@@ -33,6 +33,7 @@ public class MainController implements Initializable {
     }
 
     public MainController()  {
+        System.out.println("count");
         try {
             tournamentStatsObservableList = FXCollections.observableArrayList();
             tournamentStatsObservableList.addAll(
@@ -46,10 +47,9 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize (URL url, ResourceBundle resourceBundle) {
+        System.out.println("count2");
         listView.setItems(tournamentStatsObservableList);
-//        listView.setCellFactory(tournamentListViewCell -> new TournamentListViewCell());
-
-
+        listView.setCellFactory(tournamentListViewCell -> new TournamentListViewCell());
     }
 
 

@@ -55,8 +55,7 @@
                         <Button layoutX="48.0" layoutY="429.0" mnemonicParsing="false" text="Search" />
                         <Button layoutX="108.0" layoutY="429.0" mnemonicParsing="false" text="Placeholder" />
                         <Button layoutX="437.0" layoutY="429.0" mnemonicParsing="false" text="Placeholder" />
-                        <ListView fx:id="listView" prefHeight="332.0" prefWidth="755.0" />
-                        <ListView fx:id="roster" layoutX="3.0" layoutY="301.0" prefHeight="102.0" prefWidth="755.0" />
+                        <ListView fx:id="listView" prefHeight="402.0" prefWidth="755.0" />
                     </children>
                 </AnchorPane>
             </content>
