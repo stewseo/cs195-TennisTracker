@@ -3,19 +3,12 @@ plugins {
     id 'org.beryx.jlink' version '2.24.4'
     id 'idea'
     id 'java-library'
+    id 'application'
 }
 
 javafx {
     version = "18"
     modules = ['javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.base']
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
 }
 
 
@@ -27,16 +20,12 @@ repositories {
 }
 
 ext {
-    junitVersion = '5.8.1'
     junitVersion = '5.8.2'
 }
 
 sourceCompatibility = '17'
 targetCompatibility = '17'
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
 
 application {
     mainModule = 'com.example.cs195tennis'
@@ -45,51 +34,19 @@ application {
 
 
 
-ext {
-    jfoenixVersion = '9.0.10' as Object
-    testfxVersion = '4.0.16-alpha' as Object
-    log4JVersion = '2.17.2' as Object
-    gsonVersion = '2.9.0' as Object
-    charFxMathVersion = '11.2.6' as Object
-    slf4jVersion = '2.0.0-alpha7' as Object
-    fontAwesomeVersion = '12.3.1' as Object
-    fontAwesomeJipsy = '1.1.1' as Object
-    sqliteVersion = '3.36.0.3' as Object
-}
-
-
-
 dependencies {
-
-    implementation('org.controlsfx:controlsfx:11.1.1')
-    implementation('com.dlsc.formsfx:formsfx-core:11.5.0') {
-        exclude(group: 'org.openjfx')
-    }
+    implementation 'org.apache.logging.log4j:log4j-core:2.17.2'
+    implementation 'com.jfoenix:jfoenix:9.0.10'
+    implementation 'org.controlsfx:controlsfx:11.1.1'
+    implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
     implementation'org.kordamp.ikonli:ikonli-javafx:12.3.1'
     implementation'org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0'
-    implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'
     implementation 'org.kordamp.ikonli:ikonli-materialdesign2-pack:12.3.1'
-    implementation 'org.controlsfx:controlsfx:11.1.1'
     implementation 'org.xerial:sqlite-jdbc'
-    implementation 'org.kordamp.ikonli:ikonli-fontawesome-pack'
     implementation 'org.apache.logging.log4j:log4j-api'
     implementation 'com.jfoenix:jfoenix'
     implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'
-    implementation 'org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0'
-    implementation'org.kordamp.ikonli:ikonli-javafx:12.3.1'
     implementation'org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0'
-    implementation group: 'org.xerial', name: 'sqlite-jdbc', version: "${sqliteVersion}"
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: "${slf4jVersion}"
-    testImplementation group: 'org.junit.jupiter', name: 'junit.jupiter-api', version: "${junitVersion}"
-    implementation group: 'org.apache.logging.log4j', name:'log4j-api', version: "${log4JVersion}"
-    implementation group: 'org.apache.logging.log4j', name:'log4j-core', version: "${log4JVersion}"
-    implementation group: 'org.kordamp.ikonli', name: 'ikonli-fontawesome-pack', version: "${fontAwesomeVersion}"
-    implementation group: 'org.kordamp.jipsy', name: 'jipsy-annotations', version: "${fontAwesomeJipsy}"
-    implementation group: 'com.google.code.gson', name: 'gson', version: "${gsonVersion}"
-    implementation group: 'com.jfoenix', name: 'jfoenix', version: "${jfoenixVersion}"
-    testImplementation"org.testfx:testfx-junit5:${testfxVersion}"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
-    testImplementation group: 'testfx', name: 'testfx-core', version: "${testfxVersion}"
 }
 
 run {

@@ -50,21 +50,23 @@ public class TournamentListController implements Initializable {
     private AnchorPane contentPane;
 
 
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
 
         initCol();
         try {
             loadData();
-        } catch (SQLException | IOException | ParserConfigurationException | SAXException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
 
     private Stage getStage() {
         return (Stage) tableView.getScene().getWindow();
     }
+
 
     private void initCol() {
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -74,21 +76,22 @@ public class TournamentListController implements Initializable {
         winner_iocCol.setCellValueFactory(new PropertyValueFactory<>("winner_ioc"));
     }
 
-    private void loadData() throws SQLException, ParserConfigurationException, IOException, SAXException {
+    private void loadData() throws SQLException {
 
         DbController myHandler = new DbController();
 
         String qu = "SELECT * FROM wta_matches_1990_to_2022";
 
-        ResultSet rs = myHandler.execQuery(qu);
+        ResultSet rs = myHandler.execQuery("USA");
 
         try {
             while (rs.next()) {
+                System.out.println(rs);
                 var resultId = rs.getString("Source.name");
-                var resultWinnerName = rs.getString("winner_name");
                 var resultRound = rs.getString("ROUND");
                 var resultLoc = rs.getString("winner_ioc");
                 var resultLoserName = rs.getString("loser_name");
+                var resultWinnerName = rs.getString("winner_name");
                 list.add( new TournamentStats(resultId, resultWinnerName, resultRound, resultLoc, resultLoserName));
             }
         } catch (SQLException ex) {

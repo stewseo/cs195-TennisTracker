@@ -11,10 +11,6 @@
     -fx-background-color: -fx-primary;
 }
 
-.glyph-icon
-{
-    -fx-fill: -fx-primarytext;
-}
 
 .button{
     -fx-text-fill: -fx-primarytext;
@@ -29,14 +25,6 @@
     -fx-border-color: -fx-secondary;
     -fx-background-color: -fx-secondary;
     -fx-text-fill: -fx-primary;
-}
-
-.text-field
-{
-    -fx-text-fill: -fx-primarytext;
-    -fx-font-size : 12pt;
-    -jfx-focus-color: -fx-secondary;
-    -fx-text-fill: derive(-fx-secondary, 20%);
 }
 
 

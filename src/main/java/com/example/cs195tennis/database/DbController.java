@@ -17,6 +17,16 @@ public class DbController {
     private static final String url = "jdbc:sqlite:wta-tournaments.sqlite";
     private static Connection c = null;
 
+    public static void main(String[] args) throws SQLException {
+
+        c = DriverManager.getConnection(url);
+        PreparedStatement statement = c.prepareStatement("SELECT * FROM wta_matches_1990_to_2022 WHERE winner_ioc = ?");
+        statement.setString(1, "USA");
+
+        var foundS = statement.executeQuery();
+        System.out.println(foundS);
+    }
+
     public DbController() throws SQLException {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -60,9 +70,7 @@ public class DbController {
         PreparedStatement statement = c.prepareStatement("SELECT * FROM wta_matches_1990_to_2022 WHERE winner_ioc = ?");
         statement.setString(1, query);
 
-        var foundS = statement.executeQuery();
-
-        return foundS;
+        return statement.executeQuery();
     }
 
     public String CustomDateFormat(Date date) {

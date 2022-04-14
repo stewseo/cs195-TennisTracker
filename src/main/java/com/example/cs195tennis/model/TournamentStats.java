@@ -3,38 +3,31 @@ package com.example.cs195tennis.model;
 
 public class TournamentStats {
 
-    public static String id;
-    public static String TOURNEY_DATE;
-    public static String loser_name;
-    public static String winner_ioc;
-    public static String winner_name;
-    public static String ROUND;
+    public String id;
+    public String TOURNEY_DATE;
+    public String loser_name;
+    public String winner_ioc;
+    public String winner_name;
+    public String ROUND;
+
 
     public TournamentStats(){}
 
     public TournamentStats(String id, String winner_name, String loser_name, String winner_ioc, String ROUND) {
-        id = id;
-        winner_name = winner_name;
-        loser_name = loser_name;
-        winner_ioc = winner_ioc;
-        ROUND = ROUND;
+        this.id = id;
+        this.winner_name = winner_name;
+        this.loser_name = loser_name;
+        this.winner_ioc = winner_ioc;
+        this.ROUND = ROUND;
     }
 
-
-    public String getWinner_name() {
-        return winner_name;
-    }
-
-    public void setWinner_name(String winner_name) {
-        TournamentStats.winner_name = winner_name;
-    }
 
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        TournamentStats.id = id;
+        this.id = id;
     }
 
     public String getTOURNEY_DATE() {
@@ -42,15 +35,7 @@ public class TournamentStats {
     }
 
     public void setTOURNEY_DATE(String TOURNEY_DATE) {
-        TournamentStats.TOURNEY_DATE = TOURNEY_DATE;
-    }
-
-    public String getTourneyDate() {
-        return TOURNEY_DATE;
-    }
-
-    public void setTourneyDate(String tourneyDate) {
-        TOURNEY_DATE = tourneyDate;
+        this.TOURNEY_DATE = TOURNEY_DATE;
     }
 
     public String getLoser_name() {
@@ -58,7 +43,7 @@ public class TournamentStats {
     }
 
     public void setLoser_name(String loser_name) {
-        TournamentStats.loser_name = loser_name;
+        this.loser_name = loser_name;
     }
 
     public String getWinner_ioc() {
@@ -66,7 +51,15 @@ public class TournamentStats {
     }
 
     public void setWinner_ioc(String winner_ioc) {
-        TournamentStats.winner_ioc = winner_ioc;
+        this.winner_ioc = winner_ioc;
+    }
+
+    public String getWinner_name() {
+        return winner_name;
+    }
+
+    public void setWinner_name(String winner_name) {
+        this.winner_name = winner_name;
     }
 
     public String getROUND() {
@@ -74,7 +67,6 @@ public class TournamentStats {
     }
 
     public void setROUND(String ROUND) {
-        TournamentStats.ROUND = ROUND;
+        this.ROUND = ROUND;
     }
-
 }

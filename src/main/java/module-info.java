@@ -1,5 +1,4 @@
 module com.example.cs195tennis {
-
     requires org.kordamp.ikonli.core;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.ikonli.materialdesign2;
@@ -12,10 +11,10 @@ module com.example.cs195tennis {
     requires org.controlsfx.controls;
     requires java.sql;
     requires com.jfoenix;
+    requires org.xerial.sqlitejdbc;
     exports com.example.cs195tennis.model;
     exports com.example.cs195tennis.controller;
     opens com.example.cs195tennis.controller;
     opens com.example.cs195tennis to javafx.fxml;
     exports com.example.cs195tennis;
-
 }
