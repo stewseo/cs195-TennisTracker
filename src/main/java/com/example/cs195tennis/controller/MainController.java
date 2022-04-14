@@ -1,5 +1,6 @@
 package com.example.cs195tennis.controller;
 
+import com.example.cs195tennis.ToolbarController;
 import com.example.cs195tennis.TournamentListLoader;
 import com.example.cs195tennis.database.DbController;
 import com.example.cs195tennis.model.TournamentStats;
@@ -12,10 +13,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -26,12 +25,11 @@ import com.jfoenix.controls.JFXHamburger;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class MainController implements Initializable {
@@ -40,6 +38,8 @@ public class MainController implements Initializable {
     public Text tournamentNameHolder;
     public Text tournamentDataHolder2;
     public Text tournamentDataHolder3;
+    public Text issueDateHolder;
+    public Text fineInfoHolder;
     @FXML TextField tournamentID;
     public JFXButton renewButton;
     public JFXButton submissionButton;
@@ -57,7 +57,6 @@ public class MainController implements Initializable {
     Tab playerTab;
     @FXML
     HBox tournamentInfo;
-
     @FXML
     HBox matchInfo;
     @FXML
@@ -103,9 +102,35 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            DbController db = new DbController();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
+        initDrawer();
+//        initGraphs();
         mainTabPane.tabMinWidthProperty().bind(rootAnchorPane.widthProperty().divide(mainTabPane.getTabs().size()).subtract(15));
+
     }
+
+    @FXML
+    PieChart bookChart;
+    @FXML
+    PieChart memberChart;
+
+    private void initGraphs() {
+
+//            bookChart = new PieChart(DbController.getStatistics());
+//            memberChart = new PieChart(DbController.getStatistics());
+//            tournamentContainer.getChildren().add(bookChart);
+//            matchContainer.getChildren().add(memberChart);
+
+//            tournamentTab.setOnSelectionChanged((Event event) -> {
+//
+//            });
+        }
+
 
 
     private Stage getStage() {
@@ -118,41 +143,50 @@ public class MainController implements Initializable {
     }
 
 
-    private void initDrawer() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Toolbar.fxml"));
-            VBox toolbar = loader.load();
-            drawer.setSidePane(toolbar);
-            ToolbarController controller = loader.getController();
 
-            HamburgerSlideCloseTransition task = new HamburgerSlideCloseTransition(hamburger);
-            task.setRate(-1);
-            hamburger.addEventHandler(MouseEvent.MOUSE_CLICKED, (Event event) -> {
-                drawer.toggle();
-            });
-            drawer.setOnDrawerOpening((event) -> {
-                task.setRate(task.getRate() * -1);
-                task.play();
-                drawer.toFront();
-            });
-            drawer.setOnDrawerClosed((event) -> {
-                drawer.toBack();
-                task.setRate(task.getRate() * -1);
-                task.play();
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void initDrawer() {
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("toolbar.fxml"));
+//        taskBtn.setGraphic(createGraphicTitle(task));
+//        VBox toolbar = new VBox();
+//        toolbar.getStyleClass().add("toolbar-container");
+//        JFXButton jfxButton = new JFXButton();
+//        jfxButton.getStyleClass().add("toolbar-button");
+
+//        scene.getStylesheets().add("application.css");
+
+//        ToolbarController toolController = new ToolbarController();
+//        toolbar.getChildren().add(jfxButton);
+
+//        drawer.setSidePane(toolbar);
+
+        System.out.println("test");
+
+
+        HamburgerSlideCloseTransition task = new HamburgerSlideCloseTransition(hamburger);
+        task.setRate(-1);
+        hamburger.addEventHandler(MouseEvent.MOUSE_CLICKED, (Event event) -> {
+            drawer.toggle();
+        });
+        drawer.setOnDrawerOpening((event) -> {
+            task.setRate(task.getRate() * -1);
+            task.play();
+            drawer.toFront();
+        });
+        drawer.setOnDrawerClosed((event) -> {
+            drawer.toBack();
+            task.setRate(task.getRate() * -1);
+            task.play();
+        });
     }
 
 
     public void handleMenuSettings(ActionEvent actionEvent) {
     }
 
-    public void handleMenuAddBook(ActionEvent actionEvent) {
+    public void handleMenuTournament(ActionEvent actionEvent) {
     }
 
-    public void handleMenuAddMember(ActionEvent actionEvent) {
+    public void handleMenumatch(ActionEvent actionEvent) {
     }
 
     public void handleMenuViewBook(ActionEvent actionEvent) {
@@ -186,6 +220,12 @@ public class MainController implements Initializable {
     public void loadTournamentData(ActionEvent actionEvent) throws SQLException, IOException {
         String s = tournamentInput.getText();
         TournamentListLoader Tloadder = new TournamentListLoader(s);
+        tournamentInput.getStyleClass().add("searchField");
+    }
+
+    public void handleMenuMatchData(ActionEvent actionEvent) {
+    }
+}
 
 
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("tournament_list.fxml"));
@@ -198,10 +238,8 @@ public class MainController implements Initializable {
 //        db.execQuery(s);
 
 
-//      if(actionEvent!=null)
-//          tournamentInput.getOnAction()
-    }
+
+
 //        Glyph glyph = new Glyph("fontFamily", "TOURNAMENT");
 //        glyph.setStyle("-fx-text-fill: primary");
 
-}

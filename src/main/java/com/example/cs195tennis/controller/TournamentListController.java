@@ -53,7 +53,6 @@ public class TournamentListController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-
         initCol();
         try {
             loadData();
@@ -118,7 +117,6 @@ public class TournamentListController implements Initializable {
             Stage stage = new Stage(StageStyle.DECORATED);
             stage.setScene(new Scene(parent));
             stage.show();
-//            TournamentUtil.setStageIcon(stage);
 
             stage.setOnHiding((e) -> {
                 try {

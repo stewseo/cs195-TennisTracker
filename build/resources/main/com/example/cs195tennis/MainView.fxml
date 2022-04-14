@@ -6,6 +6,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Text?>
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXHamburger?>
 
 <StackPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="1000.0" styleClass="custom-pane" stylesheets="@application.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cs195tennis.controller.MainController">
     <children>
@@ -177,7 +178,7 @@
                                                                 </VBox>
                                                             </children>
                                                             <BorderPane.margin>
-                                                                <Insets top="20.0" />
+                                                                <Insets top="20.0"/>
                                                             </BorderPane.margin>
                                                         </HBox>
                                                     </center>
@@ -188,42 +189,24 @@
                                 </Tab>
                             </tabs>
                         </TabPane>
-<!--                        <JFXHamburger fx:id="hamburger" styleClass="jfx-hamburger-icon" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="75.0" />-->
+                        <JFXHamburger fx:id="hamburger" styleClass="jfx-hamburger-icon" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="75.0" />
                     </children>
                 </AnchorPane>
                 <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <menus>
-                        <Menu mnemonicParsing="false" text="File">
-                            <items>
-                                <MenuItem mnemonicParsing="false" onAction="#handleMenuSettings" text="Settings" />
-                                <MenuItem mnemonicParsing="false" onAction="#handleMenuClose" text="Exit" />
-                            </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Add">
-                            <items>
-                                <MenuItem mnemonicParsing="false" onAction="#handleMenuAddBook" text="Add Player Data point" />
-                                <MenuItem mnemonicParsing="false" onAction="#handleMenuAddMember" text="Add Match data point" />
-                            </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="View">
-                            <items>
-                                <MenuItem mnemonicParsing="false" onAction="#handleMenuViewBook" text="Change Backround Color" />
-                                <MenuItem mnemonicParsing="false" onAction="#handleMenuViewMemberList" text="Change Font" />
-                                <MenuItem mnemonicParsing="false" onAction="#handleIssuedList" text="Change buttons" />
-                                <MenuItem mnemonicParsing="false" onAction="#handleMenuFullScreen" text="Full Screen" />
-                            </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="History">
-                            <items>
-                                <MenuItem mnemonicParsing="false" onAction="#handleMenuOverdueNotification" text="Past Searches" />
-                            </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Save">
-                            <items>
-                                <MenuItem mnemonicParsing="false" onAction="#handleAboutMenu" text="About" />
-                            </items>
-                        </Menu>
-                    </menus>
+                <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuTournament" text="loadAddTournament"/>
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuMatchData" text="loadAddMatchData"/>
+                </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Your Previous Entries">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuViewBook" text="Saved Tournaments" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuViewMemberList" text="Saved Match Data" />
+                    </items>
+                </Menu>
+                </menus>
                 </MenuBar>
             </children>
         </AnchorPane>

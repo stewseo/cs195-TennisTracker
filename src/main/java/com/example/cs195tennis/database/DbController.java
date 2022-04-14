@@ -1,6 +1,9 @@
 package com.example.cs195tennis.database;
 
 import java.sql.DatabaseMetaData;
+
+import javafx.collections.ObservableList;
+import javafx.scene.chart.PieChart;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.sql.*;
@@ -35,6 +38,10 @@ public class DbController {
         }
         c = DriverManager.getConnection(url);
         System.out.println("Connected");
+    }
+
+    public static ObservableList<PieChart.Data> getStatistics() {
+        return null;
     }
 
 
