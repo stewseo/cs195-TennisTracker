@@ -1,10 +1,10 @@
 package com.example.cs195tennis;
+import com.example.cs195tennis.controller.TournamentListController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Objects;
@@ -12,6 +12,7 @@ import java.util.Objects;
 public class TournamentListLoader extends Application {
 
     public TournamentListLoader(String s) throws IOException {
+        TournamentListController tournamentListController = new TournamentListController();
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("tournament_list.fxml")));
         Scene scene = new Scene(root);
         Stage stage = new Stage();
@@ -28,5 +29,5 @@ public class TournamentListLoader extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }

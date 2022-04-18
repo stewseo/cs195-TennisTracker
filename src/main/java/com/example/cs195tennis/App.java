@@ -10,11 +10,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Level;
 
+
 public class App extends Application {
     private final static Logger LOGGER = LogManager.getLogger(App.class.getName());
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("MainView.fxml")));
             Scene scene = new Scene(root);
@@ -28,6 +29,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+
         long startTime = System.currentTimeMillis();
         LOGGER.log(Level.INFO,"startTime " +  startTime);
 

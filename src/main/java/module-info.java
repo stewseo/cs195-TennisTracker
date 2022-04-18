@@ -12,6 +12,7 @@ module com.example.cs195tennis {
     requires java.sql;
     requires com.jfoenix;
     requires org.xerial.sqlitejdbc;
+    requires java.sql.rowset;
     exports com.example.cs195tennis.model;
     exports com.example.cs195tennis.controller;
     opens com.example.cs195tennis.controller;

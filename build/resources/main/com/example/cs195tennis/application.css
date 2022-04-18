@@ -1,4 +1,4 @@
-{
+* {
     -fx-primary : #2A2E37;
     -fx-secondary : #FFFF8D;
     -fx-primarytext : #B2B2B2;
@@ -11,6 +11,10 @@
     -fx-background-color: -fx-primary;
 }
 
+.glyph-icon
+{
+    -fx-fill: -fx-primarytext;
+}
 
 .button{
     -fx-text-fill: -fx-primarytext;
@@ -27,6 +31,16 @@
     -fx-text-fill: -fx-primary;
 }
 
+.text-field
+{
+    -fx-text-fill: -fx-primarytext;
+    -fx-font-size : 12pt;
+    -jfx-focus-color: -fx-secondary;
+    -fx-text-fill: derive(-fx-secondary, 20%);
+}
+
+/*Login Screen Specific*/
+
 
 .wrong-credentials
 {
@@ -34,7 +48,9 @@
     -jfx-focus-color: #ef5350;
 }
 
+/*Main Screen CSS Styling starts here*/
 
+/*TablPane styling*/
 .tab{
     -fx-background-color: -fx-primary;
 }
@@ -71,7 +87,7 @@
     -fx-background-color: derive(-fx-primary, -50%);
 }
 
-
+/*Menu bar Styling*/
 .menu-bar{
     -fx-font-size: 14;
     -fx-base : -fx-primary;

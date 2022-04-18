@@ -3,13 +3,13 @@
 
 
 <?import com.jfoenix.controls.JFXButton?>
-<VBox prefHeight="445.0" prefWidth="154.0" styleClass="toolbar-container" stylesheets="@application.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cs195tennis.ToolbarController">
-        <JFXButton contentDisplay="TOP" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadAddTournament" prefHeight="400.0" prefWidth="160.0" styleClass="toolbar-button" text="Add Tournament" textAlignment="CENTER">
-        </JFXButton>
-        <JFXButton contentDisplay="TOP" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadAddMatchData" prefHeight="400.0" prefWidth="160.0" styleClass="toolbar-button" text="Add Match Data point" textAlignment="CENTER">
-        </JFXButton>
-        <JFXButton contentDisplay="TOP" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadAddTournamentList" prefHeight="400.0" prefWidth="160.0" styleClass="toolbar-button" text="Previous Tournaments" textAlignment="CENTER">
-        </JFXButton>
-        <JFXButton contentDisplay="TOP" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadAddMatchDataPointsList" prefHeight="400.0" prefWidth="160.0" styleClass="toolbar-button" text="Previous Data Points" textAlignment="CENTER">
-        </JFXButton>
+<VBox prefHeight="445.0" prefWidth="154.0" styleClass="toolbar-container" stylesheets="@application.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cs195tennis.controller.ToolbarController">
+    <JFXButton contentDisplay="TOP" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadAddTournament" prefHeight="400.0" prefWidth="160.0" styleClass="toolbar-button" text="Add Tournament" textAlignment="CENTER">
+    </JFXButton>
+    <JFXButton contentDisplay="TOP" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadAddMatchData" prefHeight="400.0" prefWidth="160.0" styleClass="toolbar-button" text="Add Match Data point" textAlignment="CENTER">
+    </JFXButton>
+    <JFXButton contentDisplay="TOP" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadAddTournamentList" prefHeight="400.0" prefWidth="160.0" styleClass="toolbar-button" text="Previous Tournaments" textAlignment="CENTER">
+    </JFXButton>
+    <JFXButton contentDisplay="TOP" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadAddMatchDataPointsList" prefHeight="400.0" prefWidth="160.0" styleClass="toolbar-button" text="Previous Data Points" textAlignment="CENTER">
+    </JFXButton>
 </VBox>

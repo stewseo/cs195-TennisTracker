@@ -1,6 +1,9 @@
 package com.example.cs195tennis.controller;
 
-import com.example.cs195tennis.database.DbController;
+import com.example.cs195tennis.TournamentListLoader;
+import com.example.cs195tennis.database.DataHandeler;
+import com.example.cs195tennis.database.Database;
+import com.example.cs195tennis.database.DatabaseConnection;
 import com.example.cs195tennis.model.TournamentStats;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,6 +25,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -31,7 +35,7 @@ import java.util.logging.Logger;
 public class TournamentListController implements Initializable {
 
     ObservableList<TournamentStats> list = FXCollections.observableArrayList();
-
+    Database database;
     @FXML
     private StackPane rootPane;
     @FXML
@@ -50,9 +54,11 @@ public class TournamentListController implements Initializable {
     private AnchorPane contentPane;
 
 
+    public TournamentListController(){
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
         initCol();
         try {
             loadData();
@@ -60,6 +66,9 @@ public class TournamentListController implements Initializable {
             e.printStackTrace();
         }
 
+    }
+
+    public void loadData() throws SQLException {
     }
 
     private Stage getStage() {
@@ -75,30 +84,6 @@ public class TournamentListController implements Initializable {
         winner_iocCol.setCellValueFactory(new PropertyValueFactory<>("winner_ioc"));
     }
 
-    private void loadData() throws SQLException {
-
-        DbController myHandler = new DbController();
-
-        String qu = "SELECT * FROM wta_matches_1990_to_2022";
-
-        ResultSet rs = myHandler.execQuery("USA");
-
-        try {
-            while (rs.next()) {
-                System.out.println(rs);
-                var resultId = rs.getString("Source.name");
-                var resultRound = rs.getString("ROUND");
-                var resultLoc = rs.getString("winner_ioc");
-                var resultLoserName = rs.getString("loser_name");
-                var resultWinnerName = rs.getString("winner_name");
-                list.add( new TournamentStats(resultId, resultWinnerName, resultRound, resultLoc, resultLoserName));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(TournamentListController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        tableView.setItems(list);
-    }
 
     @FXML
     private void handleBookDeleteOption(ActionEvent event) throws SQLException, ParserConfigurationException, IOException, SAXException {
@@ -107,11 +92,10 @@ public class TournamentListController implements Initializable {
 
     @FXML
     private void handleTournamentEditOption(ActionEvent event) {
-
         TournamentStats selectedForEdit = tableView.getSelectionModel().getSelectedItem();
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/library/assistant/ui/addbook/add_book.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("tournament_list.fxml"));
             Parent parent = loader.load();
 
             Stage stage = new Stage(StageStyle.DECORATED);

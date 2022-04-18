@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import com.jfoenix.controls.JFXDrawer?>
@@ -7,6 +6,7 @@
 <?import javafx.scene.text.Text?>
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXHamburger?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <StackPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="1000.0" styleClass="custom-pane" stylesheets="@application.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cs195tennis.controller.MainController">
     <children>
@@ -30,7 +30,7 @@
                                                                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                                                                     </HBox.margin>
                                                                     <children>
-                                                                        <TextField fx:id="tournamentInput" onAction="#loadTournamentData" prefHeight="26.0" prefWidth="230.0" promptText="Tournament Name"/>
+                                                                        <TextField fx:id="tournamentInput" onAction="#loadTournamentData" prefHeight="26.0" prefWidth="230.0" promptText="Tourney Id"/>
                                                                     </children>
                                                                 </VBox>
                                                                 <StackPane fx:id="tournamentContainer">
@@ -47,7 +47,7 @@
                                                                                 </Text>
                                                                                 <Text fx:id="tournamentType" layoutX="10.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="main-text" textAlignment="CENTER" wrappingWidth="460.0">
                                                                                     <VBox.margin>
-                                                                                        <Insets top="10.0" />
+                                                                                        <Insets top="10.0"/>
                                                                                     </VBox.margin>
                                                                                 </Text>
                                                                                 <Text fx:id="tournamentDate" layoutX="10.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="main-text" textAlignment="CENTER" wrappingWidth="460.0">
@@ -193,20 +193,38 @@
                     </children>
                 </AnchorPane>
                 <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                <menus>
-                <Menu mnemonicParsing="false" text="File">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleMenuTournament" text="loadAddTournament"/>
-                        <MenuItem mnemonicParsing="false" onAction="#handleMenuMatchData" text="loadAddMatchData"/>
-                </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Your Previous Entries">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleMenuViewBook" text="Saved Tournaments" />
-                        <MenuItem mnemonicParsing="false" onAction="#handleMenuViewMemberList" text="Saved Match Data" />
-                    </items>
-                </Menu>
-                </menus>
+                    <menus>
+                        <Menu mnemonicParsing="false" text="File">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#handleMenuSettings" text="Settings" />
+                                <MenuItem mnemonicParsing="false" onAction="#handleMenuClose" text="Exit" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Add">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#handleMenuAddBook" text="Add Book" />
+                                <MenuItem mnemonicParsing="false" onAction="#handleMenuAddMember" text="Add Member" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="View">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#handleMenuViewBook" text="Book List" />
+                                <MenuItem mnemonicParsing="false" onAction="#handleMenuViewMemberList" text="Member List" />
+                                <MenuItem mnemonicParsing="false" onAction="#handleIssuedList" text="Issued Book List" />
+                                <MenuItem mnemonicParsing="false" onAction="#handleMenuFullScreen" text="Full Screen" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Notify">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#handleMenuOverdueNotification" text="Overdue Notification" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Help">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#handleAboutMenu" text="About" />
+                            </items>
+                        </Menu>
+                    </menus>
                 </MenuBar>
             </children>
         </AnchorPane>
