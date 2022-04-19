@@ -31,59 +31,7 @@
       <console name="Connection" type="STANDARD" schema="" session="Main" />
     </connection>
     <connection id="bb201b3f-741f-4528-8688-6265f773fc40">
-      <console name="Connection 1" type="STANDARD" schema="main" session="Main"><![CDATA[select
-    wmt."Source.Name",
-    wmt.best_of,
-    wmt.draw_size,
-    wmt.l_1st_serves,
-    wmt.l_1st_serves_won,
-    wmt.l_2nd_serves_won,
-    wmt.l_ace,
-    wmt.l_break_points_faced,
-    wmt.l_break_points_saved,
-    wmt.l_double_fault,
-    wmt.l_serve_games,
-    wmt.l_serve_points,
-    wmt.loser_age,
-    wmt.loser_entry,
-    wmt.loser_hand,
-    wmt.loser_ht,
-    wmt.loser_id,
-    wmt.loser_ioc,
-    wmt.loser_name,
-    wmt.loser_rank,
-    wmt.loser_rank_points,
-    wmt.loser_seed,
-    wmt.match_num,
-    wmt.minutes,
-    wmt."round",
-    wmt.score,
-    wmt.surface,
-    wmt.tourney_date,
-    wmt.tourney_id,
-    wmt.tourney_level,
-    wmt.tourney_name,
-    wmt.w_1st_serves,
-    wmt.w_1st_serves_won,
-    wmt.w_2nd_serves_won,
-    wmt.w_ace,
-    wmt.w_break_points_faced,
-    wmt.w_break_points_saved,
-    wmt.w_double_fault,
-    wmt.w_serve_games,
-    wmt.w_serve_points,
-    wmt.winner_age,
-    wmt.winner_entry,
-    wmt.winner_hand,
-    wmt.winner_ht,
-    wmt.winner_id,
-    wmt.winner_ioc,
-    wmt.winner_name,
-    wmt.winner_rank,
-    wmt.winner_rank_points,
-    wmt.winner_seed
-from
-    wta_matches_1990_to_2022 wmt;]]></console>
+      <console name="Connection 1" type="STANDARD" schema="" session="Main" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
@@ -96,6 +44,11 @@ from
   <component name="DBNavigator.Project.DatasetFilterManager">
     <filter-actions connection-id="bb201b3f-741f-4528-8688-6265f773fc40" dataset="main.NewTournament" active-filter-id="" />
     <filter-actions connection-id="bb201b3f-741f-4528-8688-6265f773fc40" dataset="main.wta_matches_1990_to_2022" active-filter-id="" />
+    <filter-actions connection-id="900b44cc-a8f5-469e-bcba-88469a35c8bf" dataset="main.wta_matches_1990_to_2022" active-filter-id="96ecbe38-e817-41f7-b8fa-715f9469d0b4">
+      <filter id="96ecbe38-e817-41f7-b8fa-715f9469d0b4" name="Rafael" temporary="false" custom-name="false" type="basic" join-type="AND">
+        <condition column="winner_name" operator="=" value="Rafael" active="true" />
+      </filter>
+    </filter-actions>
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
@@ -132,7 +85,7 @@ from
           <description value="" />
           <database-type value="SQLITE" />
           <config-type value="BASIC" />
-          <database-version value="3.3" />
+          <database-version value="3.34" />
           <driver-source value="BUILTIN" />
           <driver-library value="" />
           <driver value="" />
@@ -141,7 +94,7 @@ from
           <port value="" />
           <database value="" />
           <files>
-            <file path="C:\Users\seost\cs195-TennisTracker\src\main\java\com\example\cs195tennis\database\DbController.java" schema="main" />
+            <file path="C:\Users\ninet\Desktop\Coding Stuff\Assignments\cs195-TennisTracker\wta-tournaments.sqlite" schema="main" />
           </files>
           <type value="NONE" />
           <user value="" />
