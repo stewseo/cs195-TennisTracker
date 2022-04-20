@@ -1,6 +1,7 @@
 package com.example.cs195tennis.database;
 import java.sql.DatabaseMetaData;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.scene.chart.PieChart;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -64,7 +65,15 @@ public class DatabaseConnection {
         return statement.executeQuery();
     }
 
-    private void populateDatabase() throws SQLException {
+    public ResultSet playerQuery(String query) throws SQLException{
+        c = DriverManager.getConnection(url);
+      PreparedStatement statement =c.prepareStatement("select * from main.atp_matches_1990_2022 where winner_name or loser_name like '?' ") ;
+      statement.setString(1,query);
+
+      return statement.executeQuery();
+    }
+
+   /* private void populateDatabase() throws SQLException {
         List<String> tableData = new ArrayList<>();
         Set<String> loadedTables = null;
 
@@ -76,5 +85,7 @@ public class DatabaseConnection {
         System.out.println("Already loaded tables " + loadedTables);
 
     }
+
+    */
 }
 

@@ -35,7 +35,9 @@
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="900b44cc-a8f5-469e-bcba-88469a35c8bf" object-ref="schemas/main/tables/atp_matches_1990_2022" />
+    </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="900b44cc-a8f5-469e-bcba-88469a35c8bf" />
@@ -44,6 +46,14 @@
   <component name="DBNavigator.Project.DatasetFilterManager">
     <filter-actions connection-id="bb201b3f-741f-4528-8688-6265f773fc40" dataset="main.NewTournament" active-filter-id="" />
     <filter-actions connection-id="bb201b3f-741f-4528-8688-6265f773fc40" dataset="main.wta_matches_1990_to_2022" active-filter-id="" />
+    <filter-actions connection-id="900b44cc-a8f5-469e-bcba-88469a35c8bf" dataset="main.atp_matches_1990_2022" active-filter-id="b344d0ce-b539-4f56-9517-308b345fa2ae">
+      <filter id="b344d0ce-b539-4f56-9517-308b345fa2ae" name="20180000" temporary="false" custom-name="false" type="basic" join-type="AND">
+        <condition column="tourney_date" operator="&gt;=" value="20180000" active="true" />
+      </filter>
+      <filter id="a9b593fa-22e3-4ef8-b6dc-68bc26c7383e" name="Player search" temporary="false" custom-name="false" type="custom">
+        <condition>winner_name or loser_name like '%Rafael%'</condition>
+      </filter>
+    </filter-actions>
     <filter-actions connection-id="900b44cc-a8f5-469e-bcba-88469a35c8bf" dataset="main.wta_matches_1990_to_2022" active-filter-id="96ecbe38-e817-41f7-b8fa-715f9469d0b4">
       <filter id="96ecbe38-e817-41f7-b8fa-715f9469d0b4" name="Rafael" temporary="false" custom-name="false" type="basic" join-type="AND">
         <condition column="winner_name" operator="=" value="Rafael" active="true" />
@@ -94,7 +104,7 @@
           <port value="" />
           <database value="" />
           <files>
-            <file path="C:\Users\ninet\Desktop\Coding Stuff\Assignments\cs195-TennisTracker\wta-tournaments.sqlite" schema="main" />
+            <file path="C:\Users\ninet\Desktop\Coding Stuff\Assignments\cs195-TennisTracker\src\main\java\com\example\cs195tennis\database\atp-tournaments.sqlite" schema="main" />
           </files>
           <type value="NONE" />
           <user value="" />
@@ -172,7 +182,7 @@
           <description value="" />
           <database-type value="SQLITE" />
           <config-type value="BASIC" />
-          <database-version value="3.3" />
+          <database-version value="3.34" />
           <driver-source value="BUILTIN" />
           <driver-library value="" />
           <driver value="" />
@@ -181,7 +191,7 @@
           <port value="" />
           <database value="" />
           <files>
-            <file path="C:\Users\seost\cs195-TennisTracker\src\main\java\com\example\cs195tennis\database\wta-tournaments.sqlite" schema="main" />
+            <file path="C:\Users\ninet\Desktop\Coding Stuff\Assignments\cs195-TennisTracker\src\main\java\com\example\cs195tennis\database\atp-tournaments.sqlite" schema="main" />
           </files>
           <type value="NONE" />
           <user value="" />
