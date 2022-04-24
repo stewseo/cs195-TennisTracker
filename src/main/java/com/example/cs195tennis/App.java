@@ -1,10 +1,15 @@
 package com.example.cs195tennis;
+import com.example.cs195tennis.database.DataHandeler;
+import com.example.cs195tennis.database.Database;
+import com.example.cs195tennis.database.DatabaseConnection;
+import com.example.cs195tennis.database.TournamentDao;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Objects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,16 +20,17 @@ public class App extends Application {
     private final static Logger LOGGER = LogManager.getLogger(App.class.getName());
 
     @Override
-    public void start(Stage stage) {
-        try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("MainView.fxml")));
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("application.css")).toExternalForm());
-            stage.setScene(scene);
-            stage.show();
+    public void start(Stage stage) throws SQLException {
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("MainView.fxml")));
+                Scene scene = new Scene(root);
+                scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("application.css")).toExternalForm());
+                stage.setScene(scene);
+                stage.show();
+
+            } catch (IOException e) {
+                e.printStackTrace();
         }
     }
 
