@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane fx:id = "AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cs195tennis.controller.PlayerController">
+   <children>
+      <Button layoutX="14.0" layoutY="57.0" mnemonicParsing="false" onAction="#switchTournamentData" prefHeight="40.0" prefWidth="270.0" text="Tournament Data" />
+      <Button layoutX="316.0" layoutY="57.0" mnemonicParsing="false" onAction="#switchPlayerData" prefHeight="40.0" prefWidth="270.0" text="Player Data" />
+      <Text layoutX="268.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Main Scene" />
+   </children>
+</AnchorPane>
