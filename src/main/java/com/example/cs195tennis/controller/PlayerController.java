@@ -59,13 +59,14 @@ public class PlayerController implements Initializable {
 
 
     public void switchMainScene(ActionEvent event) throws IOException {
-        System.out.println("Main");
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("MainScene.fxml")));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        Stage window = new Stage();
+        window.setTitle("New Scene");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Container.fxml"));
+        window.setScene((new Scene(loader.load())));
+        window.show();
     }
+
+
     public void switchPlayerData(ActionEvent event) throws IOException {
         System.out.println("testPlayerData");
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("PlayerDataScene.fxml")));
@@ -74,6 +75,8 @@ public class PlayerController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+
+
     public void switchTournamentData(ActionEvent event) throws IOException {
         System.out.println("testTournamentData");
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("TournamentScene.fxml")));
@@ -84,7 +87,6 @@ public class PlayerController implements Initializable {
     }
 
     public void switchPlayerData2(ActionEvent event) throws IOException {
-        System.out.println("TestPlayerData2");
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("PlayerDataScene2.fxml")));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
@@ -114,12 +116,12 @@ public class PlayerController implements Initializable {
     @FXML
     public void loadPlayerData(ActionEvent event) {
         String qu = " WHERE " + event.getSource().toString() + " = " + playerSearchTextField.getText();
+        playerList = PlayerDao.getTempList();
 
         playerList = new ArrayList<>();
 
         String input = playerSearchTextField.getText();
 
-        playerList = PlayerDao.getTempList(input);
 
         playerList.parallelStream().forEach(e-> playerObservableList.add(
                 new Player(e.getId(), e.getFirstName(), e.getLastName(),
@@ -128,5 +130,11 @@ public class PlayerController implements Initializable {
 
         table.setItems(playerObservableList);
 
+    }
+
+    public void handleGitButtonClicked(ActionEvent event) {
+    }
+
+    public void handleExitButtonClicked(ActionEvent event) {
     }
 }

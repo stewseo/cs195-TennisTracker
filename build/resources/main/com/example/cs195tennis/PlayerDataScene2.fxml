@@ -15,14 +15,15 @@
             <Button layoutX="194.0" layoutY="125.0" mnemonicParsing="false" text="Search" />
             <TableView fx:id="table" layoutX="14.0" layoutY="166.0" prefHeight="200.0" prefWidth="710.0">
               <columns>
-                <TableColumn fx:id="idCol" prefWidth="58.0" resizable="false" text="Player ID " />
+                <TableColumn fx:id="idCol" prefWidth="58.0" resizable="false" text="id " />
                 <TableColumn fx:id="firstNameCol" prefWidth="53.0" resizable="false" text="First Name" />
                   <TableColumn fx:id="lastNameCol" prefWidth="45.0" resizable="false" text="Last Name" />
-                  <TableColumn fx:id="dominantHandCol" prefWidth="50.0" resizable="false" text="Date of Birth" />
-                  <TableColumn fx:id="dobCol" prefWidth="92.0" resizable="false" text="Dominant Hand" />
-                  <TableColumn fx:id="heightCol" prefWidth="103.0" resizable="false" text="Height in cm" />
-                  <TableColumn fx:id="countryCol" prefWidth="98.0" resizable="false" text="Country" />
-                  <TableColumn fx:id="wikiCol" prefWidth="101.0" resizable="false" text="Wiki Page URL" />
+                  <TableColumn fx:id="dobCol" prefWidth="50.0" resizable="false" text="DOB" />
+                  <TableColumn fx:id="handCol" prefWidth="92.0" resizable="false" text="Dominant Hand" />
+                  <TableColumn fx:id="second_srvCol" prefWidth="103.0" resizable="false" text="2nd Srv Pts %" />
+                  <TableColumn fx:id="srv_pts_wonCol" prefWidth="98.0" resizable="false" text="Srv Pts Won %" />
+                  <TableColumn fx:id="bp_svd_Col" prefWidth="101.0" resizable="false" text="BP SVD %" />
+                  <TableColumn fx:id="srv_gm_wonCol"  prefWidth="105.0" resizable="false" text="Srv Gmm Won %" />
               </columns>
                 <columnResizePolicy>
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

@@ -64,28 +64,16 @@ public class DatabaseConnection {
 
     public ResultSet execQuery(String qu) throws SQLException {
         String updateQ = "UPDATE wta_matches_1990_to_2022 set tourney_name=Australian Open";
-<<<<<<< HEAD
+
         String query = "SELECT * FROM wta_matches_1990_to_2022 where tourney_date >= 2022000000";
-=======
-        String query = "SELECT * FROM wta_matches_1990_to_2022";
->>>>>>> origin/develop
+
         Connection connection = DatabaseConnection.connect();
 
         if(Objects.nonNull(connection)) {
             Statement statement = connection.createStatement();
 
-<<<<<<< HEAD
             return statement.executeQuery(query);
-=======
-            ResultSet rs = statement.executeQuery(query);
-//
-//            while(rs.next()) {
-//                System.out.println(rs.getString("tourney_name"));
-//                System.out.println(rs.getString("tourney_date"));
-//                System.out.println(rs.getString("winner_name"));
-//            }
-            return rs;
->>>>>>> origin/develop
+
         }else{
             System.out.println("Database or JDBC url error");
             return null;

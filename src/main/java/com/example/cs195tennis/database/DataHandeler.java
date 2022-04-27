@@ -113,11 +113,8 @@ public class DataHandeler {
         return -1;
     }
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> origin/develop
         public static int delete(String tableName, int id) {
             String sql = "DELETE FROM " + tableName + " WHERE id = ?";
 

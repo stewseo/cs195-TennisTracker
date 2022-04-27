@@ -1,8 +1,5 @@
 package com.example.cs195tennis;
 import com.example.cs195tennis.database.DataHandeler;
-import com.example.cs195tennis.database.Database;
-import com.example.cs195tennis.database.DatabaseConnection;
-import com.example.cs195tennis.database.TournamentDao;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
