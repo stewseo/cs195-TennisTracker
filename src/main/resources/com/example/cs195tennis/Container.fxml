@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.*?>
 <VBox alignment="CENTER" spacing="20.0" styleClass="container" stylesheets="@Sample.css"
       xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
-    <Label styleClass="app-title" text="Fancy App Title"/>
+    <Label styleClass="app-title" text="Fantasy Sports Data"/>
     <TextField maxWidth="200.0" promptText="Enter your name"/>
     <Button text="OK"/>
 </VBox>

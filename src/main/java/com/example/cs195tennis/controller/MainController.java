@@ -1,4 +1,5 @@
 package com.example.cs195tennis.controller;
+
 import com.example.cs195tennis.TournamentListLoader;
 import com.example.cs195tennis.database.DataHandeler;
 import com.example.cs195tennis.database.DatabaseConnection;
@@ -275,27 +276,28 @@ public class MainController implements Initializable {
 
     @FXML
     public void loadTournamentData(ActionEvent actionEvent) throws SQLException, IOException {
-//        List<TournamentStats> resultList = new ArrayList<>();
-//        List<String> resList = Collections.singletonList(tournamentInput.getText());
-//        DatabaseConnection dbConnection = new DatabaseConnection();
-//        String s = tournamentInput.getText();
-//        ResultSet rs = dbConnection.execQuery(s);
-//
-//        try {
-//            while (rs.next()) {
-//                    resultList.add(new TournamentStats(rs.getString("tourney_name"),
-//                    rs.getString("tourney_date"),
-//                    rs.getString("winner_name"),
-//                    rs.getString("loser_name"),
-//                    rs.getString("tourney_id")));
-//                }
-//        } catch (SQLException ex) {
-//
-//        }
-//        System.out.println("List: ");
-//        Node query = (Node) actionEvent.getSource();
-//        System.out.println(query);
-//        resultList.stream().filter(e->e.getTourney_name().equals(query)).forEach(System.out::println);
+
+        List<TournamentStats> resultList = new ArrayList<>();
+        List<String> resList = Collections.singletonList(tournamentInput.getText());
+        DatabaseConnection dbConnection = new DatabaseConnection();
+        String s = tournamentInput.getText();
+        ResultSet rs = dbConnection.execQuery(s);
+
+        try {
+            while (rs.next()) {
+                    resultList.add(new TournamentStats(rs.getString("tourney_name"),
+                    rs.getString("tourney_date"),
+                    rs.getString("winner_name"),
+                    rs.getString("loser_name"),
+                    rs.getString("tourney_id")));
+                }
+        } catch (SQLException ex) {
+
+        }
+        System.out.println("List: ");
+        Node query = (Node) actionEvent.getSource();
+        System.out.println(query);
+        resultList.stream().filter(e->e.getTourney_name().equals(query)).forEach(System.out::println);
         //TODO: Create tables for player ranking, recent tournaments, head to head
         //TODO: Web Search Object
        TournamentListController tournamentController = new TournamentListController();
@@ -304,10 +306,10 @@ public class MainController implements Initializable {
     }
 
 
-    public void loadMatchInfo(ActionEvent actionEvent) throws SQLException {
-        Node matchNode = (Node) actionEvent.getSource();
-        //TODO: use saved event nodes for scene switches or stage changes
-    }
+
+
+
+
 
     public void handleMenuAddMatch(ActionEvent actionEvent) throws IOException {
     }

@@ -57,6 +57,7 @@ public class TournamentStats {
 
     private List<TournamentStats> tournamentList;
 
+<<<<<<< HEAD
     public List<TournamentStats> getTournamentList() {
         return tournamentList;
     }
@@ -65,6 +66,8 @@ public class TournamentStats {
         this.tournamentList = tournamentList;
     }
 
+=======
+>>>>>>> origin/develop
     public String toString(){
         return tourney_name + ", " +tourney_date + ", " + winner_name + ", " + loser_name + ", " + tourney_id;
     }

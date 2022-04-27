@@ -19,11 +19,13 @@ public class PlayerLoader extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("PlayerDataScene2.fxml")));
+        Stage window = new Stage();
+        window.setTitle("New Scene");
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Container.fxml")));
         Scene scene = new Scene(root);
 //        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("application.css")).toExternalForm());
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.show();
+
+
+        window.show();
     }
 }
