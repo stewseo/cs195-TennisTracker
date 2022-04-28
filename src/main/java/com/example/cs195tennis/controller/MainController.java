@@ -109,19 +109,6 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-
-//        tableViewT.setItems(TournamentDao.getTournament());
-
-
-//        tourney_nameCol.setCellValueFactory(new PropertyValueFactory<>("tourney_name"));
-//        tourney_dateCol.setCellValueFactory(new PropertyValueFactory<>("tourney_date"));
-//        winner_nameCol.setCellValueFactory(new PropertyValueFactory<>("winner_name"));
-//        loser_nameCol.setCellValueFactory(new PropertyValueFactory<>("loser_name"));
-//        id_Col.setCellValueFactory(new PropertyValueFactory<>("id"));
-
-//        editButton.disableProperty().bind(Bindings.isEmpty(tableViewT.getSelectionModel().getSelectedItems()));
-//        deleteButton.disableProperty().bind(Bindings.isEmpty(tableViewT.getSelectionModel().getSelectedItems()));
-
         JFXButton jb1 = new JFXButton("Add1");
         JFXButton jb2 = new JFXButton("Add2");
         JFXButton jb3 = new JFXButton("Add3");
@@ -174,13 +161,11 @@ public class MainController implements Initializable {
 
     public String result;
 
-
     public void setResult(String res){
         this.result = res;
     }
 
     private static List<String> resList;
-
 
     public List<String> getResult(){
         return resList;
@@ -210,8 +195,7 @@ public class MainController implements Initializable {
         Node query = (Node) actionEvent.getSource();
         System.out.println(query);
         resultList.stream().filter(e->e.getTourney_name().equals(query)).forEach(System.out::println);
-        //TODO: Create tables for player ranking, recent tournaments, head to head
-        //TODO: Web Search Object
+
        TournamentListController tournamentController = new TournamentListController();
 
         TournamentListLoader tournamentListLoader = new TournamentListLoader();

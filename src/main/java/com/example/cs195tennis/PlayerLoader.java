@@ -18,15 +18,13 @@ public class PlayerLoader extends Application {
     private double xOffset;
     private double yOffset;
 
-
     public static void main(String[] args) {
         launch(args);
     }
 
-
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainScene.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainView.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);

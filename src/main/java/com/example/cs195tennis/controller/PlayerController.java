@@ -65,10 +65,6 @@ public class PlayerController implements Initializable {
                 new Player(e.getId(), e.getFirstName(),e.getLastName(), e.getHand(), e.getDob(), e.getIoc(), e.getHeight(), e.getWiki()
                 )));
 
-
-        playerTable.setItems(playerObservableList);
-
-
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));

@@ -19,7 +19,7 @@ public class TournamentDao {
     private static final String winner_nameCol = "winner_name";
     private static final String loser_nameCol = "loser_name";
     private static final String tourney_idCol = "tourney_id";
-    private static String tournamentTable = "wta_matches_1990_to_2022";
+    private static String tournamentTable = "Tournaments";
     private static final ObservableList<TournamentStats> tournamentStatsObservable;
     private static List<String> tourneyList;
 
