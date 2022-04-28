@@ -7,13 +7,7 @@ import java.util.List;
 
 public class TournamentStats {
 
-    public String tourney_name,tourney_date;
-    public String loser_name;
-    public String tourney_id;
-    public String surface;
-    public int draw_size;
-    public String tourney_level;
-    public String match_num;
+    public String tourney_name,tourney_date,loser_name,tourney_id,surface,draw_size,tourney_level,match_num;
     public String winner_id;
     public String winner_seed;
     public String winner_entry;
@@ -129,14 +123,6 @@ public class TournamentStats {
 
     public void setSurface(String surface) {
         this.surface = surface;
-    }
-
-    public int getDraw_size() {
-        return draw_size;
-    }
-
-    public void setDraw_size(int draw_size) {
-        this.draw_size = draw_size;
     }
 
     public String getTourney_level() {

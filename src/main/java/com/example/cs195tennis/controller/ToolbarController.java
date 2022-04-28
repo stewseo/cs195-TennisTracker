@@ -34,23 +34,13 @@ public class ToolbarController implements Initializable {
         System.out.println(actionEvent.toString());
     }
 
-    public void loadAddTournamentList(ActionEvent actionEvent) {
+    public void loadAddTournamentList(ActionEvent actionEvent) {}
 
-    }
+    public void loadAddMatchDataPointsList(ActionEvent actionEvent) {}
 
-    public void loadAddMatchDataPointsList(ActionEvent actionEvent) {
+    public void loadSettings(ActionEvent actionEvent) {}
 
-    }
+    public void setTournamentReturnCall(MainController mainController) {}
 
-
-    public void loadSettings(ActionEvent actionEvent) {
-
-    }
-
-    public void setTournamentReturnCall(MainController mainController) {
-    }
-
-    public void loadUtil(ActionEvent actionEvent) {
-
-    }
+    public void loadUtil(ActionEvent actionEvent) {}
 }

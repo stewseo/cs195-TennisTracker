@@ -1,9 +1,22 @@
 package com.example.cs195tennis.Dao;
 
 
+import com.example.cs195tennis.database.DatabaseConnection;
 import com.example.cs195tennis.model.Match;
+import com.example.cs195tennis.model.Player;
+import com.example.cs195tennis.model.TournamentStats;
+import com.opencsv.CSVReader;
+import javafx.scene.chart.PieChart;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.Reader;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MatchDao {
 
@@ -23,6 +36,7 @@ public class MatchDao {
 
 
     private static final String CREATE_TABLE_KEY_POINT_OUTCOME = "CREATE TABLE KEY_POINT_OUTCOME"
+
             + "("
             + " ID match_id,"
             + " player TEXT NOT NULL,"
@@ -33,6 +47,29 @@ public class MatchDao {
             + " height TEXT,"
             + " first_won TEXT,"
             + " second_in_pts_won "
-            + " second_wonEXT ";
+            + " second_wonEX T ";
 
-}
+
+//    public static List<Match> (){
+//        try {
+//            CSVReader csvReader = new CSVReader(new FileReader("charting-w-stats-ReturnDepth.csv"));
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+
+    }
+//            return jdbi.withHandle(handle-> {
+//            list.stream().filter(e->
+//            !e.getTourney_id().equals(qu)
+//                    .collect(Collectors.toList()));
+
+
+
+
+
+
+
+
+
+
+

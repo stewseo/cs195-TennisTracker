@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PlayerDao {
-        private static String mainTable = "Players";
+//        private static String mainTable = "Player";
         private static List<Player> playerList;
         private static List<Rankings> playerRankList;
         private static final String id = "id";
@@ -29,8 +29,8 @@ public class PlayerDao {
                 + " ID INT,"
                 + " firstName TEXT NOT NULL,"
                 + " lastName TEXT NOT NULL,"
-                + " hand TEXT NOT NULL,"
-                + " dob TEXT NOT NULL,"
+                + " hand TEXT,"
+                + " dob TEXT,"
                 + " ioc TEXT,"
                 + " height TEXT,"
                 + " wikidata_id TEXT,"
@@ -49,28 +49,86 @@ public class PlayerDao {
                 + ")";
 
 
-        static String tableName = "Players";
-        public static void createTablePlayer(String tableName) {
-
-            Connection c = null;
-            Statement st = null;
-
-            try {
-                c = DatabaseConnection.connect();
-                st = c.createStatement();
-
-                st.executeUpdate(CREATE_PLAYER);
-
-                System.out.println("Table created");
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
         static String rankingTable = "Player_Rank";
 
-        public static void createTablePlayerRank(String tableName) {
+
+
+    public static void insertPlayerFromCsv() throws SQLException, IOException {
+        Connection c = DatabaseConnection.connect();
+
+        c.setAutoCommit(false);
+        int batchSize = 20;
+        String sql = "INSERT INTO PLAYER (id, firstName, lastName, hand, dob, ioc, height, wikidata_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        PreparedStatement statement = c.prepareStatement(sql);
+
+        BufferedReader lineReader = new BufferedReader(new FileReader(playerCsv));
+        String lineText = null;
+        int count = 0;
+        List<Player> playerList = new ArrayList<Player>();
+
+        File inputF = new File(playerCsv);
+        InputStream inputFS = new FileInputStream(inputF);
+        Player player = new Player();
+
+        lineReader.readLine();
+
+        while ((lineText = lineReader.readLine()) != null) {
+            String[] data = lineText.split(",");
+            System.out.println(data.length);
+            String id = data[0];
+            String firstName = data[1];
+            String lastName = data[2];
+            String hand = data[3];
+            String dob = data.length > 4 ? data[4] : "";
+            String ioc  = data.length >  5 ? data[5] : "";
+            String height = data.length > 6 ? data[6] : "";
+            String wikidata_id = data.length > 7 ? data[7] : "";
+
+
+            statement.setString(1, id);
+            statement.setString(2, firstName);
+            statement.setString(3, lastName);
+            statement.setString(4, hand);
+            statement.setString(5, dob);
+            statement.setString(6, ioc);
+            statement.setString(7, height);
+            statement.setString(8, wikidata_id);
+
+            statement.addBatch();
+
+            statement.executeBatch();
+        }
+        lineReader.close();
+
+        statement.executeBatch();
+
+        c.commit();
+        c.close();
+    }
+
+
+
+
+    public static void createTablePlayer() {
+
+        Connection c = null;
+        Statement st = null;
+
+        try {
+            c = DatabaseConnection.connect();
+            st = c.createStatement();
+
+            st.executeUpdate(CREATE_PLAYER);
+
+            System.out.println("Table created");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+        public static void createTablePlayerRank(String rankingTable) {
 
             Connection c = null;
             Statement st = null;
@@ -90,7 +148,7 @@ public class PlayerDao {
 
 
         public static List<Rankings> getRankingList() {
-            String query = "SELECT * FROM " + tableName;
+            String query = "SELECT * FROM " + " PLAYER ";
             List<Rankings> currentRank = new ArrayList<>();
             try (Connection connection = DatabaseConnection.connect()) {
                 PreparedStatement statement = connection.prepareStatement(query);
@@ -110,12 +168,15 @@ public class PlayerDao {
             }return currentRank;
         }
 
+        String querys = " select"+ lastName+ " from " +"PLAYERS"+" join ranking on player.id = ranking.player_id where pos == 1 group by lastName; ";
+
 
         public static List<Player> getTempList() {
 
-            String query = "SELECT * FROM " + tableName;
+            String query = "SELECT * FROM " + "Player";
 
             List<Player> player = new ArrayList<>();
+
             try (Connection connection = DatabaseConnection.connect()) {
                 PreparedStatement statement = connection.prepareStatement(query);
                 ResultSet rs = statement.executeQuery();
@@ -132,115 +193,19 @@ public class PlayerDao {
                             rs.getString(wikiData_id)
                     ));
                 }
-                System.out.println("here");
-                player.forEach(System.out::println);
+                System.out.println("Size of temp player list: " + player.size());
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }return player;
         }
 
 
-        static String playerCsv = "\\src\\main\\resources\\com\\example\\cs195tennis\\atp_players.csv";
-        static String playerRankingsCsv = "\\src\\main\\resources\\com\\example\\cs195tennis\\atp_rankings_current.csv";
-
-        public static void createPlayerTableFromCsv() throws SQLException, IOException {
-            Connection c = DatabaseConnection.connect();
-
-            c.setAutoCommit(false);
-            int batchSize = 20;
-            String sql = "INSERT INTO PLAYERS (id, firstName, lastName, hand, dob, ioc, height, wikidata_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
-            PreparedStatement statement = c.prepareStatement(sql);
-
-            BufferedReader lineReader = new BufferedReader(new FileReader(playerCsv));
-            String lineText = null;
-            int count = 0;
-            List<Player> playerList = new ArrayList<Player>();
-
-            File inputF = new File(playerCsv);
-            InputStream inputFS = new FileInputStream(inputF);
-            Player player = new Player();
-
-            lineReader.readLine();
-
-            while ((lineText = lineReader.readLine()) != null) {
-                String[] data = lineText.split(",");
-                System.out.println(data.length);
-                String id = data[0];
-                String firstName = data[1];
-                String lastName = data[2];
-                String hand = data[3];
-                String dob = data.length > 4 ? data[4] : "";
-                String ioc  = data.length >  5 ? data[5] : "";
-                String height = data.length > 6 ? data[6] : "";
-                String wikidata_id = data.length > 7 ? data[7] : "";
+        static String playerCsv = "C:\\Users\\seost\\cs195TennisAnalytics\\cs195-TennisTracker\\src\\main\\resources\\com\\example\\cs195tennis\\atp_players.csvC:\\Users\\seost\\cs195TennisAnalytics\\cs195-TennisTracker\\src\\main\\resources\\com\\example\\cs195tennis\\atp_players.csvexec";
+        static String playerRankingsCsv = "";
 
 
-                statement.setString(1, id);
-                statement.setString(2, firstName);
-                statement.setString(3, lastName);
-                statement.setString(4, hand);
-                statement.setString(5, dob);
-                statement.setString(6, ioc);
-                statement.setString(7, height);
-                statement.setString(8, wikidata_id);
 
-                statement.addBatch();
-
-                statement.executeBatch();
-            }
-            lineReader.close();
-
-            statement.executeBatch();
-
-            c.commit();
-            c.close();
-        }
-
-        public static void playerRankCsvToSql() throws SQLException, IOException {
-            Connection c = DatabaseConnection.connect();
-
-            c.setAutoCommit(false);
-            int batchSize = 20;
-            String sql = "INSERT INTO PLAYER_RANK (ranking_date, rank, player, points) VALUES (?, ?, ?, ?)";
-            PreparedStatement statement = c.prepareStatement(sql);
-
-            BufferedReader lineReader = new BufferedReader(new FileReader(playerRankingsCsv));
-            String lineText = null;
-
-            int count = 0;
-
-            lineReader.readLine();
-
-            while ((lineText = lineReader.readLine()) != null) {
-                String[] data = lineText.split(",");
-                String id = data[0];
-                String ranking_date = data[1];
-                String rank = data[2];
-                String player = data[3];
-                String points = data.length > 4 ? data[4] : "";
-
-
-                statement.setString(1, ranking_date);
-                statement.setString(2, rank);
-                statement.setString(3, player);
-                statement.setString(4, points);
-
-                statement.addBatch();
-
-                statement.executeBatch();
-            }
-
-            lineReader.close();
-
-            statement.executeBatch();
-
-            c.commit();
-            c.close();
-        }
-
-
-        public static void main(String[] args) throws SQLException, IOException {
 //        createPlayerTableFromCsv();
 
 //        rankCsvToSql();
@@ -248,7 +213,7 @@ public class PlayerDao {
 //        createTablePlayerRank(CREATE_CURRENT_RANK);
         }
 
-    }
+
 
 
 

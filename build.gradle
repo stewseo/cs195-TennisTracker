@@ -30,23 +30,25 @@ targetCompatibility = '17'
 application {
     mainModule = 'com.example.cs195tennis'
     mainClass = 'com.example.cs195tennis.App'
+
 }
 
 
-
 dependencies {
+    implementation 'org.jdbi:jdbi:2.78'
+    implementation 'org.jdbi:jdbi3-core:3.28.0'
     implementation group: 'com.opencsv', name: 'opencsv', version: '5.6'
     implementation 'org.apache.logging.log4j:log4j-core:2.17.2'
     implementation 'com.jfoenix:jfoenix:9.0.10'
     implementation 'org.controlsfx:controlsfx:11.1.1'
     implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
-    implementation'org.kordamp.ikonli:ikonli-javafx:12.3.1'
     implementation'org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0'
-    implementation 'org.kordamp.ikonli:ikonli-materialdesign2-pack:12.3.1'
     implementation 'org.xerial:sqlite-jdbc'
     implementation 'org.apache.logging.log4j:log4j-api'
+    implementation'org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0'
     implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'
     implementation'org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0'
+    implementation 'org.kordamp.ikonli:ikonli-materialdesign2-pack:12.3.1'
 }
 
 run {

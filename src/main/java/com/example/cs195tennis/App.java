@@ -1,5 +1,4 @@
 package com.example.cs195tennis;
-import com.example.cs195tennis.database.DataHandeler;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,7 +19,7 @@ public class App extends Application {
     public void start(Stage stage) throws SQLException {
 
             try {
-                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("MainView.fxml")));
+                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("MainScene.fxml")));
                 Scene scene = new Scene(root);
                 scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("application.css")).toExternalForm());
                 stage.setScene(scene);

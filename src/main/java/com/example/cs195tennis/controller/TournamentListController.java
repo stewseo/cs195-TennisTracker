@@ -88,8 +88,6 @@ public class TournamentListController implements Initializable {
 
         ResultSet rs = dbConnection.execQuery("qu");
 
-
-
         TournamentDao tournamentDao = new TournamentDao();
 
         List<ResultSet> resultList = new ArrayList<>();
@@ -185,5 +183,20 @@ public class TournamentListController implements Initializable {
     }
 
     public void loadTournament(ActionEvent event) {
+    }
+
+    public void handleTournamentEditOption(ActionEvent event) {
+    }
+
+    public void handleBookDeleteOption(ActionEvent event) {
+    }
+
+    public void handleAddEntry(ActionEvent event) {
+    }
+
+    public void handleRemoveEntry(ActionEvent event) {
+    }
+
+    public void exportAsPDF(ActionEvent event) {
     }
 }

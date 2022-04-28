@@ -100,5 +100,4 @@ import java.util.List;
             this.wiki = wiki;
         }
 
-
     }
