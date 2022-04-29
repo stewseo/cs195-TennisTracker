@@ -1,5 +1,4 @@
 package com.example.cs195tennis;
-import com.example.cs195tennis.controller.TournamentListController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;

@@ -1,8 +1,7 @@
 package com.example.cs195tennis.controller;
-
 import com.example.cs195tennis.TournamentListLoader;
-import com.example.cs195tennis.database.DatabaseConnection;
 import com.example.cs195tennis.Dao.TournamentDao;
+import com.example.cs195tennis.database.DatabaseConnection;
 import com.example.cs195tennis.model.TournamentStats;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDrawer;

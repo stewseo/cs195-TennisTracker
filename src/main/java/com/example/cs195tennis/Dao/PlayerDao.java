@@ -3,6 +3,7 @@ package com.example.cs195tennis.Dao;
 import com.example.cs195tennis.database.DatabaseConnection;
 import com.example.cs195tennis.model.Rankings;
 import com.example.cs195tennis.model.Player;
+import org.sqlite.jdbc3.JDBC3Connection;
 
 import java.io.*;
 import java.sql.*;
@@ -176,7 +177,6 @@ public class PlayerDao {
             String query = "SELECT * FROM " + "Player";
 
             List<Player> player = new ArrayList<>();
-
             try (Connection connection = DatabaseConnection.connect()) {
                 PreparedStatement statement = connection.prepareStatement(query);
                 ResultSet rs = statement.executeQuery();
@@ -201,7 +201,7 @@ public class PlayerDao {
         }
 
 
-        static String playerCsv = "C:\\Users\\seost\\cs195TennisAnalytics\\cs195-TennisTracker\\src\\main\\resources\\com\\example\\cs195tennis\\atp_players.csvC:\\Users\\seost\\cs195TennisAnalytics\\cs195-TennisTracker\\src\\main\\resources\\com\\example\\cs195tennis\\atp_players.csvexec";
+        static String playerCsv = "cs195-TennisTracker\\src\\main\\resources\\com\\example";
         static String playerRankingsCsv = "";
 
 

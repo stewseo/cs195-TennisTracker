@@ -15,9 +15,6 @@ module com.example.cs195tennis.main {
     requires org.xerial.sqlitejdbc;
     requires java.sql.rowset;
     requires org.kordamp.bootstrapfx.core;
-
-//    exports com.example.cs195tennis.model;
-//    exports com.example.cs195tennis.controller;
     opens com.example.cs195tennis.model to javafx.base;
     opens com.example.cs195tennis.controller to javafx.fxml;
     exports com.example.cs195tennis;

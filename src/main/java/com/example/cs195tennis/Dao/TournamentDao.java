@@ -1,4 +1,5 @@
 package com.example.cs195tennis.Dao;
+
 import com.example.cs195tennis.database.DatabaseConnection;
 import com.example.cs195tennis.model.Player;
 import com.example.cs195tennis.model.TournamentStats;
@@ -32,7 +33,8 @@ public class TournamentDao {
     private static void executeTourneyQuery() throws SQLException {
 
         String query = "SELECT * FROM " + tournamentTable;
-        try (Connection connection = DatabaseConnection.connect()) {
+        Connection connect = DriverManager.getConnection("");
+        try (Connection connection = connect) {
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet rs = statement.executeQuery();
             tournamentStatsObservable.clear();

@@ -1,26 +1,15 @@
 package com.example.cs195tennis.database;
-import java.sql.DatabaseMetaData;
-import javafx.collections.ObservableList;
-import javafx.scene.chart.PieChart;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.sql.DriverManager;
-import java.util.logging.Level;
+import java.util.Objects;
 
 
 public class DatabaseConnection {
 
-    private final Logger LOGGER = LogManager.getLogger(DatabaseConnection.class.getName());
     private final String driver = "org.sqlite.JDBC";
     private static final String url = "jdbc:sqlite:wta-tournaments.sqlite";
 
     public Connection c = DriverManager.getConnection(url);
-    DatabaseMetaData meta = c.getMetaData();
-    String productName = meta.getDatabaseProductName();
-    String productVersion = meta.getDatabaseProductVersion();
 
     private static final String requiredTable = "Tournaments";
 
