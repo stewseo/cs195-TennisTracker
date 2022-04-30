@@ -1,5 +1,7 @@
 package com.example.cs195tennis.model;
 
+import java.util.List;
+
 public class Match {
 
     private String tourney_id,tourney_name,surface,draw_size,tourney_level,tourney_date,match_num,winner_id,
@@ -7,9 +9,30 @@ public class Match {
             loser_hand,loser_ht,loser_ioc,loser_age,score,best_of,round,minutes,w_ace,w_df,w_svpt,w_1stIn,w_1stWon,w_2ndWon,w_SvGms,w_bpSaved,
             w_bpFaced,l_ace,l_df,l_svpt,l_1stIn,l_1stWon,l_2ndWon,l_SvGms,l_bpSaved,l_bpFaced,winner_rank,winner_rank_points,loser_rank,loser_rank_points;
 
+    public String[] loserFields;
 
+    public Match(String winner_id, String winner_seed, String winner_entry, String winner_name, String winner_hand, String winner_ht, String winner_ioc, String winner_age) {
+        this.winner_id = winner_id;
+        this.winner_seed = winner_seed;
+        this.winner_entry = winner_entry;
+        this.winner_name = winner_name;
+        this.winner_hand = winner_hand;
+        this.winner_ht = winner_ht;
+        this.winner_ioc = winner_ioc;
+        this.winner_age = winner_age;
+    }
 
     public Match(){}
+
+    public String[] matchStats;
+
+    public void setMatchStats(String[] matchStats) {
+        this.matchStats = matchStats;
+    }
+
+    public Match(String[] loserFields) {
+        this.loserFields = loserFields;
+    }
 
     public String getTourney_id() {
         return tourney_id;
@@ -403,4 +426,5 @@ public class Match {
     public void setLoser_rank_points(String loser_rank_points) {
         this.loser_rank_points = loser_rank_points;
     }
+
 }

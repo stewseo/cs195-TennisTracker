@@ -1,6 +1,7 @@
 package com.example.cs195tennis.Dao;
 
 import com.example.cs195tennis.model.Match;
+import com.example.cs195tennis.model.MatchStats;
 import com.example.cs195tennis.model.Player;
 import com.example.cs195tennis.model.Tournament;
 import com.opencsv.CSVReader;
@@ -97,11 +98,12 @@ public class MatchDao {
 
     public static List<List<String>> writeAllAtpMatchesToList() throws FileNotFoundException {
         List<Tournament> tournamentList = new ArrayList<>();
-        List<Tournament> tournamentWinnerList;
-        List<Tournament> tournamentLoserList;
-        List<Match> matchStats = new ArrayList<>();
-
+        List<Match> winnerList = new ArrayList<>();
+        List<Match> loserList = new ArrayList<>();
+        List<MatchStats> matchStats = new ArrayList<>();
+        Match match = new Match();
         List<List<String>> allMatchesCsv = new ArrayList<List<String>>();
+
         try (CSVReader csvReader = new CSVReader(new FileReader(matchCsv));) {
             String[] values = null;
             while ((values = csvReader.readNext()) != null) {
@@ -111,13 +113,31 @@ public class MatchDao {
             e.printStackTrace();
         }
 
-        allMatchesCsv.forEach(row ->
-                tournamentList.add(
-                        new Tournament(row.get(0), row.get(1), row.get(2), row.get(3), row.get(4), row.get(5))));
+        allMatchesCsv.forEach(row -> {
 
-        System.out.println((tournamentList.get(0).getTourney_id()));
-        tournamentList.forEach(System.out::println);
-        System.out.println(" matches cache " + allMatchesCsv.size());
+            tournamentList.add(
+                    new Tournament(row.get(0), row.get(1), row.get(2), row.get(3), row.get(4), row.get(5), row.get(6)));
+
+            winnerList.add(
+                    new Match(row.get(6), row.get(7), row.get(8), row.get(9), row.get(10), row.get(11), row.get(12), row.get(13)));
+
+            loserList.add(
+                    new Match(new String[]{row.get(14), row.get(15), row.get(17),row.get(18), row.get(19), row.get(20), row.get(21), row.get(22), row.get(23)}));
+
+            matchStats.add(
+                    new MatchStats(row.get(24), row.get(25), row.get(26),row.get(27),row.get(28), row.get(29), row.get(30),row.get(31)));
+
+            match.setMatchStats(new String[]{row.get(32),row.get(33), row.get(34), row.get(35),row.get(36),row.get(37), row.get(38), row.get(39),row.get(40)});
+
+
+            ;});
+
+
+//        System.out.println((tournamentList.get(0).getTourney_id()));
+        allMatchesCsv.forEach(System.out::println);
+        System.out.println(" matches cache " + matchStats.size());
+        System.out.println(" winner cache " + winnerList.size());
+        System.out.println(" loser cache " + loserList.size());
         System.out.println(" Index is a row: " + tournamentList.size() + " columns per row");
         return allMatchesCsv;
     }

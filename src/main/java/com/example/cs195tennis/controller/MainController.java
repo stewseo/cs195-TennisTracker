@@ -169,7 +169,8 @@ public class MainController implements Initializable {
                             rs.getString("tourney_date"),
                             rs.getString("surface"),
                             rs.getString("draw_size"),
-                            rs.getString("tourney_level")
+                            rs.getString("tourney_level"),
+                            rs.getString("match_num")
                     ));
                 }
         } catch (SQLException ex) {

@@ -56,13 +56,14 @@ public class Tournament {
 
     public Tournament(){}
 
-    public Tournament(String tourney_id, String tourney_name, String surface, String draw_size, String tourney_level, String tourney_date) {
+    public Tournament(String tourney_id, String tourney_name, String surface, String draw_size, String tourney_level, String tourney_date, String match_num) {
         this.tourney_id = tourney_id;
         this.tourney_name = tourney_name;
         this.surface = surface;
         this.draw_size = draw_size;
         this.tourney_level = tourney_date;
         this.tourney_date = tourney_level;
+        this.match_num = match_num;
     }
 
     public void setTournamentStats(List<Tournament> list) {

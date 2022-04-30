@@ -8,7 +8,6 @@ public class Rankings extends Tournament {
     List<Rankings> rankList;
 
 
-
     public Rankings(String resultDate, String resultRank, String resultPlayer, String resultPoints) {
         this.ranking_date = resultDate;
         this.rank = resultRank;
@@ -16,9 +15,7 @@ public class Rankings extends Tournament {
         this.points  = resultPoints;
     }
 
-
     public Rankings(){}
-
 
     public String getRanking_date() {
         return ranking_date;
