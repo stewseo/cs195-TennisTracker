@@ -8,9 +8,13 @@ public class Match {
             w_bpFaced,l_ace,l_df,l_svpt,l_1stIn,l_1stWon,l_2ndWon,l_SvGms,l_bpSaved,l_bpFaced,winner_rank,winner_rank_points,loser_rank,loser_rank_points;
 
 
+
+    public Match(){}
+
     public String getTourney_id() {
         return tourney_id;
     }
+
 
     public void setTourney_id(String tourney_id) {
         this.tourney_id = tourney_id;

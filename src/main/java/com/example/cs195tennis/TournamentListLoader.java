@@ -1,4 +1,6 @@
 package com.example.cs195tennis;
+import com.example.cs195tennis.Dao.TournamentDao;
+import com.example.cs195tennis.model.Tournament;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -26,7 +28,9 @@ public class TournamentListLoader extends Application {
 
 
     public static void main(String[] args) {
-        launch(args);
+        TournamentDao.createTableTournament();
+
+//        launch(args);
     }
 
 }

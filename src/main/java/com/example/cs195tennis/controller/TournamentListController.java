@@ -1,19 +1,16 @@
 package com.example.cs195tennis.controller;
 
-
 import com.example.cs195tennis.Dao.TournamentDao;
 import com.example.cs195tennis.Dao.PlayerDao;
 import com.example.cs195tennis.database.DatabaseConnection;
 import com.example.cs195tennis.model.Rankings;
-
-import com.example.cs195tennis.model.TournamentStats;
+import com.example.cs195tennis.model.Tournament;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
@@ -47,7 +44,7 @@ public class TournamentListController implements Initializable {
     private StackPane rootPane;
     @FXML
     private TableView<Rankings> tableView;
-    @FXML private TableColumn<TournamentStats, String> tourney_idCol,tourney_nameCol,tourney_dateCol,winner_nameCol,loser_nameCol,ranking_dateCol,rankCol,pointsCol,idCol;
+    @FXML private TableColumn<Tournament, String> tourney_idCol,tourney_nameCol,tourney_dateCol,winner_nameCol,loser_nameCol,ranking_dateCol,rankCol,pointsCol,idCol;
 
     @FXML
     private TableColumn<Rankings, String> playerCol;
@@ -126,12 +123,12 @@ public class TournamentListController implements Initializable {
 
     @FXML
     private void handleBookDeleteOption(ActionEvent event) throws SQLException, ParserConfigurationException, IOException, SAXException {
-        TournamentStats selectedForDeletion = tableView.getSelectionModel().getSelectedItem();
+        Tournament selectedForDeletion = tableView.getSelectionModel().getSelectedItem();
     }
 
     @FXML
     private void handleTournamentEditOption(ActionEvent event) {
-        TournamentStats selectedForEdit = tableView.getSelectionModel().getSelectedItem();
+        Tournament selectedForEdit = tableView.getSelectionModel().getSelectedItem();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("tournament_list.fxml"));
             Parent parent = loader.load();
@@ -163,7 +160,7 @@ public class TournamentListController implements Initializable {
         List<List> printData = new ArrayList<>();
         String[] headers = {"   Name   ", "Winner", "  Loser  ", "  Score ", "Rounds"};
         printData.add(Arrays.asList(headers));
-        for (TournamentStats tournament : observableList) {
+        for (Tournament tournament : observableList) {
             List<String> row = new ArrayList<>();
             row.add(tournament.getTourney_name());
             row.add(tournament.getTourney_date());

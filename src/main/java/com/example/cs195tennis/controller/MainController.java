@@ -1,45 +1,27 @@
 package com.example.cs195tennis.controller;
 import com.example.cs195tennis.TournamentListLoader;
-import com.example.cs195tennis.Dao.TournamentDao;
 import com.example.cs195tennis.database.DatabaseConnection;
-import com.example.cs195tennis.model.TournamentStats;
+import com.example.cs195tennis.model.Tournament;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDrawer;
-import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.transitions.hamburger.HamburgerSlideCloseTransition;
-import javafx.beans.binding.Bindings;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import com.jfoenix.controls.JFXHamburger;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.function.UnaryOperator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public class MainController implements Initializable {
     public Tab userntries;
@@ -76,8 +58,8 @@ public class MainController implements Initializable {
     @FXML
     public Text numberDaysHolder;
     @FXML
-    private ListView<TournamentStats> listView;
-    private ObservableList<TournamentStats> tournamentStatsObservableList;
+    private ListView<Tournament> listView;
+    private ObservableList<Tournament> tournamentStatsObservableList;
 
     public MainController() {
     }
@@ -87,19 +69,19 @@ public class MainController implements Initializable {
     @FXML
     JFXHamburger hamburger;
 
-    public TableView<TournamentStats> tableViewT;
+    public TableView<Tournament> tableViewT;
 
-    public TableColumn<TournamentStats, String> id_Col;
+    public TableColumn<Tournament, String> id_Col;
 
-    public TableColumn<TournamentStats, String> tourney_nameCol;
+    public TableColumn<Tournament, String> tourney_nameCol;
 
-    public TableColumn<TournamentStats, String> tourney_dateCol;
+    public TableColumn<Tournament, String> tourney_dateCol;
 
-    public TableColumn<TournamentStats, String> winner_nameCol;
+    public TableColumn<Tournament, String> winner_nameCol;
 
-    public TableColumn<TournamentStats, String> loser_nameCol;
+    public TableColumn<Tournament, String> loser_nameCol;
 
-    public TableColumn<TournamentStats, String> scoreCol;
+    public TableColumn<Tournament, String> scoreCol;
 
     public Button editButton;
 
@@ -173,7 +155,7 @@ public class MainController implements Initializable {
     @FXML
     public void loadTournamentData(ActionEvent actionEvent) throws SQLException, IOException {
 
-        List<TournamentStats> resultList = new ArrayList<>();
+        List<Tournament> resultList = new ArrayList<>();
         List<String> resList = Collections.singletonList(tournamentInput.getText());
         DatabaseConnection dbConnection = new DatabaseConnection();
         String s = tournamentInput.getText();
@@ -181,11 +163,14 @@ public class MainController implements Initializable {
 
         try {
             while (rs.next()) {
-                    resultList.add(new TournamentStats(rs.getString("tourney_name"),
-                    rs.getString("tourney_date"),
-                    rs.getString("winner_name"),
-                    rs.getString("loser_name"),
-                    rs.getString("tourney_id")));
+                    resultList.add(new Tournament(
+                            rs.getString("tourney_id"),
+                            rs.getString("tourney_name"),
+                            rs.getString("tourney_date"),
+                            rs.getString("surface"),
+                            rs.getString("draw_size"),
+                            rs.getString("tourney_level")
+                    ));
                 }
         } catch (SQLException ex) {
 

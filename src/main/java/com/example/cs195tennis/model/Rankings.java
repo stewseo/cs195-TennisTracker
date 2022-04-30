@@ -2,7 +2,7 @@ package com.example.cs195tennis.model;
 
 import java.util.List;
 
-public class Rankings extends TournamentStats {
+public class Rankings extends Tournament {
 
     String ranking_date,rank,player,points;
     List<Rankings> rankList;

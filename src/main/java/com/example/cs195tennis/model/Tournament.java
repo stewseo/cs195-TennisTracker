@@ -1,27 +1,12 @@
 package com.example.cs195tennis.model;
 
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-public class TournamentStats {
+public class Tournament {
 
-    public String tourney_name,tourney_date,loser_name,tourney_id,surface,draw_size,tourney_level,match_num;
-    public String winner_id;
-    public String winner_seed;
-    public String winner_entry;
+    public String tourney_id,tourney_name,tourney_date,surface,draw_size,tourney_level,match_num,loser_name;
     public String winner_name;
-    public String winner_hand;
-    public String winner_ht;
-    public String winner_ioc;
-    public String winner_age;
-    public String loser_id;
-    public String loser_seed;
-    public String loser_hand;
-    public String loser_ht;
-    public String loser_ioc;
-    public String loser_age;
     public String score;
     public int best_of;
     public String minutes;
@@ -48,32 +33,39 @@ public class TournamentStats {
     public String loser_rank;
     public String loser_rank_points;
 
-    private List<TournamentStats> tournamentList;
+    private List<Tournament> tournamentList;
 
 
-    public List<TournamentStats> getTournamentList() {
+    public List<Tournament> getTournamentList() {
         return tournamentList;
     }
 
-    public void setTournamentList(List<TournamentStats> tournamentList) {
+    public void setTournamentList(List<Tournament> tournamentList) {
         this.tournamentList = tournamentList;
     }
 
 
     public String toString(){
-        return tourney_name + ", " +tourney_date + ", " + winner_name + ", " + loser_name + ", " + tourney_id;
-    }
-    public TournamentStats(){}
+        StringBuilder sb = new StringBuilder(tourney_id);
 
-    public TournamentStats(String tourney_name, String tourney_date, String winner_name, String loser_name, String tournament_id) {
+        return sb.append(", ").append(tourney_name).append(", ").append(surface).append(", ")
+                .append(draw_size)
+                .append(", ").append(tourney_level)
+                .append(", ").append(tourney_date).toString();
+    }
+
+    public Tournament(){}
+
+    public Tournament(String tourney_id, String tourney_name, String surface, String draw_size, String tourney_level, String tourney_date) {
+        this.tourney_id = tourney_id;
         this.tourney_name = tourney_name;
-        this.tourney_date = tourney_date;
-        this.winner_name = winner_name;
-        this.loser_name = loser_name;
-        this.tourney_id = tournament_id;
+        this.surface = surface;
+        this.draw_size = draw_size;
+        this.tourney_level = tourney_date;
+        this.tourney_date = tourney_level;
     }
 
-    public void setTournamentStats(List<TournamentStats> list) {
+    public void setTournamentStats(List<Tournament> list) {
         tournamentList = list;
     }
 
@@ -139,110 +131,6 @@ public class TournamentStats {
 
     public void setMatch_num(String match_num) {
         this.match_num = match_num;
-    }
-
-    public String getWinner_id() {
-        return winner_id;
-    }
-
-    public void setWinner_id(String winner_id) {
-        this.winner_id = winner_id;
-    }
-
-    public String getWinner_seed() {
-        return winner_seed;
-    }
-
-    public void setWinner_seed(String winner_seed) {
-        this.winner_seed = winner_seed;
-    }
-
-    public String getWinner_entry() {
-        return winner_entry;
-    }
-
-    public void setWinner_entry(String winner_entry) {
-        this.winner_entry = winner_entry;
-    }
-
-    public String getWinner_hand() {
-        return winner_hand;
-    }
-
-    public void setWinner_hand(String winner_hand) {
-        this.winner_hand = winner_hand;
-    }
-
-    public String getWinner_ht() {
-        return winner_ht;
-    }
-
-    public void setWinner_ht(String winner_ht) {
-        this.winner_ht = winner_ht;
-    }
-
-    public String getWinner_ioc() {
-        return winner_ioc;
-    }
-
-    public void setWinner_ioc(String winner_ioc) {
-        this.winner_ioc = winner_ioc;
-    }
-
-    public String getWinner_age() {
-        return winner_age;
-    }
-
-    public void setWinner_age(String winner_age) {
-        this.winner_age = winner_age;
-    }
-
-    public String getLoser_id() {
-        return loser_id;
-    }
-
-    public void setLoser_id(String loser_id) {
-        this.loser_id = loser_id;
-    }
-
-    public String getLoser_seed() {
-        return loser_seed;
-    }
-
-    public void setLoser_seed(String loser_seed) {
-        this.loser_seed = loser_seed;
-    }
-
-    public String getLoser_hand() {
-        return loser_hand;
-    }
-
-    public void setLoser_hand(String loser_hand) {
-        this.loser_hand = loser_hand;
-    }
-
-    public String getLoser_ht() {
-        return loser_ht;
-    }
-
-    public void setLoser_ht(String loser_ht) {
-        this.loser_ht = loser_ht;
-    }
-
-    public String getLoser_ioc() {
-        return loser_ioc;
-    }
-
-    public void setLoser_ioc(String loser_ioc) {
-        this.loser_ioc = loser_ioc;
-    }
-
-    public String getLoser_age() {
-        return loser_age;
-    }
-
-    public void setLoser_age(String loser_age) {
-        this.loser_age = loser_age;
     }
 
     public String getScore() {

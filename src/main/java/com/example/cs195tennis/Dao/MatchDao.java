@@ -1,28 +1,17 @@
 package com.example.cs195tennis.Dao;
 
-import com.example.cs195tennis.database.DatabaseConnection;
 import com.example.cs195tennis.model.Match;
 import com.example.cs195tennis.model.Player;
-import com.example.cs195tennis.model.TournamentStats;
+import com.example.cs195tennis.model.Tournament;
 import com.opencsv.CSVReader;
-import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import javafx.scene.chart.PieChart;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 public class MatchDao {
 
@@ -42,6 +31,18 @@ public class MatchDao {
     private final String CREATE_TABLE_STAT_OVERVIEW = "Stat Overview";
 
     static List<Match> matchList;
+
+    private static final String CREATE_TABLE_WINNER = "CREATE TABLE MATCH_WINNER"
+            + "("
+            + " winner_id PRIMARY KEY AUTOINCREMENT,"
+            + " winner_seed TEXT,"
+            + " winner_att TEXT,"
+            + " winner_name TEXT,"
+            + " winner_height TEXT,"
+            + " winner_cc TEXT,"
+            + " winner_age TEXT,"
+            + " winner_rank TEXT,"
+            + " winner_pts TEXT,";
 
     private static final String CREATE_TABLE_BAGELS_BY_YEAR = "CREATE TABLE BAGELS_BY_YEAR"
             + "("
@@ -81,20 +82,6 @@ public class MatchDao {
 
     static String matchCsv = "C:\\Users\\seost\\cs195TennisAnalytics\\cs195-TennisTracker\\src\\main\\resources\\com\\example\\cs195tennis\\atp_matches_2022.csv";
 
-    public List<String[]> readAll(Reader reader) throws Exception {
-        CSVReader csvReader = new CSVReader(reader);
-        List<String[]> list = new ArrayList<>();
-        list = csvReader.readAll();
-        reader.close();
-        csvReader.close();
-        return list;
-    }
-
-//    public String readAllExample() throws Exception {
-//        Reader reader = Files.newBufferedReader(Paths.get(
-//                ClassLoader.getSystemResource(matchCsv).toURI()));
-//        return .readAll(reader).toString();
-//    }
 
     public List<String[]> oneByOne(Reader reader) throws Exception {
         List<String[]> list = new ArrayList<>();
@@ -108,32 +95,36 @@ public class MatchDao {
         return list;
     }
 
-    public static void writeToList() throws FileNotFoundException {
-        List<List<String>> records = new ArrayList<List<String>>();
+    public static List<List<String>> writeAllAtpMatchesToList() throws FileNotFoundException {
+        List<Tournament> tournamentList = new ArrayList<>();
+        List<Tournament> tournamentWinnerList;
+        List<Tournament> tournamentLoserList;
+        List<Match> matchStats = new ArrayList<>();
+
+        List<List<String>> allMatchesCsv = new ArrayList<List<String>>();
         try (CSVReader csvReader = new CSVReader(new FileReader(matchCsv));) {
             String[] values = null;
             while ((values = csvReader.readNext()) != null) {
-                records.add(Arrays.asList(values));
+                allMatchesCsv.add(Arrays.asList(values));
             }
         } catch (IOException | CsvValidationException e) {
             e.printStackTrace();
         }
-        records.forEach(System.out::println);
+
+        allMatchesCsv.forEach(row ->
+                tournamentList.add(
+                        new Tournament(row.get(0), row.get(1), row.get(2), row.get(3), row.get(4), row.get(5))));
+
+        System.out.println((tournamentList.get(0).getTourney_id()));
+        tournamentList.forEach(System.out::println);
+        System.out.println(" matches cache " + allMatchesCsv.size());
+        System.out.println(" Index is a row: " + tournamentList.size() + " columns per row");
+        return allMatchesCsv;
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        writeToList();
+        writeAllAtpMatchesToList();
     }
-//    public String csvWriterOneByOne(List<String[]> stringArray, Path path) throws Exception {
-//        CSVWriter writer = new CSVWriter(new FileWriter(path.toString()));
-//        for (String[] array : stringArray) {
-//            writer.writeNext(array);
-//        }
-//
-//        writer.close();
-//        return Helpers.readFile(path);
-//    }
-
 
 //    public static List<Player> getTempMatchList() {
 //
