@@ -11,6 +11,7 @@ public class Match {
 
     public String[] loserFields;
 
+
     public Match(String winner_id, String winner_seed, String winner_entry, String winner_name, String winner_hand, String winner_ht, String winner_ioc, String winner_age) {
         this.winner_id = winner_id;
         this.winner_seed = winner_seed;
@@ -26,8 +27,22 @@ public class Match {
 
     public String[] matchStats;
 
-    public void setMatchStats(String[] matchStats) {
+    public String[] getLoserFields() {
+        return loserFields;
+    }
+
+    public String[] setLoserFields(String[] loserFields) {
+        this.loserFields = loserFields;
+        return loserFields;
+    }
+
+    public String[] getMatchStats() {
+        return matchStats;
+    }
+
+    public String[] setMatchStats(String[] matchStats) {
         this.matchStats = matchStats;
+        return matchStats;
     }
 
     public Match(String[] loserFields) {
@@ -426,5 +441,4 @@ public class Match {
     public void setLoser_rank_points(String loser_rank_points) {
         this.loser_rank_points = loser_rank_points;
     }
-
 }
