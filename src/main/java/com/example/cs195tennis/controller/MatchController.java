@@ -50,7 +50,7 @@ public class MatchController implements Initializable {
         winner_handCol.setCellValueFactory(new PropertyValueFactory<>("tourney_date"));
         winner_htCol.setCellValueFactory(new PropertyValueFactory<>("tourney_level"));
         winner_iocCol.setCellValueFactory(new PropertyValueFactory<>("match_num"));
-        winner_ageCol.setCellValueFactory(new PropertyValueFactory<>("match_num"));
+        winner_ageCol.setCellValueFactory(new PropertyValueFactory<>("winner_age"));
 
         matchTable.setItems(matchObservableList);
     }
