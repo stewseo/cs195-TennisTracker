@@ -181,7 +181,7 @@ public class MainController implements Initializable {
         System.out.println(query);
         resultList.stream().filter(e->e.getTourney_name().equals(query)).forEach(System.out::println);
 
-       TournamentListController tournamentController = new TournamentListController();
+       TournamentController tournamentController = new TournamentController();
 
         TournamentListLoader tournamentListLoader = new TournamentListLoader();
     }

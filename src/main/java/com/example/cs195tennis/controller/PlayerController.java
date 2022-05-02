@@ -33,9 +33,8 @@ public class PlayerController implements Initializable {
 
     @FXML public TableView<Player> playerTable = new TableView<>();
 
-    @FXML TableColumn<Player,String> countryCol, wikiCol;
-
-    @FXML public TableColumn<Player, String> tourney_dateCol,heightCol;
+    @FXML
+    public TableColumn<Player,String> heightCol,tourney_dateCol,countryCol, wikiCol;
 
     @FXML
     private TableColumn<Player, String>  ioc_col, df_Col, srv_gm_wonCol, bp_svd_Col, srv_pts_wonCol, first_srvCol, dobCol, handCol, firstNameCol,second_srvCol, idCol, lastNameCol;

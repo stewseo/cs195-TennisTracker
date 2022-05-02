@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PlayerDao {
-//        private static String mainTable = "Player";
+        private static String mainTable = "Player";
         private static List<Player> playerList;
         private static List<Rankings> playerRankList;
         private static final String id = "id";
@@ -109,8 +109,6 @@ public class PlayerDao {
     }
 
 
-
-
     public static void createTablePlayer() {
 
         Connection c = null;
@@ -146,7 +144,6 @@ public class PlayerDao {
                 e.printStackTrace();
             }
         }
-
 
         public static List<Rankings> getRankingList() {
             String query = "SELECT * FROM " + " PLAYER ";
@@ -199,7 +196,6 @@ public class PlayerDao {
                 e.printStackTrace();
             }return player;
         }
-
 
         static String playerCsv = "cs195-TennisTracker\\src\\main\\resources\\com\\example";
         static String playerRankingsCsv = "";

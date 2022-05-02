@@ -14,7 +14,7 @@ import java.util.Objects;
 public class TournamentListLoader extends Application {
 
     public TournamentListLoader() throws IOException, SQLException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("tournament_list.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("tournament.fxml")));
         Scene scene = new Scene(root);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("application.css")).toExternalForm());
         Stage stage = new Stage();
@@ -28,9 +28,9 @@ public class TournamentListLoader extends Application {
 
 
     public static void main(String[] args) {
-        TournamentDao.createTableTournament();
+//        TournamentDao.createTableTournament();
 
-//        launch(args);
+        launch(args);
     }
 
 }

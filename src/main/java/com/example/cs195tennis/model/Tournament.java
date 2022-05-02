@@ -66,6 +66,12 @@ public class Tournament {
         this.match_num = match_num;
     }
 
+    public String getDraw_size() {return draw_size;}
+
+    public void setDraw_size(String draw_size) {
+        this.draw_size = draw_size;
+    }
+
     public void setTournamentStats(List<Tournament> list) {
         tournamentList = list;
     }
@@ -333,4 +339,6 @@ public class Tournament {
     public void setLoser_rank_points(String loser_rank_points) {
         this.loser_rank_points = loser_rank_points;
     }
+
+
 }

@@ -83,6 +83,10 @@ public class MatchDao {
 
     static String matchCsv = "C:\\Users\\seost\\cs195TennisAnalytics\\cs195-TennisTracker\\src\\main\\resources\\com\\example\\cs195tennis\\atp_matches_2022.csv";
 
+    public static List<Match> allMatchesCsvToTournamentList() {
+        return matchList;
+    }
+
 
     public List<String[]> oneByOne(Reader reader) throws Exception {
         List<String[]> list = new ArrayList<>();
@@ -96,8 +100,10 @@ public class MatchDao {
         return list;
     }
 
+
     public static List<List<String>> writeAllAtpMatchesToList() throws FileNotFoundException {
         List<Tournament> tournamentList = new ArrayList<>();
+
         List<Match> winnerList = new ArrayList<>();
         List<Match> loserList = new ArrayList<>();
         List<MatchStats> matchStats = new ArrayList<>();
@@ -136,6 +142,8 @@ public class MatchDao {
 
             ;});
 
+
+//        allMatchesCsv.forEach(e-> System.out.println(Arrays.toString(e)));
 
 //        System.out.println((tournamentList.get(0).getTourney_id()));
         matchStat.forEach(e-> System.out.println(Arrays.toString(e)));
