@@ -14,16 +14,17 @@ import java.util.Objects;
 public class TournamentListLoader extends Application {
 
     public TournamentListLoader() throws IOException, SQLException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("tournament.fxml")));
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("application.css")).toExternalForm());
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.show();
+
     }
 
     @Override
     public void start(Stage stage) throws SQLException, IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("tournament.fxml")));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("application.css")).toExternalForm());
+        stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
     }
 
 

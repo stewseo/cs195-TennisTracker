@@ -2,18 +2,23 @@ package com.example.cs195tennis.controller;
 
 import com.example.cs195tennis.Dao.TournamentDao;
 import com.example.cs195tennis.Dao.PlayerDao;
+import com.example.cs195tennis.PlayerLoader;
 import com.example.cs195tennis.database.DatabaseConnection;
 import com.example.cs195tennis.model.Player;
 import com.example.cs195tennis.model.Rankings;
 import com.example.cs195tennis.model.Tournament;
+import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -23,6 +28,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.FileNotFoundException;
@@ -41,6 +47,9 @@ public class TournamentController implements Initializable {
 
     @FXML
     public TableView<Tournament> tournamentTable;
+
+    @FXML
+    public Button toPlayerTable;
 
 
     @FXML
@@ -66,6 +75,15 @@ public class TournamentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+        tournamentTable.getSelectionModel().selectedIndexProperty().addListener((
+                e -> {
+                    Object object =  tournamentTable.getSelectionModel().selectedItemProperty().get();
+                    int index = tournamentTable.getSelectionModel().selectedIndexProperty().get();
+                    System.out.println("\ntournamentList.get("+index+") = " + tournamentList.get(index));
+                    newWindow(tournamentList.get(index));   
+                }
+                ));
+
         try {
             tournamentList = TournamentDao.allMatchesCsvToTournamentList();
         } catch (FileNotFoundException | SQLException e) {
@@ -88,6 +106,10 @@ public class TournamentController implements Initializable {
         match_numCol.setCellValueFactory(new PropertyValueFactory<>("match_num"));
 
         tournamentTable.setItems(observableList);
+    }
+
+    private void newWindow(Tournament tournament) {
+        System.out.println("\nInsert tournament: " + tournament + " to GridPane -> HBox -> Root Pane");
     }
 
     @FXML
@@ -118,7 +140,6 @@ public class TournamentController implements Initializable {
     public void loadTournament(ActionEvent event) {
     }
 
-
     public void handleAddEntry(ActionEvent event) {
     }
 
@@ -126,12 +147,32 @@ public class TournamentController implements Initializable {
     }
 
 
-    public void handleTournamentAdd(ActionEvent event) {
+    public void handleCommitAddProject(ActionEvent event) throws IOException {
+        Node node = (Node) event.getSource();
+        Stage thisStage = (Stage) node.getScene().getWindow();
+        thisStage.close();
+        PlayerLoader playerLoader = new PlayerLoader();
     }
 
-    public void handleExitButtonClicked(ActionEvent event) {
+    @FXML
+    private void handleExitButtonClicked(ActionEvent event) throws IOException {
+        Platform.exit();
+        event.consume();
+        PlayerLoader playerLoader = new PlayerLoader();
     }
 
-    public void handleClearSearchText(ActionEvent event) {
+    public void handleClearSearchText(ActionEvent event) throws IOException {
+        searchBox.setText("");
+        event.consume();
+    }
+
+    public void switchTournamentData(ActionEvent event) {
+    }
+
+    public void switchPlayerData(ActionEvent event) {
+    }
+
+    @FXML
+    public void handleButtonTest(ActionEvent event) {
     }
 }

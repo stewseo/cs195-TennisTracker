@@ -1,13 +1,9 @@
 package com.example.cs195tennis.controller;
 import com.example.cs195tennis.Dao.PlayerDao;
 import com.example.cs195tennis.model.Player;
-import com.example.cs195tennis.model.Rankings;
-import com.opencsv.CSVReader;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,18 +12,17 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class PlayerController implements Initializable {
 
@@ -57,6 +52,15 @@ public class PlayerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
 
+        playerTable.getSelectionModel().selectedIndexProperty().addListener((
+                e -> {
+                    Object object =  playerTable.getSelectionModel().selectedItemProperty().get();
+                    int index = playerTable.getSelectionModel().selectedIndexProperty().get();
+                    System.out.println("\nplayerList.get("+index+") = " + playerList.get(index));
+                    playerWindow(playerList.get(index));
+                }
+        ));
+
         playerList = PlayerDao.getTempList();
         System.out.println(playerList.size());
 
@@ -76,6 +80,7 @@ public class PlayerController implements Initializable {
         playerTable.setItems(playerObservableList);
     }
 
+
     @FXML
     public void loadPlayerData(ActionEvent event) {
 
@@ -90,6 +95,10 @@ public class PlayerController implements Initializable {
                 )));
 
         table.setItems(playerObservableList);
+    }
+
+    private void playerWindow(Player player) {
+        System.out.println("\nInsert Player: " + player + " to GridPane -> HBox -> Root Pane");
     }
 
     @FXML
@@ -127,4 +136,5 @@ public class PlayerController implements Initializable {
         System.out.println(playerObservableList.size());
         table.setItems(playerObservableList);
     }
+
 }

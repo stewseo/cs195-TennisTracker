@@ -9,8 +9,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.geometry.Insets?>
 
-<VBox xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER" spacing="25.0"
-      stylesheets="@styles.css" ><Label text="Expandable backround for our layout panes" />
+<VBox xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER" spacing="25.0" stylesheets="@styles.css" ><Label text="Expandable backround for our layout panes" />
    <ImageView>
       <Image url="@relativespeed3.jpg" />
    </ImageView>

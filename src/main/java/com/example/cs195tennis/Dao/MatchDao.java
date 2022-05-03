@@ -101,7 +101,7 @@ public class MatchDao {
     }
 
 
-    public static List<List<String>> writeAllAtpMatchesToList() throws FileNotFoundException {
+    public static List<Match> writeAllAtpMatchesToList() throws FileNotFoundException {
         List<Tournament> tournamentList = new ArrayList<>();
 
         List<Match> winnerList = new ArrayList<>();
@@ -126,7 +126,7 @@ public class MatchDao {
                     new Tournament(row.get(0), row.get(1), row.get(2), row.get(3), row.get(4), row.get(5), row.get(6)));
 
             winnerList.add(
-                    new Match(row.get(8), row.get(7), row.get(8), row.get(9), row.get(10), row.get(11), row.get(12), row.get(13)));
+                    new Match(row.get(7), row.get(8), row.get(9), row.get(10), row.get(11), row.get(12), row.get(13), row.get(14)));
 
             loserList.add(
                     new Match(new String[]{row.get(16), row.get(17), row.get(18),row.get(19), row.get(20), row.get(21), row.get(22), row.get(23), row.get(24)}));
@@ -142,16 +142,8 @@ public class MatchDao {
 
             ;});
 
-
-//        allMatchesCsv.forEach(e-> System.out.println(Arrays.toString(e)));
-
-//        System.out.println((tournamentList.get(0).getTourney_id()));
-        matchStat.forEach(e-> System.out.println(Arrays.toString(e)));
-//        System.out.println(" matches cache " + matchStats.size());
-//        System.out.println(" winner cache " + winnerList.size());
-//        System.out.println(" loser cache " + loserList.size());
         System.out.println(" Index is a row: " + tournamentList.size() + " columns per row");
-        return allMatchesCsv;
+        return winnerList;
     }
 
     public static void main(String[] args) throws FileNotFoundException {

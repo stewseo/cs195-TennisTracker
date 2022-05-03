@@ -11,7 +11,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 
-<BorderPane prefHeight="400.0" prefWidth="500.0" styleClass="shadow-pane" stylesheets="@application.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cs195tennis.controller.MatchController">
+<BorderPane prefHeight="900.0" prefWidth="1000.0" styleClass="shadow-pane" stylesheets="@application.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cs195tennis.controller.MatchController">
     <center>
         <VBox id="dragTarget" spacing="10" styleClass="background-pane">
             <HBox alignment="CENTER">
@@ -54,14 +54,14 @@
             <VBox>
                 <TableView fx:id="matchTable" >
                     <columns>
-                        <TableColumn fx:id="winner_idCol" text="id" />
-                        <TableColumn fx:id="winner_seedCol" text="first name"/>
-                        <TableColumn fx:id="winner_entryCol" text="last name"/>
-                        <TableColumn fx:id="winner_nameCol" text="dominant hand"/>
-                        <TableColumn fx:id="winner_handCol" editable="false" text="date of birth"/>
-                        <TableColumn fx:id="winner_htCol" editable="false" text="country "/>
-                        <TableColumn fx:id="winner_iocCol" editable="false" text="height"/>
-                        <TableColumn fx:id="winner_ageCol" editable="false" text="height"/>
+                        <TableColumn fx:id="winner_idCol" text="Winner Id" />
+                        <TableColumn fx:id="winner_seedCol" text="Winner Seed"/>
+                        <TableColumn fx:id="winner_entryCol" text="Winner Entry"/>
+                        <TableColumn fx:id="winner_nameCol" text="Winner Name"/>
+                        <TableColumn fx:id="winner_handCol" editable="false" text="Winner Dominant Hand"/>
+                        <TableColumn fx:id="winner_htCol" editable="false" text="Winner Height "/>
+                        <TableColumn fx:id="winner_iocCol" editable="false" text="Winner Country"/>
+                        <TableColumn fx:id="winner_ageCol" editable="false" text="Winner Age"/>
                     </columns>
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

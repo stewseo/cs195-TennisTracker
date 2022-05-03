@@ -12,6 +12,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -34,7 +35,21 @@ public class MatchController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        matchList = MatchDao.allMatchesCsvToTournamentList();
+        matchTable.getSelectionModel().selectedIndexProperty().addListener((
+                e -> {
+                    Object object =  matchTable.getSelectionModel().selectedItemProperty().get();
+                    int index = matchTable.getSelectionModel().selectedIndexProperty().get();
+                    System.out.println(matchList.get(index));
+                    System.out.println(object.toString());
+                    matchWindow(matchList.get(index));
+                }
+        ));
+
+        try {
+            matchList = MatchDao.writeAllAtpMatchesToList();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         System.out.println(matchList.size());
 
@@ -43,18 +58,32 @@ public class MatchController implements Initializable {
                         e.getWinner_ht(), e.getWinner_ioc(), e.getWinner_age()
                 )));
 
-        winner_idCol.setCellValueFactory(new PropertyValueFactory<>("tourney_id"));
-        winner_seedCol.setCellValueFactory(new PropertyValueFactory<>("tourney_name"));
-        winner_entryCol.setCellValueFactory(new PropertyValueFactory<>("surface"));
-        winner_nameCol.setCellValueFactory(new PropertyValueFactory<>("draw_size"));
-        winner_handCol.setCellValueFactory(new PropertyValueFactory<>("tourney_date"));
-        winner_htCol.setCellValueFactory(new PropertyValueFactory<>("tourney_level"));
-        winner_iocCol.setCellValueFactory(new PropertyValueFactory<>("match_num"));
+        winner_idCol.setCellValueFactory(new PropertyValueFactory<>("winner_id"));
+        winner_seedCol.setCellValueFactory(new PropertyValueFactory<>("winner_seed"));
+        winner_entryCol.setCellValueFactory(new PropertyValueFactory<>("winner_entry"));
+        winner_nameCol.setCellValueFactory(new PropertyValueFactory<>("winner_name"));
+        winner_handCol.setCellValueFactory(new PropertyValueFactory<>("winner_hand"));
+        winner_htCol.setCellValueFactory(new PropertyValueFactory<>("winner_ht"));
+        winner_iocCol.setCellValueFactory(new PropertyValueFactory<>("winner_ioc"));
         winner_ageCol.setCellValueFactory(new PropertyValueFactory<>("winner_age"));
 
         matchTable.setItems(matchObservableList);
     }
 
+    private void matchWindow(Match match) {
+        System.out.println("\nInsert match winner: " + match + " to GridPane -> HBox -> Root Pane");
+    }
+
+    @FXML
+    public void clickItem(MouseEvent event) {
+
+        if (event.getClickCount() == 2) {
+            System.out.println(matchTable.getSelectionModel().getSelectedItem().getWinner_id());
+            System.out.println(matchTable.getSelectionModel().getSelectedItem().getWinner_seed());
+            System.out.println(matchTable.getSelectionModel().getSelectedItem().getWinner_entry());
+        }
+
+    }
 
     public void handleMatchAdd(ActionEvent event) {
     }
