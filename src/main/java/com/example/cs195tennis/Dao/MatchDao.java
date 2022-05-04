@@ -100,6 +100,32 @@ public class MatchDao {
         return list;
     }
 
+    public static List<MatchStats> writeMatchStatsFromCsv() throws FileNotFoundException {
+        List<MatchStats> matchStats = new ArrayList<>();
+
+        Match match = new Match();
+        List<List<String>> allMatchesCsv = new ArrayList<List<String>>();
+
+        try (CSVReader csvReader = new CSVReader(new FileReader(matchCsv));) {
+            String[] values = null;
+            while ((values = csvReader.readNext()) != null) {
+                allMatchesCsv.add(Arrays.asList(values));
+            }
+        } catch (IOException | CsvValidationException e) {
+            e.printStackTrace();
+        }
+
+        allMatchesCsv.forEach(row -> {
+
+            matchStats.add(
+                    new MatchStats(row.get(24), row.get(25), row.get(26),row.get(27),row.get(28), row.get(29), row.get(30),row.get(31),
+                    row.get(32),row.get(33), row.get(34), row.get(35),row.get(36),row.get(37), row.get(38), row.get(39),row.get(40),
+                            row.get(41),row.get(42), row.get(43), row.get(44),row.get(45),row.get(46), row.get(47), row.get(48)
+                    ));}
+        );
+        ;;
+        return matchStats;
+    }
 
     public static List<Match> writeAllAtpMatchesToList() throws FileNotFoundException {
         List<Tournament> tournamentList = new ArrayList<>();

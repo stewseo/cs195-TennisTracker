@@ -20,7 +20,7 @@
                 </padding>
                 <HBox>
                     <ImageView>
-                        <Image url="@3312577-67731808-2560-1440.jpg" />
+                        <Image url="@TennisShotChart.jpg" />
                     </ImageView>
                 </HBox>
                 <HBox id="right-icons" alignment="CENTER_RIGHT" spacing="10" HBox.hgrow="ALWAYS">

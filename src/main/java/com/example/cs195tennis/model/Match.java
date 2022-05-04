@@ -23,6 +23,10 @@ public class Match {
         this.winner_age = winner_age;
     }
 
+    public String toString(){
+        return winner_id + ", " + winner_seed+ ", " + winner_entry + ", " + winner_name+ ", " +
+                winner_hand+ ", " + winner_ht + ", " + winner_ioc + winner_age;
+    }
     public Match(){}
 
     public String[] matchStats;

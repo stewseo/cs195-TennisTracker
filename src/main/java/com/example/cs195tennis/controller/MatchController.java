@@ -21,7 +21,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class MatchController implements Initializable {
+
     public TextField searchBox;
+
     ObservableList<Match> matchObservableList = FXCollections.observableArrayList();
 
     public List<Match> matchList;
@@ -35,21 +37,23 @@ public class MatchController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        matchTable.getSelectionModel().selectedIndexProperty().addListener((
-                e -> {
-                    Object object =  matchTable.getSelectionModel().selectedItemProperty().get();
-                    int index = matchTable.getSelectionModel().selectedIndexProperty().get();
-                    System.out.println(matchList.get(index));
-                    System.out.println(object.toString());
-                    matchWindow(matchList.get(index));
-                }
-        ));
 
         try {
             matchList = MatchDao.writeAllAtpMatchesToList();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
+        matchTable.getSelectionModel().selectedIndexProperty().addListener((
+                e -> {
+                    Object object =  matchTable.getSelectionModel().selectedItemProperty().get();
+                    int index = matchTable.getSelectionModel().selectedIndexProperty().get();
+                    System.out.println("\nmatchList.get("+index+") = " + matchList.get(index));
+
+                    matchWindow(matchList.get(index), matchList);
+                }
+        ));
+
 
         System.out.println(matchList.size());
 
@@ -70,8 +74,8 @@ public class MatchController implements Initializable {
         matchTable.setItems(matchObservableList);
     }
 
-    private void matchWindow(Match match) {
-        System.out.println("\nInsert match winner: " + match + " to GridPane -> HBox -> Root Pane");
+    private void matchWindow(Match match, List<Match> matchList) {
+        System.out.println("\nUse winner_id and name for MatchStats data: " + match + " to GridPane -> HBox -> Root Pane");
     }
 
     @FXML

@@ -80,7 +80,7 @@ public class TournamentController implements Initializable {
                     Object object =  tournamentTable.getSelectionModel().selectedItemProperty().get();
                     int index = tournamentTable.getSelectionModel().selectedIndexProperty().get();
                     System.out.println("\ntournamentList.get("+index+") = " + tournamentList.get(index));
-                    newWindow(tournamentList.get(index));   
+                    newWindow(tournamentList.get(index));
                 }
                 ));
 

@@ -30,7 +30,7 @@ targetCompatibility = '17'
 
 application {
     mainModule = 'com.example.cs195tennis'
-    mainClass = 'com.example.cs195tennis.App'
+    mainClass = 'com.example.cs195tennis.PlayerLoader'
 }
 
 

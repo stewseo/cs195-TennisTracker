@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PlayerController implements Initializable {
 
@@ -41,6 +42,7 @@ public class PlayerController implements Initializable {
 
     public ObservableList<Player> playerObservableList =  FXCollections.observableArrayList();
     public List<Player> playerList;
+    private List<Player> playerCache;
 
     @FXML
     private TextField searchBox;
@@ -56,7 +58,7 @@ public class PlayerController implements Initializable {
                 e -> {
                     Object object =  playerTable.getSelectionModel().selectedItemProperty().get();
                     int index = playerTable.getSelectionModel().selectedIndexProperty().get();
-                    System.out.println("\nplayerList.get("+index+") = " + playerList.get(index));
+                    System.out.println("\nplayerList.get("+index+") = " + object);
                     playerWindow(playerList.get(index));
                 }
         ));
@@ -125,13 +127,17 @@ public class PlayerController implements Initializable {
 
     @FXML
     public void handleSearch(ActionEvent event) {
-
         playerObservableList.clear();
 
-        playerList.stream().filter(e -> e.getLastName().equals(searchBox.getText()) ||
-                        e.getHand().equals(searchBox.getText()) ||
-                        e.getIoc().equals(searchBox.getText())|| e.getFirstName().equals(searchBox.getText())
-                ).forEach(playerObservableList::add);
+        playerList = PlayerDao.getTempList();
+
+        playerList = playerList.stream().filter(e -> e.getLastName().equals(searchBox.getText()) ||
+                e.getHand().equals(searchBox.getText()) ||
+                e.getIoc().equals(searchBox.getText()) || e.getFirstName().equals(searchBox.getText())
+        ).toList();
+
+        playerObservableList.addAll(playerList);
+
 
         System.out.println(playerObservableList.size());
         table.setItems(playerObservableList);
