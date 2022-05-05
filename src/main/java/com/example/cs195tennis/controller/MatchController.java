@@ -59,10 +59,10 @@ public class MatchController implements Initializable {
 
         System.out.println(matchList.size());
 
-        matchList.forEach(e-> matchObservableList.add(
-                new Match(e.getWinner_id(), e.getWinner_seed(), e.getWinner_entry(),e.getWinner_name(), e.getWinner_hand(),
-                        e.getWinner_ht(), e.getWinner_ioc(), e.getWinner_age()
-                )));
+//        matchList.forEach(e-> matchObservableList.add(
+//                new Match(e.getWinner_id(), e.getWinner_seed(), e.getWinner_entry(),e.getWinner_name(), e.getWinner_hand(),
+//                        e.getWinner_ht(), e.getWinner_ioc(), e.getWinner_age()
+//                )));
 
         winner_idCol.setCellValueFactory(new PropertyValueFactory<>("winner_id"));
         winner_seedCol.setCellValueFactory(new PropertyValueFactory<>("winner_seed"));

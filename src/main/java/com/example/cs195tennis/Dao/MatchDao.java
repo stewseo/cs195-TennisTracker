@@ -87,6 +87,31 @@ public class MatchDao {
         return matchList;
     }
 
+    public static List<Match> shotTypeFromMatchCsv() {
+        List<Match> serveStatsList = new ArrayList<>();
+
+        Match match = new Match();
+        List<List<String>> allMatchesCsv = new ArrayList<List<String>>();
+
+        try (CSVReader csvReader = new CSVReader(new FileReader(matchCsv));) {
+            String[] values = null;
+            while ((values = csvReader.readNext()) != null) {
+                allMatchesCsv.add(Arrays.asList(values));
+            }
+        } catch (IOException | CsvValidationException e) {
+            e.printStackTrace();
+        }
+        allMatchesCsv.forEach(row -> {
+            serveStatsList.add(
+                    new Match(row.get(0), row.get(1), row.get(7), row.get(8), row.get(9), row.get(10), row.get(11), row.get(12), row.get(13), row.get(14),
+                            row.get(15), row.get(16), row.get(17),row.get(18), row.get(19), row.get(20), row.get(21), row.get(22)
+                            ));
+
+                    ;});
+
+        serveStatsList.forEach(System.out::println);
+        return serveStatsList;
+    }
 
     public List<String[]> oneByOne(Reader reader) throws Exception {
         List<String[]> list = new ArrayList<>();
@@ -151,8 +176,8 @@ public class MatchDao {
             tournamentList.add(
                     new Tournament(row.get(0), row.get(1), row.get(2), row.get(3), row.get(4), row.get(5), row.get(6)));
 
-            winnerList.add(
-                    new Match(row.get(7), row.get(8), row.get(9), row.get(10), row.get(11), row.get(12), row.get(13), row.get(14)));
+//            winnerList.add(
+//                    new Match(row.get(7), row.get(8), row.get(9), row.get(10), row.get(11), row.get(12), row.get(13), row.get(14)));
 
             loserList.add(
                     new Match(new String[]{row.get(16), row.get(17), row.get(18),row.get(19), row.get(20), row.get(21), row.get(22), row.get(23), row.get(24)}));
@@ -173,7 +198,7 @@ public class MatchDao {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        writeAllAtpMatchesToList();
+        shotTypeFromMatchCsv();
     }
 
 //    public static List<Player> getTempMatchList() {

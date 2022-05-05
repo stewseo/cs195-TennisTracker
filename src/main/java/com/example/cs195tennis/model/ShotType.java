@@ -12,6 +12,48 @@ public class ShotType {
     String serve_return;
     String shots_in_pts_lost;
 
+    private static final String CREATE_SHOTTYPE = "CREATE TABLE ShotType"
+            + "("
+            + " ID INT,"
+            + " match_id TEXT NOT NULL,"
+            + " player TEXT NOT NULL,"
+            + " row TEXT,"
+            + " crosscourt TEXT,"
+            + " down_middle TEXT,"
+            + " down_the_line TEXT,"
+            + " inside_out TEXT,"
+            + " inside_in TEXT"
+            + " PRIMARY KEY (ID)"
+            + ")";
+
+    private static final String CREATE_SHOT_DIRECTION = "CREATE TABLE ShotType"
+            + "("
+            + " ID INT,"
+            + " match_id TEXT NOT NULL,"
+            + " player TEXT NOT NULL,"
+            + " row TEXT,"
+            + " crosscourt TEXT,"
+            + " down_middle TEXT,"
+            + " down_the_line TEXT,"
+            + " inside_out TEXT,"
+            + " inside_in TEXT"
+            + " PRIMARY KEY (ID)"
+            + ")";
+
+    private static final String CREATE_SHOT_DIRECTION_OUTCOME = "CREATE TABLE ShotType"
+            + "("
+            + " ID INT,"
+            + " match_id TEXT NOT NULL,"
+            + " player TEXT NOT NULL,"
+            + " row TEXT,"
+            + " crosscourt TEXT,"
+            + " down_middle TEXT,"
+            + " down_the_line TEXT,"
+            + " inside_out TEXT,"
+            + " inside_in TEXT"
+            + " PRIMARY KEY (ID)"
+            + ")";
+
     public ShotType(String match_id, String player, String row, String crosscourt, String down_middle, String down_the_line, String inside_out, String inside_in){
         this.match_id = match_id;
         this.player = player;

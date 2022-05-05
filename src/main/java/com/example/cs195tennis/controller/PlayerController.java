@@ -82,6 +82,14 @@ public class PlayerController implements Initializable {
         playerTable.setItems(playerObservableList);
     }
 
+    Map<String, Player> playerMap = new HashMap<>();
+
+    private void playerWindow(Player player) {
+        System.out.println("\nInsert Player: " + player + " to GridPane -> HBox -> Root Pane");
+
+    }
+
+
 
     @FXML
     public void loadPlayerData(ActionEvent event) {
@@ -99,9 +107,6 @@ public class PlayerController implements Initializable {
         table.setItems(playerObservableList);
     }
 
-    private void playerWindow(Player player) {
-        System.out.println("\nInsert Player: " + player + " to GridPane -> HBox -> Root Pane");
-    }
 
     @FXML
     public void handleAddButtonClicked(ActionEvent event) throws IOException {

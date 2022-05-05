@@ -12,7 +12,10 @@ public class Match {
     public String[] loserFields;
 
 
-    public Match(String winner_id, String winner_seed, String winner_entry, String winner_name, String winner_hand, String winner_ht, String winner_ioc, String winner_age) {
+    public Match(String tourney_id, String tourney_name, String winner_id, String winner_seed, String winner_entry, String winner_name, String winner_hand, String winner_ht, String winner_ioc, String winner_age,
+                 String loser_id, String loser_seed, String loser_entry, String loser_name, String loser_hand, String loser_ht, String loser_ioc, String loser_age) {
+        this.tourney_id = tourney_id;
+        this.tourney_name = tourney_name;
         this.winner_id = winner_id;
         this.winner_seed = winner_seed;
         this.winner_entry = winner_entry;
@@ -21,11 +24,40 @@ public class Match {
         this.winner_ht = winner_ht;
         this.winner_ioc = winner_ioc;
         this.winner_age = winner_age;
+        this.loser_id = loser_id;
+        this.loser_seed = loser_seed;
+        this.loser_entry = loser_entry;
+        this.loser_name = loser_name;
+        this.loser_hand = loser_hand;
+        this.loser_ht = loser_ht;
+        this.loser_ioc = loser_ioc;
+        this.loser_age = loser_age;
     }
 
+//    public Match(String winner_id, String winner_seed, String winner_entry, String winner_name, String winner_hand, String winner_ht, String winner_ioc, String winner_age) {
+//        this.winner_id = winner_id;
+//        this.winner_seed = winner_seed;
+//        this.winner_entry = winner_entry;
+//        this.winner_name = winner_name;
+//        this.winner_hand = winner_hand;
+//        this.winner_ht = winner_ht;
+//        this.winner_ioc = winner_ioc;
+//        this.winner_age = winner_age;
+//    }
+
+    public Match(String tourney_id,String score, String best_of, String round, String minutes) {
+        this.tourney_id = tourney_id;
+        this.score = score;
+        this.best_of = best_of;
+        this.round = round;
+        this.minutes = minutes;
+    }
+
+
+
     public String toString(){
-        return winner_id + ", " + winner_seed+ ", " + winner_entry + ", " + winner_name+ ", " +
-                winner_hand+ ", " + winner_ht + ", " + winner_ioc + winner_age;
+        return tourney_id + ", " + tourney_name + ", " + winner_id + ", " + winner_seed+ ", " + winner_entry + ", " + winner_name+ ", " +
+                winner_hand+ ", " + winner_ht + ", " + winner_ioc + winner_age + ", "  + loser_id + ", " + loser_seed + ", " + loser_entry + ", " + loser_name;
     }
     public Match(){}
 

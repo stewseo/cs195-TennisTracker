@@ -1,12 +1,11 @@
 package com.example.cs195tennis.controller;
 
+import com.example.cs195tennis.Dao.MatchDao;
 import com.example.cs195tennis.Dao.TournamentDao;
 import com.example.cs195tennis.Dao.PlayerDao;
 import com.example.cs195tennis.PlayerLoader;
 import com.example.cs195tennis.database.DatabaseConnection;
-import com.example.cs195tennis.model.Player;
-import com.example.cs195tennis.model.Rankings;
-import com.example.cs195tennis.model.Tournament;
+import com.example.cs195tennis.model.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -37,8 +36,10 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class TournamentController implements Initializable {
 
@@ -68,6 +69,7 @@ public class TournamentController implements Initializable {
     @FXML
     private AnchorPane contentPane;
 
+    Map<String, Tournament> tournamentMap = new HashMap<>();
 
     private void insertTournamentCsvToSql() throws SQLException, IOException {
     }
@@ -107,9 +109,26 @@ public class TournamentController implements Initializable {
 
         tournamentTable.setItems(observableList);
     }
-
+    //after clicking on a row, the Tournament object containing that row's column values is passed in as a parameter here.
     private void newWindow(Tournament tournament) {
-        System.out.println("\nInsert tournament: " + tournament + " to GridPane -> HBox -> Root Pane");
+        System.out.println("\nTournament: " + tournament + "\ntourney_id  = " + tournament.getTourney_id() + "\ntourney_name = " + tournament.getTourney_name()
+                + "\nto GridPane -> HBox -> Root Pane");
+        //Use tourney_id as filter in atp_matches_2022_april.csv. Create model for winner and loser. keys = winner_id and loser_id
+        List<Match> tourneyIdToMatchWinnerLoserList = MatchDao.shotTypeFromMatchCsv();
+
+        System.out.println("Number of results with " + tournament.getTourney_id() + " as primary key " +tourneyIdToMatchWinnerLoserList.size());
+
+        Map<String, Match> mapTournamentIdToShotType = new HashMap<>();
+
+
+
+        tourneyIdToMatchWinnerLoserList = tourneyIdToMatchWinnerLoserList.stream().filter(
+                e -> e.getTourney_id().equals(tournament.getTourney_id())).toList();
+        System.out.println("\n\n " + tourneyIdToMatchWinnerLoserList.size());
+
+        //Contains winner and loser stat fields for clicked on tournament
+        tourneyIdToMatchWinnerLoserList.forEach(System.out::println);
+
     }
 
     @FXML
