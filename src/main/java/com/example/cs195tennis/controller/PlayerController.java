@@ -143,4 +143,9 @@ public class PlayerController implements Initializable {
         table.setItems(playerObservableList);
     }
 
+    public void switchTournamentData(ActionEvent event) {
+    }
+
+    public void switchPlayerData2(ActionEvent event) {
+    }
 }

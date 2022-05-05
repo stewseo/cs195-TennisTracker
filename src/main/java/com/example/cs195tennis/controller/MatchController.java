@@ -1,8 +1,10 @@
 package com.example.cs195tennis.controller;
 
 import com.example.cs195tennis.Dao.MatchDao;
+import com.example.cs195tennis.Dao.PlayerDao;
 import com.example.cs195tennis.Dao.TournamentDao;
 import com.example.cs195tennis.model.Match;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -90,12 +92,30 @@ public class MatchController implements Initializable {
     }
 
     public void handleMatchAdd(ActionEvent event) {
+
     }
 
     public void handleExitButtonClicked(ActionEvent event) {
+        Platform.exit();
+        event.consume();
     }
 
     public void handleSearch(ActionEvent event) {
+        matchObservableList.clear();
+
+
+
+        matchList = matchList.stream().filter(e -> e.getWinner_id().equals(searchBox.getText()) ||
+                e.getWinner_seed().equals(searchBox.getText()) ||
+                e.getWinner_entry().equals(searchBox.getText()) || e.getWinner_name().equals(searchBox.getText()) ||
+                e.getWinner_hand().equals(searchBox.getText())
+        ).toList();
+
+        matchObservableList.addAll(matchList);
+
+
+        System.out.println(matchObservableList.size());
+        matchTable.setItems(matchObservableList);
     }
 
     public void handleClearSearchText(ActionEvent event) {

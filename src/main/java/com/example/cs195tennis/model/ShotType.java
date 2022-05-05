@@ -1,8 +1,8 @@
 package com.example.cs195tennis.model;
 
 public class ShotType {
-    String match_id;
-    String player;
+    String match_id, crosscourt,down_middle,down_the_line,inside_out,inside_in;
+    String player,shots_in_pts_won;
     String row;
     String shots;
     String pt_ending;
@@ -10,15 +10,33 @@ public class ShotType {
     String induced_forced;
     String unforced;
     String serve_return;
-    String shots_in_pts_won;
     String shots_in_pts_lost;
 
-
-
-    public ShotType(String match_id, String player, String row, String shots,String pt_ending, String winners, String induced_forced,
-                    String unforced,String shots_in_pts_won, String shots_in_pts_lost){
-
+    public ShotType(String match_id, String player, String row, String crosscourt, String down_middle, String down_the_line, String inside_out, String inside_in){
+        this.match_id = match_id;
+        this.player = player;
+        this.row = row;
+        this.crosscourt = crosscourt;
+        this.down_middle = down_middle;
+        this.down_the_line = down_the_line;
+        this.inside_out = inside_out;
+        this.inside_in = inside_in;
     }
+
+    public ShotType(String match_id, String player, String row, String shots, String pt_ending, String winners, String induced_forced,
+                    String unforced, String shots_in_pts_won, String shots_in_pts_lost){
+        this.match_id = match_id;
+        this.player = player;
+        this.row = row;
+        this.shots = shots;
+        this.pt_ending = pt_ending;
+        this.winners = winners;
+        this.induced_forced = induced_forced;
+        this.unforced = unforced;
+        this.shots_in_pts_lost = shots_in_pts_lost;
+        this.shots_in_pts_won = shots_in_pts_won;
+    }
+
     public ShotType(String match_id, String player, String row, String shots, String pt_ending, String winners,
                     String induced_forced, String unforced, String serve_return, String shots_in_pts_won, String shots_in_pts_lost) {
 

@@ -4,6 +4,7 @@ import com.example.cs195tennis.Dao.MatchDao;
 import com.example.cs195tennis.Dao.ShotTypeDao;
 import com.example.cs195tennis.model.Match;
 import com.example.cs195tennis.model.ShotType;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,6 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -42,10 +44,8 @@ public class ShotTypeController implements Initializable {
 
         shotTypeTable.getSelectionModel().selectedIndexProperty().addListener((
                 e -> {
-                    Object object =  shotTypeTable.getSelectionModel().selectedItemProperty().get();
                     int index = shotTypeTable.getSelectionModel().selectedIndexProperty().get();
                     System.out.println("\nshotTypeList.get("+index+") = " + shotTypeList.get(index));
-
                     shotTypeWindow(shotTypeList.get(index), shotTypeList);
                 }
         ));
@@ -73,13 +73,28 @@ public class ShotTypeController implements Initializable {
         shotTypeTable.setItems(shotTypeObservableList);
     }
 
+    private List<ShotType> shotDirectionList() throws FileNotFoundException {
+        return ShotTypeDao.getShotDirectionList();
+    }
+    private List<ShotType> shotDirOutcomeList() throws FileNotFoundException {
+        return ShotTypeDao.getShotDirOutcomeList();
+    }
+
     private void shotTypeWindow(ShotType shotType, List<ShotType> shotTypeList) {
+        System.out.println(" Use match_id and selected player to create new table and filters for lists " +  shotType);
     }
 
     public void handleExitButtonClicked(ActionEvent event) {
+        Platform.exit();
+        event.consume();
     }
 
-    public void handleGitButton(ActionEvent event) {
+    public void handleGitButton(ActionEvent event) throws FileNotFoundException {
+        List<ShotType> temp = new ArrayList<>(shotDirOutcomeList());
+
+        shotTypeObservableList.addAll(temp);
+
+        shotTypeTable.setItems(shotTypeObservableList);
     }
 
     public void handleSearch(ActionEvent event) {

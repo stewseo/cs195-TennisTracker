@@ -19,12 +19,11 @@ public class App extends Application {
     public void start(Stage stage) throws SQLException {
 
             try {
-                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Match.fxml")));
+                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("PlayerDataScene.fxml")));
                 Scene scene = new Scene(root);
                 scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("application.css")).toExternalForm());
                 stage.setScene(scene);
                 stage.show();
-
             } catch (IOException e) {
                 e.printStackTrace();
         }

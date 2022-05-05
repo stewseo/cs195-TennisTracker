@@ -117,14 +117,15 @@ public class TournamentController implements Initializable {
 
         observableList.clear();
 
-        tournamentList.stream().filter(e -> e.getTourney_id().equals(searchBox.getText()) ||
+       tournamentList = tournamentList.stream().filter(e -> e.getTourney_id().equals(searchBox.getText()) ||
                 e.getTourney_name().equals(searchBox.getText()) ||
                 e.getSurface().equals(searchBox.getText()) || e.getDraw_size().equals(searchBox.getText())||
                 e.getTourney_date().equals(searchBox.getText()) || e.getTourney_date().equals(searchBox.getText()) ||
                 e.getTourney_level().equals(searchBox.getText()) || e.getMatch_num().equals(searchBox.getText()
 
-                ))
-                .forEach(observableList::add);
+                )).toList();
+
+        observableList.addAll(tournamentList);
 
         System.out.println(observableList.size());
 
