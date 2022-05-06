@@ -36,6 +36,7 @@ application {
 
 
 dependencies {
+    implementation 'com.google.guava:guava:31.1-jre'
     implementation 'org.jdbi:jdbi:2.78'
     implementation 'org.jdbi:jdbi3-core:3.28.0'
     implementation group: 'com.opencsv', name: 'opencsv', version: '5.6'

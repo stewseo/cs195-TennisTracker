@@ -6,6 +6,8 @@ import com.example.cs195tennis.Dao.PlayerDao;
 import com.example.cs195tennis.PlayerLoader;
 import com.example.cs195tennis.database.DatabaseConnection;
 import com.example.cs195tennis.model.*;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -40,6 +42,7 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TournamentController implements Initializable {
 
@@ -70,6 +73,7 @@ public class TournamentController implements Initializable {
     private AnchorPane contentPane;
 
     Map<String, Tournament> tournamentMap = new HashMap<>();
+    Multimap<String, Tournament> map = ArrayListMultimap.create();
 
     private void insertTournamentCsvToSql() throws SQLException, IOException {
     }
@@ -81,22 +85,21 @@ public class TournamentController implements Initializable {
                 e -> {
                     Object object =  tournamentTable.getSelectionModel().selectedItemProperty().get();
                     int index = tournamentTable.getSelectionModel().selectedIndexProperty().get();
-                    System.out.println("\ntournamentList.get("+index+") = " + tournamentList.get(index));
                     newWindow(tournamentList.get(index));
                 }
                 ));
 
         try {
-            tournamentList = TournamentDao.allMatchesCsvToTournamentList();
+            map = TournamentDao.allMatchesCsvToTournamentList();
         } catch (FileNotFoundException | SQLException e) {
             e.printStackTrace();
         }
 
-        System.out.println(tournamentList.size());
+        System.out.println(" size of tourney map " + map.size());
 
-        tournamentList.forEach(e-> observableList.add(
-                new Tournament(e.getTourney_id(), e.getTourney_name(),e.getSurface(), e.getDraw_size(),
-                        e.getTourney_date(), e.getTourney_level(), e.getMatch_num()
+        map.forEach((k, v) ->
+                observableList.add(new Tournament(v.getTourney_id(), v.getTourney_name(),v.getSurface(), v.getDraw_size(),
+                        v.getTourney_date(), v.getTourney_level(), v.getMatch_num()
                 )));
 
         tourney_idCol.setCellValueFactory(new PropertyValueFactory<>("tourney_id"));
@@ -120,23 +123,26 @@ public class TournamentController implements Initializable {
 
         Map<String, Match> mapTournamentIdToShotType = new HashMap<>();
 
-
-
         tourneyIdToMatchWinnerLoserList = tourneyIdToMatchWinnerLoserList.stream().filter(
                 e -> e.getTourney_id().equals(tournament.getTourney_id())).toList();
         System.out.println("\n\n " + tourneyIdToMatchWinnerLoserList.size());
 
         //Contains winner and loser stat fields for clicked on tournament
         tourneyIdToMatchWinnerLoserList.forEach(System.out::println);
-
     }
 
     @FXML
     public void handleSearch(ActionEvent event) {
+        //Need to think about how to Map return values, what to display.
+
+        List<Tournament> tourneyResults = tournamentMap.values().stream()
+                .filter(e -> searchBox.getText().equalsIgnoreCase(e.getTourney_name()))
+                .collect(Collectors.toList());
+
 
         observableList.clear();
 
-       tournamentList = tournamentList.stream().filter(e -> e.getTourney_id().equals(searchBox.getText()) ||
+        tournamentList = tournamentList.stream().filter(e -> e.getTourney_id().equals(searchBox.getText()) ||
                 e.getTourney_name().equals(searchBox.getText()) ||
                 e.getSurface().equals(searchBox.getText()) || e.getDraw_size().equals(searchBox.getText())||
                 e.getTourney_date().equals(searchBox.getText()) || e.getTourney_date().equals(searchBox.getText()) ||
@@ -144,12 +150,11 @@ public class TournamentController implements Initializable {
 
                 )).toList();
 
-        observableList.addAll(tournamentList);
-
-        System.out.println(observableList.size());
+        observableList.addAll(tourneyResults);
 
         tournamentTable.setItems(observableList);
     }
+
 
 
     public TextField tournamentSearch;

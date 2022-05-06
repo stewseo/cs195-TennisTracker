@@ -1,9 +1,9 @@
 package com.example.cs195tennis.controller;
 
 import com.example.cs195tennis.Dao.MatchDao;
-import com.example.cs195tennis.Dao.PlayerDao;
-import com.example.cs195tennis.Dao.TournamentDao;
 import com.example.cs195tennis.model.Match;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,9 +18,9 @@ import javafx.scene.input.MouseEvent;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MatchController implements Initializable {
 
@@ -33,7 +33,7 @@ public class MatchController implements Initializable {
     @FXML public TableView<Match> matchTable;
 
     @FXML public TableColumn<Match, String> winner_idCol, winner_seedCol, winner_entryCol, winner_nameCol, winner_handCol, winner_htCol, winner_iocCol, winner_ageCol;
-
+    Multimap<String, Match> matchMap = ArrayListMultimap.create();
 
 
     @Override
@@ -41,28 +41,29 @@ public class MatchController implements Initializable {
 
 
         try {
-            matchList = MatchDao.writeAllAtpMatchesToList();
+            matchMap = MatchDao.readAtpMatchToMap();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
         matchTable.getSelectionModel().selectedIndexProperty().addListener((
                 e -> {
-                    Object object =  matchTable.getSelectionModel().selectedItemProperty().get();
-                    int index = matchTable.getSelectionModel().selectedIndexProperty().get();
-                    System.out.println("\nmatchList.get("+index+") = " + matchList.get(index));
 
-                    matchWindow(matchList.get(index), matchList);
+                    Match selectedMatch =  matchTable.getSelectionModel().selectedItemProperty().get();
+
+                    int rowNumber = matchTable.getSelectionModel().selectedIndexProperty().get();
+
+                    matchWindow(rowNumber, selectedMatch);
                 }
         ));
 
 
-        System.out.println(matchList.size());
+        System.out.println(matchMap.size());
 
-//        matchList.forEach(e-> matchObservableList.add(
-//                new Match(e.getWinner_id(), e.getWinner_seed(), e.getWinner_entry(),e.getWinner_name(), e.getWinner_hand(),
-//                        e.getWinner_ht(), e.getWinner_ioc(), e.getWinner_age()
-//                )));
+        matchMap.forEach((k, v) ->
+                matchObservableList.add(new Match(v.getWinner_id(), v.getWinner_seed(), v.getWinner_entry(), v.getWinner_name(), v.getWinner_hand(),
+                        v.getWinner_ht(), v.getWinner_ioc(), v.getWinner_age()
+                )));
 
         winner_idCol.setCellValueFactory(new PropertyValueFactory<>("winner_id"));
         winner_seedCol.setCellValueFactory(new PropertyValueFactory<>("winner_seed"));
@@ -75,9 +76,31 @@ public class MatchController implements Initializable {
 
         matchTable.setItems(matchObservableList);
     }
+    //provide stat catgeory button click a match -> button for winner -> map winner_id of that match -> value: ShotType constructor using match_id and winner_id
+    //to GridPane -> HBox -> Root Pane
+    private void matchWindow(int rowNumber, Match selectedMatch) {
 
-    private void matchWindow(Match match, List<Match> matchList) {
-        System.out.println("\nUse winner_id and name for MatchStats data: " + match + " to GridPane -> HBox -> Root Pane");
+        String selectedId = selectedMatch.getWinner_id();
+
+        List<Match> value = matchMap.get(selectedId).stream().toList();
+
+        AtomicInteger i = new AtomicInteger(1);
+
+        System.out.println("\nClicked Row Number : " + rowNumber);
+
+        matchMap.get(selectedId).forEach(e-> {
+
+            System.out.println("\nIndex:" + (i.getAndIncrement()) +
+                    "\nwinner id " + e.getWinner_id()
+                    + "\nLoser id " + e.getLoser_id()
+                    + "\nTourney Id " + e.getTourney_id()
+            );
+        });
+
+        String winnerAces = selectedMatch.getW_ace();
+
+        System.out.print("\n\nAll fields accessible from selected row: " + value);
+
     }
 
     @FXML

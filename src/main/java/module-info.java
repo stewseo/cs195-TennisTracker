@@ -1,4 +1,5 @@
 module com.example.cs195tennis {
+    requires com.google.common;
     requires org.kordamp.ikonli.core;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.ikonli.materialdesign2;

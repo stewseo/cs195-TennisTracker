@@ -3,6 +3,8 @@ package com.example.cs195tennis.Dao;
 import com.example.cs195tennis.database.DatabaseConnection;
 import com.example.cs195tennis.model.Player;
 import com.example.cs195tennis.model.Tournament;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.FXCollections;
@@ -10,10 +12,7 @@ import javafx.collections.ObservableList;
 
 import java.io.*;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TournamentDao {
@@ -169,8 +168,9 @@ public class TournamentDao {
 
     static String matchCsv = "C:\\Users\\seost\\cs195TennisAnalytics\\cs195-TennisTracker\\src\\main\\resources\\com\\example\\cs195tennis\\atp_matches_2022.csv";
 
-    public static List<Tournament> allMatchesCsvToTournamentList() throws FileNotFoundException, SQLException {
+    public static Multimap<String,Tournament> allMatchesCsvToTournamentList() throws FileNotFoundException, SQLException {
         Connection c = DatabaseConnection.connect();
+
 
         c.setAutoCommit(false);
         int batchSize = 20;
@@ -178,9 +178,10 @@ public class TournamentDao {
 
         PreparedStatement statement = c.prepareStatement(sql);
 
-        List<Tournament> tournamentList = new ArrayList<>();
-
         List<List<String>> allMatchesCsv = new ArrayList<List<String>>();
+        Map<String,List<Tournament>> tourneyMap = new HashMap<>();
+
+        Multimap<String, Tournament> map = ArrayListMultimap.create();
 
         try (CSVReader csvReader = new CSVReader(new FileReader(matchCsv));) {
             String[] values = null;
@@ -190,16 +191,20 @@ public class TournamentDao {
         } catch (IOException | CsvValidationException e) {
             e.printStackTrace();
         }
+
+        //for each element in a row, row.get(i) where i = column index.
+        //map.computeIfAbsent(row.get(idColumn), k -> new ArrayList<>()).add(new Tournament(row.get(i))
+        //map.get(.getTourney_id()).add(new Tournament(
+        //row.get(columns we want to use for tournament
+
         allMatchesCsv.forEach(row -> {
-
-            tournamentList.add(
+            map.put(row.get(0),
                     new Tournament(row.get(0), row.get(1), row.get(2), row.get(3), row.get(4), row.get(5), row.get(6)));
-
             ;});
 
-        tournamentList.forEach(e-> System.out.println(e.toString()));
-
-        return tournamentList;
+        System.out.println(map.size());
+        map.forEach((k, v) -> System.out.print("\n\nk = " + k + ": v = " + v));
+        return map;
     }
 
 
