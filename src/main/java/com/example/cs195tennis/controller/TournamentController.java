@@ -38,6 +38,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,31 +74,36 @@ public class TournamentController implements Initializable {
     private AnchorPane contentPane;
 
     Map<String, Tournament> tournamentMap = new HashMap<>();
-    Multimap<String, Tournament> map = ArrayListMultimap.create();
+    Multimap<String, Tournament> tourneyMap = ArrayListMultimap.create();
 
     private void insertTournamentCsvToSql() throws SQLException, IOException {
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        //adds listener to table view for mouse click
         tournamentTable.getSelectionModel().selectedIndexProperty().addListener((
                 e -> {
-                    Object object =  tournamentTable.getSelectionModel().selectedItemProperty().get();
+                    Tournament tournament =  tournamentTable.getSelectionModel().selectedItemProperty().get();
                     int index = tournamentTable.getSelectionModel().selectedIndexProperty().get();
-                    newWindow(tournamentList.get(index));
+
+                    try {
+                        handleRowClick(index, tournament);
+                    } catch (FileNotFoundException ex) {
+                        ex.printStackTrace();
+                    }
                 }
                 ));
 
+        //calls dao and returns multimap
+
         try {
-            map = TournamentDao.allMatchesCsvToTournamentList();
+            tourneyMap = TournamentDao.allMatchesCsvToTournamentList();
         } catch (FileNotFoundException | SQLException e) {
             e.printStackTrace();
         }
 
-        System.out.println(" size of tourney map " + map.size());
-
-        map.forEach((k, v) ->
+        tourneyMap.forEach((k, v) ->
                 observableList.add(new Tournament(v.getTourney_id(), v.getTourney_name(),v.getSurface(), v.getDraw_size(),
                         v.getTourney_date(), v.getTourney_level(), v.getMatch_num()
                 )));
@@ -112,23 +118,33 @@ public class TournamentController implements Initializable {
 
         tournamentTable.setItems(observableList);
     }
-    //after clicking on a row, the Tournament object containing that row's column values is passed in as a parameter here.
-    private void newWindow(Tournament tournament) {
-        System.out.println("\nTournament: " + tournament + "\ntourney_id  = " + tournament.getTourney_id() + "\ntourney_name = " + tournament.getTourney_name()
-                + "\nto GridPane -> HBox -> Root Pane");
-        //Use tourney_id as filter in atp_matches_2022_april.csv. Create model for winner and loser. keys = winner_id and loser_id
-        List<Match> tourneyIdToMatchWinnerLoserList = MatchDao.shotTypeFromMatchCsv();
 
-        System.out.println("Number of results with " + tournament.getTourney_id() + " as primary key " +tourneyIdToMatchWinnerLoserList.size());
+    private void handleRowClick(int rowNumber, Tournament selectedTournament) throws FileNotFoundException {
 
-        Map<String, Match> mapTournamentIdToShotType = new HashMap<>();
+        String selectedId = selectedTournament.getTourney_id();
 
-        tourneyIdToMatchWinnerLoserList = tourneyIdToMatchWinnerLoserList.stream().filter(
-                e -> e.getTourney_id().equals(tournament.getTourney_id())).toList();
-        System.out.println("\n\n " + tourneyIdToMatchWinnerLoserList.size());
+        AtomicInteger i = new AtomicInteger(1);
 
-        //Contains winner and loser stat fields for clicked on tournament
-        tourneyIdToMatchWinnerLoserList.forEach(System.out::println);
+        List<String[]> keysForNextQuery = new ArrayList<>();
+
+        System.out.println("\nClicked Row Number : " + rowNumber);
+
+        tourneyMap.get(selectedId).forEach(e-> {
+
+            keysForNextQuery.add(new String[]{
+                    e.getTourney_id(), e.getTourney_name(), e.getSurface(),
+                    e.getDraw_size(), e.getTourney_date(), e.getTourney_level()
+            });
+
+            System.out.println("\nIndex:" + (i.getAndIncrement()) +
+                    "\nwinner id " + e.getTourney_date()
+                    + "\nLoser id " + e.getTourney_name()
+                    + "\nTourney Id " + e.getTourney_id()
+            );
+        });
+
+        keysForNextQuery.forEach(e-> System.out.println(Arrays.toString(e)));
+
     }
 
     @FXML

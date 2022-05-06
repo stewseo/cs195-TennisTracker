@@ -19,7 +19,8 @@ public class App extends Application {
     public void start(Stage stage) throws SQLException {
 
             try {
-                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Match.fxml")));
+                Parent root = FXMLLoader.
+                        load(Objects.requireNonNull(getClass().getResource("Match.fxml")));
                 Scene scene = new Scene(root);
                 scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("application.css")).toExternalForm());
                 stage.setScene(scene);

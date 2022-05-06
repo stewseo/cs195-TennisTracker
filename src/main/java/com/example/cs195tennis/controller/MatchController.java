@@ -1,5 +1,4 @@
 package com.example.cs195tennis.controller;
-
 import com.example.cs195tennis.Dao.MatchDao;
 import com.example.cs195tennis.model.Match;
 import com.google.common.collect.ArrayListMultimap;
@@ -18,8 +17,7 @@ import javafx.scene.input.MouseEvent;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MatchController implements Initializable {
@@ -35,7 +33,6 @@ public class MatchController implements Initializable {
     @FXML public TableColumn<Match, String> winner_idCol, winner_seedCol, winner_entryCol, winner_nameCol, winner_handCol, winner_htCol, winner_iocCol, winner_ageCol;
     Multimap<String, Match> matchMap = ArrayListMultimap.create();
 
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -45,6 +42,8 @@ public class MatchController implements Initializable {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
+        Map<String, Collection<Match>> map = matchMap.asMap();
 
         matchTable.getSelectionModel().selectedIndexProperty().addListener((
                 e -> {
@@ -76,6 +75,7 @@ public class MatchController implements Initializable {
 
         matchTable.setItems(matchObservableList);
     }
+
     //provide stat catgeory button click a match -> button for winner -> map winner_id of that match -> value: ShotType constructor using match_id and winner_id
     //to GridPane -> HBox -> Root Pane
     private void matchWindow(int rowNumber, Match selectedMatch) {
@@ -88,7 +88,13 @@ public class MatchController implements Initializable {
 
         System.out.println("\nClicked Row Number : " + rowNumber);
 
+        List<String[]> keysForNextQuery = new ArrayList<>();
+
         matchMap.get(selectedId).forEach(e-> {
+
+            keysForNextQuery.add(new String[]{
+                    e.getTourney_id(), e.getTourney_name(), e.getWinner_id(), e.getWinner_name(), e.getLoser_id(), e.getLoser_name(),
+            });
 
             System.out.println("\nIndex:" + (i.getAndIncrement()) +
                     "\nwinner id " + e.getWinner_id()
@@ -96,6 +102,8 @@ public class MatchController implements Initializable {
                     + "\nTourney Id " + e.getTourney_id()
             );
         });
+
+        keysForNextQuery.forEach(e-> System.out.println(Arrays.toString(e)));
 
         String winnerAces = selectedMatch.getW_ace();
 
