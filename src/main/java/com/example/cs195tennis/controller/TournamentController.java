@@ -149,7 +149,6 @@ public class TournamentController implements Initializable {
 
     @FXML
     public void handleSearch(ActionEvent event) {
-        //Need to think about how to Map return values, what to display.
 
         List<Tournament> tourneyResults = tournamentMap.values().stream()
                 .filter(e -> searchBox.getText().equalsIgnoreCase(e.getTourney_name()))
@@ -189,10 +188,12 @@ public class TournamentController implements Initializable {
 
 
     public void handleCommitAddProject(ActionEvent event) throws IOException {
-        Node node = (Node) event.getSource();
-        Stage thisStage = (Stage) node.getScene().getWindow();
-        thisStage.close();
-        PlayerLoader playerLoader = new PlayerLoader();
+        new Application() {
+            @Override
+            public void start(Stage stage) {
+            }
+        }.getHostServices().showDocument("https://github.com/stewseo/cs195-TennisTracker");
+        event.consume();
     }
 
     @FXML

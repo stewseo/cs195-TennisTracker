@@ -31,7 +31,8 @@ public class MatchController implements Initializable {
     @FXML public TableView<Match> matchTable;
 
     @FXML public TableColumn<Match, String> winner_idCol, winner_seedCol, winner_entryCol, winner_nameCol, winner_handCol, winner_htCol, winner_iocCol, winner_ageCol;
-    Multimap<String, Match> matchMap = ArrayListMultimap.create();
+
+    Map<String, List<Match>> matchMap = new HashMap<>();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -42,8 +43,7 @@ public class MatchController implements Initializable {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
-        Map<String, Collection<Match>> map = matchMap.asMap();
+//        Map<String, Collection<Match>> map = matchMap.asMap();
 
         matchTable.getSelectionModel().selectedIndexProperty().addListener((
                 e -> {
@@ -58,11 +58,14 @@ public class MatchController implements Initializable {
 
 
         System.out.println(matchMap.size());
+        //we have a model initialized by each row in the data access class. We use the tourney_id and tourney_name as the key, to all 50 columns.
+        //Is there a point create a new model here?
 
-        matchMap.forEach((k, v) ->
-                matchObservableList.add(new Match(v.getWinner_id(), v.getWinner_seed(), v.getWinner_entry(), v.getWinner_name(), v.getWinner_hand(),
-                        v.getWinner_ht(), v.getWinner_ioc(), v.getWinner_age()
-                )));
+        matchMap.forEach((k, v) -> v.forEach(e ->
+
+                matchObservableList.add(new Match(e.getWinner_id(), e.getWinner_seed(), e.getWinner_entry(), e.getWinner_name(), e.getWinner_hand(),
+                        e.getWinner_ht(), e.getWinner_ioc(), e.getWinner_age()
+                ))));
 
         winner_idCol.setCellValueFactory(new PropertyValueFactory<>("winner_id"));
         winner_seedCol.setCellValueFactory(new PropertyValueFactory<>("winner_seed"));
@@ -79,7 +82,6 @@ public class MatchController implements Initializable {
     //provide stat catgeory button click a match -> button for winner -> map winner_id of that match -> value: ShotType constructor using match_id and winner_id
     //to GridPane -> HBox -> Root Pane
     private void matchWindow(int rowNumber, Match selectedMatch) {
-
         String selectedId = selectedMatch.getWinner_id();
 
         List<Match> value = matchMap.get(selectedId).stream().toList();
@@ -90,25 +92,28 @@ public class MatchController implements Initializable {
 
         List<String[]> keysForNextQuery = new ArrayList<>();
 
+        List<String> queryString = new ArrayList<>();
+
         matchMap.get(selectedId).forEach(e-> {
 
             keysForNextQuery.add(new String[]{
-                    e.getTourney_id(), e.getTourney_name(), e.getWinner_id(), e.getWinner_name(), e.getLoser_id(), e.getLoser_name(),
+                    e.getTourney_id(), "-m-", e.getTourney_name(), e.getWinner_name(), e.getLoser_name(),
             });
+
+            queryString.add(e.getTourney_date()+"-F-"+e.getTourney_name() +"-"+ e.getWinner_name() +"-"+ e.getLoser_name());
 
             System.out.println("\nIndex:" + (i.getAndIncrement()) +
                     "\nwinner id " + e.getWinner_id()
-                    + "\nLoser id " + e.getLoser_id()
-                    + "\nTourney Id " + e.getTourney_id()
+                    +"\nLoser id " + e.getLoser_id()
+                    +"\nTourney Id " + e.getTourney_id()
             );
         });
 
-        keysForNextQuery.forEach(e-> System.out.println(Arrays.toString(e)));
+//        keysForNextQuery.forEach(e->System.out.println(Arrays.toString(e)));
 
-        String winnerAces = selectedMatch.getW_ace();
+        queryString.forEach(System.out::println);
 
         System.out.print("\n\nAll fields accessible from selected row: " + value);
-
     }
 
     @FXML

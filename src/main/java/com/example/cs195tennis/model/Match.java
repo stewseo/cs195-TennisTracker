@@ -12,10 +12,14 @@ public class Match {
     public String[] loserFields;
 
 
-    public Match(String tourney_id, String tourney_name, String winner_id, String winner_seed, String winner_entry, String winner_name, String winner_hand, String winner_ht, String winner_ioc, String winner_age,
-                 String loser_id, String loser_seed, String loser_entry, String loser_name, String loser_hand, String loser_ht, String loser_ioc, String loser_age) {
+    public Match(String tourney_id, String tourney_name, String surface, String draw_size, String tourney_level, String tourney_date, String match_num, String winner_id, String winner_seed, String winner_entry, String winner_name, String winner_hand, String winner_ht, String winner_ioc, String winner_age, String loser_id, String loser_seed, String loser_entry, String loser_name, String loser_hand, String loser_ht, String loser_ioc, String loser_age, String score, String best_of, String round, String minutes, String w_ace, String w_df, String w_svpt, String w_1stIn, String w_1stWon, String w_2ndWon, String w_SvGms, String w_bpSaved, String w_bpFaced, String l_ace, String l_df, String l_svpt, String l_1stIn, String l_1stWon, String l_2ndWon, String l_SvGms, String l_bpSaved, String l_bpFaced, String winner_rank, String winner_rank_points, String loser_rank, String loser_rank_points) {
         this.tourney_id = tourney_id;
         this.tourney_name = tourney_name;
+        this.surface = surface;
+        this.draw_size = draw_size;
+        this.tourney_level = tourney_level;
+        this.tourney_date = tourney_date;
+        this.match_num = match_num;
         this.winner_id = winner_id;
         this.winner_seed = winner_seed;
         this.winner_entry = winner_entry;
@@ -32,6 +36,56 @@ public class Match {
         this.loser_ht = loser_ht;
         this.loser_ioc = loser_ioc;
         this.loser_age = loser_age;
+        this.score = score;
+        this.best_of = best_of;
+        this.round = round;
+        this.minutes = minutes;
+        this.w_ace = w_ace;
+        this.w_df = w_df;
+        this.w_svpt = w_svpt;
+        this.w_1stIn = w_1stIn;
+        this.w_1stWon = w_1stWon;
+        this.w_2ndWon = w_2ndWon;
+        this.w_SvGms = w_SvGms;
+        this.w_bpSaved = w_bpSaved;
+        this.w_bpFaced = w_bpFaced;
+        this.l_ace = l_ace;
+        this.l_df = l_df;
+        this.l_svpt = l_svpt;
+        this.l_1stIn = l_1stIn;
+        this.l_1stWon = l_1stWon;
+        this.l_2ndWon = l_2ndWon;
+        this.l_SvGms = l_SvGms;
+        this.l_bpSaved = l_bpSaved;
+        this.l_bpFaced = l_bpFaced;
+        this.winner_rank = winner_rank;
+        this.winner_rank_points = winner_rank_points;
+        this.loser_rank = loser_rank;
+        this.loser_rank_points = loser_rank_points;
+    }
+
+    public Match(String tourney_id, String tourney_name, String tourney_date, String winner_id, String winner_seed, String winner_entry, String winner_name, String winner_hand, String winner_ht, String winner_ioc, String winner_age,
+                 String loser_id, String loser_seed, String loser_entry, String loser_name, String loser_hand, String loser_ht, String loser_ioc, String loser_age, String round) {
+        this.tourney_id = tourney_id;
+        this.tourney_name = tourney_name;
+        this.tourney_date = tourney_date;
+        this.winner_id = winner_id;
+        this.winner_seed = winner_seed;
+        this.winner_entry = winner_entry;
+        this.winner_name = winner_name;
+        this.winner_hand = winner_hand;
+        this.winner_ht = winner_ht;
+        this.winner_ioc = winner_ioc;
+        this.winner_age = winner_age;
+        this.loser_id = loser_id;
+        this.loser_seed = loser_seed;
+        this.loser_entry = loser_entry;
+        this.loser_name = loser_name;
+        this.loser_hand = loser_hand;
+        this.loser_ht = loser_ht;
+        this.loser_ioc = loser_ioc;
+        this.loser_age = loser_age;
+        this.round = round;
     }
 
     public Match(String winner_id, String winner_seed, String winner_entry, String winner_name, String winner_hand, String winner_ht, String winner_ioc, String winner_age) {
