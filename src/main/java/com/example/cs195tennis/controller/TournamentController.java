@@ -142,9 +142,7 @@ public class TournamentController implements Initializable {
                     + "\nTourney Id " + e.getTourney_id()
             );
         });
-
         keysForNextQuery.forEach(e-> System.out.println(Arrays.toString(e)));
-
     }
 
     @FXML

@@ -88,15 +88,16 @@ public class Match {
         this.round = round;
     }
 
-    public Match(String winner_id, String winner_seed, String winner_entry, String winner_name, String winner_hand, String winner_ht, String winner_ioc, String winner_age) {
-        this.winner_id = winner_id;
-        this.winner_seed = winner_seed;
-        this.winner_entry = winner_entry;
+
+    public Match(String tourney_name, String tourney_date, String match_num, String winner_name, String loser_name, String score, String best_of, String round) {
+        this.tourney_name = tourney_name;
+        this.tourney_date = tourney_date;
+        this.match_num = match_num;
         this.winner_name = winner_name;
-        this.winner_hand = winner_hand;
-        this.winner_ht = winner_ht;
-        this.winner_ioc = winner_ioc;
-        this.winner_age = winner_age;
+        this.loser_name = loser_name;
+        this.score = score;
+        this.best_of = best_of;
+        this.round = round;
     }
 
     public Match(String loser_id, String loser_seed, String loser_entry, String loser_name, String loser_hand, String loser_ht, String loser_ioc, String loser_age, String l_rank) {

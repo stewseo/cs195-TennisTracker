@@ -3,6 +3,7 @@ import com.example.cs195tennis.Dao.MatchDao;
 import com.example.cs195tennis.model.Match;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +15,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -30,7 +32,7 @@ public class MatchController implements Initializable {
 
     @FXML public TableView<Match> matchTable;
 
-    @FXML public TableColumn<Match, String> winner_idCol, winner_seedCol, winner_entryCol, winner_nameCol, winner_handCol, winner_htCol, winner_iocCol, winner_ageCol;
+    @FXML public TableColumn<Match, String> tourney_nameCol, tourney_dateCol, winner_nameCol, loser_nameCol, scoreCol, roundCol, matchNumCol,bestOfCol;
 
     Map<String, List<Match>> matchMap = new HashMap<>();
 
@@ -63,18 +65,18 @@ public class MatchController implements Initializable {
 
         matchMap.forEach((k, v) -> v.forEach(e ->
 
-                matchObservableList.add(new Match(e.getWinner_id(), e.getWinner_seed(), e.getWinner_entry(), e.getWinner_name(), e.getWinner_hand(),
-                        e.getWinner_ht(), e.getWinner_ioc(), e.getWinner_age()
+                matchObservableList.add(new Match(e.getTourney_name(), e.getTourney_date(),e.getWinner_name(), e.getLoser_name(), e.getScore(),
+                        e.getRound(), e.getMatch_num(), e.getBest_of()
                 ))));
 
-        winner_idCol.setCellValueFactory(new PropertyValueFactory<>("winner_id"));
-        winner_seedCol.setCellValueFactory(new PropertyValueFactory<>("winner_seed"));
-        winner_entryCol.setCellValueFactory(new PropertyValueFactory<>("winner_entry"));
+        tourney_nameCol.setCellValueFactory(new PropertyValueFactory<>("tourney_name"));
+        tourney_dateCol.setCellValueFactory(new PropertyValueFactory<>("tourney_date"));
         winner_nameCol.setCellValueFactory(new PropertyValueFactory<>("winner_name"));
-        winner_handCol.setCellValueFactory(new PropertyValueFactory<>("winner_hand"));
-        winner_htCol.setCellValueFactory(new PropertyValueFactory<>("winner_ht"));
-        winner_iocCol.setCellValueFactory(new PropertyValueFactory<>("winner_ioc"));
-        winner_ageCol.setCellValueFactory(new PropertyValueFactory<>("winner_age"));
+        loser_nameCol.setCellValueFactory(new PropertyValueFactory<>("loser_name"));
+        scoreCol.setCellValueFactory(new PropertyValueFactory<>("score"));
+        roundCol.setCellValueFactory(new PropertyValueFactory<>("round"));
+        matchNumCol.setCellValueFactory(new PropertyValueFactory<>("match_num"));
+        bestOfCol.setCellValueFactory(new PropertyValueFactory<>("best_of"));
 
         matchTable.setItems(matchObservableList);
     }
@@ -100,8 +102,6 @@ public class MatchController implements Initializable {
                     e.getTourney_id(), "-m-", e.getTourney_name(), e.getWinner_name(), e.getLoser_name(),
             });
 
-            queryString.add(e.getTourney_date()+"-F-"+e.getTourney_name() +"-"+ e.getWinner_name() +"-"+ e.getLoser_name());
-
             System.out.println("\nIndex:" + (i.getAndIncrement()) +
                     "\nwinner id " + e.getWinner_id()
                     +"\nLoser id " + e.getLoser_id()
@@ -109,26 +109,10 @@ public class MatchController implements Initializable {
             );
         });
 
-//        keysForNextQuery.forEach(e->System.out.println(Arrays.toString(e)));
-
-        queryString.forEach(System.out::println);
-
-        System.out.print("\n\nAll fields accessible from selected row: " + value);
-    }
-
-    @FXML
-    public void clickItem(MouseEvent event) {
-
-        if (event.getClickCount() == 2) {
-            System.out.println(matchTable.getSelectionModel().getSelectedItem().getWinner_id());
-            System.out.println(matchTable.getSelectionModel().getSelectedItem().getWinner_seed());
-            System.out.println(matchTable.getSelectionModel().getSelectedItem().getWinner_entry());
-        }
 
     }
 
     public void handleMatchAdd(ActionEvent event) {
-
     }
 
     public void handleExitButtonClicked(ActionEvent event) {
@@ -137,9 +121,8 @@ public class MatchController implements Initializable {
     }
 
     public void handleSearch(ActionEvent event) {
+
         matchObservableList.clear();
-
-
 
         matchList = matchList.stream().filter(e -> e.getWinner_id().equals(searchBox.getText()) ||
                 e.getWinner_seed().equals(searchBox.getText()) ||
@@ -149,11 +132,19 @@ public class MatchController implements Initializable {
 
         matchObservableList.addAll(matchList);
 
-
         System.out.println(matchObservableList.size());
         matchTable.setItems(matchObservableList);
     }
 
     public void handleClearSearchText(ActionEvent event) {
+    }
+
+    public void handleGitButtonClicked(ActionEvent event) {
+        new Application() {
+            @Override
+            public void start(Stage stage) {
+            }
+        }.getHostServices().showDocument("https://github.com/stewseo/cs195-TennisTracker");
+        event.consume();
     }
 }
