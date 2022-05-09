@@ -36,6 +36,10 @@ application {
 
 
 dependencies {
+    implementation 'org.jooq:jooq:3.16.6'
+    implementation 'com.querydsl:querydsl-sql:5.0.0'
+    implementation 'com.querydsl:querydsl-core:5.0.0'
+    implementation 'com.querydsl:querydsl-jpa:5.0.0'
     implementation 'com.google.guava:guava:31.1-jre'
     implementation 'org.jdbi:jdbi:2.78'
     implementation 'org.jdbi:jdbi3-core:3.28.0'

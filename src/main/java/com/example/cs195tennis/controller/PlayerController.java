@@ -17,12 +17,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class PlayerController implements Initializable {
@@ -41,7 +42,7 @@ public class PlayerController implements Initializable {
     public TextField playerSearchTextField;
 
     public ObservableList<Player> playerObservableList =  FXCollections.observableArrayList();
-    public List<Player> playerList;
+    public Map<String, List<Player>> playerMap = new HashMap<>();
     private List<Player> playerCache;
 
     @FXML
@@ -51,24 +52,25 @@ public class PlayerController implements Initializable {
         PlayerDao.insertPlayerFromCsv();
     }
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
 
         playerTable.getSelectionModel().selectedIndexProperty().addListener((
                 e -> {
-                    Object object =  playerTable.getSelectionModel().selectedItemProperty().get();
+                    Player player =  playerTable.getSelectionModel().selectedItemProperty().get();
                     int index = playerTable.getSelectionModel().selectedIndexProperty().get();
-                    System.out.println("\nplayerList.get("+index+") = " + object);
-                    playerWindow(playerList.get(index));
+                    playerWindow(player);
                 }
         ));
 
-        playerList = PlayerDao.getTempList();
-        System.out.println(playerList.size());
+        playerMap = PlayerDao.getPlayerMap();
 
-        playerList.forEach(e-> playerObservableList.add(
-                new Player(e.getId(), e.getFirstName(),e.getLastName(), e.getHand(), e.getDob(), e.getIoc(), e.getHeight(), e.getWiki()
-                )));
+        System.out.println(playerMap.size());
+
+        playerMap.forEach((k, v) -> v.forEach(pid-> playerObservableList.add(
+                new Player(pid.getId(), pid.getFirstName(), pid.getLastName(), pid.getHand(), pid.getDob(), pid.getIoc(), pid.getHeight(), pid.getWiki()
+                ))));
 
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
@@ -82,7 +84,7 @@ public class PlayerController implements Initializable {
         playerTable.setItems(playerObservableList);
     }
 
-    Map<String, Player> playerMap = new HashMap<>();
+
 
     private void playerWindow(Player player) {
         System.out.println("\nInsert Player: " + player + " to GridPane -> HBox -> Root Pane");
@@ -95,14 +97,13 @@ public class PlayerController implements Initializable {
     public void loadPlayerData(ActionEvent event) {
 
         String qu = " WHERE " + event.getSource().toString() + " = " + playerSearchTextField.getText();
-        playerList = PlayerDao.getTempList();
+        playerMap = PlayerDao.getPlayerMap();
 
         String input = playerSearchTextField.getText();
 
-        playerList.forEach(e-> playerObservableList.add(
-                new Player(e.getId(), e.getFirstName(), e.getLastName(),
-                        e.getHand(),  e.getDob(), e.getIoc(), e.getHeight(), e.getWiki()
-                )));
+        playerMap.forEach((k, v) -> v.forEach(pid-> playerObservableList.add(
+                new Player(pid.getId(), pid.getFirstName(), pid.getLastName(), pid.getHand(), pid.getDob(), pid.getIoc(), pid.getHeight(), pid.getWiki()
+                ))));
 
         table.setItems(playerObservableList);
     }
@@ -128,23 +129,44 @@ public class PlayerController implements Initializable {
         Platform.exit();
         event.consume();
     }
-
-
+    
     @FXML
     public void handleSearch(ActionEvent event) {
+
+        List<Predicate<Player>> allPredicates = Arrays.asList(
+                        e -> e.getLastName().equals(searchBox.getText()),
+                        e -> e.getFirstName().equals(searchBox.getText())
+                );
+
+        Comparator<Player> byfullName = Comparator.comparing(e-> e.getFirstName() + "_" + e.getLastName());
+
+        Comparator<Player> byPlayer = Comparator.comparing(Player::getId).thenComparing(Player::getFirstName)
+                .thenComparing(Player::getLastName)
+                .thenComparing(Player::getDob);
+
         playerObservableList.clear();
 
-        playerList = PlayerDao.getTempList();
+        Player player = new Player(searchBox.getText());
 
-        playerList = playerList.stream().filter(e -> e.getLastName().equals(searchBox.getText()) ||
-                e.getHand().equals(searchBox.getText()) ||
-                e.getIoc().equals(searchBox.getText()) || e.getFirstName().equals(searchBox.getText())
-        ).toList();
+        Map<String, List<Player>> filteredMap = playerMap;
+        System.out.println(filteredMap);
+        AtomicReference<String> id = new AtomicReference<>(searchBox.getText());
 
-        playerObservableList.addAll(playerList);
+        Map<String, List<Player>> playerId = new HashMap<>();
+
+        filteredMap.forEach((k, v) -> {
+
+                    v.stream()
+                    .filter(e -> e.getFirstName().equals(id.toString()) || e.getLastName().equals(id.toString())).forEach(result -> {
+                        id.set(result.getId());
+                        playerId.computeIfAbsent(result.getId(), idList -> new ArrayList<>());
+                        playerId.get(result.getId()).add(result);
+                    });
+        });
 
 
-        System.out.println(playerObservableList.size());
+        playerObservableList.addAll(playerId.get(id.toString()));
+//
         table.setItems(playerObservableList);
     }
 

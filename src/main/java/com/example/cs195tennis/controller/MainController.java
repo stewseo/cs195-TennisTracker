@@ -45,9 +45,7 @@ public class MainController implements Initializable{
             table.setItems(list);
         }
 
-
     }
-
 
     @FXML
     public void switchMainScene(ActionEvent event) throws IOException {

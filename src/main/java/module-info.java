@@ -1,4 +1,6 @@
 module com.example.cs195tennis {
+    requires org.jooq;
+    requires com.querydsl.core;
     requires com.google.common;
     requires org.kordamp.ikonli.core;
     requires org.kordamp.ikonli.javafx;

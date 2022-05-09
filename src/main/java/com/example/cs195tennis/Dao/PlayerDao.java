@@ -3,12 +3,13 @@ package com.example.cs195tennis.Dao;
 import com.example.cs195tennis.database.DatabaseConnection;
 import com.example.cs195tennis.model.Rankings;
 import com.example.cs195tennis.model.Player;
-import org.sqlite.jdbc3.JDBC3Connection;
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 
 import java.io.*;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class PlayerDao {
@@ -53,12 +54,16 @@ public class PlayerDao {
         static String rankingTable = "Player_Rank";
 
 
+    public static void main(String[] args){
+        createTablePlayerRank();
+    }
 
     public static void insertPlayerFromCsv() throws SQLException, IOException {
         Connection c = DatabaseConnection.connect();
 
         c.setAutoCommit(false);
         int batchSize = 20;
+
         String sql = "INSERT INTO PLAYER (id, firstName, lastName, hand, dob, ioc, height, wikidata_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement statement = c.prepareStatement(sql);
@@ -127,7 +132,7 @@ public class PlayerDao {
         }
     }
 
-        public static void createTablePlayerRank(String rankingTable) {
+        public static void createTablePlayerRank() {
 
             Connection c = null;
             Statement st = null;
@@ -145,22 +150,59 @@ public class PlayerDao {
             }
         }
 
-        public static List<Rankings> getRankingList() {
-            String query = "SELECT * FROM " + " PLAYER ";
-            List<Rankings> currentRank = new ArrayList<>();
+        static String rankCsv = "C:\\Users\\seost\\cs195TennisAnalytics\\cs195-TennisTracker\\src\\main\\resources\\com\\example\\cs195tennis\\atp_rankings_current.csv";
+
+        public static Map<String, List<Rankings>> readCsvToMap() {
+            List<List<String>> playerRankCsv = new ArrayList<List<String>>();
+
+            Map<String, List<Rankings>> map = new HashMap<>();
+
+            try (CSVReader csvReader = new CSVReader(new FileReader(rankCsv));) {
+                String[] values = null;
+                while ((values = csvReader.readNext()) != null) {
+                    playerRankCsv.add(Arrays.asList(values));
+                }
+            } catch (IOException | CsvValidationException e) {
+                e.printStackTrace();
+            }
+
+            AtomicInteger i = new AtomicInteger(0);
+
+
+            List<String> list = new ArrayList<>();
+
+            Map<String, List<Player>> playerMap = getPlayerMap();
+
+
+            playerRankCsv.forEach(row -> {
+                String rankId = row.get(0) + "-" + row.get(2);
+//                System.out.println("\nrank_date + playerid = " + rankId);
+                map.computeIfAbsent(rankId, k -> new ArrayList<>());
+
+                map.get(rankId).add(new Rankings(row.get(0), row.get(1), row.get(2), row.get(3)));
+            });
+        return map;
+        }
+
+        public static Map<String,List<Rankings>> getRankingList() {
+            String query = "SELECT * FROM " + "RANK";
+            Map<String, List<Rankings>> currentRank = new HashMap<>();
+
             try (Connection connection = DatabaseConnection.connect()) {
                 PreparedStatement statement = connection.prepareStatement(query);
                 ResultSet rs = statement.executeQuery();
 
                 while (rs.next()) {
-                    currentRank.add(new Rankings(
+
+                    currentRank.computeIfAbsent(rs.getString("ranking_date"), k->new ArrayList<>());
+
+                    currentRank.get(rs.getString("ranking_date")).add(new Rankings(
                             rs.getString("ranking_date"),
                             rs.getString("points"),
                             rs.getString("hand"),
                             rs.getString("dob")));
                 }
                 System.out.println("here");
-                currentRank.forEach(System.out::println);
             } catch (SQLException e) {
                 e.printStackTrace();
             }return currentRank;
@@ -169,17 +211,22 @@ public class PlayerDao {
         String querys = " select"+ lastName+ " from " +"PLAYERS"+" join ranking on player.id = ranking.player_id where pos == 1 group by lastName; ";
 
 
-        public static List<Player> getTempList() {
+        public static Map<String, List<Player>> getPlayerMap() {
 
             String query = "SELECT * FROM " + "Player";
 
-            List<Player> player = new ArrayList<>();
+            Map<String, List<Player>> player = new HashMap<>();
+
             try (Connection connection = DatabaseConnection.connect()) {
                 PreparedStatement statement = connection.prepareStatement(query);
                 ResultSet rs = statement.executeQuery();
 
                 while (rs.next()) {
-                    player.add(new Player(
+                    String playerkey = rs.getString(id);
+
+                    player.computeIfAbsent(playerkey, k-> new ArrayList<>());
+
+                    player.get(playerkey).add(new Player(
                             rs.getString(id),
                             rs.getString(firstName),
                             rs.getString(lastName),
@@ -194,11 +241,11 @@ public class PlayerDao {
 
             } catch (SQLException e) {
                 e.printStackTrace();
+
             }return player;
         }
 
         static String playerCsv = "cs195-TennisTracker\\src\\main\\resources\\com\\example";
-        static String playerRankingsCsv = "";
 
 
 

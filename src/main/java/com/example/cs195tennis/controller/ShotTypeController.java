@@ -4,6 +4,7 @@ import com.example.cs195tennis.Dao.MatchDao;
 import com.example.cs195tennis.Dao.ShotTypeDao;
 import com.example.cs195tennis.model.Match;
 import com.example.cs195tennis.model.ShotType;
+import com.opencsv.exceptions.CsvValidationException;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,9 +17,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class ShotTypeController implements Initializable {
@@ -73,10 +76,10 @@ public class ShotTypeController implements Initializable {
         shotTypeTable.setItems(shotTypeObservableList);
     }
 
-    private List<ShotType> shotDirectionList() throws FileNotFoundException {
+    private List<ShotType> shotDirectionList() throws IOException, CsvValidationException {
         return ShotTypeDao.getShotDirectionList();
     }
-    private List<ShotType> shotDirOutcomeList() throws FileNotFoundException {
+    private Map<String,List<ShotType>> shotDirOutcomeList() throws IOException, CsvValidationException {
         return ShotTypeDao.getShotDirOutcomeList();
     }
 
@@ -90,11 +93,7 @@ public class ShotTypeController implements Initializable {
     }
 
     public void handleGitButton(ActionEvent event) throws FileNotFoundException {
-        List<ShotType> temp = new ArrayList<>(shotDirOutcomeList());
 
-        shotTypeObservableList.addAll(temp);
-
-        shotTypeTable.setItems(shotTypeObservableList);
     }
 
     public void handleSearch(ActionEvent event) {

@@ -1,28 +1,40 @@
 package com.example.cs195tennis.controller;
 import com.example.cs195tennis.Dao.MatchDao;
+import com.example.cs195tennis.Dao.PlayerDao;
 import com.example.cs195tennis.model.Match;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
+import com.example.cs195tennis.model.Player;
+import com.example.cs195tennis.model.Rankings;
+import com.opencsv.exceptions.CsvValidationException;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MatchController implements Initializable {
+
+    @FXML public AnchorPane rootAnchorPane;
+    @FXML BorderPane rootPane;
 
     public TextField searchBox;
 
@@ -36,16 +48,15 @@ public class MatchController implements Initializable {
 
     Map<String, List<Match>> matchMap = new HashMap<>();
 
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-
         try {
             matchMap = MatchDao.readAtpMatchToMap();
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-//        Map<String, Collection<Match>> map = matchMap.asMap();
 
         matchTable.getSelectionModel().selectedIndexProperty().addListener((
                 e -> {
@@ -54,19 +65,18 @@ public class MatchController implements Initializable {
 
                     int rowNumber = matchTable.getSelectionModel().selectedIndexProperty().get();
 
-                    matchWindow(rowNumber, selectedMatch);
-                }
-        ));
+                    try {
+                        handleRowClick(rowNumber, selectedMatch);
+                    } catch (IOException | CsvValidationException ex) {
+                        ex.printStackTrace();
+                    }
 
-
-        System.out.println(matchMap.size());
-        //we have a model initialized by each row in the data access class. We use the tourney_id and tourney_name as the key, to all 50 columns.
-        //Is there a point create a new model here?
+                }));
 
         matchMap.forEach((k, v) -> v.forEach(e ->
 
-                matchObservableList.add(new Match(e.getTourney_name(), e.getTourney_date(),e.getWinner_name(), e.getLoser_name(), e.getScore(),
-                        e.getRound(), e.getMatch_num(), e.getBest_of()
+                matchObservableList.add(new Match(e.getTourney_name(), e.getTourney_date(), e.getMatch_num(), e.getWinner_name(), e.getLoser_name(), e.getScore(),
+                        e.getRound(), e.getBest_of()
                 ))));
 
         tourney_nameCol.setCellValueFactory(new PropertyValueFactory<>("tourney_name"));
@@ -83,36 +93,40 @@ public class MatchController implements Initializable {
 
     //provide stat catgeory button click a match -> button for winner -> map winner_id of that match -> value: ShotType constructor using match_id and winner_id
     //to GridPane -> HBox -> Root Pane
-    private void matchWindow(int rowNumber, Match selectedMatch) {
-        String selectedId = selectedMatch.getWinner_id();
+    private void handleRowClick(int rowNumber, Match selectedMatch) throws IOException, CsvValidationException {
 
-        List<Match> value = matchMap.get(selectedId).stream().toList();
+        AtomicReference<String> match_id = new AtomicReference<>("");
 
-        AtomicInteger i = new AtomicInteger(1);
+        Map<String, List<Rankings>> playerRanks = PlayerDao.readCsvToMap();
 
-        System.out.println("\nClicked Row Number : " + rowNumber);
+        Map<String, List<Player>> playerMap = PlayerDao.getPlayerMap();
 
-        List<String[]> keysForNextQuery = new ArrayList<>();
+        playerMap.forEach((k, v) -> v.forEach(e -> {
 
-        List<String> queryString = new ArrayList<>();
+            String fullName = e.getFirstName() + " " + e.getLastName();
 
-        matchMap.get(selectedId).forEach(e-> {
+            if(fullName.equals(selectedMatch.getWinner_name()) || fullName.equals(selectedMatch.getLoser_name())) {
 
-            keysForNextQuery.add(new String[]{
-                    e.getTourney_id(), "-m-", e.getTourney_name(), e.getWinner_name(), e.getLoser_name(),
-            });
+                match_id.set(e.getId());
 
-            System.out.println("\nIndex:" + (i.getAndIncrement()) +
-                    "\nwinner id " + e.getWinner_id()
-                    +"\nLoser id " + e.getLoser_id()
-                    +"\nTourney Id " + e.getTourney_id()
-            );
-        });
+                System.out.println(match_id);
+            }
+        }));
 
+        Map<String, List<String>> mapSeasonTotals = new HashMap<>();
 
+        matchMap.forEach((k, v)-> v.forEach(e -> {
+            String season_total_id = "";
+
+            mapSeasonTotals.computeIfAbsent(season_total_id, key -> new ArrayList<>());
+
+            }
+        ));
     }
 
-    public void handleMatchAdd(ActionEvent event) {
+
+    public void handleMatchAdd(ActionEvent event) throws SQLException {
+        MatchDao.insert();
     }
 
     public void handleExitButtonClicked(ActionEvent event) {
@@ -132,11 +146,11 @@ public class MatchController implements Initializable {
 
         matchObservableList.addAll(matchList);
 
-        System.out.println(matchObservableList.size());
         matchTable.setItems(matchObservableList);
     }
 
-    public void handleClearSearchText(ActionEvent event) {
+    public void handleClearSearchText(ActionEvent event) throws SQLException {
+
     }
 
     public void handleGitButtonClicked(ActionEvent event) {
@@ -147,4 +161,16 @@ public class MatchController implements Initializable {
         }.getHostServices().showDocument("https://github.com/stewseo/cs195-TennisTracker");
         event.consume();
     }
+
+
+    void loadMain() throws IOException {
+
+        Parent parent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("tournament.fxml")));
+        Stage stage = new Stage(StageStyle.DECORATED);
+        stage.setTitle("Touranment");
+        stage.setScene(new Scene(parent));
+        stage.show();
+
+    }
+
 }

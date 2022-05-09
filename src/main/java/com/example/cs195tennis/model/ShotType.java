@@ -1,17 +1,20 @@
 package com.example.cs195tennis.model;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ShotType {
-    String match_id, crosscourt,down_middle,down_the_line,inside_out,inside_in;
-    String player,shots_in_pts_won;
-    String row;
+    public String match_id, crosscourt,down_middle,down_the_line,inside_out,inside_in,player,shots_in_pts_won,row;
     String shots;
     String pt_ending;
     String winners;
     String induced_forced;
     String unforced;
-    String serve_return;
-    String shots_in_pts_lost;
-
+    public String serve_return;
+    public String shots_in_pts_lost;
+    public List<String> shotList;
     private static final String CREATE_SHOTTYPE = "CREATE TABLE ShotType"
             + "("
             + " ID INT,"
@@ -93,6 +96,11 @@ public class ShotType {
         this.serve_return = serve_return;
         this.shots_in_pts_won = shots_in_pts_won;
         this.shots_in_pts_lost = shots_in_pts_lost;
+    }
+
+    public ShotType(List<String> row) {
+        shotList = row;
+//        shotList.forEach(System.out::append);
     }
 
     public String getMatch_id() {

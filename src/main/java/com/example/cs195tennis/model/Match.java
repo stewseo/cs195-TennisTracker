@@ -1,15 +1,204 @@
 package com.example.cs195tennis.model;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class Match {
+
+    public Set<Winner> winnerSet;
+    public Set<Loser> loserSet;
+    public List<String> qualfierTourList;
+    Winner winner;
+    Loser loser;
 
     private String tourney_id,tourney_name,surface,draw_size,tourney_level,tourney_date,match_num,winner_id,
             winner_seed,winner_entry,winner_name,winner_hand,winner_ht,winner_ioc,winner_age,loser_id,loser_seed,loser_entry,loser_name,
             loser_hand,loser_ht,loser_ioc,loser_age,score,best_of,round,minutes,w_ace,w_df,w_svpt,w_1stIn,w_1stWon,w_2ndWon,w_SvGms,w_bpSaved,
             w_bpFaced,l_ace,l_df,l_svpt,l_1stIn,l_1stWon,l_2ndWon,l_SvGms,l_bpSaved,l_bpFaced,winner_rank,winner_rank_points,loser_rank,loser_rank_points;
 
-    public String[] loserFields;
+    public Match(List<String> row) {
+
+        qualfierTourList = new ArrayList<>(row);
+
+    }
+
+    public Set<Winner> getWinnerSet() {
+        return winnerSet;
+    }
+
+    public void setWinnerSet(Set<Winner> winnerSet) {
+        this.winnerSet = winnerSet;
+    }
+
+    public Set<Loser> getLoserSet() {
+        return loserSet;
+    }
+
+    public void setLoserSet(Set<Loser> loserSet) {
+        this.loserSet = loserSet;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(tourney_date, tourney_name);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if(o instanceof Match) {
+
+            Match o2 = (Match) o;
+
+            return tourney_id.equals(o2.tourney_id) && tourney_date.equals(o2.getTourney_date()) && tourney_name.equals(getTourney_name());
+
+        }return false;
+    }
+
+    static class Loser {
+
+        String loser_id,loser_seed,loser_entry,loser_name, loser_hand,loser_ht,loser_ioc,loser_age;
+
+        public Loser() {}
+
+        public String getLoser_id() {
+            return loser_id;
+        }
+
+        public void setLoser_id(String loser_id) {
+            this.loser_id = loser_id;
+        }
+
+        public String getLoser_seed() {
+            return loser_seed;
+        }
+
+        public void setLoser_seed(String loser_seed) {
+            this.loser_seed = loser_seed;
+        }
+
+        public String getLoser_entry() {
+            return loser_entry;
+        }
+
+        public void setLoser_entry(String loser_entry) {
+            this.loser_entry = loser_entry;
+        }
+
+        public String getLoser_name() {
+            return loser_name;
+        }
+
+        public void setLoser_name(String loser_name) {
+            this.loser_name = loser_name;
+        }
+
+        public String getLoser_hand() {
+            return loser_hand;
+        }
+
+        public void setLoser_hand(String loser_hand) {
+            this.loser_hand = loser_hand;
+        }
+
+        public String getLoser_ht() {
+            return loser_ht;
+        }
+
+        public void setLoser_ht(String loser_ht) {
+            this.loser_ht = loser_ht;
+        }
+
+        public String getLoser_ioc() {
+            return loser_ioc;
+        }
+
+        public void setLoser_ioc(String loser_ioc) {
+            this.loser_ioc = loser_ioc;
+        }
+
+        public String getLoser_age() {
+            return loser_age;
+        }
+
+        public void setLoser_age(String loser_age) {
+            this.loser_age = loser_age;
+        }
+    }
+
+    static class Winner {
+
+        String winner_id, winner_seed, winner_entry, winner_name, winner_hand, winner_ht, winner_ioc, winner_age;
+
+        public Winner() {}
+
+        public String getWinner_id() {
+            return winner_id;
+        }
+
+        public void setWinner_id(String winner_id) {
+            this.winner_id = winner_id;
+        }
+
+        public String getWinner_seed() {
+            return winner_seed;
+        }
+
+        public void setWinner_seed(String winner_seed) {
+            this.winner_seed = winner_seed;
+        }
+
+        public String getWinner_entry() {
+            return winner_entry;
+        }
+
+        public void setWinner_entry(String winner_entry) {
+            this.winner_entry = winner_entry;
+        }
+
+        public String getWinner_name() {
+            return winner_name;
+        }
+
+        public void setWinner_name(String winner_name) {
+            this.winner_name = winner_name;
+        }
+
+        public String getWinner_hand() {
+            return winner_hand;
+        }
+
+        public void setWinner_hand(String winner_hand) {
+            this.winner_hand = winner_hand;
+        }
+
+        public String getWinner_ht() {
+            return winner_ht;
+        }
+
+        public void setWinner_ht(String winner_ht) {
+            this.winner_ht = winner_ht;
+        }
+
+        public String getWinner_ioc() {
+            return winner_ioc;
+        }
+
+        public void setWinner_ioc(String winner_ioc) {
+            this.winner_ioc = winner_ioc;
+        }
+
+        public String getWinner_age() {
+            return winner_age;
+        }
+
+        public void setWinner_age(String winner_age) {
+            this.winner_age = winner_age;
+        }
+    }
 
 
     public Match(String tourney_id, String tourney_name, String surface, String draw_size, String tourney_level, String tourney_date, String match_num, String winner_id, String winner_seed, String winner_entry, String winner_name, String winner_hand, String winner_ht, String winner_ioc, String winner_age, String loser_id, String loser_seed, String loser_entry, String loser_name, String loser_hand, String loser_ht, String loser_ioc, String loser_age, String score, String best_of, String round, String minutes, String w_ace, String w_df, String w_svpt, String w_1stIn, String w_1stWon, String w_2ndWon, String w_SvGms, String w_bpSaved, String w_bpFaced, String l_ace, String l_df, String l_svpt, String l_1stIn, String l_1stWon, String l_2ndWon, String l_SvGms, String l_bpSaved, String l_bpFaced, String winner_rank, String winner_rank_points, String loser_rank, String loser_rank_points) {
@@ -126,18 +315,10 @@ public class Match {
         return tourney_id + ", " + tourney_name + ", " + winner_id + ", " + winner_seed+ ", " + winner_entry + ", " + winner_name+ ", " +
                 winner_hand+ ", " + winner_ht + ", " + winner_ioc + winner_age + ", "  + loser_id + ", " + loser_seed + ", " + loser_entry + ", " + loser_name;
     }
+
     public Match(){}
 
     public String[] matchStats;
-
-    public String[] getLoserFields() {
-        return loserFields;
-    }
-
-    public String[] setLoserFields(String[] loserFields) {
-        this.loserFields = loserFields;
-        return loserFields;
-    }
 
     public String[] getMatchStats() {
         return matchStats;
@@ -148,14 +329,10 @@ public class Match {
         return matchStats;
     }
 
-    public Match(String[] loserFields) {
-        this.loserFields = loserFields;
-    }
 
     public String getTourney_id() {
         return tourney_id;
     }
-
 
     public void setTourney_id(String tourney_id) {
         this.tourney_id = tourney_id;

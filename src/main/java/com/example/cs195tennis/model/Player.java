@@ -3,17 +3,23 @@ package com.example.cs195tennis.model;
 import java.util.List;
 
     public class Player {
-
+        Ranking ranking;
         public String firstName, height, id,rank,ioc,dob,hand,lastName,wiki;
         public List<Player> playerList;
         public Player(){}
+
+
+
+        public Player(String firstName) {
+            this.firstName = firstName;
+        }
+
 
         @Override
         public String toString(){
 
             return id + " " + firstName + " " + lastName + " " + hand + " " +  dob + " " + wiki;
         }
-
 
         public Player(String id, String firstName, String lastName, String hand, String dob, String ioc, String height, String wiki) {
             this.id = id;
@@ -26,7 +32,59 @@ import java.util.List;
             this.wiki = wiki;
         }
 
+        class Ranking {
 
+            String ranking_date,rank,player,points;
+
+            public Ranking(){}
+            public String getRanking_date() {
+                return ranking_date;
+            }
+
+            public void setRanking_date(String ranking_date) {
+                this.ranking_date = ranking_date;
+            }
+
+            public String getRank() {
+                return rank;
+            }
+
+            public void setRank(String rank) {
+                this.rank = rank;
+            }
+
+            public String getPlayer() {
+                return player;
+            }
+
+            public void setPlayer(String player) {
+                this.player = player;
+            }
+
+            public String getPoints() {
+                return points;
+            }
+
+            public void setPoints(String points) {
+                this.points = points;
+            }
+        }
+
+        public List<Player> getPlayerList() {
+            return playerList;
+        }
+
+        public void setPlayerList(List<Player> playerList) {
+            this.playerList = playerList;
+        }
+
+        public Ranking getRanking() {
+            return ranking;
+        }
+
+        public void setRanking(Ranking ranking) {
+            this.ranking = ranking;
+        }
 
         public String getRank() {
             return rank;
