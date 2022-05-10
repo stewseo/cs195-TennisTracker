@@ -18,6 +18,7 @@
 
 package com.example.cs195tennis.model;
 
+import com.example.cs195tennis.Dao.PlayerDao;
 import io.github.palexdev.materialfx.font.FontResources;
 import io.github.palexdev.materialfx.utils.FXCollectors;
 import javafx.collections.FXCollections;
@@ -39,7 +40,7 @@ public class Model {
 					""";
 	public static final FontResources[] notificationsIcons;
 	public static final String[] randomText;
-	public static final ObservableList<String> strings;
+	public static ObservableList<String> strings;
 	public static final ObservableList<Person> people;
 	public static final ObservableList<Device> devices;
 
@@ -105,9 +106,14 @@ public class Model {
 				"""
 		};
 
-		strings = IntStream.rangeClosed(1, 25)
-				.mapToObj(i -> "String " + i)
+		PlayerDao.getPlayerMap().forEach((k,v)->  {
+
+			int resultSize = v.size();
+
+			strings = IntStream.rangeClosed(1, resultSize)
+				.mapToObj(i -> v.get(i-1).getFullName() + i)
 				.collect(FXCollectors.toList());
+	});
 
 		people = FXCollections.observableArrayList(
 				Person.ofSplit("Turner Romero", " ").randomAge(),

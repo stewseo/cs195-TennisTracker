@@ -102,7 +102,7 @@ public class MatchController implements Initializable {
 
         AtomicReference<String> match_id = new AtomicReference<>("");
 
-        Map<String, List<Rankings>> playerRanks = PlayerDao.readCsvToMap();
+        Map<String, List<Player>> playerRanks = PlayerDao.readCsvToMap();
 
         Map<String, List<Player>> playerMap = PlayerDao.getPlayerMap();
 

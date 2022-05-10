@@ -25,8 +25,6 @@ import io.github.palexdev.materialfx.controls.MFXPaginatedTableView;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
-import io.github.palexdev.materialfx.filter.EnumFilter;
-import io.github.palexdev.materialfx.filter.IntegerFilter;
 import io.github.palexdev.materialfx.filter.StringFilter;
 import io.github.palexdev.materialfx.utils.others.observables.When;
 import javafx.collections.FXCollections;
@@ -42,11 +40,13 @@ import java.util.*;
 
 public class TableViewsController implements Initializable {
 
-	@FXML private MFXTableView<Match> table;
-	@FXML private MFXPaginatedTableView<Player> paginated;
+    @FXML public MFXTableView<Match> wtaTouranmentTable;
+    @FXML private MFXTableView<Match> table;
+	@FXML private MFXTableView<Player> paginated;
 
 	public ObservableList<Player> playerObservableList = FXCollections.observableArrayList();
-	public ObservableList<Match> matchObservableList = FXCollections.observableArrayList();
+	public ObservableList<Match> atpTournamentObservable = FXCollections.observableArrayList();
+	public ObservableList<Match> wtaTournamentObservable = FXCollections.observableArrayList();
 
 	private static Map<String, List<Match>> matchMap = new HashMap<>();
 
@@ -61,25 +61,13 @@ public class TableViewsController implements Initializable {
 		}
 
 		matchMap.forEach((k, v) -> v.forEach(e ->
-				matchObservableList.add(new Match(e.getTourney_name(), e.getTourney_date(), e.getMatch_num(), e.getWinner_name(), e.getLoser_name(), e.getScore(),
+				atpTournamentObservable.add(new Match(e.getTourney_name(), e.getTourney_date(), e.getMatch_num(), e.getWinner_name(), e.getLoser_name(), e.getScore(),
 						e.getRound(), e.getBest_of()
 				))));
 
-		Map<String, List<Player>> playerMap = new HashMap<>(PlayerDao.getPlayerMap());
-
-		playerMap.forEach((k, v) -> v.forEach(pid-> playerObservableList.add(
-                    new Player(pid.getId(), pid.getFirstName(), pid.getLastName(), pid.getHand(), pid.getDob(), pid.getIoc(), pid.getHeight(), pid.getWiki(), pid.getRank()
-                    ))));
-
 		setupTable();
-		setupPaginated();
 
-		table.autosizeColumnsOnInitialization();
-		paginated.autosizeColumnsOnInitialization();
-
-		When.onChanged(paginated.currentPageProperty())
-				.then((oldValue, newValue) -> paginated.autosizeColumns())
-				.listen();
+//		table.autosizeColumnsOnInitialization();
 	}
 
 	private void setupTable() {
@@ -116,7 +104,7 @@ public class TableViewsController implements Initializable {
 				new StringFilter<>("round", Match::getRound),
 				new StringFilter<>("best_of", Match::getBest_of)
 		);
-		table.setItems(matchObservableList);
+		table.setItems(atpTournamentObservable);
 	}
 
 	private void setupPaginated() {
@@ -141,19 +129,19 @@ public class TableViewsController implements Initializable {
 		playerWikiColumn.setRowCellFactory(player -> new MFXTableRowCell<>(Player::getWiki));
 		playerHandColumn.setAlignment(Pos.CENTER_RIGHT);
 
-		paginated.getTableColumns().addAll(playerIdColumn, playerNameColumn,playerHandColumn, playerDobColumn, playerLocColumn, playerHeightColumn, playerWikiColumn);
-		paginated.getFilters().addAll(
-				new StringFilter<>("player_id", Player::getId),
-				new StringFilter<>("fullName", Player::getFullName),
-				new StringFilter<>("hand", Player::getHand),
-				new StringFilter<>("dob", Player::getDob),
-				new StringFilter<>("player_ioc", Player::getDob),
-				new StringFilter<>("height", Player::getIoc),
-				new StringFilter<>("wiki", Player::getHand)
-		);
+//		paginated.getTableColumns().addAll(playerIdColumn, playerNameColumn,playerHandColumn, playerDobColumn, playerLocColumn, playerHeightColumn, playerWikiColumn);
+//		paginated.getFilters().addAll(
+//				new StringFilter<>("player_id", Player::getId),
+//				new StringFilter<>("fullName", Player::getFullName),
+//				new StringFilter<>("hand", Player::getHand),
+//				new StringFilter<>("dob", Player::getDob),
+//				new StringFilter<>("player_ioc", Player::getDob),
+//				new StringFilter<>("height", Player::getIoc),
+//				new StringFilter<>("wiki", Player::getHand)
+//		);
 
-		System.out.println(playerObservableList.size());
-
-		paginated.setItems(playerObservableList);
+//		System.out.println(playerObservableList.size());
+//
+//		paginated.setItems(playerObservableList);
 	}
 }

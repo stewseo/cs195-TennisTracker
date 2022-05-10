@@ -7,13 +7,19 @@ public class Player {
         public static Ranking ranking;
         public String firstName, lastName, fullName, height, id,rank,ioc,dob,hand,wiki;
         public List<Player> playerList;
+
         public Player(){}
 
         public Player(String firstName) {
             this.firstName = firstName;
         }
 
-        @Override
+    public Player(String ranking_date, String points, String player, String dob) {
+            ranking = new Ranking(ranking_date, points, player, dob);
+    }
+
+
+    @Override
         public String toString(){
 
             return id + " " + fullName + " " + hand + " " +  dob + " " + wiki;
@@ -49,6 +55,7 @@ public class Player {
         public String getFirstName() {
             return firstName;
         }
+
         public void setFirstName(String firstName) {
             this.firstName = firstName;
         }
@@ -62,7 +69,7 @@ public class Player {
     }
 
     @Override
-        public int hashCode(){
+    public int hashCode(){
             return Objects.hash(id);
         }
 
@@ -70,44 +77,43 @@ public class Player {
             M, F
         }
 
-        public static class Ranking {
+    public static class Ranking {
 
-            String ranking_date, rank, player, points;
+        String ranking_date, rank,player, points;
 
-            public Ranking(){}
+        public Ranking(){}
 
-            public String getRanking_date() {
-                return ranking_date;
-            }
-
-            public void setRanking_date(String ranking_date) {
-                this.ranking_date = ranking_date;
-            }
-
-            public String getRank() {
-                return rank;
-            }
-
-            public void setRank(String rank) {
-                this.rank = rank;
-            }
-
-            public String getPlayer() {
-                return player;
-            }
-
-            public void setPlayer(String player) {
-                this.player = player;
-            }
-
-            public String getPoints() {
-                return points;
-            }
-
-            public void setPoints(String points) {
-                this.points = points;
-            }
+        public Ranking(String ranking_date, String rank, String player, String points) {
+            this.ranking_date = ranking_date;
+            this.rank = rank;
+            this.player = player;
+            this.points = points;
         }
+
+        public String getRanking_date() {
+            return ranking_date;
+        }
+
+        public void setRanking_date(String ranking_date) {
+            this.ranking_date = ranking_date;
+        }
+
+        public String getRank() {
+            return rank;
+        }
+
+        public void setRank(String rank) {
+            this.rank = rank;
+        }
+
+        public String getPoints() {
+            return points;
+        }
+
+        public void setPoints(String points) {
+            this.points = points;
+        }
+    }
 
         public List<Player> getPlayerList() {
             return playerList;

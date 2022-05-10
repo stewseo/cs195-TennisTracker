@@ -16,7 +16,7 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import '/fonts/Fonts.css';
+@import 'Fonts.css';
 @import 'Common.css';
 @import 'MFXColors.css';
 
@@ -36,7 +36,7 @@
 	-fx-font-family: 'Visby Round CF Demi Bold';
 }
 
-#custList {
+#list {
 	-fx-background-color: -mfx-purple;
 	-fx-background-radius: 10;
 	-fx-border-color: -mfx-purple;
@@ -44,45 +44,45 @@
 	-fx-padding: 4;
 }
 
-#custList .virtual-flow {
+#list .virtual-flow {
 	-fx-background-color: transparent;
 }
 
-#custList:focused {
+#list:focused {
 	-fx-border-color: -mfx-purple;
 }
 
-#custList .virtual-flow .mfx-list-cell {
+#list .virtual-flow .mfx-list-cell {
 	-fx-background-color: transparent;
 	-fx-border-color: transparent;
 	-fx-background-radius: 10;
 	-fx-border-radius: 10;
 }
 
-#custList .virtual-flow .mfx-list-cell .data-label {
+#list .virtual-flow .mfx-list-cell .data-label {
 	-fx-text-fill: white;
 }
 
-#custList .virtual-flow .mfx-list-cell .user-icon {
+#list .virtual-flow .mfx-list-cell .user-icon {
 	-mfx-color: white;
 }
 
-#custList .virtual-flow .mfx-list-cell:hover,
-#custList .virtual-flow .mfx-list-cell:selected {
+#list .virtual-flow .mfx-list-cell:hover,
+#list .virtual-flow .mfx-list-cell:selected {
 	-fx-background-color: rgba(255, 255, 255, 0.3);
 }
 
-#custList .virtual-flow .mfx-list-cell .mfx-ripple-generator {
+#list .virtual-flow .mfx-list-cell .mfx-ripple-generator {
 	-mfx-auto-clip: true;
 }
 
-#custList .virtual-flow .mfx-list-cell:selected .mfx-ripple-generator {
+#list .virtual-flow .mfx-list-cell:selected .mfx-ripple-generator {
 	-mfx-paused: true;
 }
 
 .mfx-button {
-	-fx-background-color: -mfx-purple;
-	-fx-border-color: -mfx-purple;
+	-fx-background-color: -mfx-black;
+	-fx-border-color: -mfx-black;
 	-fx-border-radius: 3;
 	-fx-text-fill: white;
 	-fx-font-family: 'Visby Round CF Demi Bold';

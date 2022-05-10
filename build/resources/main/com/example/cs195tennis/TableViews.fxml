@@ -35,8 +35,6 @@
             <Insets bottom="10.0" top="10.0"/>
         </padding>
     </Label>
-    <MFXTableView fx:id="table" maxWidth="-800" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0"
+    <MFXTableView fx:id="table" maxWidth="800" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0"
                   prefWidth="800.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="1"/>
-    <MFXPaginatedTableView fx:id="paginated" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="800.0"
-                           GridPane.columnSpan="2147483647" GridPane.rowIndex="2"/>
 </GridPane>

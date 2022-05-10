@@ -35,11 +35,11 @@ public class PlayerDao {
 
     static String rankCsv = "C:\\Users\\seost\\cs195TennisAnalytics\\cs195-TennisTracker\\src\\main\\resources\\com\\example\\cs195tennis\\atp_rankings_current.csv";
 
-    public static Map<String, List<Rankings>> readCsvToMap() {
+    public static Map<String, List<Player>> readCsvToMap() {
 
             List<List<String>> playerRankCsv = new ArrayList<List<String>>();
 
-            Map<String, List<Rankings>> map = new HashMap<>();
+            Map<String, List<Player>> map = new HashMap<>();
 
             try (CSVReader csvReader = new CSVReader(new FileReader(rankCsv));) {
                 String[] values = null;
@@ -58,31 +58,30 @@ public class PlayerDao {
 
 
             playerRankCsv.forEach(row -> {
-                String rankId = row.get(0) + "-" + row.get(2);
-                map.computeIfAbsent(rankId, k -> new ArrayList<>());
+                map.computeIfAbsent(row.get(0), k -> new ArrayList<>());
 
-                map.get(rankId).add(new Rankings(row.get(0), row.get(1), row.get(2), row.get(3)));
+                map.get(row.get(0)).add(new Player(row.get(0), row.get(1), row.get(2), row.get(3)));
             });
         return map;
         }
 
-        public static Map<String,List<Rankings>> getRankingList() {
+        public static Map<String, List<Player>> getRankingList() {
             String query = "SELECT * FROM " + "RANK";
-            Map<String, List<Rankings>> currentRank = new HashMap<>();
+            Map<String, List<Player>> currentRank = new HashMap<>();
 
             try (Connection connection = DatabaseConnection.connect()) {
                 PreparedStatement statement = connection.prepareStatement(query);
                 ResultSet rs = statement.executeQuery();
 
                 while (rs.next()) {
-
+                    System.out.println(rs);
                     currentRank.computeIfAbsent(rs.getString("ranking_date"), k->new ArrayList<>());
 
-                    currentRank.get(rs.getString("ranking_date")).add(new Rankings(
+                    currentRank.get(rs.getString("ranking_date")).add(new Player(
                             rs.getString("ranking_date"),
-                            rs.getString("points"),
-                            rs.getString("hand"),
-                            rs.getString("dob")));
+                            rs.getString("rank"),
+                            rs.getString("player"),
+                            rs.getString("points")));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();

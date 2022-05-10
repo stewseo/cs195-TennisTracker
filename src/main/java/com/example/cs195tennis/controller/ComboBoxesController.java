@@ -18,75 +18,88 @@
 
 package com.example.cs195tennis.controller;
 
-import com.example.cs195tennis.model.Model;
-import com.example.cs195tennis.model.Person;
+import com.example.cs195tennis.Dao.MatchDao;
+import com.example.cs195tennis.Dao.PlayerDao;
+import com.example.cs195tennis.model.*;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.MFXTooltip;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyComboBox;
 import com.example.cs195tennis.model.Model;
 import com.example.cs195tennis.model.Person;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.util.StringConverter;
 
+import java.io.FileNotFoundException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class ComboBoxesController implements Initializable {
 
-	@FXML
-	private MFXLegacyComboBox<String> lCombo;
+	@FXML public MFXTextField textFieldPlayer2;
+
+	@FXML private MFXComboBox<Match> nBFCombo;
+
+	@FXML private MFXComboBox<Match> nCombo;
+
+	@FXML private MFXComboBox<Match> nCustCombo;
 
 	@FXML
-	private MFXLegacyComboBox<String> lCustCombo;
+	private MFXComboBox<Match> nEditCombo;
 
 	@FXML
-	private MFXComboBox<String> nBFCombo;
+	private MFXComboBox<Match> nNFCombo;
 
-	@FXML
-	private MFXComboBox<String> nCombo;
+	@FXML private MFXFilterComboBox<Match> filterCombo;
 
-	@FXML
-	private MFXComboBox<String> nCustCombo;
+	@FXML private MFXFilterComboBox<Match> custFilterCombo;
 
-	@FXML
-	private MFXComboBox<String> nEditCombo;
 
-	@FXML
-	private MFXComboBox<String> nNFCombo;
+	@FXML private MFXTextField textField;
 
-	@FXML
-	private MFXFilterComboBox<Person> filterCombo;
-
-	@FXML
-	private MFXFilterComboBox<Person> custFilterCombo;
+	@FXML private Label validationLabel;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		ObservableList<String> strings = Model.strings;
-		ObservableList<Person> people = Model.people;
 
-		lCombo.setItems(strings);
-		lCustCombo.setItems(strings);
+		ObservableList<Player> playerObservable = FXCollections.observableArrayList();
+		ObservableList<Match> matchObservable = FXCollections.observableArrayList();
+		try {
+			MatchDao.readAtpMatchToMap().forEach((k,v)-> v.forEach(matchObservable::addAll));
+		} catch (FileNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
 
-		nCombo.setItems(strings);
-		nCustCombo.setItems(strings);
-		nEditCombo.setItems(strings);
-		nBFCombo.setItems(strings);
-		nNFCombo.setItems(strings);
+		String input = textField.getText();
 
-		nEditCombo.setOnCancel(s -> nEditCombo.setText(nEditCombo.getSelectedItem()));
+		validationLabel.setText("Head to Head");
+
+		System.out.println(" size " + matchObservable.size());
+		System.out.println(matchObservable);
+		nCombo.setItems(matchObservable);
+		nCustCombo.setItems(matchObservable);
+		nEditCombo.setItems(matchObservable);
+		nBFCombo.setItems(matchObservable);
+		nNFCombo.setItems(matchObservable);
+
+		nEditCombo.setOnCancel(s -> nEditCombo.setText(nEditCombo.getSelectedItem().getTourney_name()));
+
 		nEditCombo.setOnCommit(s -> {
-			if (!strings.contains(s)) {
-				strings.add(s);
+			Match match = new Match(s);
+			if (!matchObservable.contains(match)) {
+				matchObservable.add(match);
 			}
-			nEditCombo.selectItem(s);
+			nEditCombo.selectItem(match);
 		});
 
 		MFXTooltip.of(
@@ -99,12 +112,13 @@ public class ComboBoxesController implements Initializable {
 						"""
 		).install();
 
-		StringConverter<Person> converter = FunctionalStringConverter.to(person -> (person == null) ? "" : person.getName() + " " + person.getSurname());
-		Function<String, Predicate<Person>> filterFunction = s -> person -> StringUtils.containsIgnoreCase(converter.toString(person), s);
-		filterCombo.setItems(people);
+		StringConverter<Match> converter = FunctionalStringConverter.to(e -> (e == null) ? "" : e.getWinner_ioc());
+		Function<String, Predicate<Match>> filterFunction = s -> e -> StringUtils.containsIgnoreCase(converter.toString(e), s);
+
+		filterCombo.setItems(matchObservable);
 		filterCombo.setConverter(converter);
 		filterCombo.setFilterFunction(filterFunction);
-		custFilterCombo.setItems(people);
+		custFilterCombo.setItems(matchObservable);
 		custFilterCombo.setConverter(converter);
 		custFilterCombo.setFilterFunction(filterFunction);
 		custFilterCombo.setResetOnPopupHidden(false);

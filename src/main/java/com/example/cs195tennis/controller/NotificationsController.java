@@ -196,7 +196,7 @@ public class NotificationsController {
 			container.setTop(header);
 			container.setCenter(contentLabel);
 			container.setBottom(actionsBar);
-			container.getStylesheets().add(MFXDemoResourcesLoader.load("css/ExampleNotification.css"));
+			container.getStylesheets().add(MFXDemoResourcesLoader.load("ExampleNotification.css"));
 			container.setMinHeight(200);
 			container.setMaxWidth(400);
 

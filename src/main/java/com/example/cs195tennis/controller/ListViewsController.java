@@ -40,10 +40,10 @@ import java.util.ResourceBundle;
 public class ListViewsController implements Initializable {
 
 	@FXML
-	private MFXListView<String> list;
+	private MFXListView<String> list2;
 
 	@FXML
-	private MFXListView<Person> custList;
+	private MFXListView<Person> list;
 
 	@FXML
 	private MFXCheckListView<String> checkList;
@@ -57,13 +57,13 @@ public class ListViewsController implements Initializable {
 		ObservableList<Person> people = Model.people;
 		StringConverter<Person> converter = FunctionalStringConverter.to(person -> (person == null) ? "" : person.getName() + " " + person.getSurname());
 
-		list.setItems(strings);
-		custList.setItems(people);
+		list2.setItems(strings);
+		list.setItems(people);
 		checkList.setItems(strings);
-		custList.setConverter(converter);
-		custList.setCellFactory(person -> new PersonCellFactory(custList, person));
-		custList.features().enableBounceEffect();
-		custList.features().enableSmoothScrolling(0.5);
+		list.setConverter(converter);
+		list.setCellFactory(person -> new PersonCellFactory(list, person));
+		list.features().enableBounceEffect();
+		list.features().enableSmoothScrolling(0.5);
 
 		legacyList.setItems(people);
 		legacyList.setConverter(converter);
@@ -71,15 +71,15 @@ public class ListViewsController implements Initializable {
 
 	@FXML
 	void changeColors(ActionEvent event) {
-		custList.setTrackColor(ColorUtils.getRandomColor());
-		custList.setThumbColor(ColorUtils.getRandomColor());
-		custList.setThumbHoverColor(ColorUtils.getRandomColor());
+		list.setTrackColor(ColorUtils.getRandomColor());
+		list.setThumbColor(ColorUtils.getRandomColor());
+		list.setThumbHoverColor(ColorUtils.getRandomColor());
 	}
 
 	@FXML
 	void changeDepth(ActionEvent event) {
-		DepthLevel newLevel = (custList.getDepthLevel() == DepthLevel.LEVEL0) ? DepthLevel.LEVEL2 : DepthLevel.LEVEL0;
-		custList.setDepthLevel(newLevel);
+		DepthLevel newLevel = (list.getDepthLevel() == DepthLevel.LEVEL0) ? DepthLevel.LEVEL2 : DepthLevel.LEVEL0;
+		list.setDepthLevel(newLevel);
 	}
 
 	private static class PersonCellFactory extends MFXListCell<Person> {

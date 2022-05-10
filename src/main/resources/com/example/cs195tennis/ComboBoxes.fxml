@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.legacy.MFXLegacyComboBox?>
 <?import io.github.palexdev.materialfx.controls.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.Label?>
@@ -57,12 +56,13 @@
             <Insets/>
         </opaqueInsets>
     </StackPane>
-    <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="header-label" text="Legacy Combos"
+    <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="header-label" text="text fields"
            GridPane.columnSpan="3" GridPane.rowIndex="4"/>
-    <MFXLegacyComboBox fx:id="lCombo" promptText="Combo" GridPane.rowIndex="5"/>
-    <MFXLegacyComboBox id="customLCombo" fx:id="lCustCombo" promptText="Custom" GridPane.columnIndex="1"
+    <MFXTextField fx:id="textField" promptText="Enter Player Name" stylesheets="@TextFields.css" GridPane.rowIndex="5"/>
+    <MFXTextField fx:id="textFieldPlayer2" promptText="Enter Player2 Name" stylesheets="@TextFields.css" GridPane.columnIndex="1"
                        GridPane.rowIndex="5"/>
-    <MFXLegacyComboBox disable="true" promptText="Disabled" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+    <Label id="validationLabel" fx:id="validationLabel" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+           textFill="#ef6e6b" visible="false" wrapText="true"/>
     <StackPane minHeight="150.0" minWidth="300.0" styleClass="grid-background" GridPane.columnIndex="4"
                GridPane.columnSpan="2" GridPane.rowSpan="3">
         <opaqueInsets>

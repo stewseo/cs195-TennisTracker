@@ -24,23 +24,23 @@ public class MatchDao {
 
     static List<Match> matchList;
     public static ObservableList <Match> matches = FXCollections.observableArrayList();
-    static String matchCsv = "C:\\Users\\seost\\cs195TennisAnalytics\\cs195-TennisTracker\\src\\main\\resources\\com\\example\\cs195tennis\\charting-m-matches.csv";
 
-    static String atpMatches2022 = "C:\\Users\\seost\\cs195TennisAnalytics\\cs195-TennisTracker\\src\\main\\resources\\com\\example\\cs195tennis\\atp_matches_2022.csv";
 
-    public static List<Match> allMatchesCsvToTournamentList() {
-        return matchList;
-    }
+    static String qualCsvs = "atp_matches_qual_chall_";
 
-    static String qualCsvs = "C:\\Users\\seost\\tennis_atp\\atp_matches_qual_chall_";
+    static String atpMatches2022 = "C:\\Users\\seost\\tennis_atp\\atp_matches_2022.csv";
+    static String wtaMatchCsvs = "C:\\Users\\seost\\Downloads\\tennis_wta-master\\wta_matches_2022.csv";
+    static String wtaPlayers = "C:\\Users\\seost\\Downloads\\tennis_wta-master\\wta_players.csv";
+    static String atpPlayers = "C:\\Users\\seost\\tennis_atp\\atp_players.csv";
 
 
     public static void insert() throws SQLException {
 
-        int yrStart = 1978, yrEnd = 2022;
+        int yrStart = 2018, yrEnd = 2022;
+        StringBuilder players = new StringBuilder(wtaPlayers);
 
         for (int i = yrStart; i < yrEnd; i++) {
-            StringBuilder sb = new StringBuilder(qualCsvs);
+            StringBuilder sb = new StringBuilder(wtaMatchCsvs);
             sb.append(i).append(".csv");
 
             System.out.println(sb.toString());
@@ -60,7 +60,7 @@ public class MatchDao {
         } catch (CsvValidationException | IOException e) {
             e.printStackTrace();
         }
-        DataHandeler.create("QualifierTournament", csvList);
+        DataHandeler.create("WTAPlayers", csvList);
         }
     }
 
@@ -69,15 +69,19 @@ public class MatchDao {
 
         List<List<String>> allMatchesCsv = new ArrayList<List<String>>();
 
-        try (CSVReader csvReader = new CSVReader(new FileReader(atpMatches2022));) {
-            String[] values = null;
+        List<String[]> columns = new ArrayList<>();
 
+        try (CSVReader csvReader = new CSVReader(new FileReader(atpMatches2022));) {
+
+            String[] values = null;
+            int i = 0;
             while ((values = csvReader.readNext()) != null) {
                 allMatchesCsv.add(Arrays.asList(values));
             }
         } catch (IOException | CsvValidationException e) {
             e.printStackTrace();
         }
+
         return allMatchesCsv;
     }
 
@@ -146,24 +150,17 @@ public class MatchDao {
         return map;
     }
 
-//    static {
-//
-//        Map<String,List<Match>> matchMap = new HashMap<>();
-//        System.out.println("test");
-//        try {
-//            matchMap = readAtpMatchToMap();
-//        } catch (SQLException | FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//        matchMap.forEach((k, v) -> v.forEach(e ->
-//
-//                matchList.add(new Match(e.getTourney_name(), e.getTourney_date(), e.getMatch_num(), e.getWinner_name(), e.getLoser_name(), e.getScore(),
-//                        e.getRound(), e.getBest_of()
-//                ))));
-//        System.out.println("test " + matches);
-//    }
+    public static Map<String, List<Match>> readWtaMatches() throws FileNotFoundException, SQLException {
+        return DataHandeler.readWtaMatchesToMap();
+    }
+    public static void main(String[] args) throws SQLException {
+//      insert();
+    }
 
+    public static ObservableList<Match> getSeasonTotal() {
+        ObservableList<Match> seasonTotal = FXCollections.observableArrayList();
+        return seasonTotal;
+    }
 }
 
 

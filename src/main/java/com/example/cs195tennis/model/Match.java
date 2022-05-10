@@ -21,7 +21,9 @@ public class Match {
         qualfierTourList = new ArrayList<>(row);
 
     }
-
+    public Match(String match) {
+        tourney_id = match;
+    }
     public Set<Winner> getWinnerSet() {
         return winnerSet;
     }

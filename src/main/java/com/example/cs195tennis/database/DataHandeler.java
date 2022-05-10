@@ -1,6 +1,7 @@
 package com.example.cs195tennis.database;
 
 import com.example.cs195tennis.model.Match;
+import com.example.cs195tennis.model.Player;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
@@ -10,9 +11,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,7 +20,7 @@ public class DataHandeler {
 
     DataHandeler(){}
 
-    public static Object read(String tableName, String fieldName, String indexFieldName, Object index) {
+    public static ResultSet read(String tableName, String fieldName, String indexFieldName, Object index) {
         int indexDataType = 1;
         int fieldDataType = Types.VARCHAR;
         StringBuilder queryBuilder = new StringBuilder("Select ");
@@ -32,20 +31,13 @@ public class DataHandeler {
         queryBuilder.append(indexFieldName);
         queryBuilder.append(" = ");
         queryBuilder.append(convertObjectToSQLField(index, indexDataType));
+
         try (Connection connection = DatabaseConnection.connect()) {
             PreparedStatement statement = connection.prepareStatement(queryBuilder.toString());
-            try (ResultSet rs = statement.executeQuery()) {
-                rs.next();
-                switch (fieldDataType) {
-                    case Types.INTEGER:
-                        return rs.getInt(fieldName);
-                    case Types.VARCHAR:
-                        return rs.getString(fieldName);
-                    default:
-                        throw new IllegalArgumentException("Index type " + indexDataType + " from sql.Types is not yet supported.");
-                }
-            }
-        } catch (SQLException exception) {
+            ResultSet rs = statement.executeQuery();
+            return rs;
+        }
+        catch (SQLException exception) {
             Logger.getAnonymousLogger().log(
                     Level.SEVERE,
                     LocalDateTime.now() + ": Could not fetch from " + tableName + " by index " + index +
@@ -55,6 +47,7 @@ public class DataHandeler {
     }
 
     public static void main(String[]  args){
+
     }
 
     //create table from dao
@@ -160,4 +153,154 @@ public class DataHandeler {
     }
 
 
+    public static Map<String, List<Match>> readAll() {
+
+        String query = "SELECT * FROM " + "Tournament";
+
+        Map<String, List<Match>> allMatches = new HashMap<>();
+
+        try (Connection connection = DatabaseConnection.connect()) {
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                String tourney_id = rs.getString("tourney_id");
+
+                allMatches.computeIfAbsent(tourney_id, k-> new ArrayList<>());
+
+                allMatches.get(tourney_id).add(new Match(
+                        rs.getString(tourney_id),
+                        rs.getString("tourney_name"),
+                        rs.getString("surface"),
+                        rs.getString("draw_size"),
+                        rs.getString("tourney_level"),
+                        rs.getString("tourney_date"),
+                        rs.getString("match_num"),
+                        rs.getString("winner_id"),
+                        rs.getString("winner_seed"),
+                        rs.getString("winner_entry"),
+                        rs.getString("winner_name"),
+                        rs.getString("winner_hand"),
+                        rs.getString("winner_ht"),
+                        rs.getString("winner_ioc"),
+                        rs.getString("winner_age"),
+                        rs.getString("loser_id"),
+                        rs.getString("loser_seed"),
+                        rs.getString("loser_entry"),
+                        rs.getString("loser_name"),
+                        rs.getString("loser_hand"),
+                        rs.getString("winner_hand"),
+                        rs.getString("loser_ht"),
+                        rs.getString("loser_ioc"),
+                        rs.getString("loser_age"),
+                        rs.getString("score"),
+                        rs.getString("best_of"),
+                        rs.getString("round"),
+                        rs.getString("minutes"),
+                        rs.getString("w_ace"),
+                        rs.getString("w_df"),
+                        rs.getString("w_svpt"),
+                        rs.getString("w_1stIn"),
+                        rs.getString("w_1stWon"),
+                        rs.getString("w_2ndWon"),
+                        rs.getString("w_bpSaved"),
+                        rs.getString("w_bpFaced"),
+                        rs.getString("l_ace"),
+                        rs.getString("l_df"),
+                        rs.getString("l_svpt"),
+                        rs.getString("l_1stIn"),
+                        rs.getString("l_1stWon"),
+                        rs.getString("l_2ndWon"),
+                        rs.getString("l_SvGms"),
+                        rs.getString("l_bpSaved"),
+                        rs.getString("l_bpFaced"),
+                        rs.getString("winner_rank"),
+                        rs.getString("winner_rank_points"),
+                        rs.getString("loser_rank"),
+                        rs.getString("loser_rank_points")
+                ));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }return allMatches;
+    }
+
+    public static Map<String, List<Match>> readWtaMatchesToMap() {
+        String query = "SELECT * FROM " + "WTATournament";
+
+        Map<String, List<Match>> allMatches = new HashMap<>();
+        System.out.println(query);
+
+        try (Connection connection = DatabaseConnection.connect()) {
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
+            System.out.println(rs.toString());
+            while (rs.next()) {
+
+                String tourney_id = rs.getString("tourney_id");
+
+                allMatches.computeIfAbsent(tourney_id, k-> new ArrayList<>());
+
+                allMatches.get(tourney_id).add(new Match(
+                        rs.getString(tourney_id),
+                        rs.getString("tourney_name"),
+                        rs.getString("surface"),
+                        rs.getString("draw_size"),
+                        rs.getString("tourney_level"),
+                        rs.getString("tourney_date"),
+                        rs.getString("match_num"),
+                        rs.getString("winner_id"),
+                        rs.getString("winner_seed"),
+                        rs.getString("winner_entry"),
+                        rs.getString("winner_name"),
+                        rs.getString("winner_hand"),
+                        rs.getString("winner_ht"),
+                        rs.getString("winner_ioc"),
+                        rs.getString("winner_age"),
+                        rs.getString("loser_id"),
+                        rs.getString("loser_seed"),
+                        rs.getString("loser_entry"),
+                        rs.getString("loser_name"),
+                        rs.getString("loser_hand"),
+                        rs.getString("winner_hand"),
+                        rs.getString("loser_ht"),
+                        rs.getString("loser_ioc"),
+                        rs.getString("loser_age"),
+                        rs.getString("score"),
+                        rs.getString("best_of"),
+                        rs.getString("round"),
+                        rs.getString("minutes"),
+                        rs.getString("w_ace"),
+                        rs.getString("w_df"),
+                        rs.getString("w_svpt"),
+                        rs.getString("w_1stIn"),
+                        rs.getString("w_1stWon"),
+                        rs.getString("w_2ndWon"),
+                        rs.getString("w_bpSaved"),
+                        rs.getString("w_bpFaced"),
+                        rs.getString("l_ace"),
+                        rs.getString("l_df"),
+                        rs.getString("l_svpt"),
+                        rs.getString("l_1stIn"),
+                        rs.getString("l_1stWon"),
+                        rs.getString("l_2ndWon"),
+                        rs.getString("l_SvGms"),
+                        rs.getString("l_bpSaved"),
+                        rs.getString("l_bpFaced"),
+                        rs.getString("winner_rank"),
+                        rs.getString("winner_rank_points"),
+                        rs.getString("loser_rank"),
+                        rs.getString("loser_rank_points")
+                ));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }      System.out.println(allMatches.size());
+        return allMatches;
+    }
 }
+
