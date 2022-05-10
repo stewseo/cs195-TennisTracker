@@ -56,7 +56,6 @@ public class TournamentController implements Initializable {
     @FXML
     public Button toPlayerTable;
 
-
     @FXML
     private TextField searchBox;
 
@@ -94,8 +93,6 @@ public class TournamentController implements Initializable {
                     }
                 }
                 ));
-
-        //calls dao and returns multimap
 
         try {
             tourneyMap = TournamentDao.allMatchesCsvToTournamentList();

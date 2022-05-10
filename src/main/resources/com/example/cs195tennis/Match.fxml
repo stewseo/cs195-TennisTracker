@@ -11,18 +11,16 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 
-<BorderPane fx:id = "rootPane" prefHeight="800.0" prefWidth="600.0" styleClass="shadow-pane" stylesheets="@application.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cs195tennis.controller.MatchController">
+<BorderPane prefHeight="900.0" prefWidth="1000.0" styleClass="shadow-pane" stylesheets="@application.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cs195tennis.controller.MatchController">
     <center>
-        <AnchorPane fx:id="rootAnchorPane" prefHeight="200.0" prefWidth="200.0">
         <VBox id="dragTarget" spacing="10" styleClass="background-pane">
             <HBox alignment="CENTER">
                 <padding>
                     <Insets right="5" top="2" />
                 </padding>
-                <HBox>
-                    <ImageView>
-                        <Image url="@TennisShotChart.jpg" />
-                    </ImageView>
+                <HBox id="left-icons" alignment="CENTER_LEFT" spacing="10" HBox.hgrow="ALWAYS">
+                    <Button onAction="#handleButton3CLick" styleClass="git-button" />
+                    <Button onAction="#handleButton4Click" styleClass="exit-button" />
                 </HBox>
                 <HBox id="right-icons" alignment="CENTER_RIGHT" spacing="10" HBox.hgrow="ALWAYS">
                     <Button onAction="#handleGitButtonClicked" styleClass="git-button" />
@@ -70,6 +68,5 @@
                 </TableView>
             </VBox>
         </VBox>
-        </AnchorPane>
     </center>
 </BorderPane>

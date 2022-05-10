@@ -1,28 +1,40 @@
 package com.example.cs195tennis.model;
 
 import java.util.List;
+import java.util.Objects;
 
-    public class Player {
-        Ranking ranking;
-        public String firstName, height, id,rank,ioc,dob,hand,lastName,wiki;
+public class Player {
+        public static Ranking ranking;
+        public String firstName, lastName, fullName, height, id,rank,ioc,dob,hand,wiki;
         public List<Player> playerList;
         public Player(){}
-
-
 
         public Player(String firstName) {
             this.firstName = firstName;
         }
 
-
         @Override
         public String toString(){
 
-            return id + " " + firstName + " " + lastName + " " + hand + " " +  dob + " " + wiki;
+            return id + " " + fullName + " " + hand + " " +  dob + " " + wiki;
         }
 
-        public Player(String id, String firstName, String lastName, String hand, String dob, String ioc, String height, String wiki) {
+    public Player(String id, String firstName, String lastName, String hand, String dob, String ioc, String height, String wiki) {
+        this.id = id;
+        this.fullName = firstName.concat("_" + lastName);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.hand = hand;
+        this.dob = dob;
+        this.ioc = ioc;
+        this.height = height;
+        this.wiki = wiki;
+    }
+
+
+    public Player(String id, String firstName, String lastName, String hand, String dob, String ioc, String height, String wiki, String rank) {
             this.id = id;
+            this.fullName = firstName.concat("_" + lastName);
             this.firstName = firstName;
             this.lastName = lastName;
             this.hand = hand;
@@ -30,13 +42,40 @@ import java.util.List;
             this.ioc = ioc;
             this.height = height;
             this.wiki = wiki;
+            this.rank = rank;
         }
 
-        class Ranking {
 
-            String ranking_date,rank,player,points;
+        public String getFirstName() {
+            return firstName;
+        }
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    @Override
+        public int hashCode(){
+            return Objects.hash(id);
+        }
+
+        static enum GENDER {
+            M, F
+        }
+
+        public static class Ranking {
+
+            String ranking_date, rank, player, points;
 
             public Ranking(){}
+
             public String getRanking_date() {
                 return ranking_date;
             }
@@ -102,23 +141,15 @@ import java.util.List;
             this.id = id;
         }
 
-        public String getFirstName() {
-            return firstName;
+        public String getFullName() {
+            return fullName;
         }
 
-        public void setFirstName(String firstName) {
-            this.firstName = firstName;
-        }
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
-        public String getLastName() {
-            return lastName;
-        }
-
-        public void setLastName(String lastName) {
-            this.lastName = lastName;
-        }
-
-        public String getHand() {
+    public String getHand() {
             return hand;
         }
 

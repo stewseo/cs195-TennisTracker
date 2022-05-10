@@ -48,10 +48,6 @@ public class PlayerController implements Initializable {
     @FXML
     private TextField searchBox;
 
-    private void insertPlayerCsvToSql() throws SQLException, IOException {
-        PlayerDao.insertPlayerFromCsv();
-    }
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
@@ -69,7 +65,7 @@ public class PlayerController implements Initializable {
         System.out.println(playerMap.size());
 
         playerMap.forEach((k, v) -> v.forEach(pid-> playerObservableList.add(
-                new Player(pid.getId(), pid.getFirstName(), pid.getLastName(), pid.getHand(), pid.getDob(), pid.getIoc(), pid.getHeight(), pid.getWiki()
+                new Player(pid.getId(), pid.getFirstName(), pid.getLastName(), pid.getHand(), pid.getDob(), pid.getIoc(), pid.getHeight(), pid.getWiki(), pid.getRank()
                 ))));
 
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -85,13 +81,10 @@ public class PlayerController implements Initializable {
     }
 
 
-
     private void playerWindow(Player player) {
         System.out.println("\nInsert Player: " + player + " to GridPane -> HBox -> Root Pane");
 
     }
-
-
 
     @FXML
     public void loadPlayerData(ActionEvent event) {
@@ -102,12 +95,11 @@ public class PlayerController implements Initializable {
         String input = playerSearchTextField.getText();
 
         playerMap.forEach((k, v) -> v.forEach(pid-> playerObservableList.add(
-                new Player(pid.getId(), pid.getFirstName(), pid.getLastName(), pid.getHand(), pid.getDob(), pid.getIoc(), pid.getHeight(), pid.getWiki()
+                new Player(pid.getId(), pid.getFirstName(), pid.getLastName(), pid.getHand(), pid.getDob(), pid.getIoc(), pid.getHeight(), pid.getWiki(), pid.getRank()
                 ))));
 
         table.setItems(playerObservableList);
     }
-
 
     @FXML
     public void handleAddButtonClicked(ActionEvent event) throws IOException {
@@ -129,7 +121,7 @@ public class PlayerController implements Initializable {
         Platform.exit();
         event.consume();
     }
-    
+
     @FXML
     public void handleSearch(ActionEvent event) {
 

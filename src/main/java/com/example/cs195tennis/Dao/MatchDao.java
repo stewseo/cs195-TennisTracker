@@ -7,6 +7,9 @@ import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Multimap;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.io.*;
 import java.lang.reflect.Field;
 import java.security.KeyStore;
@@ -20,7 +23,7 @@ public class MatchDao {
     MatchDao() {}
 
     static List<Match> matchList;
-
+    public static ObservableList <Match> matches = FXCollections.observableArrayList();
     static String matchCsv = "C:\\Users\\seost\\cs195TennisAnalytics\\cs195-TennisTracker\\src\\main\\resources\\com\\example\\cs195tennis\\charting-m-matches.csv";
 
     static String atpMatches2022 = "C:\\Users\\seost\\cs195TennisAnalytics\\cs195-TennisTracker\\src\\main\\resources\\com\\example\\cs195tennis\\atp_matches_2022.csv";
@@ -78,6 +81,25 @@ public class MatchDao {
         return allMatchesCsv;
     }
 
+    public static Map<Integer, Map<Integer, List<Object>>> mapTempMaps() throws SQLException {
+
+        Map<Integer, Map<Integer, List <Object>>> mapMaps = new HashMap<>();
+
+        readCSVRowsToList().forEach(row -> {
+
+            int key = Objects.hash(row.get(0));
+
+            mapMaps.computeIfAbsent(key, k -> new HashMap<>());
+
+            mapMaps.get(key).computeIfAbsent(key, k -> new ArrayList<>());
+
+            mapMaps.get(key).get(key).add(new Match(row));
+
+        });
+        return mapMaps;
+    }
+
+
     public static Map<String, Map<String,List<Match>>> mapStatsToCategories() throws SQLException {
 
         Map<String, Map<String, List<Match>>> mapMaps = new HashMap<>();
@@ -87,7 +109,9 @@ public class MatchDao {
         readCSVRowsToList().forEach(row -> {
 
             String qualKey = row.get(0);
+
             System.out.print("qual tourney key " + qualKey);
+
             String tourney_id = row.get(0);
 
             mapMaps.computeIfAbsent(qualKey, k -> new HashMap<String, List<Match>>());
@@ -121,6 +145,25 @@ public class MatchDao {
 
         return map;
     }
+
+//    static {
+//
+//        Map<String,List<Match>> matchMap = new HashMap<>();
+//        System.out.println("test");
+//        try {
+//            matchMap = readAtpMatchToMap();
+//        } catch (SQLException | FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//
+//        matchMap.forEach((k, v) -> v.forEach(e ->
+//
+//                matchList.add(new Match(e.getTourney_name(), e.getTourney_date(), e.getMatch_num(), e.getWinner_name(), e.getLoser_name(), e.getScore(),
+//                        e.getRound(), e.getBest_of()
+//                ))));
+//        System.out.println("test " + matches);
+//    }
+
 }
 
 

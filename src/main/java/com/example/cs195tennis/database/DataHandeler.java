@@ -57,6 +57,7 @@ public class DataHandeler {
     public static void main(String[]  args){
     }
 
+    //create table from dao
     public static boolean createTable(String tableName, String[] columns) throws SQLException {
 
         int number = columns.length;
@@ -69,7 +70,6 @@ public class DataHandeler {
         }
 
         queryBuilder.append(", PRIMARY KEY (ID))");
-        System.out.println(queryBuilder.toString());
 
         Statement st = null;
         Connection conn = DatabaseConnection.connect();
@@ -81,7 +81,7 @@ public class DataHandeler {
         return true;
     }
 
-
+    //read csv in dao and insert to sql
     public static boolean create(String tableName, List<String[]> columns) throws SQLException {
 
         int cols = columns.get(0).length;
@@ -101,6 +101,8 @@ public class DataHandeler {
         queryBuilder.append(") ");
         queryBuilder.append(" VALUES (");
 
+        //TODO batch insert instead of singles.
+        //TODO parse json to sql
         for(int i = 1; i < rows;  i++) {
             StringBuilder values = new StringBuilder(queryBuilder);
 

@@ -1,6 +1,7 @@
 package com.example.cs195tennis.controller;
 import com.example.cs195tennis.Dao.MatchDao;
 import com.example.cs195tennis.Dao.PlayerDao;
+import com.example.cs195tennis.PlayerLoader;
 import com.example.cs195tennis.model.Match;
 import com.example.cs195tennis.model.Player;
 import com.example.cs195tennis.model.Rankings;
@@ -13,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
@@ -21,6 +23,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -30,10 +33,12 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class MatchController implements Initializable {
 
     @FXML public AnchorPane rootAnchorPane;
+    public TextField searchBox2;
     @FXML BorderPane rootPane;
 
     public TextField searchBox;
@@ -129,24 +134,26 @@ public class MatchController implements Initializable {
         MatchDao.insert();
     }
 
-    public void handleExitButtonClicked(ActionEvent event) {
+    public void handleExitButtonClicked(ActionEvent event) throws IOException {
+
         Platform.exit();
         event.consume();
+        PlayerLoader playerLoader = new PlayerLoader();
     }
 
     public void handleSearch(ActionEvent event) {
 
         matchObservableList.clear();
 
-        matchList = matchList.stream().filter(e -> e.getWinner_id().equals(searchBox.getText()) ||
+        matchMap.forEach((k,v) -> v.stream().filter(e -> e.getWinner_id().equals(searchBox.getText()) ||
                 e.getWinner_seed().equals(searchBox.getText()) ||
                 e.getWinner_entry().equals(searchBox.getText()) || e.getWinner_name().equals(searchBox.getText()) ||
                 e.getWinner_hand().equals(searchBox.getText())
-        ).toList();
+        ).collect(Collectors.toList()));
 
-        matchObservableList.addAll(matchList);
-
-        matchTable.setItems(matchObservableList);
+//        matchObservableList.addAll();
+//
+//        matchTable.setItems(matchObservableList);
     }
 
     public void handleClearSearchText(ActionEvent event) throws SQLException {
@@ -162,15 +169,24 @@ public class MatchController implements Initializable {
         event.consume();
     }
 
-
-    void loadMain() throws IOException {
-
-        Parent parent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("tournament.fxml")));
-        Stage stage = new Stage(StageStyle.DECORATED);
-        stage.setTitle("Touranment");
-        stage.setScene(new Scene(parent));
-        stage.show();
-
+    Node getNodeByCoordinate(Integer row, Integer column) {
+        for (Node node : rootAnchorPane.getChildren()) {
+            if(GridPane.getColumnIndex(node) == row && GridPane.getColumnIndex(node) == column){
+                return node;
+            }
+        }
+        return null;
     }
 
+    public void handleButton3CLick(ActionEvent event) {
+            Node node = (Node) event.getTarget();
+            int row = GridPane.getRowIndex(node);
+            int column = GridPane.getColumnIndex(node);
+    }
+
+    public void handleButton4Click(ActionEvent event) {
+    }
+
+    public void handleSearch2(ActionEvent event) {
+    }
 }

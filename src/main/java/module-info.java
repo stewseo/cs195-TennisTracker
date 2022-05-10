@@ -1,4 +1,7 @@
 module com.example.cs195tennis {
+    requires MaterialFX;
+    requires VirtualizedFX;
+    requires fr.brouillard.oss.cssfx;
     requires org.jooq;
     requires com.querydsl.core;
     requires com.google.common;
