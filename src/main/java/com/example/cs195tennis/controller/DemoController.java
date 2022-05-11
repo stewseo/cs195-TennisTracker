@@ -95,12 +95,12 @@ public class DemoController implements Initializable {
 //        loader.addView(MFXLoaderBean.of("ATP Players", loadURL("AtpPlayer.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-square-list", "Wta Players")).get());
 //        loader.addView(MFXLoaderBean.of("WTA Players", loadURL("ListViews.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-square-list", "Atp Players")).get());
 //        loader.addView(MFXLoaderBean.of("Text Fields", loadURL("TextFields.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-input-pipe-alt", "Atp Rankings")).get());
-        loader.addView(MFXLoaderBean.of("Buttons", loadURL("Buttons.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-circle-dot", "Wta Rankings")).setDefaultRoot(true).get());
+//        loader.addView(MFXLoaderBean.of("Buttons", loadURL("Buttons.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-circle-dot", "Wta Rankings")).setDefaultRoot(true).get());
 //        loader.addView(MFXLoaderBean.of("CHECKS_RADIOS_TOGGLES", loadURL("ChecksRadiosToggles.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-toggle-on", "Checks, Radios, Toggles")).get());
-        loader.addView(MFXLoaderBean.of("COMBOS", loadURL("ComboBoxes.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-list-dropdown", "ComboBoxes")).get());
+        loader.addView(MFXLoaderBean.of("COMBOS", loadURL("Search.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-list-dropdown", "ComboBoxes")).get());
 //        loader.addView(MFXLoaderBean.of("Dialogues", loadURL("Dialogs.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-messages", "Dialogs")).setControllerFactory(c -> new DialogsController(stage)).get());
 //        loader.addView(MFXLoaderBean.of("NOTIFICATIONS", loadURL("Notifications.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-bell", "Notifications")).setControllerFactory(c -> new NotificationsController(stage)).get());
-        loader.addView(MFXLoaderBean.of("PICKERS", loadURL("Pickers.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-calendars", "Pickers")).get());
+//        loader.addView(MFXLoaderBean.of("PICKERS", loadURL("Pickers.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-calendars", "Pickers")).get());
 //        loader.addView(MFXLoaderBean.of("PROGRESS", loadURL("Progress.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-progress-bars", "Progress")).get());
 //        loader.addView(MFXLoaderBean.of("SLIDERS", loadURL("Sliders.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-sliders", "Sliders")).get());
 //        loader.addView(MFXLoaderBean.of("STEPPER", loadURL("Stepper.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-stepper", "Stepper")).get());

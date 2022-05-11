@@ -33,7 +33,7 @@ public class FontResourcesController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		System.out.println("test test");
+
 		MFXTableColumn<FontResources> iconColumn = new MFXTableColumn<>("Icon", false, Comparator.comparing(FontResources::getDescription));
 		MFXTableColumn<FontResources> descriptionColumn = new MFXTableColumn<>("Description", false, Comparator.comparing(FontResources::getDescription));
 		MFXTableColumn<FontResources> codeColumn = new MFXTableColumn<>("Code", false, Comparator.comparing(FontResources::getCode));

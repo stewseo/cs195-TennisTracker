@@ -1,17 +1,18 @@
 package com.example.cs195tennis.database;
 
 import com.example.cs195tennis.model.Match;
-import com.example.cs195tennis.model.Player;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -95,7 +96,6 @@ public class DataHandeler {
         queryBuilder.append(" VALUES (");
 
         //TODO batch insert instead of singles.
-        //TODO parse json to sql
         for(int i = 1; i < rows;  i++) {
             StringBuilder values = new StringBuilder(queryBuilder);
 
@@ -153,78 +153,28 @@ public class DataHandeler {
     }
 
 
-    public static Map<String, List<Match>> readAll() {
+    public static ObservableList<String> getQueryFields(String[] fields) throws SQLException {
+        AtomicInteger i = new AtomicInteger();
 
-        String query = "SELECT * FROM " + "Tournament";
+        Statement st = DatabaseConnection.connect().createStatement();
 
-        Map<String, List<Match>> allMatches = new HashMap<>();
+        ResultSet rs = st.executeQuery("Select * from WTATournament");
 
-        try (Connection connection = DatabaseConnection.connect()) {
-            PreparedStatement statement = connection.prepareStatement(query);
-            ResultSet rs = statement.executeQuery();
+        ObservableList<String> temp = FXCollections.observableArrayList();
 
-            while (rs.next()) {
-                String tourney_id = rs.getString("tourney_id");
+        Set<String> set = new HashSet<>();
 
-                allMatches.computeIfAbsent(tourney_id, k-> new ArrayList<>());
-
-                allMatches.get(tourney_id).add(new Match(
-                        rs.getString(tourney_id),
-                        rs.getString("tourney_name"),
-                        rs.getString("surface"),
-                        rs.getString("draw_size"),
-                        rs.getString("tourney_level"),
-                        rs.getString("tourney_date"),
-                        rs.getString("match_num"),
-                        rs.getString("winner_id"),
-                        rs.getString("winner_seed"),
-                        rs.getString("winner_entry"),
-                        rs.getString("winner_name"),
-                        rs.getString("winner_hand"),
-                        rs.getString("winner_ht"),
-                        rs.getString("winner_ioc"),
-                        rs.getString("winner_age"),
-                        rs.getString("loser_id"),
-                        rs.getString("loser_seed"),
-                        rs.getString("loser_entry"),
-                        rs.getString("loser_name"),
-                        rs.getString("loser_hand"),
-                        rs.getString("winner_hand"),
-                        rs.getString("loser_ht"),
-                        rs.getString("loser_ioc"),
-                        rs.getString("loser_age"),
-                        rs.getString("score"),
-                        rs.getString("best_of"),
-                        rs.getString("round"),
-                        rs.getString("minutes"),
-                        rs.getString("w_ace"),
-                        rs.getString("w_df"),
-                        rs.getString("w_svpt"),
-                        rs.getString("w_1stIn"),
-                        rs.getString("w_1stWon"),
-                        rs.getString("w_2ndWon"),
-                        rs.getString("w_bpSaved"),
-                        rs.getString("w_bpFaced"),
-                        rs.getString("l_ace"),
-                        rs.getString("l_df"),
-                        rs.getString("l_svpt"),
-                        rs.getString("l_1stIn"),
-                        rs.getString("l_1stWon"),
-                        rs.getString("l_2ndWon"),
-                        rs.getString("l_SvGms"),
-                        rs.getString("l_bpSaved"),
-                        rs.getString("l_bpFaced"),
-                        rs.getString("winner_rank"),
-                        rs.getString("winner_rank_points"),
-                        rs.getString("loser_rank"),
-                        rs.getString("loser_rank_points")
-                ));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-        }return allMatches;
+        while(rs.next()) {
+            i.set(0);
+            Arrays.stream(fields).forEach(e-> {
+                try {
+                    set.add(rs.getString(fields[i.getAndIncrement()].toString()));
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }});
+        }
+        temp.addAll(set);
+        return temp;
     }
 
     public static Map<String, List<Match>> readWtaMatchesToMap() {

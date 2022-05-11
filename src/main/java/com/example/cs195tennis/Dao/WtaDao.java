@@ -68,9 +68,7 @@ import java.util.stream.IntStream;
 
             Map<String,List<Match>> wtaMap = new HashMap<>();
 
-//            ResultSet rs = DataHandeler.read(tableName, field, indexFieldName, index);
-
-            wtaMap = DataHandeler.readAll();
+//            wtaMap = DataHandeler.readAll();
 
             return wtaMap;
         }
@@ -103,7 +101,6 @@ import java.util.stream.IntStream;
                 DataHandeler.create("WTATournament", csvList);
             }
         }
-
 
         public static List<List<String>> readCSVRowsToList() throws SQLException {
 

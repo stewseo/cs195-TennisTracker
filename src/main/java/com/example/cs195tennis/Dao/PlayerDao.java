@@ -123,6 +123,24 @@ public class PlayerDao {
 
             }return player;
         }
+
+    public static List<String> query(String tourney_id, String[] s) throws SQLException {
+            System.out.println(tourney_id);
+            Connection c = DatabaseConnection.connect();
+            PreparedStatement ps = c.prepareStatement("Select * from WtaTournament");
+            ResultSet rs = ps.executeQuery();
+            List<String> l = new ArrayList<>();
+
+            while(rs.next()) {
+
+                for (int i = s.length-1; i >= 0; i--) {
+                    if(!s[i].equals("")) {
+                        System.out.println(rs.getString(s[i]));
+                        l.add(rs.getString(s[i]));
+                    }
+                }
+            }return l;
+    }
 }
 
 

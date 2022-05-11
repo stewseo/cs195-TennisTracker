@@ -15,7 +15,7 @@ import java.util.Objects;
 
 public class Main extends Application {
     private double x, y;
-
+        //TODO Diagram pane structure
         @Override
         public void start(Stage primaryStage) throws IOException {
             CSSFX.start();
