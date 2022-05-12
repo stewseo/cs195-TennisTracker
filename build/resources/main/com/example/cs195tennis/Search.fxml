@@ -4,77 +4,50 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-<GridPane alignment="CENTER" hgap="20.0" styleClass="grid-pane" stylesheets="@ComboBoxes.css" vgap="20.0"
+<GridPane alignment="TOP_CENTER" hgap="10.0" styleClass="grid-pane" stylesheets="@ComboBoxes.css" vgap="10.0"
           xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="com.example.cs195tennis.controller.SearchController">
     <columnConstraints>
-        <ColumnConstraints halignment="CENTER"/>
-        <ColumnConstraints halignment="CENTER"/>
-        <ColumnConstraints halignment="CENTER"/>
-        <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="20.0"/>
-        <ColumnConstraints halignment="CENTER" minWidth="10.0"/>
         <ColumnConstraints halignment="CENTER" minWidth="10.0"/>
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints minHeight="10.0" prefHeight="32.0"/>
-        <RowConstraints minHeight="10.0" prefHeight="64.0"/>
-        <RowConstraints minHeight="10.0" prefHeight="64.0"/>
-        <RowConstraints minHeight="10.0" prefHeight="10.0"/>
-        <RowConstraints minHeight="10.0" prefHeight="64.0"/>
-        <RowConstraints minHeight="10.0" prefHeight="64.0"/>
+        <RowConstraints minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
     </rowConstraints>
     <padding>
         <Insets bottom="20.0" left="30.0" right="30.0" top="20.0"/>
     </padding>
-    <StackPane minHeight="150.0" minWidth="300.0" styleClass="grid-background" GridPane.columnSpan="3"
-               GridPane.rowSpan="3">
-        <opaqueInsets>
-            <Insets/>
-        </opaqueInsets>
+
+    <StackPane minHeight="300.0" minWidth="300.0" styleClass="grid-background" GridPane.columnSpan="2147483647"
+               GridPane.rowSpan="2147483647">
         <GridPane.margin>
-            <Insets left="-15.0" right="-15.0"/>
+            <Insets bottom="-15.0" left="-15.0" right="-15.0"/>
         </GridPane.margin>
     </StackPane>
-    <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-           styleClass="header-label" text="Search" GridPane.columnSpan="3"/>
-    <MFXComboBox fx:id="tournamentFilterBox" floatingText="Combo" GridPane.rowIndex="1"/>
-    <MFXComboBox id="customNCombo" fx:id="playerStatsFilterBox" floatingText="Custom" GridPane.columnIndex="1"
-                 GridPane.rowIndex="1"/>
-    <MFXComboBox fx:id="matchStatFilterBox" allowEdit="true" floatingText="Editable" scrollOnOpen="true" selectable="true"
-                 GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-    <MFXComboBox fx:id="yrStartFilterBox" floatMode="BORDER" floatingText="Border Float" GridPane.rowIndex="2"/>
-    <MFXComboBox id="customNCombo2" fx:id="yrEndFilterBox" floatMode="DISABLED" promptText="No Float Custom"
-                 GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-    <MFXComboBox disable="true" floatMode="DISABLED" promptText="Disabled" GridPane.columnIndex="2"
-                 GridPane.rowIndex="2"/>
-    <StackPane minHeight="150.0" minWidth="300.0" styleClass="grid-background" GridPane.columnSpan="3"
-               GridPane.rowIndex="4" GridPane.rowSpan="2">
-        <GridPane.margin>
-            <Insets left="-15.0" right="-15.0"/>
-        </GridPane.margin>
-        <opaqueInsets>
-            <Insets/>
-        </opaqueInsets>
-    </StackPane>
-    <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="header-label" text="text fields"
-           GridPane.columnSpan="3" GridPane.rowIndex="4"/>
-    <MFXTextField fx:id="textField" onAction="#handleSearchPlayer1" promptText="Enter Player Name" stylesheets="@TextFields.css" GridPane.rowIndex="5"/>
-    <MFXTextField fx:id="textFieldPlayer2" onAction="#handleSearchPlayer2" promptText="Enter Player2 Name" stylesheets="@TextFields.css" GridPane.columnIndex="1"
-                       GridPane.rowIndex="5"/>
+
+    <Label alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" styleClass="header-label" text="WTA Tournaments"
+           GridPane.columnSpan="6" GridPane.rowSpan="2">
+    </Label>
+
+    <MFXTextField fx:id="textField" onAction="#handleSearchPlayer1" promptText="Enter Player Name" stylesheets="TextFields.css"
+                  GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
     <Label id="validationLabel" fx:id="validationLabel" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
            textFill="#ef6e6b" visible="false" wrapText="true"/>
-    <StackPane minHeight="150.0" minWidth="300.0" styleClass="grid-background" GridPane.columnIndex="4"
-               GridPane.columnSpan="2" GridPane.rowSpan="3">
-        <opaqueInsets>
-            <Insets/>
-        </opaqueInsets>
-        <GridPane.margin>
-            <Insets left="-15.0" right="-15.0"/>
-        </GridPane.margin>
-    </StackPane>
-    <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-           styleClass="header-label" text="Filter Combos" GridPane.columnIndex="4" GridPane.columnSpan="2"/>
-    <MFXFilterComboBox fx:id="filters" floatingText="Filter" GridPane.columnIndex="4" GridPane.rowIndex="1"/>
-    <MFXFilterComboBox id="customFilter" fx:id="filterMatchStats" floatMode="DISABLED" promptText="Custom"
-                       GridPane.columnIndex="5" GridPane.rowIndex="1"/>
+
+    <MFXDatePicker id="custDatePicker" fx:id="custDatePicker" closePopupOnChange="false" floatMode="INLINE"
+                   floatingText="Date Range"
+                   GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+
+    <MFXFilterComboBox id="customFilter" fx:id="filterTournaments" floatMode="DISABLED" promptText="WTA Tournaments"
+                       GridPane.rowIndex="2" GridPane.columnIndex="4"/>
+
+    <MFXFilterComboBox fx:id="filteredPlayers" floatingText="WTA Players"
+                       GridPane.rowIndex="2" GridPane.columnIndex="5"/>
+
+    <MFXButton id="custom" buttonType="RAISED" minHeight="50.0" minWidth="70.0" text="Search Button" GridPane.rowIndex="3"/>
+
+    <MFXTableView fx:id="table" maxWidth="1000"  minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+                  prefWidth="900.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="5"/>
 </GridPane>

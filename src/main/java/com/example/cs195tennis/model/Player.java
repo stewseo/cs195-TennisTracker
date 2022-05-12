@@ -27,7 +27,7 @@ public class Player {
 
     public Player(String id, String firstName, String lastName, String hand, String dob, String ioc, String height, String wiki) {
         this.id = id;
-        this.fullName = firstName.concat("_" + lastName);
+        this.fullName = firstName.concat(" " + lastName);
         this.firstName = firstName;
         this.lastName = lastName;
         this.hand = hand;
@@ -78,16 +78,30 @@ public class Player {
         }
 
     public static class Ranking {
-
-        String ranking_date, rank,player, points;
+            String ranking_date, rank,player, points;
 
         public Ranking(){}
+
+        public Ranking(Player p) {
+            this(p.getRanking().getRanking_date(),
+                    p.getRanking().getRank(),
+                    p.getRanking().getPlayer(),
+                    p.getRanking().getPoints());
+        }
 
         public Ranking(String ranking_date, String rank, String player, String points) {
             this.ranking_date = ranking_date;
             this.rank = rank;
             this.player = player;
             this.points = points;
+        }
+
+        public String getPlayer() {
+            return player;
+        }
+
+        public void setPlayer(String player) {
+            this.player = player;
         }
 
         public String getRanking_date() {

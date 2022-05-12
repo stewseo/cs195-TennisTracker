@@ -11,6 +11,10 @@ public class Match {
     Winner winner;
     Loser loser;
 
+    private int id;
+
+    public HashSet<String> queryParams = new HashSet<>();
+
     private String tourney_id,tourney_name,surface,draw_size,tourney_level,tourney_date,match_num,winner_id,
             winner_seed,winner_entry,winner_name,winner_hand,winner_ht,winner_ioc,winner_age,loser_id,loser_seed,loser_entry,loser_name,
             loser_hand,loser_ht,loser_ioc,loser_age,score,best_of,round,minutes,w_ace,w_df,w_svpt,w_1stIn,w_1stWon,w_2ndWon,w_SvGms,w_bpSaved,
@@ -21,9 +25,30 @@ public class Match {
         qualfierTourList = new ArrayList<>(row);
 
     }
+
     public Match(String match) {
         tourney_id = match;
     }
+
+    public Match(HashSet<String> queryParams) {
+        this.queryParams = queryParams;
+    }
+
+    public Match(String tourney_id, String tourney_name, String tourney_date, String winner_name, String loser_name, String score, String round, String winner_id, String loser_id) {
+        this.tourney_id = tourney_id;
+        this.tourney_name = tourney_name;
+        this.tourney_date = tourney_date;
+        this.winner_name = winner_name;
+        this.loser_name = loser_name;
+        this.score = score;
+        this.round = round;
+        this.winner_id = winner_id;
+        this.loser_id = loser_id;
+    }
+
+    public Match(String tourney_name, String tourney_date, String match_num, String winner_name, String loser_name, String score, String round, String best_of) {
+    }
+
     public Set<Winner> getWinnerSet() {
         return winnerSet;
     }
@@ -38,6 +63,20 @@ public class Match {
 
     public void setLoserSet(Set<Loser> loserSet) {
         this.loserSet = loserSet;
+    }
+
+    public Match(String tourney_id, String tourney_name,String tourney_date) {
+        this.tourney_id = tourney_id;
+        this.tourney_name = tourney_name;
+        this.tourney_date = tourney_date;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
@@ -280,27 +319,14 @@ public class Match {
     }
 
 
-    public Match(String tourney_name, String tourney_date, String match_num, String winner_name, String loser_name, String score, String best_of, String round) {
+    public Match(String tourney_name, String tourney_date, String match_num, String loser_name, String score, String best_of, String round) {
         this.tourney_name = tourney_name;
         this.tourney_date = tourney_date;
         this.match_num = match_num;
-        this.winner_name = winner_name;
         this.loser_name = loser_name;
         this.score = score;
         this.best_of = best_of;
         this.round = round;
-    }
-
-    public Match(String loser_id, String loser_seed, String loser_entry, String loser_name, String loser_hand, String loser_ht, String loser_ioc, String loser_age, String l_rank) {
-        this.loser_id = loser_id;
-        this.loser_seed = loser_seed;
-        this.loser_entry = loser_entry;
-        this.loser_name = loser_name;
-        this.loser_hand = loser_hand;
-        this.loser_ht = loser_ht;
-        this.loser_ioc = loser_ioc;
-        this.loser_age = loser_age;
-        this.loser_rank = l_rank;
     }
 
     public Match(String tourney_id, String score, String best_of, String round, String minutes) {

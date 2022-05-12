@@ -3,9 +3,7 @@
 @import 'fonts/Fonts.css';
 @import 'MFXColors.css';
 
-/**************************************************
- * Root
-**************************************************/
+
 .rootPane {
 	-fx-background-color: white;
 	-fx-background-radius: 10;
@@ -13,9 +11,6 @@
 	-fx-border-radius: 10;
 }
 
-/**************************************************
- * Window Header
-**************************************************/
 .rootPane .close-icon {
 	-mfx-color: -mfx-red;
 	-fx-opacity: 0.5;

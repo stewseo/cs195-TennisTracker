@@ -1,27 +1,19 @@
 package com.example.cs195tennis.Dao;
 
 import com.example.cs195tennis.database.DataHandeler;
-import com.example.cs195tennis.database.DatabaseConnection;
+import com.example.cs195tennis.database.Database;
 import com.example.cs195tennis.model.*;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ComparisonChain;
-import com.google.common.collect.Multimap;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.*;
-import java.lang.reflect.Field;
-import java.security.KeyStore;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class MatchDao {
 
@@ -31,21 +23,17 @@ public class MatchDao {
     public static ObservableList <Match> matches = FXCollections.observableArrayList();
 
 
-    static String qualCsvs = "atp_matches_qual_chall_";
-
-    static String atpMatches2022 = "C:\\Users\\seost\\tennis_atp\\atp_matches_2022.csv";
-    static String wtaMatchCsvs = "C:\\Users\\seost\\Downloads\\tennis_wta-master\\wta_matches_2022.csv";
-    static String wtaPlayers = "C:\\Users\\seost\\Downloads\\tennis_wta-master\\wta_players.csv";
+    static String qualCsvs = "C:\\Users\\seost\\tennis_atp\\atp_matches_qual_chall_";
+    static String atpMatches2022 = "C:\\Users\\seost\\tennis_atp\\atp_matches_";
     static String atpPlayers = "C:\\Users\\seost\\tennis_atp\\atp_players.csv";
 
 
-    public static void insert() throws SQLException {
+    public static void insert(int yrStart, int yrEnd, String csv) throws SQLException {
 
-        int yrStart = 2018, yrEnd = 2022;
-        StringBuilder players = new StringBuilder(wtaPlayers);
+        StringBuilder players = new StringBuilder(atpPlayers);
 
         for (int i = yrStart; i < yrEnd; i++) {
-            StringBuilder sb = new StringBuilder(wtaMatchCsvs);
+            StringBuilder sb = new StringBuilder(csv);
             sb.append(i).append(".csv");
 
             System.out.println(sb.toString());
@@ -169,7 +157,7 @@ public class MatchDao {
 
 
     public static void meta() throws SQLException {
-        DatabaseMetaData md = DatabaseConnection.connect().getMetaData();
+        DatabaseMetaData md = Database.connect().getMetaData();
         ResultSet rs = md.getSchemas();
         System.out.println(rs.toString());
 
@@ -180,24 +168,33 @@ public class MatchDao {
 
     }
 
-    public static ObservableList<String> getTournamentNames() throws SQLException {
+    public static ObservableList<Match> getTournamentNames() throws SQLException {
 
-        Statement st = DatabaseConnection.connect().createStatement();
+        Statement st = Database.connect().createStatement();
 
         ResultSet rs = st.executeQuery("Select * from WTATournament");
 
-        System.out.println(rs.toString());
+        Map<String, List<Match>> map = new HashMap<>();
 
-        Map<Integer, List<Match>> map = new HashMap<>();
-        List<ResultSet> match = new ArrayList<>();
-        ObservableList<String> temp = FXCollections.observableArrayList();
-        Set<String> tNames = new HashSet<>();
+        ObservableList<Match> temp = FXCollections.observableArrayList();
+
+        Set<Match> tNames = new HashSet<>();
+
         while(rs.next()) {
-            String id = rs.getString("tourney_id");
-            tNames.add(rs.getString("tourney_name"));
 
-            map.computeIfAbsent(id.hashCode(), k -> new ArrayList<>());
-            map.get(id.hashCode()).add(new Match(id,
+            String key = rs.getString("tourney_id");
+            String date = rs.getString("tourney_date");
+
+//            int id = Objects.hash(key);
+
+
+
+            map.computeIfAbsent(key, k -> new ArrayList<>());
+
+            tNames.add(new Match(key, rs.getString("tourney_name"),date));
+
+
+            map.get(key).add(new Match(key,
                     rs.getString("tourney_name"),
                     rs.getString("surface"),
                     rs.getString("draw_size"),
@@ -247,16 +244,14 @@ public class MatchDao {
                     rs.getString("loser_rank"),
                     rs.getString("loser_rank_points")
             ));
-            tNames.add(rs.getString("tourney_name"));
-
         }
-        temp.addAll(tNames);
+
         return temp;
     }
 
     public static ObservableList<Match> getMatchData() throws SQLException {
-        Statement st = DatabaseConnection.connect().createStatement();
-        ResultSet rs = st.executeQuery("Select * in Tournament where id = ?");
+        Statement st = Database.connect().createStatement();
+        ResultSet rs = st.executeQuery("Select * in Tournament");
         System.out.println(rs.toString());
         ObservableList<Match> temp = FXCollections.observableArrayList();
 

@@ -4,17 +4,17 @@ import com.example.cs195tennis.Dao.PlayerDao;
 import com.example.cs195tennis.Dao.WtaDao;
 import com.example.cs195tennis.database.DataHandeler;
 import com.example.cs195tennis.model.*;
-import io.github.palexdev.materialfx.controls.MFXPaginatedTableView;
-import io.github.palexdev.materialfx.controls.MFXTableColumn;
-import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.StringFilter;
 import io.github.palexdev.materialfx.utils.others.observables.When;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -32,7 +32,11 @@ public class WtaPlayerController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        playerMap = PlayerDao.getPlayerMap();
+        try {
+            playerMap = PlayerDao.getPlayerMap();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         System.out.println(playerMap.size());
 
@@ -74,6 +78,11 @@ public class WtaPlayerController implements Initializable {
         wtaPlayerTable.setItems(wtaPlayerObservable);
     }
 
+    public void changeColors(ActionEvent event) {
+    }
+
+    public void handleSearchPlayer(ActionEvent event) {
+    }
 }
 
 

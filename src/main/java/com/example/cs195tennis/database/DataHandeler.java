@@ -15,6 +15,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 public class DataHandeler {
@@ -33,7 +35,7 @@ public class DataHandeler {
         queryBuilder.append(" = ");
         queryBuilder.append(convertObjectToSQLField(index, indexDataType));
 
-        try (Connection connection = DatabaseConnection.connect()) {
+        try (Connection connection = Database.connect()) {
             PreparedStatement statement = connection.prepareStatement(queryBuilder.toString());
             ResultSet rs = statement.executeQuery();
             return rs;
@@ -46,59 +48,57 @@ public class DataHandeler {
             return null;
         }
     }
-
-    public static void main(String[]  args){
+    public static void main(String[]  args) throws SQLException {
 
     }
 
-    //create table from dao
-    public static boolean createTable(String tableName, String[] columns) throws SQLException {
+    public static boolean createTable(String tableName, List<String>columns) throws SQLException {
 
-        int number = columns.length;
+        int number = columns.size();
 
         StringBuilder queryBuilder = new StringBuilder("CREATE TABLE " + tableName + "(ID INT, ");
+        int i = 0;
 
-        for (int i = 0; i < number; i++) {
-            queryBuilder.append(columns[i]).append(" TEXT");
-            if (i < number - 1) queryBuilder.append(", ");
-        }
+        columns.forEach(e-> {
+            queryBuilder.append(e).append(" TEXT");
+            if (i < number - 1) {
+                queryBuilder.append(", ");
+            }
+        });
 
-        queryBuilder.append(", PRIMARY KEY (ID))");
-
-        Statement st = null;
-        Connection conn = DatabaseConnection.connect();
-
-            st = conn.createStatement();
-
-            st.executeUpdate(queryBuilder.toString());
-
-        return true;
+        queryBuilder.append(" PRIMARY KEY (ID))");
+        System.out.println(queryBuilder.toString());
+        return Database.connect()
+                .prepareStatement(queryBuilder.toString())
+                .execute();
     }
 
-    //read csv in dao and insert to sql
+
+
     public static boolean create(String tableName, List<String[]> columns) throws SQLException {
 
-        int cols = columns.get(0).length;
 
-        int rows = columns.size() - 1;
+        int cols = columns.get(0).length, rows = columns.size() - 1;
 
         List<StringBuilder> inserts = new ArrayList<>();
 
         StringBuilder queryBuilder = new StringBuilder("INSERT INTO " + tableName + " (");
 
-        for (int i = 0; i < cols; i++) {
+
+        for(int i = 0; i < cols; i++){
             queryBuilder.append("\"");
             queryBuilder.append(columns.get(0)[i]);
             queryBuilder.append("\"");
             if (i < cols - 1) queryBuilder.append(", ");
         }
+
         queryBuilder.append(") ");
         queryBuilder.append(" VALUES (");
 
-        //TODO batch insert instead of singles.
+        System.out.println(queryBuilder.toString());
+
         for(int i = 1; i < rows;  i++) {
             StringBuilder values = new StringBuilder(queryBuilder);
-
             for (int j = 0; j < columns.get(i).length; j++) {
                 values.append("\"");
                 values.append(columns.get(i)[j]);
@@ -108,11 +108,9 @@ public class DataHandeler {
             values.append(")");
             inserts.add(values);
         }
-
         int index = 1;
-        System.out.println(inserts.get(2).toString());
-        try (Connection conn = DatabaseConnection.connect()) {
 
+        try (Connection conn = Database.connect()) {
             while(index < rows-1) {
                 Statement st = conn.createStatement();
                 st.executeUpdate(inserts.get(index++).toString());
@@ -135,11 +133,11 @@ public class DataHandeler {
         return queryBuilder.toString();
     }
 
-    private static void readCsvToDb() throws FileNotFoundException {
+    private static List<List<String>> readCsvToDb(String csv) throws FileNotFoundException {
 
     List<List<String>> records = new ArrayList<List<String>>();
 
-    try (CSVReader csvReader = new CSVReader(new FileReader("current-rankings.csv"));) {
+    try (CSVReader csvReader = new CSVReader(new FileReader(csv));) {
 
         String[] values = null;
 
@@ -149,14 +147,14 @@ public class DataHandeler {
         }
     } catch (CsvValidationException | IOException e) {
         e.printStackTrace();
-    }
+    }return records;
     }
 
 
     public static ObservableList<String> getQueryFields(String[] fields) throws SQLException {
         AtomicInteger i = new AtomicInteger();
 
-        Statement st = DatabaseConnection.connect().createStatement();
+        Statement st = Database.connect().createStatement();
 
         ResultSet rs = st.executeQuery("Select * from WTATournament");
 
@@ -176,14 +174,13 @@ public class DataHandeler {
         temp.addAll(set);
         return temp;
     }
-
     public static Map<String, List<Match>> readWtaMatchesToMap() {
         String query = "SELECT * FROM " + "WTATournament";
 
         Map<String, List<Match>> allMatches = new HashMap<>();
         System.out.println(query);
 
-        try (Connection connection = DatabaseConnection.connect()) {
+        try (Connection connection = Database.connect()) {
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet rs = statement.executeQuery();
             System.out.println(rs.toString());
@@ -252,5 +249,19 @@ public class DataHandeler {
         }      System.out.println(allMatches.size());
         return allMatches;
     }
+
+    public static void buildPath(String s, String s1) throws SQLException, FileNotFoundException {
+        String csv = s1.toLowerCase().substring(s1.length()-3);
+
+        int csvSysHash = System.identityHashCode(csv.hashCode());
+        System.out.println(csvSysHash);
+
+        if (csvSysHash == System.identityHashCode("csv".hashCode())) {
+
+            createTable(s, readCsvToDb(s1).get(0));
+        }
+    }
+
+
 }
 

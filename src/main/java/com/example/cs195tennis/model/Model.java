@@ -24,6 +24,7 @@ import io.github.palexdev.materialfx.utils.FXCollectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.SQLException;
 import java.util.stream.IntStream;
 
 import static com.example.cs195tennis.model.Device.State.OFFLINE;
@@ -106,14 +107,18 @@ public class Model {
 				"""
 		};
 
-		PlayerDao.getPlayerMap().forEach((k,v)->  {
+		try {
+			PlayerDao.getPlayerMap().forEach((k,v)->  {
 
-			int resultSize = v.size();
+				int resultSize = v.size();
 
-			strings = IntStream.rangeClosed(1, resultSize)
-				.mapToObj(i -> v.get(i-1).getFullName() + i)
-				.collect(FXCollectors.toList());
-	});
+				strings = IntStream.rangeClosed(1, resultSize)
+					.mapToObj(i -> v.get(i-1).getFullName() + i)
+					.collect(FXCollectors.toList());
+		});
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 		people = FXCollections.observableArrayList(
 				Person.ofSplit("Turner Romero", " ").randomAge(),

@@ -1,7 +1,6 @@
 package com.example.cs195tennis.Dao;
 
-import com.example.cs195tennis.database.DatabaseConnection;
-import com.example.cs195tennis.model.Player;
+import com.example.cs195tennis.database.Database;
 import com.example.cs195tennis.model.Tournament;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -13,7 +12,6 @@ import javafx.collections.ObservableList;
 import java.io.*;
 import java.sql.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class TournamentDao {
 
@@ -43,7 +41,7 @@ public class TournamentDao {
 
     public static void createTableTournament() {
 
-        try(Connection c = DatabaseConnection.connect()) {
+        try(Connection c = Database.connect()) {
 
             Statement st = c.createStatement();
 
@@ -115,7 +113,7 @@ public class TournamentDao {
     }
 
     public static void insertToTournament() throws SQLException, IOException {
-        Connection c = DatabaseConnection.connect();
+        Connection c = Database.connect();
 
         c.setAutoCommit(false);
         int batchSize = 20;
@@ -169,7 +167,7 @@ public class TournamentDao {
     static String matchCsv = "C:\\Users\\seost\\cs195TennisAnalytics\\cs195-TennisTracker\\src\\main\\resources\\com\\example\\cs195tennis\\atp_matches_2022.csv";
 
     public static Multimap<String,Tournament> allMatchesCsvToTournamentList() throws FileNotFoundException, SQLException {
-        Connection c = DatabaseConnection.connect();
+        Connection c = Database.connect();
 
 
         c.setAutoCommit(false);
@@ -216,7 +214,7 @@ public class TournamentDao {
         String query = "SELECT * FROM " + "Tournament";
 
         List<Tournament> tournamentList = new ArrayList<>();
-        try (Connection connection = DatabaseConnection.connect()) {
+        try (Connection connection = Database.connect()) {
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet rs = statement.executeQuery();
 

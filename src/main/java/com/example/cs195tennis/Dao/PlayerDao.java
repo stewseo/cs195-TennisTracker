@@ -1,9 +1,6 @@
 package com.example.cs195tennis.Dao;
 
-import com.example.cs195tennis.database.DatabaseConnection;
-import com.example.cs195tennis.model.Device;
-import com.example.cs195tennis.model.Person;
-import com.example.cs195tennis.model.Rankings;
+import com.example.cs195tennis.database.Database;
 import com.example.cs195tennis.model.Player;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -14,17 +11,12 @@ import java.io.*;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 public class PlayerDao {
-        public static ObservableList<Player> players = FXCollections.observableArrayList();
+        public static ObservableList<Player> playerObservableList = FXCollections.observableArrayList();
+        public static ObservableList<Player.Ranking> playerRanking = FXCollections.observableArrayList();
         private static String mainTable = "Player";
-        private static List<Player> playerList;
-        private static List<Rankings> playerRankList;
-        private static final String id = "id";
-        private static final String firstName = "firstName";
-        private static final String lastName = "lastName";
-        private static final String hand = "hand";
+        private static final String id = "id",firstName = "firstName",lastName = "lastName",hand = "hand";
         private static final String dob = "dob";
         private static final String ioc = "ioc";
         private static final String height = "height";
@@ -35,7 +27,7 @@ public class PlayerDao {
 
     static String rankCsv = "C:\\Users\\seost\\cs195TennisAnalytics\\cs195-TennisTracker\\src\\main\\resources\\com\\example\\cs195tennis\\atp_rankings_current.csv";
 
-    public static Map<String, List<Player>> readCsvToMap() {
+    public static Map<String, List<Player>> readCsvToMap() throws SQLException {
 
             List<List<String>> playerRankCsv = new ArrayList<List<String>>();
 
@@ -56,8 +48,8 @@ public class PlayerDao {
 
             Map<String, List<Player>> playerMap = getPlayerMap();
 
-
             playerRankCsv.forEach(row -> {
+
                 map.computeIfAbsent(row.get(0), k -> new ArrayList<>());
 
                 map.get(row.get(0)).add(new Player(row.get(0), row.get(1), row.get(2), row.get(3)));
@@ -65,17 +57,36 @@ public class PlayerDao {
         return map;
         }
 
-        public static Map<String, List<Player>> getRankingList() {
-            String query = "SELECT * FROM " + "RANK";
+    public static Map<String, List<Player>> getPlayerMap() throws SQLException {
+
+        Map<String, List<Player>> player = new HashMap<>();
+
+        Connection c = Database.connect();
+
+        PreparedStatement ps = c.prepareStatement("Select * in player");
+
+        return player;
+    }
+
+    public static Map<String, List<Player>> getRankingList() {
+            String query = "Select * From " + "AtpPlayerRanking";
             Map<String, List<Player>> currentRank = new HashMap<>();
 
-            try (Connection connection = DatabaseConnection.connect()) {
+            try (Connection connection = Database.connect()) {
                 PreparedStatement statement = connection.prepareStatement(query);
                 ResultSet rs = statement.executeQuery();
 
                 while (rs.next()) {
-                    System.out.println(rs);
-                    currentRank.computeIfAbsent(rs.getString("ranking_date"), k->new ArrayList<>());
+
+                    String id = rs.getString("ranking_date") + rs.getString("player");
+
+                    int key = Integer.parseInt(rs.getString("ranking_date") + rs.getString("player"));
+
+                    key ^= key >>> 16;
+
+                    System.out.println("key " + key);
+
+                    currentRank.computeIfAbsent(id, k->new ArrayList<>());
 
                     currentRank.get(rs.getString("ranking_date")).add(new Player(
                             rs.getString("ranking_date"),
@@ -91,23 +102,33 @@ public class PlayerDao {
         String querys = " select"+ lastName+ " from " +"PLAYERS"+" join ranking on player.id = ranking.player_id where pos == 1 group by lastName; ";
 
 
-        public static Map<String, List<Player>> getPlayerMap() {
+
+    public static ObservableList<String> getPlayerNames() {
+
+        Set<String> set = new HashSet<>();
+
+        ObservableList<String> temp = FXCollections.observableArrayList();
+
+        playerObservableList.forEach(e-> set.add(e.getFullName()));
+
+        temp.addAll(set);
+
+        return temp;
+    }
+
+
+        public static ObservableList<Player> readWtaPlayerToObservable() {
 
             String query = "SELECT * FROM " + "Player";
 
-            Map<String, List<Player>> player = new HashMap<>();
-
-            try (Connection connection = DatabaseConnection.connect()) {
+            try (Connection connection = Database.connect()) {
                 PreparedStatement statement = connection.prepareStatement(query);
                 ResultSet rs = statement.executeQuery();
 
                 while (rs.next()) {
-                    String playerkey = rs.getString(id);
 
-                    player.computeIfAbsent(playerkey, k-> new ArrayList<>());
-
-                    player.get(playerkey).add(new Player(
-                            rs.getString(id),
+                    playerObservableList.add(new Player(
+                           rs.getString(id),
                             rs.getString(firstName),
                             rs.getString(lastName),
                             rs.getString(hand),
@@ -121,12 +142,12 @@ public class PlayerDao {
             } catch (SQLException e) {
                 e.printStackTrace();
 
-            }return player;
+            }return playerObservableList;
         }
 
     public static List<String> query(String tourney_id, String[] s) throws SQLException {
             System.out.println(tourney_id);
-            Connection c = DatabaseConnection.connect();
+            Connection c = Database.connect();
             PreparedStatement ps = c.prepareStatement("Select * from WtaTournament");
             ResultSet rs = ps.executeQuery();
             List<String> l = new ArrayList<>();
@@ -140,6 +161,15 @@ public class PlayerDao {
                     }
                 }
             }return l;
+    }
+
+    public static ObservableList<Player.Ranking> getPlayerRanks() {
+
+        getRankingList().forEach((k, v) -> v.forEach(e ->
+                playerRanking.add(new Player.Ranking(e)
+                )));
+
+        return playerRanking;
     }
 }
 

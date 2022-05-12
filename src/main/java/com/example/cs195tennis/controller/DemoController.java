@@ -90,22 +90,11 @@ public class DemoController implements Initializable {
 
     private void initializeLoader() {
         MFXLoader loader = new MFXLoader();
-        loader.addView(MFXLoaderBean.of("WTA Tournaments", loadURL("WTATournament.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-table", "Wta Tournaments")).get());
-        loader.addView(MFXLoaderBean.of("ATP Tournaments", loadURL("TableViews.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-table", "ATP Tournaments")).get());
-//        loader.addView(MFXLoaderBean.of("ATP Players", loadURL("AtpPlayer.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-square-list", "Wta Players")).get());
-//        loader.addView(MFXLoaderBean.of("WTA Players", loadURL("ListViews.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-square-list", "Atp Players")).get());
-//        loader.addView(MFXLoaderBean.of("Text Fields", loadURL("TextFields.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-input-pipe-alt", "Atp Rankings")).get());
-//        loader.addView(MFXLoaderBean.of("Buttons", loadURL("Buttons.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-circle-dot", "Wta Rankings")).setDefaultRoot(true).get());
-//        loader.addView(MFXLoaderBean.of("CHECKS_RADIOS_TOGGLES", loadURL("ChecksRadiosToggles.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-toggle-on", "Checks, Radios, Toggles")).get());
-        loader.addView(MFXLoaderBean.of("COMBOS", loadURL("Search.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-list-dropdown", "ComboBoxes")).get());
-//        loader.addView(MFXLoaderBean.of("Dialogues", loadURL("Dialogs.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-messages", "Dialogs")).setControllerFactory(c -> new DialogsController(stage)).get());
-//        loader.addView(MFXLoaderBean.of("NOTIFICATIONS", loadURL("Notifications.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-bell", "Notifications")).setControllerFactory(c -> new NotificationsController(stage)).get());
-//        loader.addView(MFXLoaderBean.of("PICKERS", loadURL("Pickers.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-calendars", "Pickers")).get());
-//        loader.addView(MFXLoaderBean.of("PROGRESS", loadURL("Progress.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-progress-bars", "Progress")).get());
-//        loader.addView(MFXLoaderBean.of("SLIDERS", loadURL("Sliders.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-sliders", "Sliders")).get());
-//        loader.addView(MFXLoaderBean.of("STEPPER", loadURL("Stepper.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-stepper", "Stepper")).get());
-//        loader.addView(MFXLoaderBean.of("SCROLL-PANES", loadURL("ScrollPanes.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-scroll-bar", "Scroll Panes")).get());
-////        loader.addView(MFXLoaderBean.of("FONT-RESOURCES", loadURL("FontResources.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-fonticons", "Font Resources")).get());
+//        loader.addView(MFXLoaderBean.of("WTA Players", loadURL("Search.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-table", "WTA Playesr")).get());
+//        loader.addView(MFXLoaderBean.of("ATP Tournaments", loadURL("Search.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-table", "ATP Tournaments")).get());
+        loader.addView(MFXLoaderBean.of("ATP Players", loadURL("AtpPlayer.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-square-list", "ATP Players")).get());
+        loader.addView(MFXLoaderBean.of("WTA Tournaments", loadURL("WTATournament.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-list-dropdown", "WTA Tournaments")).get());
+
         loader.setOnLoadedAction(beans -> {
             List<ToggleButton> nodes = beans.stream()
                     .map(bean -> {
@@ -125,7 +114,6 @@ public class DemoController implements Initializable {
 
     private ToggleButton createToggle(String icon, String text) {
         MFXIconWrapper wrapper = new MFXIconWrapper(icon, 24, 32);
-
         MFXRectangleToggleNode toggleNode = new MFXRectangleToggleNode(text, wrapper);
         toggleNode.setAlignment(Pos.CENTER_LEFT);
         toggleNode.setMaxWidth(Double.MAX_VALUE);
