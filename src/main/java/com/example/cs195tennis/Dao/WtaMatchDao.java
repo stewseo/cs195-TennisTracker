@@ -2,42 +2,36 @@ package com.example.cs195tennis.Dao;
 import com.example.cs195tennis.database.DataHandeler;
 import com.example.cs195tennis.database.Database;
 import com.example.cs195tennis.model.Match;
-import com.example.cs195tennis.model.Player;
+import com.example.cs195tennis.model.WtaMatch;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.Objects;
-import java.sql.PreparedStatement;
+import java.util.stream.Collectors;
 
 public class WtaMatchDao {
-    public static ObservableList<Player> wtaObservablePlayer = FXCollections.observableArrayList();
-    public static ObservableList<Match> wtaObservable = FXCollections.observableArrayList();
-    static String wtaMatchCsvs = "C:\\Users\\seost\\Downloads\\tennis_wta-master\\wta_matches_";
-    static String wtaPlayers = "C:\\Users\\seost\\Downloads\\tennis_wta-master\\wta_players.csv";
 
-    public static Set<Match> keys = new HashSet<>();
+    public static ObservableList<WtaMatch> wtaObservable = FXCollections.observableArrayList();
 
-    public static Map<String, List<Match>> queryWta(String tableName, String field, String indexFieldName, String index, Match match) throws SQLException {
+    public static Map<String, List<WtaMatchDao>> queryWta(String tableName, String field, String indexFieldName, String index, Match match) throws SQLException {
         String id = match.getTourney_id();
         String tourneyDate = match.getTourney_date();
-        String winner_name = match.getWinner_name();
-        String loser_name = match.getLoser_name();
+        String winner_name = match.getWinnerName();
+        String loser_name = match.getLoserName();
 
-        Map<String, List<Match>> wtaMap = new HashMap<>();
+        Map<String, List<WtaMatchDao>> wtaMap = new HashMap<>();
 
         ResultSet rs = DataHandeler.read(tableName, field, indexFieldName, index);
 
@@ -51,21 +45,47 @@ public class WtaMatchDao {
         return wtaMap;
     }
 
-    public static void main(String[] args) throws SQLException {
-        System.out.println(getWtaList().size());
+
+    public static ObservableList<WtaMatch> getTournamentNames() throws SQLException {
+
+        Statement st = Database.connect().createStatement();
+
+        ResultSet rs = st.executeQuery("Select * from WTATournament");
+
+        Map<String, List<Match>> map = new HashMap<>();
+
+        ObservableList<WtaMatch> temp = FXCollections.observableArrayList();
+
+        Set<WtaMatch> tNames = new HashSet<>();
+
+        while(rs.next()) {
+
+            String key = rs.getString("tourney_id");
+
+            String date = rs.getString("tourney_date");
+//
+//            map.computeIfAbsent(key, k -> new ArrayList<>());
+//
+//            tNames.add(new WtaMatch(key, rs.getString("tourney_name"),date));
+
+//            map.get(key).add((key +
+            System.out.println(" test ");
+                    temp.add(new WtaMatch(
+                            rs.getString("tourney_id"),
+                            rs.getString("tourney_name"),
+                            rs.getString("surface"),
+                            rs.getString("draw_size"),
+                            rs.getString("tourney_level"),
+                            rs.getString("tourney_date")));
+        };
+
+        return temp;
     }
 
-    public static Map<String, List<Match>> getWtaList() throws SQLException {
-
-        Map<String, List<Match>> wtaMap = new HashMap<>();
-
-        return wtaMap;
-    }
-
-    public static void insert(String pre, int yrSt, int yrEnd, String suf) throws SQLException {
+    public static void insert(String pre, int yrSt, int yrEnd, String suf, String wtaMatch) throws SQLException {
 
         for (int i = yrSt; i < yrEnd; i++) {
-            StringBuilder sb = new StringBuilder(wtaMatchCsvs);
+            StringBuilder sb = new StringBuilder(wtaMatch);
             sb.append(i).append(".csv");
 
             System.out.println(sb.toString());
@@ -89,11 +109,11 @@ public class WtaMatchDao {
         }
     }
 
-    public static List<List<String>> readCSVRowsToList() throws SQLException {
+    public static List<List<String>> readCSVRowsToList(String url) throws SQLException {
 
         List<List<String>> allMatchesCsv = new ArrayList<List<String>>();
 
-        try (CSVReader csvReader = new CSVReader(new FileReader(wtaMatchCsvs));) {
+        try (CSVReader csvReader = new CSVReader(new FileReader(url));) {
             String[] values = null;
 
             while ((values = csvReader.readNext()) != null) {
@@ -105,50 +125,8 @@ public class WtaMatchDao {
         return allMatchesCsv;
     }
 
-    public static Map<Integer, Map<Integer, List<Object>>> mapTempMaps() throws SQLException {
 
-        Map<Integer, Map<Integer, List<Object>>> mapMaps = new HashMap<>();
-
-        readCSVRowsToList().forEach(row -> {
-
-            int key = Objects.hash(row.get(0));
-
-            mapMaps.computeIfAbsent(key, k -> new HashMap<>());
-
-            mapMaps.get(key).computeIfAbsent(key, k -> new ArrayList<>());
-
-            mapMaps.get(key).get(key).add(new Match(row));
-
-        });
-        return mapMaps;
-    }
-
-    public static ObservableList<Player> readWtaPlyersToObservable() throws SQLException {
-        Connection c = Database.connect();
-        PreparedStatement ps = c.prepareStatement("select * in WtaPlayer");
-
-        ResultSet rs = ps.executeQuery();
-
-        Set<Player> keys = new HashSet<>();
-
-        while (rs.next()) {
-            keys.add(new Player(
-                    rs.getString("player_id"),
-                    rs.getString("firstName"),
-                    rs.getString("lastName"),
-                    rs.getString("hand"),
-                    rs.getString("dob"),
-                    rs.getString("player_ioc"),
-                    rs.getString("height"),
-                    rs.getString("wikiData_id")
-            ));
-        }
-
-        wtaObservablePlayer.addAll(keys);
-        return wtaObservablePlayer;
-    }
-
-    public static ObservableList<Match> readWtaMatchesToObservable() throws SQLException {
+    public static ObservableList<WtaMatch> readWtaMatchesToObservable() throws SQLException {
 
         Connection c = Database.connect();
         PreparedStatement ps = c.prepareStatement("select * from WtaTournament");
@@ -156,7 +134,7 @@ public class WtaMatchDao {
 
         while (rs.next()) {
             wtaObservable.add(
-                    new Match(
+                    new WtaMatch(
                             rs.getString("tourney_id"),
                             rs.getString("tourney_name"),
                             rs.getString("tourney_date"),
@@ -172,14 +150,34 @@ public class WtaMatchDao {
         return wtaObservable;
     }
 
-    public static ObservableList<String> getTournamentNames() {
+    public static ObservableList<WtaMatch> getWtaMatchesCustom() {
 
-        Set<String> set = new HashSet<>();
-        ObservableList<String> tournamentNames = FXCollections.observableArrayList();
-        wtaObservable.forEach(e-> set.add(e.getTourney_name()));
+        Set<WtaMatch> set = new HashSet<>();
+        ObservableList<WtaMatch> tournamentNames = FXCollections.observableArrayList();
+
         tournamentNames.addAll(set);
 
         return tournamentNames;
+    }
+
+
+    public static ObservableList<WtaMatch> getTournamentResults(String tournamentId, String rangeYears, String filters) throws SQLException {
+
+
+        ObservableList<WtaMatch> temp = FXCollections.observableArrayList();
+
+        String.join(", " + Arrays.stream(new String[]{tournamentId,rangeYears,filters}).collect(Collectors.joining(", ")));
+
+        ResultSet rs =
+                Database.connect().prepareStatement("select * from "+ " Table " + " inner join " + " second param " + " where Tournament.id = " +  " param key ")
+                        .executeQuery();
+
+        int i = 0;
+
+        while(rs.next()) {
+            temp.add(new WtaMatch(rs.getObject(i++)));
+        }
+        return temp;
     }
 }
 

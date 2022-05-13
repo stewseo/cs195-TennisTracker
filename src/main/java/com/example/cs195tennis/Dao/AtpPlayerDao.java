@@ -1,9 +1,9 @@
 package com.example.cs195tennis.Dao;
 
-import com.example.cs195tennis.database.DataHandeler;
 import com.example.cs195tennis.database.Database;
-import com.example.cs195tennis.model.Match;
-import com.example.cs195tennis.model.Player;
+import com.example.cs195tennis.model.AtpPlayer;
+import com.example.cs195tennis.model.PlayerRanking;
+import com.example.cs195tennis.model.WtaPlayer;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.FXCollections;
@@ -11,131 +11,155 @@ import javafx.collections.ObservableList;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AtpPlayerDao {
 
-    public static ObservableList<Match> atpMatchObservable = FXCollections.observableArrayList();
-    public static ObservableList<Player> atpRankObservable = FXCollections.observableArrayList();
-    public static ObservableList<Player> atpPlayerObservable = FXCollections.observableArrayList();
-    static String atpPlayerCsv = "C:\\Users\\seost\\tennis_atp\\atp_players.csv";
-    static String atpPlayerRanking = "C:\\Users\\seost\\tennis_atp\\atp_rankings_current.csv";
+    public static ObservableList<AtpPlayer> playerObservableList = FXCollections.observableArrayList();
+    public static ObservableList<PlayerRanking> playerRanking = FXCollections.observableArrayList();
+    private static String mainTable = "Player";
+    private static final String id = "id", firstName = "firstName", lastName = "lastName", hand = "hand";
+    private static final String dob = "dob";
+    private static final String ioc = "ioc";
+    private static final String height = "height";
+    private static final String wikiData_id = "wikidata_id";
+    private static final String player_Rank_Id = "ID";
 
-    public static Set<Match> keys = new HashSet<>();
+    static String rankingTable = "Player_Rank";
 
+    static String rankCsv = "C:\\Users\\seost\\cs195TennisAnalytics\\cs195-TennisTracker\\src\\main\\resources\\com\\example\\cs195tennis\\atp_rankings_current.csv";
 
-    public static void main(String[] args) throws SQLException {
-        createAndInsert();
+    public static Map<String, List<WtaPlayer>> readCsvToMap() throws SQLException {
 
+        List<List<String>> playerRankCsv = new ArrayList<List<String>>();
+
+        Map<String, List<WtaPlayer>> map = new HashMap<>();
+
+        try (CSVReader csvReader = new CSVReader(new FileReader(rankCsv));) {
+            String[] values = null;
+            while ((values = csvReader.readNext()) != null) {
+
+                playerRankCsv.add(Arrays.asList(values));
+            }
+        } catch (IOException | CsvValidationException e) {
+            e.printStackTrace();
+        }
+
+        AtomicInteger i = new AtomicInteger(0);
+
+        List<String> list = new ArrayList<>();
+
+        Map<String, List<AtpPlayer>> playerMap = getPlayerMap();
+
+        playerRankCsv.forEach(row -> {
+
+            map.computeIfAbsent(row.get(0), k -> new ArrayList<>());
+
+            map.get(row.get(0)).add(new WtaPlayer(row.get(0), row.get(1), row.get(2), row.get(3)));
+        });
+        return map;
     }
 
-    public static void insert(String pre, int yrSt, int yrEnd, String suf) throws SQLException {
+    public static Map<String, List<AtpPlayer>> getPlayerMap() throws SQLException {
 
-        for (int i = yrSt; i < yrEnd; i++) {
-            StringBuilder sb = new StringBuilder(atpPlayerCsv);
-            sb.append(i).append(".csv");
+        Map<String, List<AtpPlayer>> player = new HashMap<>();
 
+        Connection c = Database.connect();
 
-            List<List<String>> allMatchesCsv = new ArrayList<List<String>>();
+        PreparedStatement ps = c.prepareStatement("Select * in player");
 
-            List<String[]> csvList = new ArrayList<>();
-
-            try (CSVReader csvReader = new CSVReader(new FileReader(sb.toString()));) {
-
-                String[] values = null;
-
-                while ((values = csvReader.readNext()) != null) {
-                    allMatchesCsv.add(Arrays.asList(values));
-                    csvList.add(values);
-                }
-            } catch (CsvValidationException | IOException e) {
-                e.printStackTrace();
-            }
-        }
+        return player;
     }
-        public static void createAndInsert() throws SQLException {
 
-            List<List<String>> allMatchesCsv = new ArrayList<List<String>>();
-            List<String[]> list = new ArrayList<>();
-            try (CSVReader csvReader = new CSVReader(new FileReader(atpPlayerRanking));) {
-                String[] values = null;
+    public static ObservableList<PlayerRanking> getAtpRanking() throws SQLException {
+        String query = "Select * From " + "AtpPlayerRanking";
 
-                while ((values = csvReader.readNext()) != null) {
-                    allMatchesCsv.add(Arrays.asList(values));
-                    list.add(values);
-                }
-            } catch (IOException | CsvValidationException e) {
-                e.printStackTrace();
-            }
-            DataHandeler.createTable("AtpPlayerRanking", allMatchesCsv.get(0));
-            DataHandeler.create("AtpPlayerRanking",list);
+        ResultSet rs = Database.connect().prepareStatement(query).executeQuery();
 
+        while (rs.next()) {
+            System.out.println("test ");
+            playerRanking.add(new PlayerRanking(rs.getString("ranking_date"),
+                    rs.getString("rank"),
+                    rs.getString("player"),
+                    rs.getString("points")));
         }
-        public static List<List<String>> readCSVRowsToList() throws SQLException {
+        return playerRanking;
+    }
 
-            List<List<String>> allMatchesCsv = new ArrayList<List<String>>();
-            List<String[]> list = new ArrayList<>();
-            try (CSVReader csvReader = new CSVReader(new FileReader(atpPlayerCsv));) {
-                String[] values = null;
+    String querys = " select" + lastName + " from " + "PLAYERS" + " join ranking on player.id = ranking.player_id where pos == 1 group by lastName; ";
 
-                while ((values = csvReader.readNext()) != null) {
-                    allMatchesCsv.add(Arrays.asList(values));
-                    list.add(values);
-                }
-            } catch (IOException | CsvValidationException e) {
-                e.printStackTrace();
-            }
-            DataHandeler.create("AtpPlayer",list);
-            return allMatchesCsv;
-        }
 
-        public static Map<Integer, Map<Integer, List<Object>>> mapTempMaps() throws SQLException {
+    public static ObservableList<String> getPlayerNames() {
 
-            Map<Integer, Map<Integer, List<Object>>> mapMaps = new HashMap<>();
+        Set<String> set = new HashSet<>();
+        ObservableList<String> temp = FXCollections.observableArrayList();
+        playerObservableList.forEach(e -> set.add(e.getFirstName() + " " + e.getLastName()));
+        temp.addAll(set);
 
-            readCSVRowsToList().forEach(row -> {
+        return temp;
+    }
 
-                int key = Objects.hash(row.get(0));
 
-                mapMaps.computeIfAbsent(key, k -> new HashMap<>());
+    public static ObservableList<AtpPlayer> getAtpObservablePlayer() {
 
-                mapMaps.get(key).computeIfAbsent(key, k -> new ArrayList<>());
+        String query = "SELECT * FROM " + "Player";
 
-                mapMaps.get(key).get(key).add(new Match(row));
-
-            });
-            return mapMaps;
-        }
-
-        public static ObservableList<Player> getAtpPlayers() throws SQLException {
-
-            Connection c = Database.connect();
-            System.out.println("Here ");
-            PreparedStatement ps = c.prepareStatement("select * from AtpPlayerRanking");
-
-            ResultSet rs = ps.executeQuery();
-            System.out.println(rs);
-            Set<Player> keys = new HashSet<>();
+        try (Connection connection = Database.connect()) {
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
-                System.out.println(rs);
-                keys.add(new Player(
-                        rs.getString("player_id"),
-                        rs.getString("name_first"),
-                        rs.getString("name_last"),
-                        rs.getString("hand"),
-                        rs.getString("dob"),
-                        rs.getString("ioc"),
-                        rs.getString("height"),
-                        rs.getString("wikidata_id"),
-                        rs.getString("rank")
+            System.out.println(rs.next());
+                playerObservableList.add(new AtpPlayer(
+                        rs.getString(id),
+                        rs.getString(firstName),
+                        rs.getString(lastName),
+                        rs.getString(hand),
+                        rs.getString(dob),
+                        rs.getString(ioc),
+                        rs.getString(height),
+                        rs.getString(wikiData_id)
                 ));
             }
-            atpPlayerObservable.addAll(keys);
-            atpPlayerObservable.forEach(System.out::println);
-            return atpPlayerObservable;
-        }
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return playerObservableList;
+    }
+
+    public static List<String> query(String tourney_id, String[] s) throws SQLException {
+
+        System.out.println(tourney_id);
+        Connection c = Database.connect();
+        PreparedStatement ps = c.prepareStatement("Select * from AtpTournament");
+        ResultSet rs = ps.executeQuery();
+        List<String> l = new ArrayList<>();
+
+        while (rs.next()) {
+
+            for (int i = s.length - 1; i >= 0; i--) {
+                if (!s[i].equals("")) {
+                    System.out.println(rs.getString(s[i]));
+                    l.add(rs.getString(s[i]));
+                }
+            }
+        }
+        return l;
+    }
 }
+
+
+
+
+
+
+
+
 

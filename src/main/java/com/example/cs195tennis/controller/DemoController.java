@@ -90,11 +90,10 @@ public class DemoController implements Initializable {
 
     private void initializeLoader() {
         MFXLoader loader = new MFXLoader();
-//        loader.addView(MFXLoaderBean.of("WTA Players", loadURL("Search.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-table", "WTA Playesr")).get());
-//        loader.addView(MFXLoaderBean.of("ATP Tournaments", loadURL("Search.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-table", "ATP Tournaments")).get());
-        loader.addView(MFXLoaderBean.of("ATP Players", loadURL("AtpPlayer.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-square-list", "ATP Players")).get());
-        loader.addView(MFXLoaderBean.of("WTA Tournaments", loadURL("WTATournament.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-list-dropdown", "WTA Tournaments")).get());
 
+        loader.addView(MFXLoaderBean.of("Atp Tournament", loadURL("Search.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-table", "Tables")).get());
+        loader.addView(MFXLoaderBean.of("WTA TOURNAMENT", loadURL("WTATournament.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-list-dropdown", "ComboBoxes")).get());
+        loader.addView(MFXLoaderBean.of("ATP Players", loadURL("AtpPlayer.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-square-list", "Lists")).get());
         loader.setOnLoadedAction(beans -> {
             List<ToggleButton> nodes = beans.stream()
                     .map(bean -> {

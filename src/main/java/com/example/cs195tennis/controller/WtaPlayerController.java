@@ -1,13 +1,11 @@
 package com.example.cs195tennis.controller;
-import com.example.cs195tennis.Dao.MatchDao;
-import com.example.cs195tennis.Dao.PlayerDao;
-import com.example.cs195tennis.Dao.WtaDao;
-import com.example.cs195tennis.database.DataHandeler;
-import com.example.cs195tennis.model.*;
+import com.example.cs195tennis.Dao.WtaPlayerDao;
+import com.example.cs195tennis.model.WtaPlayer;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.StringFilter;
-import io.github.palexdev.materialfx.utils.others.observables.When;
+import io.github.palexdev.materialfx.utils.StringUtils;
+import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,25 +13,33 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-
-import java.io.FileNotFoundException;
+import javafx.util.StringConverter;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class WtaPlayerController implements Initializable {
 
-    @FXML public MFXTableView<Player> wtaPlayerTable;
+    @FXML public MFXTableView<WtaPlayer> wtaPlayerTable;
 
-    static public ObservableList<Player> wtaPlayerObservable = FXCollections.observableArrayList();
+    static public ObservableList<WtaPlayer> wtaPlayerObservable = FXCollections.observableArrayList();
 
-    private static Map<String, List<Player>> playerMap = new HashMap<>();
+    private static Map<String, List<WtaPlayer>> playerMap = new HashMap<>();
+    public MFXTextField testWtaPlayer;
+
+    @FXML Label handleWtaPlayers;
+    @FXML MFXDatePicker handleWtaDate;
+
+    @FXML MFXFilterComboBox<WtaPlayer> wtaFilerComboBoxCustom;
+    @FXML MFXFilterComboBox<WtaPlayer> wtaFilerComboBox;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         try {
-            playerMap = PlayerDao.getPlayerMap();
+            playerMap = WtaPlayerDao.getPlayerMap();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -41,47 +47,66 @@ public class WtaPlayerController implements Initializable {
         System.out.println(playerMap.size());
 
         playerMap.forEach((k, v) -> v.forEach(e ->
-                wtaPlayerObservable.add(new Player(e.getId(), e.getFirstName(), e.getLastName(), e.getHand(), e.getDob(), e.getIoc(),
-                        e.getHeight(), e.getRank()
+                wtaPlayerObservable.add(new WtaPlayer(e.getId(), e.getFirstName(), e.getLastName(), e.getHand(), e.getDob(), e.getIoc(),
+                        e.getHeight(),e.getWiki()
                 ))));
-        setupTable();
+
+        try {
+            setupTable();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void setupTable() {
-        MFXTableColumn<Player> playerNameCol = new MFXTableColumn<>("Name", true, Comparator.comparing(Player::getFullName));
-        MFXTableColumn<Player> playerHandCol = new MFXTableColumn<>("Dominant Hand", true, Comparator.comparing(Player::getHeight));
-        MFXTableColumn<Player> playerDobCol = new MFXTableColumn<>("Date of Birth", true, Comparator.comparing(Player::getDob));
-        MFXTableColumn<Player> playerLocCol = new MFXTableColumn<>("Country", true, Comparator.comparing(Player::getIoc));
-        MFXTableColumn<Player> playerHeightCol = new MFXTableColumn<>("Height", true, Comparator.comparing(Player::getHeight));
-        MFXTableColumn<Player> playerRank = new MFXTableColumn<>("Current Rank", true, Comparator.comparing(Player::getRank));
+    private void setupTable() throws SQLException {
+        StringConverter<WtaPlayer> converter = FunctionalStringConverter.to(wtaPlayer -> (wtaPlayer == null) ? "" : wtaPlayer.getFirstName() + " " + wtaPlayer.getLastName());
+        Function<String, Predicate<WtaPlayer>> filterFunction = s -> wtaPlayer -> StringUtils.containsIgnoreCase(converter.toString(wtaPlayer), s);
 
-        playerNameCol.setRowCellFactory(player -> new MFXTableRowCell<>(Player::getFullName));
-        playerHandCol.setRowCellFactory(match -> new MFXTableRowCell<>(Player::getHeight));
-        playerDobCol.setRowCellFactory(match -> new MFXTableRowCell<>(Player::getDob));
-        playerLocCol.setRowCellFactory(match -> new MFXTableRowCell<>(Player::getIoc));
-        playerHeightCol.setRowCellFactory(match -> new MFXTableRowCell<>(Player::getHeight));
-        playerRank.setRowCellFactory(match -> new MFXTableRowCell<>(Player::getRank)
+
+        wtaPlayerObservable = WtaPlayerDao.readWtaPlayerToObservable();
+
+        wtaFilerComboBox.setItems(wtaPlayerObservable);
+        wtaFilerComboBox.setConverter(converter);
+        wtaFilerComboBox.setFilterFunction(filterFunction);
+
+        wtaFilerComboBoxCustom.setItems(wtaPlayerObservable);
+        wtaFilerComboBoxCustom.setConverter(converter);
+        wtaFilerComboBoxCustom.setFilterFunction(filterFunction);
+
+
+        MFXTableColumn<WtaPlayer> playerNameCol = new MFXTableColumn<>("name_first", true, Comparator.comparing(WtaPlayer::getFirstName));
+        MFXTableColumn<WtaPlayer> playerHeightCol = new MFXTableColumn<>("name_last", true, Comparator.comparing(WtaPlayer::getLastName));
+        MFXTableColumn<WtaPlayer> playerHandCol = new MFXTableColumn<>("Hand", true, Comparator.comparing(WtaPlayer::getHand));
+        MFXTableColumn<WtaPlayer> playerDobCol = new MFXTableColumn<>("dob", true, Comparator.comparing(WtaPlayer::getDob));
+        MFXTableColumn<WtaPlayer> playerRankColumn = new MFXTableColumn<>("rank", true, Comparator.comparing(WtaPlayer::getRanking));
+        MFXTableColumn<WtaPlayer> playerLocCol = new MFXTableColumn<>("player_ioc", true, Comparator.comparing(WtaPlayer::getIoc));
+
+        playerNameCol.setRowCellFactory(player -> new MFXTableRowCell<>(WtaPlayer::getFirstName));
+        playerHandCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getLastName));
+        playerDobCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getHeight));
+        playerLocCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getDob));
+        playerRankColumn.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getRank));
+        playerHeightCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getRank)
+
         {{
             setAlignment(Pos.CENTER_RIGHT);
         }});
-        playerRank.setAlignment(Pos.CENTER_RIGHT);
+        playerRankColumn.setAlignment(Pos.CENTER_RIGHT);
 
-        wtaPlayerTable.getTableColumns().addAll(playerNameCol, playerHandCol, playerDobCol, playerLocCol, playerHeightCol, playerRank);
+        wtaPlayerTable.getTableColumns().addAll(playerNameCol, playerHandCol, playerDobCol, playerLocCol, playerRankColumn, playerHeightCol);
         wtaPlayerTable.getFilters().addAll(
-                new StringFilter<>("Name", Player::getFullName),
-                new StringFilter<>("Dominant Hand", Player::getHeight),
-                new StringFilter<>("Date of Birth", Player::getDob),
-                new StringFilter<>("Country", Player::getIoc),
-                new StringFilter<>("Height", Player::getHeight),
-                new StringFilter<>("Current Rank", Player::getRank)
+                new StringFilter<>("Name", WtaPlayer::getFirstName),
+                new StringFilter<>("Name", WtaPlayer::getLastName),
+                new StringFilter<>("Dominant Hand", WtaPlayer::getHand),
+                new StringFilter<>("Date of Birth", WtaPlayer::getDob),
+                new StringFilter<>("Country", WtaPlayer::getRanking),
+                new StringFilter<>("Current Rank", WtaPlayer::getIoc)
         );
         wtaPlayerTable.setItems(wtaPlayerObservable);
     }
 
-    public void changeColors(ActionEvent event) {
-    }
 
-    public void handleSearchPlayer(ActionEvent event) {
+    public void handleWtaPlayers(ActionEvent event) {
     }
 }
 

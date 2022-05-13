@@ -1,4 +1,5 @@
 module com.example.cs195tennis {
+    requires org.jooq.meta;
     requires org.jooq;
     requires MaterialFX;
     requires VirtualizedFX;
@@ -16,7 +17,6 @@ module com.example.cs195tennis {
     requires org.apache.logging.log4j;
     requires org.controlsfx.controls;
     requires java.sql;
-    requires com.jfoenix;
     requires org.xerial.sqlitejdbc;
     requires java.sql.rowset;
     requires org.kordamp.bootstrapfx.core;

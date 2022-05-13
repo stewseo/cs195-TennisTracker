@@ -1,12 +1,12 @@
 package com.example.cs195tennis.controller;
 
 import com.example.cs195tennis.Dao.AtpPlayerDao;
-import com.example.cs195tennis.Dao.PlayerDao;
-import com.example.cs195tennis.Dao.WtaDao;
 import com.example.cs195tennis.database.DataHandeler;
-import com.example.cs195tennis.database.Database;
+import com.example.cs195tennis.model.AtpPlayer;
 import com.example.cs195tennis.model.Match;
-import com.example.cs195tennis.model.Player;
+import com.example.cs195tennis.model.PlayerRanking;
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.StringFilter;
@@ -22,151 +22,129 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.util.StringConverter;
-
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class AtpPlayerController implements Initializable {
 
-    @FXML public MFXTableView<Player> table;
 
-    @FXML public MFXButton searchButton;
+    static ObservableList<AtpPlayer> playerObservable = FXCollections.observableArrayList();
+    static ObservableList<PlayerRanking> playerRankObservable = FXCollections.observableArrayList();
+    public MFXFilterComboBox<AtpPlayer> filterCombo;
+    public MFXFilterComboBox<AtpPlayer> custFilterCombo;
+    public MFXTextField textAtpPlayer;
+    public MFXDatePicker atpPlayerDate;
 
-    @FXML private MFXComboBox<String> tournamentFilterBox;
+    @FXML MFXTableView<AtpPlayer> table;
 
-    @FXML private MFXComboBox<Match> matchStatFilterBox;
-
-    @FXML public MFXDatePicker custDatePicker;
-
-    @FXML private MFXFilterComboBox<Player> filterPlayerCategories;
-
-    @FXML private MFXFilterComboBox<Player> filteredPlayers;
-
-    @FXML private MFXTextField textField;
-
-    @FXML private Label validationLabel;
-
-    static ObservableList<Match> matchObservable;
-    static ObservableList<Player> playerObservable;
-    static ObservableList<Player.Ranking> playerRankObservable;
+    @FXML Label atpPlayerValidation;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        initDate();
-
-//        populateDb();
-
         try {
-            initFilters();
             setupTable();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-    private void initDate() {
-        custDatePicker.setGridAlgorithm(DateTimeUtils::partialIntMonthMatrix);
-        custDatePicker.setConverterSupplier(() -> new DateStringConverter("dd/MM/yyyy", custDatePicker.getLocale()));
-    }
 
-    private void populateDb() {
-    }
+        atpPlayerDate.setConverterSupplier(() -> new DateStringConverter("dd/MM/yyyy", atpPlayerDate.getLocale()));
 
-    private void initFilters() throws SQLException {
+        playerObservable = AtpPlayerDao.getAtpObservablePlayer();
 
-        playerObservable = AtpPlayerDao.getAtpPlayers();
+        try {
+            playerRankObservable = AtpPlayerDao.getAtpRanking();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        validationLabel.setText("Validation label");
 
-        StringConverter<Player> playerConverter =
-                FunctionalStringConverter.to(e ->
-                (e == null) ? "" : e.getFirstName() +" "+e.getLastName());
+        StringConverter<AtpPlayer> playerConverter = FunctionalStringConverter.to(e -> (e == null) ? "" : e.getFirstName() + " " + e.getLastName());
 
-        StringConverter<Player> rankConverter =
-                FunctionalStringConverter.to(e ->
-                        (e == null) ? "" : e.getRanking() +" "+ e.getRanking());
-
-        Function<String, Predicate<Player>> filterPlayer = s -> e -> {
-            System.out.println(e);
+        Function<String, Predicate<AtpPlayer>> filterPlayer = s -> e -> {
             return StringUtils.containsIgnoreCase(playerConverter.toString(e), s);
         };
 
+        filterCombo.setItems(playerObservable);
+        filterCombo.setConverter(playerConverter);
+        filterCombo.setFilterFunction(filterPlayer);
 
-        filteredPlayers.setItems(playerObservable);
-
-        playerObservable.forEach(System.out::println);
-        filteredPlayers.setConverter(playerConverter);
-        filteredPlayers.setFilterFunction(filterPlayer);
-
-        filterPlayerCategories.setItems(playerObservable);
-        filterPlayerCategories.setConverter(playerConverter);
-        filterPlayerCategories.setFilterFunction(filterPlayer);
-        filterPlayerCategories.setResetOnPopupHidden(false);
+        custFilterCombo.setItems(playerObservable);
+        custFilterCombo.setConverter(playerConverter);
+        custFilterCombo.setFilterFunction(filterPlayer);
+        custFilterCombo.setResetOnPopupHidden(false);
     }
 
-    private void setupTable() throws SQLException {
-        MFXTableColumn<Player> playerNameColumn = new MFXTableColumn<>("fulName", true, Comparator.comparing(Player::getFullName));
-        MFXTableColumn<Player> playerRankColumn = new MFXTableColumn<>("rank", true, Comparator.comparing(Player::getRank));
-        MFXTableColumn<Player> playerLocationColumn = new MFXTableColumn<>("player_ioc", true, Comparator.comparing(Player::getIoc));
-        MFXTableColumn<Player> playerHeightColumn = new MFXTableColumn<>("height", true, Comparator.comparing(Player::getHeight));
-        MFXTableColumn<Player> playerDominantHand = new MFXTableColumn<>("hand", true, Comparator.comparing(Player::getHand));
 
-        playerNameColumn.setRowCellFactory(player -> new MFXTableRowCell<>(Player::getFullName));
-        playerRankColumn.setRowCellFactory(player -> new MFXTableRowCell<>(Player::getRank));
-        playerLocationColumn.setRowCellFactory(player -> new MFXTableRowCell<>(Player::getIoc));
-        playerLocationColumn.setRowCellFactory(player -> new MFXTableRowCell<>(Player::getHeight));
-        playerDominantHand.setRowCellFactory(player -> new MFXTableRowCell<>(Player::getHand)
-        {{
+    private void setupTable() throws SQLException {
+
+        MFXTableColumn<AtpPlayer> playerFirstNameColumn = new MFXTableColumn<>("name_first", true, Comparator.comparing(AtpPlayer::getFirstName));
+        MFXTableColumn<AtpPlayer> playerDominantHand = new MFXTableColumn<>("player_ioc", true, Comparator.comparing(AtpPlayer::getHand));
+        MFXTableColumn<AtpPlayer> playerHeightColumn = new MFXTableColumn<>("height", true, Comparator.comparing(AtpPlayer::getHeight));
+
+        playerFirstNameColumn.setRowCellFactory(player -> new MFXTableRowCell<>(AtpPlayer::getFirstName));
+        playerHeightColumn.setRowCellFactory(player -> new MFXTableRowCell<>(AtpPlayer::getHeight));
+        playerDominantHand.setRowCellFactory(player -> new MFXTableRowCell<>(AtpPlayer::getDob) {{
             setAlignment(Pos.CENTER_RIGHT);
         }});
         playerDominantHand.setAlignment(Pos.CENTER_RIGHT);
 
-        table.getTableColumns().addAll(playerNameColumn, playerRankColumn, playerLocationColumn, playerHeightColumn, playerDominantHand);
+        table.getTableColumns().addAll(playerFirstNameColumn, playerDominantHand, playerHeightColumn);
         table.getFilters().addAll(
-                new StringFilter<>("player_name", Player::getFullName),
-                new StringFilter<>("rank", Player::getRank),
-                new StringFilter<>("player_ioc", Player::getIoc),
-                new StringFilter<>("height", Player::getIoc),
-                new StringFilter<>("hand", Player::getHand)
+                new StringFilter<>("name_first", AtpPlayer::getFirstName),
+                new StringFilter<>("hand", AtpPlayer::getHand),
+                new StringFilter<>("height", AtpPlayer::getIoc)
         );
-        table.setItems(AtpPlayerDao.getAtpPlayers());
+
+        System.out.println(playerObservable.size());
+
+        AtpPlayerDao.getAtpObservablePlayer();
+
+        table.setItems(playerObservable);
     }
 
-    public void handleFileInput(ActionEvent event) {
-        String input = textField.getText();
-
+    public void handleAtpPlayer(ActionEvent event) {
     }
 
-    public void handleSearchPlayer1(ActionEvent event) throws SQLException {
-        String date = custDatePicker.getText();
-        String player = filteredPlayers.getText();
-        String tournament = filterPlayerCategories.getText();
-        String filterInput = tournamentFilterBox.getText();
+    static String atpMatches2022 = "C:\\Users\\seost\\tennis_atp\\atp_matches_";
+    static String atpPlayers = "C:\\Users\\seost\\tennis_atp\\atp_players.csv";
+    static String grandPrix = "C:\\Users\\seost\\Downloads\\tennis_slam_pointbypoint-master\\tennis_slam_pointbypoint-master\\";
 
-        System.out.println(filterInput + " " + tournament + " " + player + " " + date);
+    public static void insert(String csv) throws SQLException, IOException, CsvValidationException {
 
-        String[] temp = new String[]{};
+        List<File> filesInFolder = Files.walk(Paths.get(grandPrix))
+                .filter(Files::isRegularFile)
+                .map(Path::toFile).collect(Collectors.toList());
 
-        PlayerDao.query(player, temp);
-    }
+        filesInFolder.forEach(System.out::println);
 
-    public void handleSearchPlayer(ActionEvent event) {
-    }
+        List<List<String>> allMatchesCsv = new ArrayList<List<String>>();
 
-    public void handleCsvPath(ActionEvent event) throws SQLException, FileNotFoundException {
-        String[] test = textField.getText().split(", ");
 
-        System.out.println(Arrays.toString(test));
+        List<String[]> csvList = new ArrayList<>();
 
-        DataHandeler.buildPath(test[0],test[1]);
+        String[] values = null;
+
+        int i = 0;
+
+
+
+//        DataHandeler.createTable("GrandSlamTournament", allMatchesCsv.get(0));
+//
+//        DataHandeler.create("GrandSlamTournament", (List<String[]>) csvList);
 
     }
 }
+
 
 

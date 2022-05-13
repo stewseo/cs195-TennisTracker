@@ -3,18 +3,14 @@ package com.example.cs195tennis.database;
 import java.sql.*;
 import java.util.Objects;
 
-
 public class Database {
 
     private final String driver = "org.sqlite.JDBC";
-    private static final String url = "jdbc:sqlite:AtpWta.sqlite";
+    private static final String url = "jdbc:sqlite:Database/wta-tournaments.sqlite";
 
     public Connection c = DriverManager.getConnection(url);
 
-    private static final String requiredTable = "Tournaments";
-
-    public Database() throws SQLException {
-    }
+    public Database() throws SQLException {}
 
     public static Connection connect() {
         Connection connection = null;
@@ -23,14 +19,12 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return connection;
     }
 
-
     private static boolean checkTables() throws SQLException {
-        String checkTables =
-                "select DISTINCT tbl_name from sqlite_master where tbl_name = '" + requiredTable + "'";
+        String requiredTable = "Tournament";
+        String checkTables = "select DISTINCT tbl_name from sqlite_master where tbl_name = '" + requiredTable + "'";
 
         try (Connection connection = Database.connect()) {
             PreparedStatement statement = connection.prepareStatement(checkTables);

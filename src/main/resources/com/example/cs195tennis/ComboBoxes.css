@@ -4,7 +4,16 @@
 @import 'Common.css';
 @import 'MFXColors.css';
 
+/**************************************************
+ * Legacy Combos
+**************************************************/
+.mfx-legacy-combo-box {
+	-fx-min-width: 120;
+}
 
+/**************************************************
+ * New Combos
+**************************************************/
 .mfx-combo-box {
 	-fx-min-width: 150;
 	-fx-font-family: 'Visby Round CF Medium';
@@ -62,6 +71,9 @@
 	-fx-background-color: derive(#ff5d53, 90%);
 }
 
+/**************************************************
+ * Filter Combos
+**************************************************/
 #customFilter {
 	-fx-border-color: transparent;
 	-fx-border-radius: 0;
@@ -88,60 +100,4 @@
 
 #customFilter .caret .mfx-ripple-generator {
 	-mfx-ripple-color: rgba(255, 255, 255, 0.5);
-}
-.mfx-text-field {
-	-fx-min-width: 130;
-	-fx-font-family: 'Visby Round CF Medium';
-}
-
-.mfx-text-field .floating-text {
-	-fx-font-family: 'Visby Round CF Medium';
-}
-
-
-#customField {
-	-fx-border-color: -common-gradient;
-}
-
-#customField .floating-text {
-	-fx-text-fill: -mfx-red;
-}
-
-
-
-#customPassword:masked {
-	-fx-text-fill: -mfx-blue;
-}
-
-#customPassword .mfx-font-icon {
-	-mfx-color: -mfx-blue;
-}
-
-#customPassword .mfx-context-menu .mfx-menu-item:disabled .mfx-font-icon {
-	-mfx-color: #bcbcbc;
-}
-
-#customPassword .floating-text {
-	-fx-text-fill: -mfx-blue;
-}
-
-#validatedField {
-	-mfx-hide-character: '?';
-}
-
-#validatedField:invalid {
-	-fx-border-color: -mfx-red;
-}
-
-#validatedField:invalid .floating-text {
-	-fx-text-fill: -mfx-red;
-}
-
-#validatedField:invalid .mfx-font-icon {
-	-mfx-color: -mfx-red;
-}
-
-#validationLabel {
-	-fx-font-family: 'Visby Round CF Demi Bold';
-	-fx-font-size: 11;
 }

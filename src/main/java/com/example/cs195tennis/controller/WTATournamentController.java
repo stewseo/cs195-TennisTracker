@@ -1,8 +1,6 @@
 package com.example.cs195tennis.controller;
-import com.example.cs195tennis.Dao.MatchDao;
-import com.example.cs195tennis.Dao.PlayerDao;
-import com.example.cs195tennis.Dao.WtaDao;
-import com.example.cs195tennis.database.DataHandeler;
+
+import com.example.cs195tennis.Dao.WtaMatchDao;
 import com.example.cs195tennis.model.*;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
@@ -11,7 +9,7 @@ import io.github.palexdev.materialfx.utils.DateTimeUtils;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import io.github.palexdev.materialfx.utils.others.dates.DateStringConverter;
-import io.github.palexdev.materialfx.utils.others.observables.When;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,135 +19,101 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.util.StringConverter;
 
-import java.io.FileNotFoundException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
-public class WTATournamentController implements Initializable {
+public class WtaTournamentController implements Initializable {
 
-    @FXML
-    public MFXTableView<Match> wtaTouranmentTable;
+    @FXML public MFXTableView<WtaMatch> wtaTouranmentTable;
 
-    @FXML
-    public MFXButton searchButton;
+    @FXML public MFXButton searchButton;
 
-    @FXML
-    private MFXTableView<Match> table;
+    @FXML public MFXFilterComboBox<WtaMatch>  filterCombo;
 
-    @FXML
-    private MFXComboBox<String> tournamentFilterBox;
+    @FXML public MFXFilterComboBox<WtaMatch>  custFilterCombo;
+    public Label validateWtaTournamentLavel;
+    public MFXTextField wtaMatchText;
 
-    @FXML
-    private MFXComboBox<Match> matchStatFilterBox;
+    @FXML MFXTableView<WtaMatch> matchTable;
 
-    @FXML
-    public MFXDatePicker custDatePicker;
+    @FXML public MFXDatePicker custDatePicker;
 
-    @FXML
-    private MFXFilterComboBox<Match> filterTournaments;
-
-    @FXML private MFXFilterComboBox<Player> filteredPlayers;
+    @FXML private MFXTextField textField;
 
 
-    @FXML
-    private MFXTextField textField;
-
-    @FXML
-    private Label validationLabel;
-
-    static ObservableList<Match> tournamentObservable = FXCollections.observableArrayList();
-    ObservableList<Player.Ranking> playerRankObservable = FXCollections.observableArrayList();
-    ObservableList<Player> playerObservable = FXCollections.observableArrayList();
+    ObservableList<WtaMatch> tournamentObservable = FXCollections.observableArrayList();
 
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @Override public void initialize(URL location, ResourceBundle resources) {
 
         custDatePicker.setGridAlgorithm(DateTimeUtils::partialIntMonthMatrix);
+
         custDatePicker.setConverterSupplier(() -> new DateStringConverter("dd/MM/yyyy", custDatePicker.getLocale()));
 
+
+        StringConverter<WtaMatch> converter = FunctionalStringConverter.to(e -> (e == null) ? "" : e.getTourney_name() + "" + e.getTourney_id());
+
+        Function<String, Predicate<WtaMatch>> filterPlayer = s -> e -> StringUtils.containsIgnoreCase(converter.toString(e), s);
+
         try {
+            System.out.println(WtaMatchDao.getTournamentNames().size());
 
-            playerRankObservable.addAll(PlayerDao.getPlayerRanks());
+            tournamentObservable = WtaMatchDao.getTournamentNames();
 
-            playerObservable = PlayerDao.readWtaPlayerToObservable();
 
-            tournamentObservable = WtaDao.readWtaMatchesToObservable();
+            filterCombo.setItems(tournamentObservable);
+            filterCombo.setConverter(converter);
+            filterCombo.setFilterFunction(filterPlayer);
+
+            custFilterCombo.setItems(WtaMatchDao.getTournamentNames());
+            custFilterCombo.setConverter(converter);
+            custFilterCombo.setFilterFunction(filterPlayer);
+            custFilterCombo.setResetOnPopupHidden(false);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        validationLabel.setText("Validation label");
-
-        StringConverter<Match> converter = FunctionalStringConverter.to(e -> (e == null) ? "" : e.getTourney_name());
-
-        StringConverter<Player> playerConverter = FunctionalStringConverter.to(e -> (e == null) ? "" : e.getFullName());
-
-        Function<String, Predicate<Match>> filterFunction = s -> e -> {return StringUtils.containsIgnoreCase(converter.toString(e), s);};
-
-        Function<String, Predicate<Player>> filterPlayer = s -> e -> StringUtils.containsIgnoreCase(playerConverter.toString(e), s);;
-
-        filteredPlayers.setItems(playerObservable);
-        filteredPlayers.setConverter(playerConverter);
-        filteredPlayers.setFilterFunction(filterPlayer);
 
         try {
-            filterTournaments.setItems(MatchDao.getTournamentNames());
+            setupTable();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        filterTournaments.setConverter(converter);
-        filterTournaments.setFilterFunction(filterFunction);
-        filterTournaments.setResetOnPopupHidden(false);
-
-        setupTable();
     }
 
-    private void setupTable() {
-        MFXTableColumn<Match> tourneyNameColumn = new MFXTableColumn<>("tourney_name", true, Comparator.comparing(Match::getTourney_name));
-        MFXTableColumn<Match> tourneyDateColumn = new MFXTableColumn<>("tourney_date", true, Comparator.comparing(Match::getTourney_date));
-        MFXTableColumn<Match> winnerNameColumn = new MFXTableColumn<>("loser_name", true, Comparator.comparing(Match::getWinner_name));
-        MFXTableColumn<Match> loserNameColumn = new MFXTableColumn<>("score", true, Comparator.comparing(Match::getLoser_name));
-        MFXTableColumn<Match> roundColumn = new MFXTableColumn<>("round", true, Comparator.comparing(Match::getRound));
+    private void setupTable() throws SQLException {
+
+        MFXTableColumn<WtaMatch> tourneyNameColumn = new MFXTableColumn<>("tourney_name", true, Comparator.comparing(WtaMatch::getTourney_name));
+        MFXTableColumn<WtaMatch> tourneyDateColumn = new MFXTableColumn<>("tourney_date", true, Comparator.comparing(WtaMatch::getTourney_date));
+        MFXTableColumn<WtaMatch> loserNameColumn = new MFXTableColumn<>("winner_name", true, Comparator.comparing(WtaMatch::getWinnerName));
 
 
-        tourneyNameColumn.setRowCellFactory(match -> new MFXTableRowCell<>(Match::getTourney_name));
-        tourneyDateColumn.setRowCellFactory(match -> new MFXTableRowCell<>(Match::getTourney_date));
-        winnerNameColumn.setRowCellFactory(match -> new MFXTableRowCell<>(Match::getWinner_name));
-        loserNameColumn.setRowCellFactory(match -> new MFXTableRowCell<>(Match::getLoser_name));
-        loserNameColumn.setRowCellFactory(match -> new MFXTableRowCell<>(Match::getScore));
-        roundColumn.setRowCellFactory(match -> new MFXTableRowCell<>(Match::getRound)
+        tourneyNameColumn.setRowCellFactory(match -> new MFXTableRowCell<>(WtaMatch::getTourney_name));
+        tourneyDateColumn.setRowCellFactory(match -> new MFXTableRowCell<>(WtaMatch::getTourney_date));
+        loserNameColumn.setRowCellFactory(match -> new MFXTableRowCell<>(WtaMatch::getLoserName)
         {{
             setAlignment(Pos.CENTER_RIGHT);
         }});
         tourneyDateColumn.setAlignment(Pos.CENTER_RIGHT);
 
-        table.getTableColumns().addAll(tourneyNameColumn, tourneyDateColumn, winnerNameColumn, loserNameColumn, roundColumn);
-        table.getFilters().addAll(
-                new StringFilter<>("tourney_name", Match::getTourney_name),
-                new StringFilter<>("tourney_date", Match::getTourney_date),
-                new StringFilter<>("winner_name", Match::getWinner_name),
-                new StringFilter<>("loser_name", Match::getLoser_name),
-                new StringFilter<>("score", Match::getScore),
-                new StringFilter<>("round", Match::getRound)
+        matchTable.getTableColumns().addAll(tourneyNameColumn, tourneyDateColumn, loserNameColumn);
+        matchTable.getFilters().addAll(
+                new StringFilter<>("tourney_name", WtaMatch::getTourney_name),
+                new StringFilter<>("tourney_date", WtaMatch::getTourney_date),
+                new StringFilter<>("winner_name", WtaMatch::getWinnerName)
         );
 
-        table.setItems(tournamentObservable);
+        tournamentObservable = WtaMatchDao.getTournamentNames();
+
+        matchTable.setItems(tournamentObservable);
     }
 
-    public void handleSearchPlayer1(ActionEvent event) throws SQLException {
-        String date = custDatePicker.getText();
-        String player = filteredPlayers.getText();
-        String tournament = filterTournaments.getText();
-        String filterInput = tournamentFilterBox.getText();
-
-        String[] temp = new String[]{};
-
-        PlayerDao.query(player, temp);
+    public void handleTextEntry(ActionEvent event) {
     }
 }
 
