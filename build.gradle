@@ -35,7 +35,7 @@ application {
 
 dependencies {
     implementation 'org.jooq:jooq-meta:3.16.6'
-    jooqGenerator 'org.postgresql:postgresql:42.3.4'
+    jooqGenerator 'org.xerial:sqlite-jdbc'
     implementation 'org.jooq:jooq:3.16.6'
     implementation 'net.raumzeitfalle.fx:scenic-view:11.0.2'
     implementation('fr.brouillard.oss:cssfx:11.5.1') { exclude group: 'org.openjfx' }
@@ -79,6 +79,62 @@ jlinkZip {
 
 test {
     useJUnitPlatform()
+}
+import org.jooq.meta.jaxb.Logging
+
+jooq {
+    g
+    configurations {
+        main {  // name of the jOOQ configuration
+            generateSchemaSourceOnCompilation = true  // default (can be omitted)
+
+            generationTool {
+                logging = Logging.WARN
+                jdbc {
+                    driver = 'org.postgresql.Driver'
+                    url = 'jdbc:postgresql://localhost:5432/sample'
+                    user = 'some_user'
+                    password = 'some_secret'
+                    properties {
+                        property {
+                            key = 'ssl'
+                            value = 'true'
+                        }
+                    }
+                }
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    database {
+                        name = 'org.jooq.meta.postgres.PostgresDatabase'
+                        inputSchema = 'public'
+                        forcedTypes {
+                            forcedType {
+                                name = 'varchar'
+                                includeExpression = '.*'
+                                includeTypes = 'JSONB?'
+                            }
+                            forcedType {
+                                name = 'varchar'
+                                includeExpression = '.*'
+                                includeTypes = 'INET'
+                            }
+                        }
+                    }
+                    generate {
+                        deprecated = false
+                        records = true
+                        immutablePojos = true
+                        fluentSetters = true
+                    }
+                    target {
+                        packageName = 'nu.studer.sample'
+                        directory = 'build/generated-src/jooq/main'  // default (can be omitted)
+                    }
+                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+                }
+            }
+        }
+    }
 }
 
 

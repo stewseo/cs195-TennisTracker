@@ -1,13 +1,6 @@
 package com.example.cs195tennis.model;
 
-import com.example.cs195tennis.Dao.WtaMatchDao;
-
 import java.sql.SQLException;
-import java.util.Comparator;
-import java.util.function.Function;
-import java.util.function.ToDoubleFunction;
-import java.util.function.ToIntFunction;
-import java.util.function.ToLongFunction;
 
 public class PlayerRanking extends Player{
     static League league;

@@ -31,6 +31,10 @@ public class WtaPlayer {
     public WtaPlayer(String ranking_date, String rank, String player, String points) {
     }
 
+    public WtaPlayer(String string, String string1, String string2, String string3, String string4, String string5) {
+
+    }
+
     public String getRanking() {
         return ranking;
     }

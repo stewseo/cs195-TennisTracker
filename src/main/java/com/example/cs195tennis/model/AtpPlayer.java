@@ -27,6 +27,42 @@ public class AtpPlayer extends Player {
         this.wiki = wiki;
     }
 
+    public String getPlayer_id() {
+        return player_id;
+    }
+
+    public void setPlayer_id(String player_id) {
+        this.player_id = player_id;
+    }
+
+    public void setRanking(String ranking) {
+        this.ranking = ranking;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public static PlayerRanking getAtp() {
+        return atp;
+    }
+
+    public static void setAtp(PlayerRanking atp) {
+        AtpPlayer.atp = atp;
+    }
+
+    public static List<Player> getPlayerStats() {
+        return playerStats;
+    }
+
+    public static void setPlayerStats(List<Player> playerStats) {
+        AtpPlayer.playerStats = playerStats;
+    }
+
     @Override
     public String getFirstName() {
         return firstName;

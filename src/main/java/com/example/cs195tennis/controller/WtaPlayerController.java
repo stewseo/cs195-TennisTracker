@@ -24,9 +24,9 @@ public class WtaPlayerController implements Initializable {
 
     @FXML public MFXTableView<WtaPlayer> wtaPlayerTable;
 
-    static public ObservableList<WtaPlayer> wtaPlayerObservable = FXCollections.observableArrayList();
+    ObservableList<WtaPlayer> wtaPlayerObservable;
 
-    private static Map<String, List<WtaPlayer>> playerMap = new HashMap<>();
+
     public MFXTextField testWtaPlayer;
 
     @FXML Label handleWtaPlayers;
@@ -39,23 +39,11 @@ public class WtaPlayerController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         try {
-            playerMap = WtaPlayerDao.getPlayerMap();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(playerMap.size());
-
-        playerMap.forEach((k, v) -> v.forEach(e ->
-                wtaPlayerObservable.add(new WtaPlayer(e.getId(), e.getFirstName(), e.getLastName(), e.getHand(), e.getDob(), e.getIoc(),
-                        e.getHeight(),e.getWiki()
-                ))));
-
-        try {
             setupTable();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
 
     private void setupTable() throws SQLException {
@@ -74,33 +62,33 @@ public class WtaPlayerController implements Initializable {
         wtaFilerComboBoxCustom.setFilterFunction(filterFunction);
 
 
-        MFXTableColumn<WtaPlayer> playerNameCol = new MFXTableColumn<>("name_first", true, Comparator.comparing(WtaPlayer::getFirstName));
-        MFXTableColumn<WtaPlayer> playerHeightCol = new MFXTableColumn<>("name_last", true, Comparator.comparing(WtaPlayer::getLastName));
-        MFXTableColumn<WtaPlayer> playerHandCol = new MFXTableColumn<>("Hand", true, Comparator.comparing(WtaPlayer::getHand));
-        MFXTableColumn<WtaPlayer> playerDobCol = new MFXTableColumn<>("dob", true, Comparator.comparing(WtaPlayer::getDob));
-        MFXTableColumn<WtaPlayer> playerRankColumn = new MFXTableColumn<>("rank", true, Comparator.comparing(WtaPlayer::getRanking));
-        MFXTableColumn<WtaPlayer> playerLocCol = new MFXTableColumn<>("player_ioc", true, Comparator.comparing(WtaPlayer::getIoc));
+        MFXTableColumn<WtaPlayer> playerNameCol = new MFXTableColumn<>("name_first", true, Comparator.comparing(WtaPlayer::getFullName));
+        MFXTableColumn<WtaPlayer> playerHeightCol = new MFXTableColumn<>("name_last", true, Comparator.comparing(WtaPlayer::getHeight));
+//        MFXTableColumn<WtaPlayer> playerHandCol = new MFXTableColumn<>("Hand", true, Comparator.comparing(WtaPlayer::getHand));
+//        MFXTableColumn<WtaPlayer> playerDobCol = new MFXTableColumn<>("dob", true, Comparator.comparing(WtaPlayer::getDob));
+//        MFXTableColumn<WtaPlayer> playerRankColumn = new MFXTableColumn<>("rank", true, Comparator.comparing(WtaPlayer::getRanking));
+//        MFXTableColumn<WtaPlayer> playerLocCol = new MFXTableColumn<>("player_ioc", true, Comparator.comparing(WtaPlayer::getIoc));
 
-        playerNameCol.setRowCellFactory(player -> new MFXTableRowCell<>(WtaPlayer::getFirstName));
-        playerHandCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getLastName));
-        playerDobCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getHeight));
-        playerLocCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getDob));
-        playerRankColumn.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getRank));
-        playerHeightCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getRank)
+        playerNameCol.setRowCellFactory(player -> new MFXTableRowCell<>(WtaPlayer::getFullName));
+        playerHeightCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getHeight)
+//        playerDobCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getHeight));
+//        playerLocCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getDob));
+//        playerRankColumn.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getRank));
+//        playerHeightCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getRank)
 
         {{
             setAlignment(Pos.CENTER_RIGHT);
         }});
-        playerRankColumn.setAlignment(Pos.CENTER_RIGHT);
+        playerHeightCol.setAlignment(Pos.CENTER_RIGHT);
 
-        wtaPlayerTable.getTableColumns().addAll(playerNameCol, playerHandCol, playerDobCol, playerLocCol, playerRankColumn, playerHeightCol);
+        wtaPlayerTable.getTableColumns().addAll(playerNameCol,playerHeightCol);
         wtaPlayerTable.getFilters().addAll(
-                new StringFilter<>("Name", WtaPlayer::getFirstName),
-                new StringFilter<>("Name", WtaPlayer::getLastName),
-                new StringFilter<>("Dominant Hand", WtaPlayer::getHand),
-                new StringFilter<>("Date of Birth", WtaPlayer::getDob),
-                new StringFilter<>("Country", WtaPlayer::getRanking),
-                new StringFilter<>("Current Rank", WtaPlayer::getIoc)
+                new StringFilter<>("Name", WtaPlayer::getFullName),
+                new StringFilter<>("Name", WtaPlayer::getHeight)
+//                new StringFilter<>("Dominant Hand", WtaPlayer::getHand),
+//                new StringFilter<>("Date of Birth", WtaPlayer::getDob),
+//                new StringFilter<>("Country", WtaPlayer::getRanking),
+//                new StringFilter<>("Current Rank", WtaPlayer::getIoc)
         );
         wtaPlayerTable.setItems(wtaPlayerObservable);
     }

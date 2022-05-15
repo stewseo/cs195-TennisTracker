@@ -1,11 +1,8 @@
 package com.example.cs195tennis.controller;
 
 import com.example.cs195tennis.Dao.AtpPlayerDao;
-import com.example.cs195tennis.database.DataHandeler;
 import com.example.cs195tennis.model.AtpPlayer;
-import com.example.cs195tennis.model.Match;
 import com.example.cs195tennis.model.PlayerRanking;
-import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
@@ -23,7 +20,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.util.StringConverter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -37,11 +33,9 @@ import java.util.stream.Collectors;
 
 public class AtpPlayerController implements Initializable {
 
-
-    static ObservableList<AtpPlayer> playerObservable = FXCollections.observableArrayList();
-    static ObservableList<PlayerRanking> playerRankObservable = FXCollections.observableArrayList();
     public MFXFilterComboBox<AtpPlayer> filterCombo;
     public MFXFilterComboBox<AtpPlayer> custFilterCombo;
+
     public MFXTextField textAtpPlayer;
     public MFXDatePicker atpPlayerDate;
 
@@ -51,21 +45,24 @@ public class AtpPlayerController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        atpPlayerDate.setGridAlgorithm(DateTimeUtils::partialIntMonthMatrix);
+        atpPlayerDate.setConverterSupplier(() -> new DateStringConverter("dd/MM/yyyy", atpPlayerDate.getLocale()));
         try {
             setupTable();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        atpPlayerDate.setConverterSupplier(() -> new DateStringConverter("dd/MM/yyyy", atpPlayerDate.getLocale()));
+        ObservableList<AtpPlayer> playerObservable = FXCollections.observableArrayList();
+        ObservableList<PlayerRanking> playerRankObservable = FXCollections.observableArrayList();
 
-        playerObservable = AtpPlayerDao.getAtpObservablePlayer();
 
         try {
             playerRankObservable = AtpPlayerDao.getAtpRanking();
+            playerObservable = AtpPlayerDao.getAtpObservablePlayer();
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("Observable lists null");
         }
 
 
@@ -74,6 +71,8 @@ public class AtpPlayerController implements Initializable {
         Function<String, Predicate<AtpPlayer>> filterPlayer = s -> e -> {
             return StringUtils.containsIgnoreCase(playerConverter.toString(e), s);
         };
+
+//        playerObservable.forEach(System.out::println);
 
         filterCombo.setItems(playerObservable);
         filterCombo.setConverter(playerConverter);
@@ -84,31 +83,36 @@ public class AtpPlayerController implements Initializable {
         custFilterCombo.setFilterFunction(filterPlayer);
         custFilterCombo.setResetOnPopupHidden(false);
     }
-
-
+    String column1, column2, column3;
+    String c1Value, c2Value, c3Value;
     private void setupTable() throws SQLException {
 
-        MFXTableColumn<AtpPlayer> playerFirstNameColumn = new MFXTableColumn<>("name_first", true, Comparator.comparing(AtpPlayer::getFirstName));
-        MFXTableColumn<AtpPlayer> playerDominantHand = new MFXTableColumn<>("player_ioc", true, Comparator.comparing(AtpPlayer::getHand));
-        MFXTableColumn<AtpPlayer> playerHeightColumn = new MFXTableColumn<>("height", true, Comparator.comparing(AtpPlayer::getHeight));
+        MFXTableColumn<AtpPlayer> column1 = new MFXTableColumn<>(c1Value, true, Comparator.comparing(AtpPlayer::getFullName));
+        MFXTableColumn<AtpPlayer> column2 = new MFXTableColumn<>(c2Value, true, Comparator.comparing(AtpPlayer::getHand));
+        MFXTableColumn<AtpPlayer> column3 = new MFXTableColumn<>(c3Value, true, Comparator.comparing(AtpPlayer::getHeight));
+//        MFXTableColumn<AtpPlayer> playerDominantHand = new MFXTableColumn<>("player_ioc", true, Comparator.comparing(AtpPlayer::getHand));
 
-        playerFirstNameColumn.setRowCellFactory(player -> new MFXTableRowCell<>(AtpPlayer::getFirstName));
-        playerHeightColumn.setRowCellFactory(player -> new MFXTableRowCell<>(AtpPlayer::getHeight));
-        playerDominantHand.setRowCellFactory(player -> new MFXTableRowCell<>(AtpPlayer::getDob) {{
+        column1.setRowCellFactory(player -> new MFXTableRowCell<>(AtpPlayer::getFullName));
+        column2.setRowCellFactory(player -> new MFXTableRowCell<>(AtpPlayer::getHand));
+        column3.setRowCellFactory(player -> new MFXTableRowCell<>(AtpPlayer::getHeight) {{
+//        playerDominantHand.setRowCellFactory(player -> new MFXTableRowCell<>(AtpPlayer::getDob) {{
             setAlignment(Pos.CENTER_RIGHT);
         }});
-        playerDominantHand.setAlignment(Pos.CENTER_RIGHT);
+        column3.setAlignment(Pos.CENTER_RIGHT);
 
-        table.getTableColumns().addAll(playerFirstNameColumn, playerDominantHand, playerHeightColumn);
+        table.getTableColumns().addAll(column1, column2, column3);
         table.getFilters().addAll(
-                new StringFilter<>("name_first", AtpPlayer::getFirstName),
-                new StringFilter<>("hand", AtpPlayer::getHand),
-                new StringFilter<>("height", AtpPlayer::getIoc)
+                new StringFilter<>(c1Value, AtpPlayer::getFullName),
+                new StringFilter<>(c2Value, AtpPlayer::getHand),
+                new StringFilter<>(c3Value, AtpPlayer::getHeight)
+//                new StringFilter<>("height", AtpPlayer::getIoc)
         );
 
-        System.out.println(playerObservable.size());
+//        System.out.println(playerObservable.size());
 
-        AtpPlayerDao.getAtpObservablePlayer();
+
+        ObservableList<AtpPlayer> playerObservable = FXCollections.observableArrayList();
+        playerObservable = AtpPlayerDao.getAtpObservablePlayer();
 
         table.setItems(playerObservable);
     }
@@ -116,26 +120,11 @@ public class AtpPlayerController implements Initializable {
     public void handleAtpPlayer(ActionEvent event) {
     }
 
-    static String atpMatches2022 = "C:\\Users\\seost\\tennis_atp\\atp_matches_";
-    static String atpPlayers = "C:\\Users\\seost\\tennis_atp\\atp_players.csv";
-    static String grandPrix = "C:\\Users\\seost\\Downloads\\tennis_slam_pointbypoint-master\\tennis_slam_pointbypoint-master\\";
 
-    public static void insert(String csv) throws SQLException, IOException, CsvValidationException {
-
-        List<File> filesInFolder = Files.walk(Paths.get(grandPrix))
-                .filter(Files::isRegularFile)
-                .map(Path::toFile).collect(Collectors.toList());
-
-        filesInFolder.forEach(System.out::println);
-
-        List<List<String>> allMatchesCsv = new ArrayList<List<String>>();
+//    String atpPlayers = "C:\\Users\\seost\\tennis_atp\\atp_players.csv";
+//     String grandPrix = "C:\\Users\\seost\\Downloads\\tennis_slam_pointbypoint-master\\tennis_slam_pointbypoint-master\\";
 
 
-        List<String[]> csvList = new ArrayList<>();
-
-        String[] values = null;
-
-        int i = 0;
 
 
 
@@ -143,7 +132,7 @@ public class AtpPlayerController implements Initializable {
 //
 //        DataHandeler.create("GrandSlamTournament", (List<String[]>) csvList);
 
-    }
+
 }
 
 

@@ -1,6 +1,5 @@
 package com.example.cs195tennis.Dao;
 
-import com.example.cs195tennis.database.DataHandeler;
 import com.example.cs195tennis.model.*;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.FXCollections;
@@ -18,8 +17,6 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.*;
 
-import static java.util.Collections.addAll;
-
 
 public class AtpMatchDao {
 
@@ -29,18 +26,16 @@ public class AtpMatchDao {
 
     public static ObservableList<Match> matches = FXCollections.observableArrayList();
 
-
-    static String grandPrix = "C:\\Users\\seost\\Downloads\\tennis_slam_pointbypoint-master\\tennis_slam_pointbypoint-master\\";
+    String grandPrix = "C:\\Users\\seost\\Downloads\\tennis_slam_pointbypoint-master\\tennis_slam_pointbypoint-master\\";
 
 
     public static List<File> getFilesFromFolder(String pathToFolder) throws IOException {
 
-        return Files.walk(Paths.get(grandPrix))
+        return Files.walk(Paths.get(pathToFolder))
                 .filter(Files::isRegularFile)
                 .map(Path::toFile).toList();
 
     }
-
 
     public Result<Record> fetchRowsFromCsv(String string, boolean header, char delimiter) {
 
@@ -64,17 +59,17 @@ public class AtpMatchDao {
     }
 
 
-    public static void main(String[] args) throws SQLException, IOException, CsvValidationException {
+//    public static void main(String[] args) throws SQLException, IOException, CsvValidationException {
+//
+//        int valid = grandPrix.codePointAt(grandPrix.length()-1);
+//
+//    }
 
-        int valid = grandPrix.codePointAt(grandPrix.length()-1);
 
-    }
-
-
-    public static ObservableList<Match> getSeasonTotal() {
-        ObservableList<Match> seasonTotal = FXCollections.observableArrayList();
-        return seasonTotal;
-    }
+//    public static ObservableList<Match> getSeasonTotal() {
+//        ObservableList<Match> seasonTotal = FXCollections.observableArrayList();
+//        return seasonTotal;
+//    }
 
 
 }

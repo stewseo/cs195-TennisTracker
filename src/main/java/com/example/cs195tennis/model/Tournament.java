@@ -7,11 +7,27 @@ public class Tournament {
 
     private int tourneyId;
 
-    public String tourney_id, tourney_name, tourney_date, surface, draw_size, tourney_level, score;
+    public String tourney_id;
+    public String tourney_name;
+    public String tourney_date;
+    public String surface;
+    public String draw_size;
+    public String tourney_level;
+    public String score;
 
-    private Match match;
+    public static Match match;
 
-    static private List<Match> matches;
+    static List<Match> matches;
+
+    public Tournament(String tourney_id, String tourney_name, String surface, String draw_size, String tourney_level, String tourney_date) {
+        this.tourney_id = tourney_id;
+        this.tourney_name = tourney_name;
+        this.surface = surface;
+        this.draw_size = draw_size;
+        this.tourney_level = tourney_level;
+        this.tourney_date = tourney_date;
+    }
+
 
 
     public String toString() {

@@ -15,7 +15,6 @@ public class Match extends Tournament {
     public String match_id, match_num, winnerName, loserName, round;
 
     PlayerRanking wtaRank;
-
     static String[] matchStats;
 
     public Match(Tournament tournament, WtaPlayer winner, WtaPlayer loser, PlayerRanking playerRanking, String[] matchStats) {

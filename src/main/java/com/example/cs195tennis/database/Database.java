@@ -8,12 +8,14 @@ public class Database {
     private final String driver = "org.sqlite.JDBC";
     private static final String url = "jdbc:sqlite:Database/wta-tournaments.sqlite";
 
-    public Connection c = DriverManager.getConnection(url);
+
 
     public Database() throws SQLException {}
 
     public static Connection connect() {
+
         Connection connection = null;
+
         try {
             connection = DriverManager.getConnection(url);
         } catch (SQLException e) {
@@ -59,5 +61,6 @@ public class Database {
             return null;
         }
     }
+
 }
 
