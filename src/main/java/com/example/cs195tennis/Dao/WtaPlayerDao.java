@@ -40,12 +40,7 @@ public class WtaPlayerDao {
 
         ObservableList<WtaPlayer> playerObservableList = FXCollections.observableArrayList();
 
-        String query = "SELECT * FROM " + "Player ";
-//
-//        Player player = create().select().from(TOURNAMENT).fetchAny().into(Player.class);
-//        System.out.println("Player create " + player);
-//        List<Player> players = create().select().from(TOURNAMENT).fetch().into(Player.class);
-//        List<Player> players2 = create().select().from(TOURNAMENT).fetchInto(Player.class);
+        String query = "SELECT * FROM " + "GRANDSLAM";
 
         try (Connection connection = Database.connect()) {
             ResultSet rs = connection.prepareStatement(query).executeQuery();
@@ -53,7 +48,6 @@ public class WtaPlayerDao {
             while (rs.next()) {
                 System.out.println("wta player");
                 playerObservableList.add(new WtaPlayer(
-
                         rs.getString(String.valueOf(TOURNAMENT.ID)),
                         rs.getString(String.valueOf(TOURNAMENT.NAME)),
                         rs.getString(String.valueOf(TOURNAMENT.SURFACE)),

@@ -2,8 +2,6 @@ package com.example.cs195tennis.model;
 
 public class WtaPlayer {
     public String firstName,lastName,height,id,ioc,dob,hand,wiki;
-    PlayerRanking rank;
-    String ranking, fullName;
 
     public WtaPlayer(String id, String firstName, String lastName, String hand, String dob, String ioc, String height, String wiki) {
         this.id = id;
@@ -25,7 +23,6 @@ public class WtaPlayer {
         this.dob = dob;
         this.hand = hand;
         this.wiki = wiki;
-        this.rank = rank;
     }
 
     public WtaPlayer(String ranking_date, String rank, String player, String points) {
@@ -35,32 +32,7 @@ public class WtaPlayer {
 
     }
 
-    public String getRanking() {
-        return ranking;
-    }
-
-    public PlayerRanking getRank() {
-        return rank;
-    }
-
-    public void setRank(PlayerRanking rank) {
-        this.rank = rank;
-    }
-
     public WtaPlayer() {
-    }
-
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public void setRanking(String ranking) {
-        this.ranking = ranking;
     }
 
     public String getFirstName() {
@@ -125,6 +97,10 @@ public class WtaPlayer {
 
     public void setWiki(String wiki) {
         this.wiki = wiki;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 
 }

@@ -31,6 +31,7 @@ public class GrandSlamController implements Initializable {
     @FXML public MFXButton searchButton;
 
     @FXML public MFXFilterComboBox<Tournament> filterCombo;
+
     @FXML public MFXFilterComboBox<Tournament>  custFilterCombo;
 
     @FXML public Label validateWtaTournamentLavel;
@@ -47,7 +48,7 @@ public class GrandSlamController implements Initializable {
         custDatePicker.setConverterSupplier(() -> new DateStringConverter("dd/MM/yyyy", custDatePicker.getLocale()));
 
         try {
-          tournamentObservable = TournamentDao.getTournamentObservable();
+            tournamentObservable = null;
             setupTable();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,62 +62,52 @@ public class GrandSlamController implements Initializable {
         filterCombo.setFilterFunction(filterTournaments);
         tournamentObservable.stream().close();
 
-//        ObservableList<TournamentRecord> checkedCatgeGoriesFilter = null;
-//        StringConverter<TournamentRecord> convertInputs = null;
-//        Function<String, Predicate<TournamentRecord>> filterTournamentStats = null;
-
-        try {
-            tournamentObservable = TournamentDao.getTournamentObservable();
-            custFilterCombo.setItems(tournamentObservable);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        tournamentObservable = null;
+        custFilterCombo.setItems(tournamentObservable);
 
         custFilterCombo.setConverter(converter);
         custFilterCombo.setFilterFunction(filterTournaments);
         custFilterCombo.setResetOnPopupHidden(false);
-
     }
 
-    String col1 = "tourney_name";
-    String col2 = "surface";
-    String col3 = "draw_size";
-    String col4 = "level";
-    String col5 = "winner_name";
-    String suffix = "Column";
     private void setupTable() throws SQLException {
 
-        MFXTableColumn<Tournament> c1 = new MFXTableColumn<>(col1, true, Comparator.comparing(Tournament::getTourney_name));
-        MFXTableColumn<Tournament> c2 = new MFXTableColumn<>(col2, true, Comparator.comparing(Tournament::getSurface));
-        MFXTableColumn<Tournament> c3 = new MFXTableColumn<>(col3, true, Comparator.comparing(Tournament::getDraw_size));
-        MFXTableColumn<Tournament> c4 = new MFXTableColumn<>(col3, true, Comparator.comparing(Tournament::getTourney_level));
+        MFXTableColumn<Tournament> c1 = new MFXTableColumn<>("Tournament", true, Comparator.comparing(Tournament::getTourney_name));
+        MFXTableColumn<Tournament> c2 = new MFXTableColumn<>("Surface", true, Comparator.comparing(Tournament::getSurface));
+        MFXTableColumn<Tournament> c3 = new MFXTableColumn<>("Draw Size", true, Comparator.comparing(Tournament::getDraw_size));
+        MFXTableColumn<Tournament> c4 = new MFXTableColumn<>("Level", true, Comparator.comparing(Tournament::getTourney_level));
+        MFXTableColumn<Tournament> c5 = new MFXTableColumn<>("Winner", true, Comparator.comparing(Tournament::getWinnerFullName));
+        MFXTableColumn<Tournament> c6 = new MFXTableColumn<>("Loser", true, Comparator.comparing(Tournament::getLoserFullName));
+
 
         c1.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getTourney_name));
         c2.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getSurface));
         c3.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getDraw_size));
-        c4.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getTourney_level)
+        c4.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getTourney_level));
+        c5.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getWinnerFullName));
+        c6.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getLoserFullName)
         {{
             setAlignment(Pos.CENTER_RIGHT);
         }});
         c4.setAlignment(Pos.CENTER_RIGHT);
 
-        wtaTouranmentTable.getTableColumns().addAll(c1, c2, c3, c4);
+        wtaTouranmentTable.getTableColumns().addAll(c1, c2, c3, c4, c5, c6);
         wtaTouranmentTable.getFilters().addAll(
                 new StringFilter<>("tourney_name", Tournament::getTourney_name),
                 new StringFilter<>("surface", Tournament::getSurface),
-                new StringFilter<>("draw_size", Tournament::getDraw_size),
-                new StringFilter<>("level",Tournament::getTourney_level)
+                new StringFilter<>("Draw Size", Tournament::getDraw_size),
+                new StringFilter<>("level",Tournament::getTourney_level),
+                new StringFilter<>("Winner",Tournament::getWinnerFullName),
+                new StringFilter<>("Loser",Tournament::getLoserFullName)
         );
 
-
-        tournamentObservable = TournamentDao.getTournamentObservable();
+        tournamentObservable = null;
 
         wtaTouranmentTable.setItems(tournamentObservable);
         tournamentObservable.stream().close();
     }
 
-    public void handleTextEntry(ActionEvent event) {
-    }
+    public void handleTextEntry(ActionEvent event) {}
 }
 
 

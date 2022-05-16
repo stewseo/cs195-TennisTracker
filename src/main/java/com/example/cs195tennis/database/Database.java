@@ -24,6 +24,7 @@ public class Database {
         return connection;
     }
 
+
     private static boolean checkTables() throws SQLException {
         String requiredTable = "Tournament";
         String checkTables = "select DISTINCT tbl_name from sqlite_master where tbl_name = '" + requiredTable + "'";

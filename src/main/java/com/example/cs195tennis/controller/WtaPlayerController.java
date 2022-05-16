@@ -43,7 +43,6 @@ public class WtaPlayerController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     private void setupTable() throws SQLException {
@@ -62,14 +61,14 @@ public class WtaPlayerController implements Initializable {
         wtaFilerComboBoxCustom.setFilterFunction(filterFunction);
 
 
-        MFXTableColumn<WtaPlayer> playerNameCol = new MFXTableColumn<>("name_first", true, Comparator.comparing(WtaPlayer::getFullName));
+        MFXTableColumn<WtaPlayer> playerNameColumn = new MFXTableColumn<>("name_first", true, Comparator.comparing(WtaPlayer::getFullName));
         MFXTableColumn<WtaPlayer> playerHeightCol = new MFXTableColumn<>("name_last", true, Comparator.comparing(WtaPlayer::getHeight));
-//        MFXTableColumn<WtaPlayer> playerHandCol = new MFXTableColumn<>("Hand", true, Comparator.comparing(WtaPlayer::getHand));
-//        MFXTableColumn<WtaPlayer> playerDobCol = new MFXTableColumn<>("dob", true, Comparator.comparing(WtaPlayer::getDob));
+        MFXTableColumn<WtaPlayer> playerHandCol = new MFXTableColumn<>("Hand", true, Comparator.comparing(WtaPlayer::getHand));
+        MFXTableColumn<WtaPlayer> playerDobCol = new MFXTableColumn<>("dob", true, Comparator.comparing(WtaPlayer::getDob));
 //        MFXTableColumn<WtaPlayer> playerRankColumn = new MFXTableColumn<>("rank", true, Comparator.comparing(WtaPlayer::getRanking));
-//        MFXTableColumn<WtaPlayer> playerLocCol = new MFXTableColumn<>("player_ioc", true, Comparator.comparing(WtaPlayer::getIoc));
+        MFXTableColumn<WtaPlayer> playerLocCol = new MFXTableColumn<>("player_ioc", true, Comparator.comparing(WtaPlayer::getIoc));
 
-        playerNameCol.setRowCellFactory(player -> new MFXTableRowCell<>(WtaPlayer::getFullName));
+        playerNameColumn.setRowCellFactory(player -> new MFXTableRowCell<>(WtaPlayer::getFullName));
         playerHeightCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getHeight)
 //        playerDobCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getHeight));
 //        playerLocCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getDob));
@@ -81,7 +80,7 @@ public class WtaPlayerController implements Initializable {
         }});
         playerHeightCol.setAlignment(Pos.CENTER_RIGHT);
 
-        wtaPlayerTable.getTableColumns().addAll(playerNameCol,playerHeightCol);
+        wtaPlayerTable.getTableColumns().addAll(playerNameColumn,playerHeightCol);
         wtaPlayerTable.getFilters().addAll(
                 new StringFilter<>("Name", WtaPlayer::getFullName),
                 new StringFilter<>("Name", WtaPlayer::getHeight)
