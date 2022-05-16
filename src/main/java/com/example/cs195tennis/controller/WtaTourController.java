@@ -48,8 +48,9 @@ public class WtaTourController implements Initializable {
         Function<String, Predicate<PlayerRanking>> filterFunction = s -> playerRank -> StringUtils.containsIgnoreCase(converter.toString(playerRank), s);
 
         String input = handleWtaPlayers.getText();
-        playerRankObservable = WtaPlayerDao.allTimeWtaRankings(input);
+//        playerRankObservable = WtaPlayerDao.allTimeWtaRankings("Select * from WTATournament ");
 
+        System.out.println(WtaPlayerDao.allTimeWtaRankings("Select * from WTATournament "));
         filterPlayerRecentRanks.setItems(playerRankObservable);
         filterPlayerRecentRanks.setConverter(converter);
         filterPlayerRecentRanks.setFilterFunction(filterFunction);

@@ -49,6 +49,7 @@ public class GrandSlamController implements Initializable {
 
         try {
             tournamentObservable = TournamentDao.grandSlamTournamentsObservable();
+
             setupTable();
         } catch (SQLException e) {
             e.printStackTrace();

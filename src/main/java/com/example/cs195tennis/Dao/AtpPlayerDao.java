@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class AtpPlayerDao {
 
+
     ObservableList<PlayerRanking> playerRanking;
 
     String rankingTable = "Player_Rank";
@@ -31,7 +32,9 @@ public class AtpPlayerDao {
         Map<String, List<WtaPlayer>> map = new HashMap<>();
 
         try (CSVReader csvReader = new CSVReader(new FileReader(rankCsv));) {
+
             String[] values = null;
+
             while ((values = csvReader.readNext()) != null) {
 
                 playerRankCsv.add(Arrays.asList(values));
@@ -44,7 +47,7 @@ public class AtpPlayerDao {
 
         List<String> list = new ArrayList<>();
 
-        Map<String, List<AtpPlayer>> playerMap = getAtpObservablePlayer();
+        List<AtpPlayer> playerList = getAtpObservablePlayer();
 
         playerRankCsv.forEach(row -> {
 
@@ -54,13 +57,11 @@ public class AtpPlayerDao {
         });
 
         return map;
-
     }
-
 
         private ObservableList<AtpPlayer> observablePlayerList () throws SQLException {
 
-            ObservableList<AtpPlayer> playerList;
+            ObservableList<AtpPlayer> playerList = null;
 
             Connection c = Database.connect();
 
@@ -72,24 +73,25 @@ public class AtpPlayerDao {
 
         public static ObservableList<PlayerRanking> getAtpRanking () throws SQLException {
 
-            ObservableList<PlayerRanking> playerRanking = FXCollections.observableArrayList();
+            ObservableList<PlayerRanking> playerRankingObservable = FXCollections.observableArrayList();
 
             String query = "Select * From " + "AtpPlayerRanking";
 
             ResultSet rs = Database.connect().prepareStatement(query).executeQuery();
 
             while (rs.next()) {
-                playerRanking.add(new PlayerRanking(rs.getString("ranking_date"),
+                playerRankingObservable.add(new PlayerRanking(rs.getString("ranking_date"),
                         rs.getString("rank"),
                         rs.getString("player"),
                         rs.getString("points")));
             }
-            return playerRanking;
+            return playerRankingObservable;
         }
 
         private ObservableList<String> getPlayerNames () {
 
             Set<String> set = new HashSet<>();
+
             ObservableList<String> temp = FXCollections.observableArrayList();
 
             ObservableList<AtpPlayer> playerObservableList = FXCollections.observableArrayList();
@@ -108,9 +110,6 @@ public class AtpPlayerDao {
             ObservableList<AtpPlayer> playerObservableList = null;
 
 //            playerObservableList = FXCollections.observableArrayList()) {
-
-
-
 
             try (Connection connection = Database.connect()) {
                 PreparedStatement statement = connection.prepareStatement(query);
@@ -131,7 +130,6 @@ public class AtpPlayerDao {
 
             } catch (SQLException e) {
                 e.printStackTrace();
-
             }
             return playerObservableList;
         }

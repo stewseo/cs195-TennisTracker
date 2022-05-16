@@ -90,10 +90,10 @@ public class DemoController implements Initializable {
 
     private void initializeLoader() {
         MFXLoader loader = new MFXLoader();
-        loader.addView(MFXLoaderBean.of("Atp Players", loadURL("PlayerRanking.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-circle-dot", "Buttons")).setDefaultRoot(true).get());
+//        loader.addView(MFXLoaderBean.of("Atp Players", loadURL("PlayerRanking.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-circle-dot", "Buttons")).setDefaultRoot(true).get());
 //        loader.addView(MFXLoaderBean.of("Atp Tournament", loadURL("AtpTours.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-table", "Tables")).get());
         loader.addView(MFXLoaderBean.of("GrandSlams", loadURL("GrandSlam.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-list-dropdown", "ComboBoxes")).get());
-//        loader.addView(MFXLoaderBean.of("Wta Players", loadURL("WtaPlayer.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-square-list", "Lists")).get());
+//        loader.addView(a.of("Wta Players", loadURL("WtaPlayer.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-square-list", "Lists")).get());
 
         loader.setOnLoadedAction(beans -> {
             List<ToggleButton> nodes = beans.stream()

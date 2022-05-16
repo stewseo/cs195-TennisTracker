@@ -9,6 +9,7 @@ import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.jooq.DSLContext;
+import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import java.io.*;
@@ -25,7 +26,7 @@ import static com.example.cs195tennis.Dao.DataModel.TournamentTable.TOURNAMENT1;
 public class WtaPlayerDao {
 
     private static DSLContext create() {
-        try(Connection conn = Database.connect()) {
+        try (Connection conn = Database.connect()) {
 
             return DSL.using(conn, SQLDialect.SQLITE);
 
@@ -40,23 +41,21 @@ public class WtaPlayerDao {
 
         ObservableList<PlayerRanking> playerObservableList = FXCollections.observableArrayList();
 
-        try (Connection connection = Database.connect()) {
-            ResultSet rs = connection.prepareStatement(query).executeQuery();
+        Result<?> result = create().select()
+                .from(TOURNAMENT1)
+                .fetch();
 
-            while (rs.next()) {
-                System.out.println("\nwta player");
-                playerObservableList.add(new PlayerRanking(
-                        rs.getString("ranking_date"),
-                        rs.getString("rank"),
-                        rs.getString("player"),
-                        rs.getString("points")
-                ));
-            }
-            } catch (SQLException e) {
-                e.printStackTrace();
+        System.out.println(result);
 
-            }return playerObservableList;
-        }
+        Result<org.jooq.Record> rs = create().select().from(TOURNAMENT1).fetch();
+
+        playerObservableList .addAll((PlayerRanking) create().select().from(TOURNAMENT1).fetch().stream().toList());
+
+        return playerObservableList;
+
+    }
+}
+
 
 //    public void insert(String csv) throws SQLException, IOException, CsvValidationException {
 //
@@ -76,7 +75,7 @@ public class WtaPlayerDao {
 //        int i = 0;
 
 
-}
+
 
 
 

@@ -21,29 +21,31 @@ import static org.jooq.impl.SQLDataType.VARCHAR;
 
 public class TournamentTable extends CustomTable<TournamentRecord> {
     private Collection<Field<?>> fields;
+
     public static final TournamentTable TOURNAMENT1 = new TournamentTable();
+
     public final TableField<TournamentRecord, Integer> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), TOURNAMENT1, "");
     public final TableField<TournamentRecord, String> TOURNEY_NAME = createField(DSL.name("TOURNEY_NAME"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
     public final TableField<TournamentRecord, String> SURFACE = createField(DSL.name("SURFACE"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
     public final TableField<TournamentRecord, String> LEVEL = createField(DSL.name("LEVEL"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
     public final TableField<TournamentRecord, String> DATE = createField(DSL.name("TOURNEY_DATE"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+//    public final TableField<TournamentRecord, String> PLAYER = createField(DSL.name("player1"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
 
 
     @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-    public class Tournament {
+    public class Tournament1 {
         public final String name;
         public final int id;
 
         @ConstructorProperties({"title", "id"})
-        public Tournament(String tournamentName, int id) {
+        public Tournament1(String tournamentName, int id) {
             this.name = tournamentName;
             this.id = id;
 
         }
     }
 
-
-    protected TournamentTable() {super(name("GrandSlamTable"));}
+    protected TournamentTable() {super(name("GrandSlam"));}
 
     @Override
     @SuppressWarnings({ "all", "unchecked", "rawtypes" })

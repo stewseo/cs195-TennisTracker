@@ -1,6 +1,5 @@
 package com.example.cs195tennis.model;
 
-
 import com.example.cs195tennis.database.Database;
 import io.github.palexdev.materialfx.utils.others.dates.DateStringConverter;
 import org.jooq.DSLContext;
@@ -14,8 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static com.example.cs195tennis.Dao.TournamentDao.GRAND_SLAM;
 import static org.jooq.impl.DSL.using;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignT.TOURNAMENT;
 
 public class Tournament {
 
@@ -47,15 +46,19 @@ public class Tournament {
     public Tournament(Field<?>[] fields) {
 
         for(int i=0;i<6;i++){
-            this.tourney_id = field.toString();
+
+            this.tourney_id = fields[i].toString();
         }
+
         IntStream.range(6,fields.length).forEach(e-> {
+
             matchStats.add(String.valueOf(e));
         });
     }
+
     DSLContext ctx = using(Database.connect(), SQLDialect.SQLITE);
 
-    Query query = ctx.select(GrandSlam);
+    Query query = ctx.select();
 
     public String toString() {
         StringBuilder sb = new StringBuilder(tourney_id);
@@ -65,7 +68,6 @@ public class Tournament {
                 .append(", ").append(tourney_level)
                 .append(", ").append(tourney_date).toString();
     }
-
 
     public String dateFormat(String date) {
 

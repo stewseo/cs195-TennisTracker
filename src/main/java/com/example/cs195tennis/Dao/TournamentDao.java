@@ -74,43 +74,49 @@ public class TournamentDao {
 
         Map<Object, List<Object>> map = new HashMap<>();
 
-        Result<Record> tournaments = Objects.requireNonNull(create()).select()
-                .from(GRAND_SLAM)
-                .fetch();
+
+        Result<TournamentRecord> tournaments = create().selectQuery(TOURNAMENT1).fetch();
+
+        System.out.println(tournaments);
+
+        Result<Record> result =
+                create().select()
+                        .from(GRAND_SLAM).fetch();
 
 
-            create().selectFrom(GRAND_SLAM).stream().forEach(e -> {
-                if (e == null) return;
+        result.forEach(e -> {
 
-                Object o2 = (Object) e;
+            if (e == null) return;
 
-                Field<?> field;
+            Object o2 = (Object)e;
 
-                List<Object> obj = new ArrayList<>();
+            Field<?> field;
+
+            List<Object> obj = new ArrayList<>();
 
             grandSlamObservable.addAll(new Tournament(e.fields()));
-            ;
 
-                map.computeIfAbsent(field("o2"), v -> new ArrayList<>());
+            map.computeIfAbsent(field("o2"), v -> new ArrayList<>());
 
-                map.get(field("id")).add(e);
+            map.get(field("id")).add(e);
 
             });
-            map.forEach((k,v)-> v.forEach(e-> {
 
-                System.out.println(e);
-        }));
+            map.forEach((k,v)-> v.forEach(System.out::println));
+
+            System.out.println("test " );
 
 
-        tournaments.forEach(t -> {
-
-            Integer id = t.getValue(TOURNAMENT1.ID);
-            String tourneyName = t.getValue(TOURNAMENT1.TOURNEY_NAME);
-            String surface = t.getValue(TOURNAMENT1.SURFACE);
-            String level = t.getValue(TOURNAMENT1.LEVEL);
-            String tourneyDate = t.getValue(TOURNAMENT1.DATE);
-        });
-        grandSlamObservable.addAll( );
+//            yournaments = TournamentDao.getAllTournamentFieldsObservable();
+//        tournaments.forEach(t -> {
+//
+//            Integer id = t.getValue(TOURNAMENT1.ID);
+//            String tourneyName = t.getValue(TOURNAMENT1.TOURNEY_NAME);
+//            String surface = t.getValue(TOURNAMENT1.SURFACE);
+//            String level = t.getValue(TOURNAMENT1.LEVEL);
+//            String tourneyDate = t.getValue(TOURNAMENT1.DATE);
+//        });
+//        grandSlamObservable.addAll( );
         return grandSlamObservable;
 
     }
