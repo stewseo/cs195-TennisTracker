@@ -1,8 +1,6 @@
 package com.example.cs195tennis.controller;
+import com.example.cs195tennis.Dao.AtpTourDao;
 import com.example.cs195tennis.model.AtpMatch;
-import com.example.cs195tennis.model.Match;
-import com.example.cs195tennis.model.Player;
-import com.example.cs195tennis.model.PlayerRanking;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
@@ -11,7 +9,6 @@ import io.github.palexdev.materialfx.utils.DateTimeUtils;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import io.github.palexdev.materialfx.utils.others.dates.DateStringConverter;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -32,15 +29,16 @@ public class ATPTourController implements Initializable {
     @FXML public MFXButton searchButton;
 
 	@FXML public MFXFilterComboBox<AtpMatch> atpFilterTournament;
+
 	@FXML public MFXFilterComboBox<AtpMatch> atpFilterTournamentStats;
-    public Label atpValidate;
-	public MFXTextField atpTextFields;
+
+    @FXML public Label atpValidate;
+
+	@FXML public MFXTextField atpTextFields;
+
 	@FXML MFXTableView<AtpMatch> atpTournamentViewTable;
 
 	@FXML public MFXDatePicker custDatePicker;
-
-
-	@FXML private MFXTextField textField;
 
 	ObservableList<AtpMatch> matchObservable;
 
@@ -48,9 +46,11 @@ public class ATPTourController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		custDatePicker.setGridAlgorithm(DateTimeUtils::partialIntMonthMatrix);
-		custDatePicker.setConverterSupplier(() -> new DateStringConverter("dd/MM/yyyy", custDatePicker.getLocale()));
+//		Objects.nonNull(matchObservable);
 
+		custDatePicker.setGridAlgorithm(DateTimeUtils::partialIntMonthMatrix);
+
+		custDatePicker.setConverterSupplier(() -> new DateStringConverter("dd/MM/yyyy", custDatePicker.getLocale()));
 
 
 		StringConverter<AtpMatch> converter = FunctionalStringConverter.to(e -> (e == null) ? "" : e.getTourney_name());
@@ -59,10 +59,13 @@ public class ATPTourController implements Initializable {
 			return StringUtils.containsIgnoreCase(converter.toString(e), s);
 		};
 
+		matchObservable = AtpTourDao.getAtpTourObservable();
 
+		atpFilterTournamentStats.setItems(matchObservable);
 		atpFilterTournamentStats.setConverter(converter);
 		atpFilterTournamentStats.setFilterFunction(filterFunction);
 
+		atpFilterTournament.setItems(matchObservable);
 		atpFilterTournament.setConverter(converter);
 		atpFilterTournament.setFilterFunction(filterFunction);
 		atpFilterTournament.setResetOnPopupHidden(false);

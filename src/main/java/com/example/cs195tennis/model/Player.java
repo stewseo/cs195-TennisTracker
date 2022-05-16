@@ -3,6 +3,8 @@ import java.util.Objects;
 
 public class Player {
 
+
+
     PlayerRanking ranking;
 
     WtaPlayer wtaPlayer;
@@ -11,6 +13,7 @@ public class Player {
 
     public String firstName, lastName, player_id;
 
+    static String fullName;
 
     public Player(){}
 
@@ -22,6 +25,10 @@ public class Player {
     }
 
     public Player(int hash, PlayerRanking playerRanking, String concat, boolean add) {
+    }
+
+    static String fullName(){
+        return fullName;
     }
 
     @Override

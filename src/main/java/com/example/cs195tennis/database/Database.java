@@ -6,8 +6,8 @@ import java.util.Objects;
 public class Database {
 
     private final String driver = "org.sqlite.JDBC";
-    private static final String url = "jdbc:sqlite:Database/wta-tournaments.sqlite";
 
+    private static final String url = "jdbc:sqlite:Database/wta-tournaments.sqlite";
 
     public Database() throws SQLException {}
 
@@ -25,7 +25,9 @@ public class Database {
 
 
     private static boolean checkTables() throws SQLException {
+
         String requiredTable = "Tournament";
+
         String checkTables = "select DISTINCT tbl_name from sqlite_master where tbl_name = '" + requiredTable + "'";
 
         try (Connection connection = Database.connect()) {

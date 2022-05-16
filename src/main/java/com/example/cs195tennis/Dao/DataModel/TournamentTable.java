@@ -20,7 +20,6 @@ import static org.jooq.impl.SQLDataType.VARCHAR;
 
 
 public class TournamentTable extends CustomTable<TournamentRecord> {
-    //match_id	year	slam	match_num	player1	player2	status	winner	event_name	round	court_name	court_idplayer1id	player2id	nation1	nation2
     private Collection<Field<?>> fields;
     public static final TournamentTable TOURNAMENT1 = new TournamentTable();
     public final TableField<TournamentRecord, Integer> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), TOURNAMENT1, "");
@@ -30,26 +29,21 @@ public class TournamentTable extends CustomTable<TournamentRecord> {
     public final TableField<TournamentRecord, String> DATE = createField(DSL.name("TOURNEY_DATE"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
 
 
-
     @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-    public class Tournament1 {
+    public class Tournament {
         public final String name;
         public final int id;
 
         @ConstructorProperties({"title", "id"})
-        public Tournament1(String tournamentName, int id) {
+        public Tournament(String tournamentName, int id) {
             this.name = tournamentName;
             this.id = id;
 
         }
     }
-//    Tournament tournament    = create.select(tournament.ID, TOURNAMENT1.TOURNEY_NAME).from(TOURNAMENT1).fetchAny().into(MyBook3.class);
-//    List<Tournament> tourneyList = create.select(tournament.ID, TOURNAMENT1.TOURNEY_NAME).from(TOURNAMENT1).fetch().into(MyBook3.class);
-//    List<Tournament> myBooks = create().select(tournament.ID, TOURNAMENT1.TOURNEY_NAME).from(TOURNAMENT1).fetchInto(MyBook3.class);
 
 
     protected TournamentTable() {super(name("GrandSlamTable"));}
-
 
     @Override
     @SuppressWarnings({ "all", "unchecked", "rawtypes" })
@@ -62,6 +56,7 @@ public class TournamentTable extends CustomTable<TournamentRecord> {
     }
 
     public void tableMeta(String tableRef){
+
         DSLContext ctx = using(Database.connect(), SQLDialect.SQLITE);
     }
 

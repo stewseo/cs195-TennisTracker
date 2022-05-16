@@ -35,25 +35,23 @@ public class WtaPlayerDao {
         return null;
     }
 
-    public static ObservableList<WtaPlayer> readWtaPlayerToObservable() {
 
-        ObservableList<WtaPlayer> playerObservableList = FXCollections.observableArrayList();
+    public static ObservableList<PlayerRanking> allTimeWtaRankings(String query) {
 
-        String query = "SELECT * FROM " + "GRANDSLAM";
+        ObservableList<PlayerRanking> playerObservableList = FXCollections.observableArrayList();
 
         try (Connection connection = Database.connect()) {
             ResultSet rs = connection.prepareStatement(query).executeQuery();
 
             while (rs.next()) {
-                System.out.println("wta player");
-                playerObservableList.add(new WtaPlayer(
-                        rs.getString(String.valueOf(TOURNAMENT1.ID)),
-                        rs.getString(String.valueOf(TOURNAMENT1.TOURNEY_NAME)),
-                        rs.getString(String.valueOf(TOURNAMENT1.DATE)),
-                        new String[]{}
+                System.out.println("\nwta player");
+                playerObservableList.add(new PlayerRanking(
+                        rs.getString("ranking_date"),
+                        rs.getString("rank"),
+                        rs.getString("player"),
+                        rs.getString("points")
                 ));
-                }
-
+            }
             } catch (SQLException e) {
                 e.printStackTrace();
 

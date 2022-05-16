@@ -1,12 +1,25 @@
 package com.example.cs195tennis.model;
 
 
+import com.example.cs195tennis.database.Database;
+import io.github.palexdev.materialfx.utils.others.dates.DateStringConverter;
+import org.jooq.DSLContext;
+import org.jooq.Field;
+import org.jooq.Query;
+import org.jooq.SQLDialect;
+import org.sqlite.SQLiteLimits;
+
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
+
+import static com.example.cs195tennis.Dao.TournamentDao.GRAND_SLAM;
+import static org.jooq.impl.DSL.using;
 
 public class Tournament {
 
     private int tourneyId;
-
     public String tourney_id,tourney_name,tourney_date;
     public String surface;
     public String draw_size;
@@ -14,24 +27,35 @@ public class Tournament {
     public String score;
     public Player winner, loser;
     public Object o1, o2;
-    public Match match;
-    List<Match> matches;
+    public List<String> matchStats;
 
-    public List<Object[]> objA;
 
-    public Tournament(String tourney_id, String tourney_name, String surface, String draw_size, String tourney_level, String tourney_date) {
+    public Tournament(String tourney_id, String tourney_name, String tourney_date, Player winner, Player loser,  List<String> matchStats) {
         this.tourney_id = tourney_id;
         this.tourney_name = tourney_name;
-        this.surface = surface;
-        this.draw_size = draw_size;
-        this.tourney_level = tourney_level;
         this.tourney_date = tourney_date;
+        this.winner = winner;
+        this.loser = loser;
+        this.matchStats = matchStats;
     }
+
 
     public Tournament(Object o, Object o1) {
         this.o1 = o; o2 = o1;
     }
 
+    public Tournament(Field<?>[] fields) {
+
+        for(int i=0;i<6;i++){
+            this.tourney_id = field.toString();
+        }
+        IntStream.range(6,fields.length).forEach(e-> {
+            matchStats.add(String.valueOf(e));
+        });
+    }
+    DSLContext ctx = using(Database.connect(), SQLDialect.SQLITE);
+
+    Query query = ctx.select(GrandSlam);
 
     public String toString() {
         StringBuilder sb = new StringBuilder(tourney_id);
@@ -42,6 +66,16 @@ public class Tournament {
                 .append(", ").append(tourney_date).toString();
     }
 
+
+    public String dateFormat(String date) {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+        String strDate = formatter.format(date);
+
+        return strDate;
+
+    }
 
     public int getTourneyId() {
         return tourneyId;
@@ -71,21 +105,6 @@ public class Tournament {
         this.loser = loser;
     }
 
-    public Match getMatch() {
-        return match;
-    }
-
-    public void setMatch(Match match) {
-        this.match = match;
-    }
-
-    public List<Match> getMatches() {
-        return matches;
-    }
-
-    public void setMatches(List<Match> matches) {
-        this.matches = matches;
-    }
 
     public Tournament() {}
 
@@ -139,13 +158,39 @@ public class Tournament {
         this.tourney_level = tourney_level;
     }
 
-    public Tournament(String tourney_id, String tourney_name, String surface, String draw_size, String tourney_level, String tourney_date, String match_num) {
-        this.tourney_id = tourney_id;
-        this.tourney_name = tourney_name;
-        this.tourney_level = tourney_date;
-        this.surface = surface;
-        this.draw_size = draw_size;
+    public Player getWinner() {
+        return winner;
     }
 
+    public Player getLoser() {
+        return loser;
+    }
 
+    public Object getO1() {
+        return o1;
+    }
+
+    public void setO1(Object o1) {
+        this.o1 = o1;
+    }
+
+    public Object getO2() {
+        return o2;
+    }
+
+    public void setO2(Object o2) {
+        this.o2 = o2;
+    }
+
+    public List<String> getMatchStats() {
+        return matchStats;
+    }
+
+    public void setMatchStats(List<String> matchStats) {
+        this.matchStats = matchStats;
+    }
+
+    public Object getMatches() {
+        return matchStats;
+    }
 }

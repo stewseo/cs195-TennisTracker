@@ -12,25 +12,27 @@ import javafx.beans.property.adapter.ReadOnlyJavaBeanDoublePropertyBuilder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.util.PropertySource;
-import org.jooq.
+import org.jooq.*;
+import org.jooq.Record;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.Record;
 import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
-
 import static com.example.cs195tennis.Dao.DataModel.TournamentTable.TOURNAMENT1;
-import static org.jooq.impl.DSL.*;
+
+import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.using;
 
 
 public class TournamentDao {
+
 
     static DSLContext create() {
         try(Connection conn = Database.connect()) {
@@ -43,14 +45,9 @@ public class TournamentDao {
         return null;
     }
     
-    public static Collection<Field<?>> getTournamentObservable() throws SQLException {
+    public void getTournamentObservable() throws SQLException {
 
-        Collection<Field<?>> fields = new ArrayList<>();
 
-        Objects.requireNonNull(create()).selectFrom(TOURNAMENT1)
-                .orderBy(TOURNAMENT1.ID).forEach(System.out::println);
-
-        return fields;
     }
 
     public static List<List<String>> readCSVRowsToList(String url) throws SQLException {
@@ -73,54 +70,57 @@ public class TournamentDao {
     
     public static <R> ObservableList<Tournament> grandSlamTournamentsObservable() throws SQLException {
 
-
         ObservableList<Tournament> grandSlamObservable = FXCollections.observableArrayList();
 
-        Map<String, List<Tournament>> map = new HashMap<>();
+        Map<Object, List<Object>> map = new HashMap<>();
 
-
-        Result<org.jooq.Record> tournaments = Objects.requireNonNull(create()).select()
+        Result<Record> tournaments = Objects.requireNonNull(create()).select()
                 .from(GRAND_SLAM)
                 .fetch();
 
-        Map<String, List<String>> mapp = new HashMap<>();
 
-        Stream<Tournament> stream = create().selectFrom(GRAND_SLAM).stream()
+            create().selectFrom(GRAND_SLAM).stream().forEach(e -> {
+                if (e == null) return;
 
-            stream.forEach(e -> {
+                Object o2 = (Object) e;
 
-                mapp.computeIfAbsent(e.getTourney_id(), v -> new ArrayList<>());
-                
-                mapp.get(e.getTourney_id()).add(new Tournament(e.("tourney_id"),field("tourney_name"),field("tourney_date"), v.get));
-                });
-                
+                Field<?> field;
+
+                List<Object> obj = new ArrayList<>();
+
+            grandSlamObservable.addAll(new Tournament(e.fields()));
+            ;
+
+                map.computeIfAbsent(field("o2"), v -> new ArrayList<>());
+
+                map.get(field("id")).add(e);
+
             });
+            map.forEach((k,v)-> v.forEach(e-> {
+
+                System.out.println(e);
+        }));
 
 
-//        tournaments.forEach(t -> {
-//            Integer id = t.getValue(GRAND_SLAM.ID);
-//            String tourneyName = t.getValue(GRAND_SLAM.TOURNEY_NAME);
-//            String tourneyDate = t.getValue(GRAND_SLAM.DATE);
-//            String tourneyLevel = t.getValue(GRAND_SLAM.TOURNEY_NAME);
-//            String tourneyLevel = t.getValue(GRAND_SLAM.TOURNEY_NAME);
-//            String surface = t.getValue(GRAND_SLAM.TOURNEY_NAME);
+        tournaments.forEach(t -> {
 
+            Integer id = t.getValue(TOURNAMENT1.ID);
+            String tourneyName = t.getValue(TOURNAMENT1.TOURNEY_NAME);
+            String surface = t.getValue(TOURNAMENT1.SURFACE);
+            String level = t.getValue(TOURNAMENT1.LEVEL);
+            String tourneyDate = t.getValue(TOURNAMENT1.DATE);
+        });
+        grandSlamObservable.addAll( );
+        return grandSlamObservable;
 
-//
-//        Objects.requireNonNull(create()).selectFrom(TOURNAMENT1)
-//                .orderBy(TOURNAMENT1.ID).forEach(e -> {
-//                    new Tournament(e.get(1),e.get(2));
-//                        });
-//
-//            return grandSlamObservable;
-
-
+    }
 
     public static ObservableList<Tournament> getAllTournamentFieldsObservable() throws SQLException {
 
-
         ObservableList<Tournament> wtaResultsObservable = FXCollections.observableArrayList();
+
         wtaResultsObservable.addAll();
+
         return wtaResultsObservable;
     }
 

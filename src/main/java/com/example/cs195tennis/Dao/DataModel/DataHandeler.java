@@ -53,16 +53,6 @@ public class DataHandeler {
                 .execute();
     }
 
-    public static boolean create(String tableName, List<String[]> columns) throws SQLException {
-
-        int cols = columns.get(0).length, rows = columns.size() - 1;
-
-        List<StringBuilder> inserts = new ArrayList<>();
-
-        StringBuilder queryBuilder = new StringBuilder("INSERT INTO " + tableName + " (");
-
-
-    }
 }
 
 

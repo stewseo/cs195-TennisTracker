@@ -15,6 +15,9 @@ public class WtaPlayer {
     }
     public WtaPlayer(){}
 
+    public WtaPlayer(String string, String string1, String string2, String string3) {
+    }
+
     public String getFullName() {
         return firstName + " " + lastName;
     }

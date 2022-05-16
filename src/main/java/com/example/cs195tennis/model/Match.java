@@ -139,10 +139,6 @@ public class Match extends Tournament {
         this.wtaRank = wtaRank;
     }
 
-    public static String[] getMatchStats() {
-        return matchStats;
-    }
-
     public static void setMatchStats(String[] matchStats) {
         Match.matchStats = matchStats;
     }
