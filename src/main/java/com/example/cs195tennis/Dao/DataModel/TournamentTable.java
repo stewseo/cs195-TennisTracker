@@ -2,37 +2,57 @@ package com.example.cs195tennis.Dao.DataModel;
 
 import com.example.cs195tennis.Dao.TournamentDao;
 import com.example.cs195tennis.database.Database;
+import com.example.cs195tennis.model.Tournament;
 import org.jooq.*;
-import org.jooq.impl.*;
+import org.jooq.Record;
+import org.jooq.impl.CustomField;
+import org.jooq.impl.CustomTable;
+import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.meta.TableDefinition;
 
+import java.beans.ConstructorProperties;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import static org.jooq.impl.DSL.name;
-import static org.jooq.impl.DSL.using;
+import java.util.*;
+import static org.jooq.impl.DSL.*;
 import static org.jooq.impl.SQLDataType.SMALLINT;
 import static org.jooq.impl.SQLDataType.VARCHAR;
 
 
 public class TournamentTable extends CustomTable<TournamentRecord> {
+    //match_id	year	slam	match_num	player1	player2	status	winner	event_name	round	court_name	court_idplayer1id	player2id	nation1	nation2
+    private Collection<Field<?>> fields;
+    public static final TournamentTable TOURNAMENT1 = new TournamentTable();
+    public final TableField<TournamentRecord, Integer> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), TOURNAMENT1, "");
+    public final TableField<TournamentRecord, String> TOURNEY_NAME = createField(DSL.name("TOURNEY_NAME"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<TournamentRecord, String> SURFACE = createField(DSL.name("SURFACE"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<TournamentRecord, String> LEVEL = createField(DSL.name("LEVEL"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<TournamentRecord, String> DATE = createField(DSL.name("TOURNEY_DATE"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
 
-    private static Collection<Field<?>> fields;
-    public static final TournamentTable TOURNAMENT = new TournamentTable();
-    public final TableField<TournamentRecord, Short>  ID = createField(name("ID"), SMALLINT);
-    public final TableField<TournamentRecord, String> NAME = createField(name("TOURNEY_NAME"), VARCHAR);
-    public final TableField<TournamentRecord, String> SURFACE = createField(name("SURFACE"), VARCHAR);
-    public final TableField<TournamentRecord, String> LEVEL = createField(name("LEVEL"), VARCHAR);
-    public final TableField<TournamentRecord, String> DATE = createField(name("TOURNEY_DATE"), VARCHAR);
-    public final TableField<TournamentRecord, String> DRAW_SIZE = createField(name("DRAW_SIZE"), VARCHAR);
 
-    protected TournamentTable() {
-        super(name("GRANDSLAM"));
+
+    @SuppressWarnings({ "all", "unchecked", "rawtypes" })
+    public class Tournament1 {
+        public final String name;
+        public final int id;
+
+        @ConstructorProperties({"title", "id"})
+        public Tournament1(String tournamentName, int id) {
+            this.name = tournamentName;
+            this.id = id;
+
+        }
     }
+//    Tournament tournament    = create.select(tournament.ID, TOURNAMENT1.TOURNEY_NAME).from(TOURNAMENT1).fetchAny().into(MyBook3.class);
+//    List<Tournament> tourneyList = create.select(tournament.ID, TOURNAMENT1.TOURNEY_NAME).from(TOURNAMENT1).fetch().into(MyBook3.class);
+//    List<Tournament> myBooks = create().select(tournament.ID, TOURNAMENT1.TOURNEY_NAME).from(TOURNAMENT1).fetchInto(MyBook3.class);
+
+
+    protected TournamentTable() {super(name("GrandSlamTable"));}
+
 
     @Override
+    @SuppressWarnings({ "all", "unchecked", "rawtypes" })
     public Class<? extends TournamentRecord> getRecordType() {
         return TournamentRecord.class;
     }
@@ -45,37 +65,14 @@ public class TournamentTable extends CustomTable<TournamentRecord> {
         DSLContext ctx = using(Database.connect(), SQLDialect.SQLITE);
     }
 
-    public List<Table<?>> allTablesInDb() {
 
-        DSLContext create = using(Database.connect(), SQLDialect.SQLITE);
-
-        List<Table<?>> list = create.meta().getTables().stream().toList();
-
-        return list;
-
+    public Collection<Field<?>> getFields() {
+        return fields;
     }
 
-    public void listenColumn(){
-
-        var parser =
-                DSL.using(new DefaultConfiguration().set(new DefaultVisitListener() {
-                    @Override
-                    public void visitStart(VisitContext ctx) {
-                        if (ctx.queryPart() instanceof Field
-                                && !(ctx.queryPart() instanceof Param))
-                            System.out.println(((Named) ctx.queryPart()).getQualifiedName());
-                    }
-                })).parser();
+    public void setFields(Collection<Field<?>> fields) {
+        this.fields = fields;
     }
-
-    public static void getFields() throws SQLException {
-        fields = TournamentDao.getTournamentObservable();
-    }
-
-    public static void main(String[] args) throws SQLException {
-        getFields();
-    }
-
 }
 
 

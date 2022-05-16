@@ -42,19 +42,15 @@ public class ATPTourController implements Initializable {
 
 	@FXML private MFXTextField textField;
 
-	static ObservableList<AtpMatch> matchObservable = FXCollections.observableArrayList();
+	ObservableList<AtpMatch> matchObservable;
 
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+
 		custDatePicker.setGridAlgorithm(DateTimeUtils::partialIntMonthMatrix);
 		custDatePicker.setConverterSupplier(() -> new DateStringConverter("dd/MM/yyyy", custDatePicker.getLocale()));
 
-		ObservableList<String> tournamentFilterObservable = FXCollections.observableArrayList();
-		ObservableList<String> winnerLoserObservable = FXCollections.observableArrayList();
-		ObservableList<PlayerRanking> playerRankObservable = FXCollections.observableArrayList();
-		ObservableList<Player> playerObservable = FXCollections.observableArrayList();
-		ObservableList<Match> tournamentObservable = FXCollections.observableArrayList();
 
 
 		StringConverter<AtpMatch> converter = FunctionalStringConverter.to(e -> (e == null) ? "" : e.getTourney_name());
@@ -62,7 +58,6 @@ public class ATPTourController implements Initializable {
 		Function<String, Predicate<AtpMatch>> filterFunction = s -> e -> {
 			return StringUtils.containsIgnoreCase(converter.toString(e), s);
 		};
-
 
 
 		atpFilterTournamentStats.setConverter(converter);
@@ -80,7 +75,7 @@ public class ATPTourController implements Initializable {
 	}
 
 
-
+	@SuppressWarnings("unchecked")
 	private void setupTable() throws SQLException {
 		MFXTableColumn<AtpMatch> tourneyNameColumn = new MFXTableColumn<>("tourney_name", true, Comparator.comparing(AtpMatch::getTourney_name));
 		MFXTableColumn<AtpMatch> tourneyDateColumn = new MFXTableColumn<>("tourney_date", true, Comparator.comparing(AtpMatch::getTourney_date));
@@ -104,7 +99,8 @@ public class ATPTourController implements Initializable {
 				new StringFilter<>("winner_name", AtpMatch::getWinnerName),
 				new StringFilter<>("loser_name", AtpMatch::getLoserName)
 		);
-//		atpTournamentViewTable.setItems(AtpMatchDao.getTournamentNames());
+
+//		atpTournamentViewTable.setItems();
 	}
 
 	public void AtpPlayersText(ActionEvent event) {

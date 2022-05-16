@@ -13,9 +13,11 @@ public class Tournament {
     public String tourney_level;
     public String score;
     public Player winner, loser;
-
+    public Object o1, o2;
     public Match match;
     List<Match> matches;
+
+    public List<Object[]> objA;
 
     public Tournament(String tourney_id, String tourney_name, String surface, String draw_size, String tourney_level, String tourney_date) {
         this.tourney_id = tourney_id;
@@ -24,6 +26,10 @@ public class Tournament {
         this.draw_size = draw_size;
         this.tourney_level = tourney_level;
         this.tourney_date = tourney_date;
+    }
+
+    public Tournament(Object o, Object o1) {
+        this.o1 = o; o2 = o1;
     }
 
 

@@ -20,13 +20,10 @@ import java.util.*;
 
 public class AtpMatchDao {
 
-    AtpMatchDao() {
-    }
+    AtpMatchDao() {}
     static List<Match> matchList;
 
     public static ObservableList<Match> matches = FXCollections.observableArrayList();
-
-    String grandPrix = "C:\\Users\\seost\\Downloads\\tennis_slam_pointbypoint-master\\tennis_slam_pointbypoint-master\\";
 
 
     public static List<File> getFilesFromFolder(String pathToFolder) throws IOException {
@@ -57,21 +54,6 @@ public class AtpMatchDao {
     private Result<Record> fetchRowsFromCsv(List<String[]> list, boolean header) {
         return null;
     }
-
-
-//    public static void main(String[] args) throws SQLException, IOException, CsvValidationException {
-//
-//        int valid = grandPrix.codePointAt(grandPrix.length()-1);
-//
-//    }
-
-
-//    public static ObservableList<Match> getSeasonTotal() {
-//        ObservableList<Match> seasonTotal = FXCollections.observableArrayList();
-//        return seasonTotal;
-//    }
-
-
 }
 
 

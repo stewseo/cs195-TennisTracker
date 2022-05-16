@@ -1,7 +1,5 @@
 module com.example.cs195tennis {
-    requires com.fasterxml.jackson.annotation;
-    requires com.fasterxml.jackson.databind;
-    requires com.fasterxml.jackson.core;
+    requires org.jdbi.v3.sqlobject;
     requires org.jooq.joor;
     requires org.jooq.meta;
     requires org.jooq;

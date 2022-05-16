@@ -18,9 +18,6 @@ public class PlayerRanking extends Player{
     public PlayerRanking(Player e) {}
 
 
-    public PlayerRanking(String tourney_id, String winner_id, String winner_rank_points, String winner_rank, String loser_id, String loser_rank_points, String loser_rank) {
-    }
-
     private void queryUsingNameAndId() {
 
     }

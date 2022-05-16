@@ -11,7 +11,6 @@ import javafx.collections.ObservableList;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,10 +19,10 @@ import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.example.cs195tennis.Dao.DataModel.TournamentTable.TOURNAMENT;
+import static com.example.cs195tennis.Dao.DataModel.TournamentTable.TOURNAMENT1;
+
 
 public class WtaPlayerDao {
-
 
     private static DSLContext create() {
         try(Connection conn = Database.connect()) {
@@ -48,12 +47,10 @@ public class WtaPlayerDao {
             while (rs.next()) {
                 System.out.println("wta player");
                 playerObservableList.add(new WtaPlayer(
-                        rs.getString(String.valueOf(TOURNAMENT.ID)),
-                        rs.getString(String.valueOf(TOURNAMENT.NAME)),
-                        rs.getString(String.valueOf(TOURNAMENT.SURFACE)),
-                        rs.getString(String.valueOf(TOURNAMENT.LEVEL)),
-                        rs.getString(String.valueOf(TOURNAMENT.DRAW_SIZE)),
-                        rs.getString(String.valueOf(TOURNAMENT.DATE))
+                        rs.getString(String.valueOf(TOURNAMENT1.ID)),
+                        rs.getString(String.valueOf(TOURNAMENT1.TOURNEY_NAME)),
+                        rs.getString(String.valueOf(TOURNAMENT1.DATE)),
+                        new String[]{}
                 ));
                 }
 

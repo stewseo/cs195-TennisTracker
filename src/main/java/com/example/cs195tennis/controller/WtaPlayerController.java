@@ -26,7 +26,6 @@ public class WtaPlayerController implements Initializable {
 
     ObservableList<WtaPlayer> wtaPlayerObservable;
 
-
     public MFXTextField testWtaPlayer;
 
     @FXML Label handleWtaPlayers;

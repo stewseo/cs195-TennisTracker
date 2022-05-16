@@ -9,7 +9,6 @@ public class Database {
     private static final String url = "jdbc:sqlite:Database/wta-tournaments.sqlite";
 
 
-
     public Database() throws SQLException {}
 
     public static Connection connect() {

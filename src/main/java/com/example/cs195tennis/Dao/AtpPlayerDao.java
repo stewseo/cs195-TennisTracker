@@ -85,9 +85,6 @@ public class AtpPlayerDao {
         return playerRanking;
     }
 
-//    String querys = " select" + lastName + " from " + "PLAYERS" + " join ranking on player.id = ranking.player_id where pos == 1 group by lastName; ";
-
-
     private ObservableList<String> getPlayerNames() {
 
         Set<String> set = new HashSet<>();
@@ -130,25 +127,6 @@ public class AtpPlayerDao {
         return playerObservableList;
     }
 
-//    public static List<String> query(String tourney_id, String[] s) throws SQLException {
-//
-//        System.out.println(tourney_id);
-//        Connection c = Database.connect();
-//        PreparedStatement ps = c.prepareStatement("Select * from AtpTournament");
-//        ResultSet rs = ps.executeQuery();
-//        List<String> l = new ArrayList<>();
-//
-//        while (rs.next()) {
-//
-//            for (int i = s.length - 1; i >= 0; i--) {
-//                if (!s[i].equals("")) {
-//                    System.out.println(rs.getString(s[i]));
-//                    l.add(rs.getString(s[i]));
-//                }
-//            }
-//        }
-//        return l;
-//    }
 }
 
 

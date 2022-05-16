@@ -5,8 +5,7 @@ import org.jooq.impl.CustomRecord;
 public class TournamentRecord extends CustomRecord<TournamentRecord> {
 
     protected TournamentRecord() {
-        super(TournamentTable.TOURNAMENT);
+        super(TournamentTable.TOURNAMENT1);
     }
-
 
 }

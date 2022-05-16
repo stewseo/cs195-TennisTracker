@@ -115,17 +115,6 @@ public class PlayerRankController implements Initializable {
     }
 
 
-//    String atpPlayers = "C:\\Users\\seost\\tennis_atp\\atp_players.csv";
-//     String grandPrix = "C:\\Users\\seost\\Downloads\\tennis_slam_pointbypoint-master\\tennis_slam_pointbypoint-master\\";
-
-
-
-
-
-//        DataHandeler.createTable("GrandSlamTournament", allMatchesCsv.get(0));
-//
-//        DataHandeler.create("GrandSlamTournament", (List<String[]>) csvList);
-
 
 }
 

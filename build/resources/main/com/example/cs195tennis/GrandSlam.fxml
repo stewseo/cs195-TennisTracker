@@ -37,6 +37,6 @@
     <MFXFilterComboBox fx:id="filterCombo" floatingText="Tournament"
                        GridPane.rowIndex="2" GridPane.columnIndex="5"/>
     <MFXButton id="Custom" buttonType="RAISED" minHeight="30.0" minWidth="70.0" text="Custom" GridPane.rowIndex="3"/>
-    <MFXTableView fx:id="wtaTouranmentTable" maxWidth="1000"  minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+    <MFXTableView fx:id="grandSlamTable" maxWidth="1000"  minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
                   prefWidth="900.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="5"/>
 </GridPane>
