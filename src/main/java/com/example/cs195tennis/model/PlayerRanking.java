@@ -20,7 +20,6 @@ public class PlayerRanking extends Player{
         return playerObj.firstName + " " + playerObj.getLastName();
     }
 
-
     public String getRanking_date() {
         return ranking_date;
     }
@@ -47,11 +46,7 @@ public class PlayerRanking extends Player{
 
     public PlayerRanking(Player e) {}
 
-
-
-    private void queryUsingNameAndId() {
-
-    }
+    private void queryUsingNameAndId() {}
 
     public String getPlayerWTARanking(){
         return rank;
@@ -64,6 +59,7 @@ public class PlayerRanking extends Player{
     public static String getRank() {
         return PlayerRanking.getRank();
     }
+
 
     public void setRank(String rank) {this.rank = rank;}
 

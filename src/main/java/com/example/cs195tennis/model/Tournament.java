@@ -45,7 +45,7 @@ public class Tournament {
 
     public Tournament(Field<?>[] fields) {
 
-        for(int i=0;i<6;i++){
+        for(int i=0; i<6; i++){
 
             this.tourney_id = fields[i].toString();
         }

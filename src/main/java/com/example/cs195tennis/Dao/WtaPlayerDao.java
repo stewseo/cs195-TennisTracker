@@ -21,11 +21,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.example.cs195tennis.Dao.DataModel.TournamentTable.TOURNAMENT1;
+import static java.awt.SystemColor.menu;
+import static javafx.scene.input.KeyCode.R;
 
 
 public class WtaPlayerDao {
 
     private static DSLContext create() {
+
         try (Connection conn = Database.connect()) {
 
             return DSL.using(conn, SQLDialect.SQLITE);
@@ -36,7 +39,6 @@ public class WtaPlayerDao {
         return null;
     }
 
-
     public static ObservableList<PlayerRanking> allTimeWtaRankings(String query) {
 
         ObservableList<PlayerRanking> playerObservableList = FXCollections.observableArrayList();
@@ -44,14 +46,12 @@ public class WtaPlayerDao {
         Result<?> result = create().select()
                 .from(TOURNAMENT1)
                 .fetch();
-
         System.out.println(result);
-
         Result<org.jooq.Record> rs = create().select().from(TOURNAMENT1).fetch();
-
         playerObservableList .addAll((PlayerRanking) create().select().from(TOURNAMENT1).fetch().stream().toList());
 
-        return playerObservableList;
+        return null;
+
 
     }
 }

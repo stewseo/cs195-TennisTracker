@@ -32,15 +32,11 @@ public class AtpTourDao {
 
     public static ObservableList<AtpMatch> getAtpTourObservable() {
         return null;
-
     }
-
 
     private Result<Record> fetchRowsFromCsv(List<String[]> list, boolean header) {
         return null;
     }
-
-
 
 }
 

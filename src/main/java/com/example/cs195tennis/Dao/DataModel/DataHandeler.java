@@ -1,58 +1,97 @@
 package com.example.cs195tennis.Dao.DataModel;
 
 import com.example.cs195tennis.database.Database;
-import com.example.cs195tennis.model.Match;
 import com.example.cs195tennis.model.Tournament;
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.jooq.*;
-import org.jooq.tools.jdbc.MockExecuteContext;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.sql.*;
-import java.sql.Statement;
-import java.time.LocalDateTime;
+import javafx.css.Selector;
+import org.jooq.DSLContext;
+import org.jooq.Field;
+import org.jooq.SQLDialect;
+import org.jooq.SelectQuery;
+import org.jooq.impl.DSL;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import static org.jooq.impl.DSL.table;
 import static org.jooq.impl.DSL.using;
 
-
 public class DataHandeler {
+
+    Selector dslContext;
 
     DataHandeler() {
     }
 
+    static void main(String[] args) {
+        DSLContext create = using(Database.connect(), SQLDialect.SQLITE);
+
+        int count = create.fetchCount(DSL.selectFrom("Tournament"));
+
+    }
 
     public static void createTable(String tableName, List<String> columns) throws SQLException {
-
         int number = columns.size();
 
+        ObservableList<Tournament> tournamentObservable;
+        Map<Object, List<Object >> mapToModel = new HashMap<>();
+
         StringBuilder queryBuilder = new StringBuilder("CREATE TABLE " + tableName + "(ID INT, ");
+
         int i = 0;
 
         columns.forEach(e -> {
-            queryBuilder.append(e).append(" TEXT");
-            if (i < number - 1) {
-                queryBuilder.append(", ");
-            }
-        });
 
-        queryBuilder.append(" PRIMARY KEY (ID))");
-        System.out.println(queryBuilder.toString());
-        Database.connect()
-                .prepareStatement(queryBuilder.toString())
-                .execute();
+            mapToModel.computeIfAbsent((e.toString()), v -> new ArrayList<>());
+
+            mapToModel.get(e.toString()).add(e);
+            queryBuilder.append(e).append(" TEXT");
+
+        });
     }
 
+
+
+//        FXCollections.observableArrayList();
+
+//        return ObservableList.addAll(table);
+
+
+    public static List<String> getColumnNames(Connection connection, String tableName) throws SQLException {
+        List<String> columnNames = new LinkedList<String>();
+        DatabaseMetaData dbm = connection.getMetaData();
+        ResultSet rs = dbm.getColumns(null, null, tableName, null);
+        while (rs.next()) {
+            String keyColumnName = rs.getString("COLUMN_NAME");
+            columnNames.add(keyColumnName);
+        }
+        rs.close();
+        return columnNames;
+    }
+
+
+    public <T> List<T> fetchUsingSelectStatement(SelectQuery<?> select, Class<T> clazz) {
+
+        DSLContext ctx = using(Database.connect(), SQLDialect.SQLITE);
+
+
+           DSLContext cst = using(Database.connect(), SQLDialect.SQLITE);
+           DSLContext context = null;
+
+           return null;
+
+        }
+
 }
+
+
+
+
+
+
+
 
 

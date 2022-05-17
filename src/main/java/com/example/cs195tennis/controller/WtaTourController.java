@@ -48,7 +48,7 @@ public class WtaTourController implements Initializable {
         Function<String, Predicate<PlayerRanking>> filterFunction = s -> playerRank -> StringUtils.containsIgnoreCase(converter.toString(playerRank), s);
 
         String input = handleWtaPlayers.getText();
-//        playerRankObservable = WtaPlayerDao.allTimeWtaRankings("Select * from WTATournament ");
+        playerRankObservable = WtaPlayerDao.allTimeWtaRankings("Select * from WTATournament ");
 
         System.out.println(WtaPlayerDao.allTimeWtaRankings("Select * from WTATournament "));
         filterPlayerRecentRanks.setItems(playerRankObservable);
@@ -63,16 +63,16 @@ public class WtaTourController implements Initializable {
         MFXTableColumn<PlayerRanking> playerNameColumn = new MFXTableColumn<>("first_name", true, Comparator.comparing(PlayerRanking::getFirstName));
         MFXTableColumn<PlayerRanking> playerRankColumn = new MFXTableColumn<>("rank", true, Comparator.comparing(PlayerRanking::getPlayerWTARanking));
         MFXTableColumn<PlayerRanking> playerRankPtsCol = new MFXTableColumn<>("points", true, Comparator.comparing(PlayerRanking::getPoints));
-//        MFXTableColumn<WtaPlayer> playerDobCol = new MFXTableColumn<>("dob", true, Comparator.comparing(PlayerRanking::getRank));
-//        MFXTableColumn<WtaPlayer> playerRankColumn = new MFXTableColumn<>("rank", true, Comparator.comparing(WtaPlayer::getRanking));
-//        MFXTableColumn<WtaPlayer> playerLocCol = new MFXTableColumn<>("player_ioc", true, Comparator.comparing(WtaPlayer::getIoc));
+        MFXTableColumn<PlayerRanking> playerDobCol = new MFXTableColumn<>("dob", true, Comparator.comparing(PlayerRanking::getRank));
+        MFXTableColumn<PlayerRanking> playerRankColumn = new MFXTableColumn<>("rank", true, Comparator.comparing(WtaPlayer::getRanking));
+        MFXTableColumn<PlayerRanking> playerLocCol = new MFXTableColumn<>("player_ioc", true, Comparator.comparing(WtaPlayer::getIoc));
 
         playerNameColumn.setRowCellFactory(player -> new MFXTableRowCell<>(PlayerRanking::getFirstName));
         playerRankColumn.setRowCellFactory(match -> new MFXTableRowCell<>(PlayerRanking::getPlayerWTARanking));
         playerRankPtsCol.setRowCellFactory(match -> new MFXTableRowCell<>(PlayerRanking::getPoints)
-//        playerLocCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getDob));
-//        playerRankColumn.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getRank));
-//        playerHeightCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getRank)
+        playerLocCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getDob));
+        playerRankColumn.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getRank));
+        playerHeightCol.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getRank)
 
         {{
             setAlignment(Pos.CENTER_RIGHT);
@@ -84,9 +84,9 @@ public class WtaTourController implements Initializable {
                 new StringFilter<>("first_name", PlayerRanking::getFirstName),
                 new StringFilter<>("rank", PlayerRanking::getPlayerWTARanking),
               new StringFilter<>("points", PlayerRanking::getPlayerWTARanking)
-//                new StringFilter<>("Date of Birth", WtaPlayer::getDob),
-//                new StringFilter<>("Country", WtaPlayer::getRanking),
-//                new StringFilter<>("Current Rank", WtaPlayer::getIoc)
+                new StringFilter<>("Date of Birth", PlayerRanking::getDob),
+                new StringFilter<>("Country", PlayerRanking::getRanking),
+                new StringFilter<>("Current Rank", PlayerRanking::getIoc)
         );
         playerRankingTable.setItems(playerRankObservable);
     }

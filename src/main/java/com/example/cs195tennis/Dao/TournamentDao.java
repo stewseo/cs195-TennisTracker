@@ -1,5 +1,4 @@
 package com.example.cs195tennis.Dao;
-import com.example.cs195tennis.Dao.DataModel.DataHandeler;
 import com.example.cs195tennis.Dao.DataModel.TournamentRecord;
 import com.example.cs195tennis.Dao.DataModel.TournamentTable;
 import com.example.cs195tennis.database.Database;
@@ -16,6 +15,7 @@ import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
+import org.jooq.meta.sqlite.SQLiteDatabase;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -33,9 +33,8 @@ import static org.jooq.impl.DSL.using;
 
 public class TournamentDao {
 
-
     static DSLContext create() {
-        try(Connection conn = Database.connect()) {
+        try (Connection conn = Database.connect()) {
 
             return using(conn, SQLDialect.SQLITE);
 
@@ -44,9 +43,11 @@ public class TournamentDao {
         }
         return null;
     }
-    
-    public void getTournamentObservable() throws SQLException {
 
+    public static ObservableList<Tournament> getTournamentObservable() throws SQLException {
+
+        Map<String, List<Tournament>> map = new LinkedHashMap<>();
+        return null;
 
     }
 
@@ -58,6 +59,7 @@ public class TournamentDao {
             String[] values = null;
 
             while ((values = csvReader.readNext()) != null) {
+
                 allMatchesCsv.add(Arrays.asList(values));
             }
         } catch (IOException | CsvValidationException e) {
@@ -65,19 +67,18 @@ public class TournamentDao {
         }
         return allMatchesCsv;
     }
-
     static String GRAND_SLAM = "GrandSlam";
-    
+
+
     public static <R> ObservableList<Tournament> grandSlamTournamentsObservable() throws SQLException {
 
         ObservableList<Tournament> grandSlamObservable = FXCollections.observableArrayList();
 
         Map<Object, List<Object>> map = new HashMap<>();
 
-
         Result<TournamentRecord> tournaments = create().selectQuery(TOURNAMENT1).fetch();
 
-        System.out.println(tournaments);
+        System.out.println("fetched " + tournaments);
 
         Result<Record> result =
                 create().select()
@@ -88,7 +89,7 @@ public class TournamentDao {
 
             if (e == null) return;
 
-            Object o2 = (Object)e;
+            Object o2 = (Object) e;
 
             Field<?> field;
 
@@ -100,26 +101,27 @@ public class TournamentDao {
 
             map.get(field("id")).add(e);
 
-            });
+        });
 
-            map.forEach((k,v)-> v.forEach(System.out::println));
+        map.forEach((k, v) -> v.forEach(System.out::println));
 
-            System.out.println("test " );
+        System.out.println("test ");
 
 
-//            yournaments = TournamentDao.getAllTournamentFieldsObservable();
-//        tournaments.forEach(t -> {
-//
-//            Integer id = t.getValue(TOURNAMENT1.ID);
-//            String tourneyName = t.getValue(TOURNAMENT1.TOURNEY_NAME);
-//            String surface = t.getValue(TOURNAMENT1.SURFACE);
-//            String level = t.getValue(TOURNAMENT1.LEVEL);
-//            String tourneyDate = t.getValue(TOURNAMENT1.DATE);
-//        });
-//        grandSlamObservable.addAll( );
+       TournamentDao.getAllTournamentFieldsObservable();
+        tournaments.forEach(t -> {
+            System.out.println();
+            Integer id = t.getValue(TOURNAMENT1.ID);
+            String tourneyName = t.getValue(TOURNAMENT1.TOURNEY_NAME);
+            String surface = t.getValue(TOURNAMENT1.SURFACE);
+            String level = t.getValue(TOURNAMENT1.LEVEL);
+            String tourneyDate = t.getValue(TOURNAMENT1.DATE);
+        });
+        grandSlamObservable.addAll();
         return grandSlamObservable;
-
     }
+
+
 
     public static ObservableList<Tournament> getAllTournamentFieldsObservable() throws SQLException {
 
@@ -130,6 +132,26 @@ public class TournamentDao {
         return wtaResultsObservable;
     }
 
+    public <T> List<T> fetchUsingSelectStatement(SelectQuery<?> select, Class<T> clazz) {
+
+        if(select == null) {
+            return null;
+        }
+
+//        List<T> list = new ArrayList<T>(clazz);
+
+        DSLContext ctx = using(Database.connect(), SQLDialect.SQLITE);
+
+        try (Connection connection = Database.connect()) {
+
+            DSLContext create = using(connection, SQLDialect.SQLITE);
+
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+
+    }
 }
 
 

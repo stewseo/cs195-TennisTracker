@@ -1,10 +1,4 @@
 module com.example.cs195tennis {
-    requires org.simpleflatmapper.map;
-    requires org.simpleflatmapper.jooq;
-    requires org.simpleflatmapper.jdbc;
-    requires org.simpleflatmapper.reflect;
-    requires org.simpleflatmapper.converter;
-    requires org.simpleflatmapper.util;
     requires org.jooq.joor;
     requires org.jooq.meta;
     requires org.jooq;

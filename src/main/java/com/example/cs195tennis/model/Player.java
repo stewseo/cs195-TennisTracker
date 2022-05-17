@@ -1,4 +1,5 @@
 package com.example.cs195tennis.model;
+
 import java.util.Objects;
 
 public class Player {
@@ -21,10 +22,12 @@ public class Player {
             this.firstName = firstName;
         }
 
-    public Player(String ranking_date, String rank, String player, String points) {
-    }
 
-    public Player(int hash, PlayerRanking playerRanking, String concat, boolean add) {
+    public Player(String id, String firstName, String lastName) {
+        this.player_id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+
     }
 
     static String fullName(){
@@ -33,15 +36,7 @@ public class Player {
 
     @Override
     public String toString(){
-        StringBuilder sb = new StringBuilder(firstName).append(" ").append(lastName);
-            return sb.toString();
-        }
-
-    public Player(String id, String firstName, String lastName) {
-        this.player_id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-
+        return firstName  + " " +  lastName;
     }
 
     public String getFirstName() {
