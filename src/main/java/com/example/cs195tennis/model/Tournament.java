@@ -1,3 +1,4 @@
+
 package com.example.cs195tennis.model;
 
 import com.example.cs195tennis.database.Database;
@@ -7,7 +8,6 @@ import org.jooq.Field;
 import org.jooq.Query;
 import org.jooq.SQLDialect;
 import org.sqlite.SQLiteLimits;
-
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;

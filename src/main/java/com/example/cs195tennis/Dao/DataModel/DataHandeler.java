@@ -21,10 +21,8 @@ import static org.jooq.impl.DSL.using;
 
 public class DataHandeler {
 
-    Selector dslContext;
+    Selector dslConte;
 
-    DataHandeler() {
-    }
 
     static void main(String[] args) {
         DSLContext create = using(Database.connect(), SQLDialect.SQLITE);
@@ -48,16 +46,12 @@ public class DataHandeler {
             mapToModel.computeIfAbsent((e.toString()), v -> new ArrayList<>());
 
             mapToModel.get(e.toString()).add(e);
+
             queryBuilder.append(e).append(" TEXT");
 
         });
     }
 
-
-
-//        FXCollections.observableArrayList();
-
-//        return ObservableList.addAll(table);
 
 
     public static List<String> getColumnNames(Connection connection, String tableName) throws SQLException {
@@ -73,14 +67,13 @@ public class DataHandeler {
     }
 
 
-    public <T> List<T> fetchUsingSelectStatement(SelectQuery<?> select, Class<T> clazz) {
+    public <T> List<T> fetchWithSelect(SelectQuery<?> select, Class<T> clazz) {
 
         DSLContext ctx = using(Database.connect(), SQLDialect.SQLITE);
 
 
            DSLContext cst = using(Database.connect(), SQLDialect.SQLITE);
            DSLContext context = null;
-
            return null;
 
         }

@@ -44,7 +44,6 @@ public class TournamentTable extends CustomTable<TournamentRecord> {
 
         }
     }
-
     protected TournamentTable() {super(name("GrandSlam"));}
 
     @Override

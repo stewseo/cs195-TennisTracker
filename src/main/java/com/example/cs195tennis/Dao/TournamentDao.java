@@ -1,4 +1,6 @@
 package com.example.cs195tennis.Dao;
+
+public class Tournament
 import com.example.cs195tennis.Dao.DataModel.TournamentRecord;
 import com.example.cs195tennis.Dao.DataModel.TournamentTable;
 import com.example.cs195tennis.database.Database;

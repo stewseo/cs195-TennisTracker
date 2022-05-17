@@ -43,22 +43,22 @@ public class GrandSlamController implements Initializable {
 
     @FXML private MFXTextField textField;
 
-    ObservableList<Tournament> tournamentObservable = null;
 
     @Override public void initialize(URL location, ResourceBundle resources) {
 
+
         custDatePicker.setGridAlgorithm(DateTimeUtils::partialIntMonthMatrix);
+
         custDatePicker.setConverterSupplier(() -> new DateStringConverter("dd/MM/yyyy", custDatePicker.getLocale()));
 
         try {
             tournamentObservable = TournamentDao.getTournamentObservable();
             setupTable();
 
-        } catch (SQLException e) {System.out.println(e);
+        } catch (SQLException e) {System.out.println();
             e.printStackTrace();
         }
-//        StringConverter<Tournament> dateC = FunctionalStringConverter.to(e -> (e == null) ? "" : e.getTourney_date())
-//       ;
+//
         StringConverter<Tournament> converter = FunctionalStringConverter.to(e -> (e == null) ? "" : e.getTourney_name());
 
         Function<String, Predicate<Tournament>> filterTournaments = s -> e -> StringUtils.containsIgnoreCase(converter.toString(e), s);
@@ -80,20 +80,20 @@ public class GrandSlamController implements Initializable {
 
         MFXTableColumn<Tournament> c1 = new MFXTableColumn<>("Tourney_name", true, Comparator.comparing(Tournament::getTourney_name));
         MFXTableColumn<Tournament> c2 = new MFXTableColumn<>("Date", true, Comparator.comparing(Tournament::getTourney_date));
-//        MFXTableColumn<Tournament> c3 = new MFXTableColumn<>("Winner", true, Comparator.comparing(Tournament::getWinnerFullName));
-//        MFXTableColumn<Tournament> c4 = new MFXTableColumn<>("Loser", true, Comparator.comparing(Tournament::getLoserFullName));
-//        MFXTableColumn<Tournament> c5 = new MFXTableColumn<>("Level", true, Comparator.comparing(Tournament::getTourney_level));
-//        MFXTableColumn<Tournament> c6 = new MFXTableColumn<>("Surface", true, Comparator.comparing(Tournament::getSurface));
-//        MFXTableColumn<Tournament> c7 = new MFXTableColumn<>("Draw Size", true, Comparator.comparing(Tournament::getDraw_size));
+        MFXTableColumn<Tournament> c3 = new MFXTableColumn<>("Winner", true, Comparator.comparing(Tournament::getWinnerFullName));
+        MFXTableColumn<Tournament> c4 = new MFXTableColumn<>("Loser", true, Comparator.comparing(Tournament::getLoserFullName));
+        MFXTableColumn<Tournament> c5 = new MFXTableColumn<>("Level", true, Comparator.comparing(Tournament::getTourney_level));
+        MFXTableColumn<Tournament> c6 = new MFXTableColumn<>("Surface", true, Comparator.comparing(Tournament::getSurface));
+        MFXTableColumn<Tournament> c7 = new MFXTableColumn<>("Draw Size", true, Comparator.comparing(Tournament::getDraw_size));
             System.out.println();
 
         c1.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getTourney_name));
-        c2.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getTourney_date)
-//        c3.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getWinnerFullName));
-//        c4.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getLoserFullName));
-//        c5.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getTourney_level));
-//        c6.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getSurface));
-//        c7.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getDraw_size)
+        c2.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getTourney_date));
+        c3.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getWinnerFullName)
+        c4.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getLoserFullName));
+        c5.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getTourney_level));
+        c6.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getSurface));
+        c7.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getDraw_size)
         {{
             setAlignment(Pos.CENTER_RIGHT);
         }});
@@ -101,20 +101,17 @@ public class GrandSlamController implements Initializable {
 
         grandSlamTable.getTableColumns().addAll(c1, c2);
         grandSlamTable.getFilters().addAll(
-                new StringFilter<>("GrandSlam.tourney_name", Tournament::getTourney_name),
-                new StringFilter<>("GrandSlam.surface", Tournament::getTourney_date)
-//                new StringFilter<>("GrandSlam.Draw Size", Tournament::getWinnerFullName),
-//                new StringFilter<>("GrandSlam.level",Tournament::getLoserFullName),
-//                new StringFilter<>("GrandSlam.Winner",Tournament::getTourney_level),
-//                new StringFilter<>("GrandSlam.Loser",Tournament::getSurface),
-//                new StringFilter<>("GrandSlam.Loser",Tournament::getDraw_size)
-        );
-        grandSlamTable.setItems(tournamentObservable);
-    }
+                new StringFilter<>("GrandSlam.tourney_name", Tournament::getTourney_name));
+                new StringFilter<>("GrandSlam.surface", Tournament::getTourney_date));
+                new StringFilter<>("GrandSlam.Draw Size", Tournament::getWinnerFullName))
+                new StringFilter<>("GrandSlam.level",Tournament::getLoserFullName),
+                new StringFilter<>("GrandSlam.Winner",Tournament::getTourney_level),
+                new StringFilter<>("GrandSlam.Loser",Tournament::getSurface));
 
-    public void handleTextEntry(ActionEvent event) {}
+        grandSlamTable.setItems(tournamentObservable);
+    public void handleTextEntry(ActionEvent event))};
+
 
 
 }
-
 

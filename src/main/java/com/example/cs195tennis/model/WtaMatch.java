@@ -11,10 +11,15 @@ public class WtaMatch extends Match {
 
     public String match_id, match_num, winner_id, loser_id, round;
 
-    public WtaMatch(String key, String tourney_name, String date) {}
+    public WtaMatch(String key, String tourney_name, String date) {
+        super();
+    }
+
+    Map<String, List<String> matchStats;
 
 
     public WtaMatch(String tourney_id, String tourney_name, String tourney_date, String winner_name, String loser_name, String score, String round, String winner_id, String loser_id) {
+        super();
         this.tourney_id = tourney_id;
         this.tourney_name = tourney_name;
         this.tourney_date = tourney_name;
@@ -25,16 +30,19 @@ public class WtaMatch extends Match {
     }
 
     public WtaMatch(String tourney_id, String tourney_name, String surface, String draw_size, String tourney_level, String tourney_date) {
+        super();
         this.tourney_id = tourney_id;
         this.tourney_name = tourney_name;
         this.surface = surface;
-        this.draw_size = draw_size;
-        this.tourney_level = tourney_level;
-        this.tourney_date = tourney_date;
+        this.score = score;
+        this.round = round;
+        this.winner_id = winner_id;
+        this.loser_id = loser_id;
+
+
     }
 
 }
-
 
 
 
