@@ -15,6 +15,9 @@ public class PlayerRanking extends Player{
         this.rankingPoints = points;
     }
 
+    public String toString() {
+        return playerId + " " +  rankDate;
+    }
     public String getPlayerRank() {
         return playerRank;
     }

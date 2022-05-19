@@ -41,7 +41,10 @@ public class PlayerRankingController implements Initializable {
 
     private void grandSlamFilters() {
         StringConverter<PlayerRanking> converter =
-                FunctionalStringConverter.to(e->(e==null) ? "" : e.getFirstName() + " " + e.getLastName());
+                FunctionalStringConverter.to(e->(e==null) ? "" : "player id: " + e.getPlayerId() + " " + e.getPlayerRank());
+
+        StringConverter<PlayerRanking> converterRank =
+                FunctionalStringConverter.to(e->(e==null) ? "" : "rank date: " + e.getRankDate());
 
         Function<String, Predicate<PlayerRanking>> filterFunction =
                 s ->
@@ -61,7 +64,7 @@ public class PlayerRankingController implements Initializable {
         filterCombo.setFilterFunction(filterFunction);
 
         custFilterCombo.setItems(observablePlayerRank);
-        custFilterCombo.setConverter(converter);
+        custFilterCombo.setConverter(converterRank);
         custFilterCombo.setFilterFunction(filterFunction);
         custFilterCombo.setResetOnPopupHidden(false);
     }

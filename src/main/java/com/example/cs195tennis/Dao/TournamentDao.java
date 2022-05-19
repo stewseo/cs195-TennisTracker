@@ -55,10 +55,12 @@ public class TournamentDao {
             String date = e.getValue("tourney_name").toString();
             String winnerName = e.getValue("winner_name").toString();
             String loserName = e.getValue("loser_name").toString();
-            String level = e.getValue("tourney_level").toString();
+            String tourney_level = e.getValue("tourney_level").toString();
+            System.out.println(tourney_level);
+            String surface = e.getValue("surface").toString();
             String drawSize = e.getValue("draw_size").toString();
 
-            temp.add(new Tournament(id, name, date, winnerName, loserName, level, drawSize));
+            temp.add(new Tournament(id, name, date, winnerName, loserName, tourney_level,surface, drawSize));
 
         });
         return temp;

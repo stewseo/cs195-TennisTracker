@@ -46,8 +46,8 @@ public class PlayerDao {
 
         System.out.println(r);
 
+//        Result<Record> playerTable = ctx().select().from("AtpPlayer").join("AtpPlayerRanking").on("player_id").fetch();
         Result<Record> playerTable = ctx().select().from("AtpPlayer").fetch();
-
         AtomicInteger i = new AtomicInteger();
 
         playerTable.stream().filter(Objects::nonNull).forEach(e -> {

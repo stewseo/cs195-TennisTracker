@@ -61,14 +61,15 @@ public class Tournament {
 
     Query query = ctx.select();
 
-    public Tournament(Object o, Object o1, Object o2, Object o3, Object o4, Object o5, String strings) {
-        this.tourney_name = o.toString();
-        this.tourney_id = o1.toString();
-        this.tourney_name = o2.toString();
-        this.tourney_date = o3.toString();
-        this.winner = o4.toString();
-        this.loser = o5.toString();
-        this.draw_size = strings;
+    public Tournament(String tourney_id, String tourney_name, String tourney_date, String winner_name, String loser_name, String tourney_level, String surface, String draw_size) {
+        this.tourney_id = tourney_id;
+        this.tourney_name = tourney_name;
+        this.tourney_date = tourney_date;
+        this.winner = winner_name;
+        this.loser = loser_name;
+        this.tourney_level = tourney_level;
+        this.surface = surface;
+        this.draw_size = draw_size;
     }
 
     List<String> list;

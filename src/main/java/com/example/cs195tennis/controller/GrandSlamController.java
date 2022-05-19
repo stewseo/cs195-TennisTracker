@@ -108,12 +108,12 @@ public class GrandSlamController implements Initializable {
 
         grandSlamTable.getTableColumns().addAll(c1, c2, c3, c4, c5, c6);
         grandSlamTable.getFilters().addAll(
-                new StringFilter<>("tourney_name",Tournament::getTourney_name));
-            new StringFilter<>("tourney_date",Tournament::getTourney_date);
-            new StringFilter<>("winner",Tournament::getWinner);
-            new StringFilter<>("loser",Tournament::getLoser);
-            new StringFilter<>("Tourney_level",Tournament::getTourney_level);
-        new StringFilter<>("surface",Tournament::getSurface);
+                new StringFilter<>("tourney_name",Tournament::getTourney_name),
+            new StringFilter<>("tourney_date",Tournament::getTourney_date),
+            new StringFilter<>("winner",Tournament::getWinner),
+            new StringFilter<>("loser",Tournament::getLoser),
+            new StringFilter<>("Tourney_level",Tournament::getTourney_level),
+        new StringFilter<>("Surface",Tournament::getSurface));
 
         ObservableList<Tournament> observableGrandSlams = FXCollections.observableArrayList();
         observableGrandSlams = TournamentDao.populateGrandSlam();

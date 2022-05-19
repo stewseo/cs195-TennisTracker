@@ -16,6 +16,22 @@ public class AtpPlayer extends Player {
 
     static List<Player> playerStats;
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
     public AtpPlayer(String playerId, String firstName, String lastName, String fullName, String hand, String dob, String ioc, String height, String wiki) {
         this.player_id = playerId;
         this.firstName = firstName;
@@ -105,21 +121,7 @@ public class AtpPlayer extends Player {
         this.height = height;
     }
 
-    public String getCountry() {
-        return country;
-    }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
 
     public String getHand() {
         return hand;
