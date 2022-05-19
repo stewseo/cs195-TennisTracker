@@ -10,21 +10,35 @@ import java.util.function.ToLongFunction;
 
 public class AtpPlayer extends Player {
 
-    public String firstName, lastName, height, player_id,ioc, dob, hand, wiki, ranking, fullName;
+    public String firstName, lastName, height, player_id, country, dateOfBirth, hand, wiki, ranking, fullName;
 
     static PlayerRanking atp;
 
     static List<Player> playerStats;
 
-    public AtpPlayer(String playerId, String firstName, String lastName, String hand, String dob, String ioc, String height, String wiki) {
+    public AtpPlayer(String playerId, String firstName, String lastName, String fullName, String hand, String dob, String ioc, String height, String wiki) {
         this.player_id = playerId;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.fullName = fullName;
         this.hand = hand;
-        this.dob = dob;
-        this.ioc = ioc;
+        this.country = dob;
+        this.dateOfBirth = ioc;
         this.height = height;
         this.wiki = wiki;
+    }
+
+    public AtpPlayer(String id, String firstName, String lastName, String fullName, String dominantHand, String location) {
+        this.player_id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.fullName = fullName;
+        this.hand = dominantHand;
+        this.country = location;
+    }
+
+    public String toString() {
+        return this.firstName + " " + this.lastName;
     }
 
     public String getPlayer_id() {
@@ -91,20 +105,20 @@ public class AtpPlayer extends Player {
         this.height = height;
     }
 
-    public String getIoc() {
-        return ioc;
+    public String getCountry() {
+        return country;
     }
 
-    public void setIoc(String ioc) {
-        this.ioc = ioc;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
-    public String getDob() {
-        return dob;
+    public String getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setDob(String dob) {
-        this.dob = dob;
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getHand() {
@@ -122,7 +136,6 @@ public class AtpPlayer extends Player {
     public void setWiki(String wiki) {
         this.wiki = wiki;
     }
-
 
     public String getRanking(){
         return ranking;

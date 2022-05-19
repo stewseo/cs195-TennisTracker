@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <GridPane alignment="TOP_CENTER" hgap="10.0" styleClass="grid-pane" stylesheets="@ComboBoxes.css" vgap="10.0"
           xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="com.example.cs195tennis.controller.PlayerRankController">
+          fx:controller="com.example.cs195tennis.controller.PlayerRankingController">
     <columnConstraints>
         <ColumnConstraints halignment="CENTER" minWidth="10.0"/>
     </columnConstraints>
@@ -29,9 +29,9 @@
     </Label>
     <MFXTextField fx:id="textAtpPlayer" onAction="#handleAtpPlayer" promptText="Enter Player Name" stylesheets="@TextFields.css"
                   GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-    <Label id="validationLabel" fx:id="atpPlayerValidation" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+    <Label id="validationLabel" fx:id="validateAtpPlayer" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
            textFill="#ef6e6b" visible="false" wrapText="true"/>
-    <MFXDatePicker id="custDatePicker" fx:id="atpPlayerDate" closePopupOnChange="false" floatMode="INLINE"
+    <MFXDatePicker id="custDatePicker" fx:id="custDatePicker" closePopupOnChange="false" floatMode="INLINE"
                    floatingText="Date Range"
                    GridPane.rowIndex="2" GridPane.columnIndex="3"/>
     <MFXFilterComboBox id="customFilter" fx:id="custFilterCombo" floatMode="DISABLED" promptText="Atp layerAnalytics"
@@ -39,6 +39,6 @@
     <MFXFilterComboBox fx:id="filterCombo" floatingText="AtpPlayers"
                        GridPane.rowIndex="2" GridPane.columnIndex="5"/>
     <MFXButton id="Custom" buttonType="RAISED" minHeight="50.0" minWidth="70.0" text="Search Button" GridPane.rowIndex="3"/>
-    <MFXTableView fx:id="table" maxWidth="1000"  minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+    <MFXTableView fx:id="atpPlayerTable" maxWidth="1000"  minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
                   prefWidth="900.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="5"/>
 </GridPane>

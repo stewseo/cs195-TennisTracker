@@ -6,8 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.jooq.Record;
 import org.jooq.Result;
-import org.jooq.exception.DataAccessException;
-import org.jooq.tools.csv.CSVReader;
 
 import java.io.*;
 import java.io.File;
@@ -17,14 +15,11 @@ import java.nio.file.Paths;
 import java.util.*;
 
 
-public class AtpTourDao {
+public class AtpPlayerDao {
 
-    AtpTourDao() {}
-
-    public static final ObservableList<Tournament> observableTournaments;
+    AtpPlayerDao() {}
 
     static {
-        observableTournaments = FXCollections.observableArrayList(TournamentTable.TOURNAMENT.createGrandSlamHistory());
         updateTournaments();
     }
 

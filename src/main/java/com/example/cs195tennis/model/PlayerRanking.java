@@ -4,53 +4,60 @@ import java.sql.SQLException;
 
 public class PlayerRanking extends Player{
 
-    public String rank,ranking_date,player,points;
+    public String playerRank, rankDate, playerId,rankingPoints;
     private static Player playerObj;
 
     public PlayerRanking(String ranking_date, String rank, String player, String points) {
 
-        this.rank = rank;
-        this.ranking_date = ranking_date;
-        this.player = player;
-        this.points = points;
-        playerObj = new Player(player);
+        this.playerRank = rank;
+        this.rankDate = ranking_date;
+        this.playerId = player;
+        this.rankingPoints = points;
     }
 
-    public static String getFullName() {
-        return playerObj.firstName + " " + playerObj.getLastName();
+    public String getPlayerRank() {
+        return playerRank;
     }
 
-    public String getRanking_date() {
-        return ranking_date;
+    public void setPlayerRank(String playerRank) {
+        this.playerRank = playerRank;
     }
 
-    public void setRanking_date(String ranking_date) {
-        this.ranking_date = ranking_date;
+    public String getRankDate() {
+        return rankDate;
     }
 
-    public String getPlayer() {
-        return player;
+    public void setRankDate(String rankDate) {
+        this.rankDate = rankDate;
     }
 
-    public void setPlayer(String player) {
-        this.player = player;
+    public String getPlayerId() {
+        return playerId;
     }
 
-    public String getPoints() {
-        return points;
+    public void setPlayerId(String playerId) {
+        this.playerId = playerId;
     }
 
-    public void setPoints(String points) {
-        this.points = points;
+    public String getRankingPoints() {
+        return rankingPoints;
+    }
+
+    public void setRankingPoints(String rankingPoints) {
+        this.rankingPoints = rankingPoints;
+    }
+
+    public static Player getPlayerObj() {
+        return playerObj;
+    }
+
+    public static void setPlayerObj(Player playerObj) {
+        PlayerRanking.playerObj = playerObj;
     }
 
     public PlayerRanking(Player e) {}
 
     private void queryUsingNameAndId() {}
-
-    public String getPlayerWTARanking(){
-        return rank;
-    }
 
 
     public PlayerRanking(){
@@ -59,10 +66,6 @@ public class PlayerRanking extends Player{
     public static String getRank() {
         return PlayerRanking.getRank();
     }
-
-
-    public void setRank(String rank) {this.rank = rank;}
-
 
 
 

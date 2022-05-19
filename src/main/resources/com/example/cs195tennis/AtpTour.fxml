@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <GridPane alignment="TOP_CENTER" hgap="10.0" styleClass="grid-pane" stylesheets="@ComboBoxes.css" vgap="10.0"
           xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="com.example.cs195tennis.controller.ATPTourController">
+          fx:controller="com.example.cs195tennis.controller.PlayerRankingController">
     <columnConstraints>
         <ColumnConstraints halignment="CENTER" minWidth="10.0"/>
     </columnConstraints>

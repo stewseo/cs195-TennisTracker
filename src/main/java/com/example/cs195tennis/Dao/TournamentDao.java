@@ -30,7 +30,6 @@ public class TournamentDao {
 
         populateGrandSlam();
 
-
         System.out.println("meta master table: " + r);
     }
 
@@ -82,12 +81,9 @@ public class TournamentDao {
 
         Result<Record> atpTournament = ctx().select().from("Tournament").fetch();
         System.out.println("size of Tournament" +atpTournament.size());
-
     }
 
-
 }
-
 
 
 
