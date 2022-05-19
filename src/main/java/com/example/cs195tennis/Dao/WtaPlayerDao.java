@@ -1,6 +1,8 @@
 package com.example.cs195tennis.Dao;
 
+import com.example.cs195tennis.Dao.DataModel.DataHandeler;
 import com.example.cs195tennis.database.Database;
+import com.example.cs195tennis.model.AtpPlayer;
 import com.example.cs195tennis.model.Player;
 import com.example.cs195tennis.model.PlayerRanking;
 import com.example.cs195tennis.model.WtaPlayer;
@@ -9,71 +11,91 @@ import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.jooq.DSLContext;
+import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
+
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static com.example.cs195tennis.Dao.DataModel.TournamentTable.TOURNAMENT1;
-import static java.awt.SystemColor.menu;
-import static javafx.scene.input.KeyCode.R;
-
+import static org.jooq.impl.DSL.using;
 
 public class WtaPlayerDao {
+    public static ObservableList<WtaPlayer> playerObservableList = FXCollections.observableArrayList();
+    public static ObservableList<PlayerRanking> playerRanking = FXCollections.observableArrayList();
+    private static String mainTable = "Player";
+    private static final String id = "id", firstName = "firstName", lastName = "lastName", hand = "hand";
+    private static final String dob = "dob";
+    private static final String ioc = "ioc";
+    private static final String height = "height";
+    private static final String wikiData_id = "wikidata_id";
+    private static final String player_Rank_Id = "ID";
 
-    private static DSLContext create() {
+    static String rankingTable = "Player_Rank";
 
-        try (Connection conn = Database.connect()) {
+    static String rankCsv = "C:\\Users\\seost\\cs195TennisAnalytics\\cs195-TennisTracker\\src\\main\\resources\\com\\example\\cs195tennis\\atp_rankings_current.csv";
 
-            return DSL.using(conn, SQLDialect.SQLITE);
 
+    public static Map<String, List<WtaPlayer>> getRankingList() {
+
+        String query = "Select * From " + "WtayerRanking";
+
+        Map<String, List<WtaPlayer>> currentRank = new HashMap<>();
+
+        try (Connection connection = Database.connect()) {
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+
+                String id = rs.getString("ranking_date") + rs.getString("player");
+
+                int key = Integer.parseInt(rs.getString("ranking_date") + rs.getString("player"));
+
+                key ^= key >>> 16;
+
+                System.out.println("key " + key);
+
+                currentRank.computeIfAbsent(id, k -> new ArrayList<>());
+
+                currentRank.get(rs.getString("ranking_date")).add(new WtaPlayer(
+                        rs.getString("ranking_date"),
+                        rs.getString("rank"),
+                        rs.getString("player"),
+                        rs.getString("points")));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return currentRank;
     }
 
-    public static ObservableList<PlayerRanking> allTimeWtaRankings(String query) {
+    String querys = " select" + lastName + " from " + "PLAYERS" + " join ranking on player.id = ranking.player_id where pos == 1 group by lastName; ";
 
-        ObservableList<PlayerRanking> playerObservableList = FXCollections.observableArrayList();
+    static ObservableList<PlayerRanking> getPlayerRanks() throws SQLException {
+        playerRanking = DataHandeler.getPlayerRanks();
 
-        Result<?> result = create().select()
-                .from(TOURNAMENT1)
-                .fetch();
-        System.out.println(result);
-        Result<org.jooq.Record> rs = create().select().from(TOURNAMENT1).fetch();
-        playerObservableList .addAll((PlayerRanking) create().select().from(TOURNAMENT1).fetch().stream().toList());
+        return playerRanking;
+    }
 
-        return null;
+    private void catalogueWta() {
+        Result<Record> wtaPlayers = ctx().select().from("WtaPlayers").fetch();
+        System.out.println("size of wta players " + wtaPlayers.size());
+        Result<Record> wtaRank = ctx().select().from("WtaRank").fetch();
+        System.out.println("size of wta rankings " + wtaRank.size());
+        Result<Record> wtaTournament = ctx().select().from("WTATournament").fetchSize(100).fetch();
+        System.out.println("size of wta tournaments " + wtaTournament.size());
+    }
 
+
+    private DSLContext ctx() {
+        DSLContext ctx = using(Database.connect(), SQLDialect.SQLITE);
+        return ctx;
     }
 }
-
-
-//    public void insert(String csv) throws SQLException, IOException, CsvValidationException {
-//
-//        List<File> filesInFolder = Files.walk(Paths.get("C:\\Users\\seost\\Downloads\\tennis_slam_pointbypoint-master\\tennis_slam_pointbypoint-master\\"))
-//                .filter(Files::isRegularFile)
-//                .map(Path::toFile).collect(Collectors.toList());
-//
-//        filesInFolder.forEach(System.out::println);
-//
-//        List<List<String>> allMatchesCsv = new ArrayList<List<String>>();
-//
-//
-//        List<String[]> csvList = new ArrayList<>();
-//
-//        String[] values = null;
-//
-//        int i = 0;
-
-
 
 
 

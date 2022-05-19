@@ -2,7 +2,11 @@ package com.example.cs195tennis.model;
 
 import java.util.Objects;
 
-public class Player {
+public class Player{
+
+    static enum GENDER {
+        M, F
+    }
 
 
 

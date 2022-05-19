@@ -6,8 +6,8 @@ import java.util.*;
 
 public class Match extends Tournament {
 
-    Player winner;
-    static  Player Loser;
+
+    static  Player winner, Loser;
 
     static WtaPlayer wtaWinner, wtaLoser;
 
@@ -21,15 +21,9 @@ public class Match extends Tournament {
     static String[] matchStats;
 
 
-    public Match(Tournament tournament, WtaPlayer winner, WtaPlayer loser, PlayerRanking playerRanking, String[] matchStats) {
-        this.tournament = tournament;
-        wtaWinner = winner;
-        wtaLoser = loser;
-        this.wtaRank = playerRanking;
-        System.arraycopy(matchStats, 0, matchStats, 0, matchStats.length);
-    }
 
     public Match(String tourney_id, String winner_name, String loser_name, String tourney_date, String score, String round) {
+        super();
         this.tourney_id = tourney_id;
         this.tourney_date = tourney_date;
         this.score = score;
@@ -37,7 +31,9 @@ public class Match extends Tournament {
     }
 
 
-
+    public Match(Tournament tournament, WtaPlayer winner, WtaPlayer loser, PlayerRanking playerRanking, String[] matchStats) {
+        super();
+    }
 }
 
 

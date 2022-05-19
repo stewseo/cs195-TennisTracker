@@ -1,6 +1,7 @@
 package com.example.cs195tennis.model;
 
 public class WtaPlayer {
+
     public String firstName,lastName,height,id,ioc,dob,hand,wiki;
 
     public WtaPlayer(String id, String firstName, String lastName, String hand, String dob, String ioc, String height, String wiki) {

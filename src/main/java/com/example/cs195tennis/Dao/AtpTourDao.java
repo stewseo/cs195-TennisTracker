@@ -1,5 +1,6 @@
 package com.example.cs195tennis.Dao;
 
+import com.example.cs195tennis.Dao.DataModel.TournamentTable;
 import com.example.cs195tennis.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,19 +21,27 @@ public class AtpTourDao {
 
     AtpTourDao() {}
 
-    public static ObservableList<Match> AtpTourObservable = FXCollections.observableArrayList();
+    public static final ObservableList<Tournament> observableTournaments;
+
+    static {
+        observableTournaments = FXCollections.observableArrayList(TournamentTable.TOURNAMENT.createGrandSlamHistory());
+        updateTournaments();
+    }
+
+    private static void updateTournaments() {
+
+    }
 
     private List<File> getFilesFromFolder(String pathToFolder) throws IOException {
-
         return Files.walk(Paths.get(pathToFolder))
                 .filter(Files::isRegularFile)
                 .map(Path::toFile).toList();
-
     }
 
-    public static ObservableList<AtpMatch> getAtpTourObservable() {
+    static ObservableList<Match> getAtpTourObservable() {
         return null;
     }
+
 
     private Result<Record> fetchRowsFromCsv(List<String[]> list, boolean header) {
         return null;

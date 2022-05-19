@@ -1,6 +1,6 @@
 module com.example.cs195tennis {
-    requires org.jooq.joor;
     requires org.jooq.meta;
+    requires org.jooq.joor;
     requires org.jooq;
     requires MaterialFX;
     requires VirtualizedFX;

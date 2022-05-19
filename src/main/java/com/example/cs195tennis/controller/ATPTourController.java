@@ -1,6 +1,6 @@
 package com.example.cs195tennis.controller;
 import com.example.cs195tennis.Dao.AtpTourDao;
-import com.example.cs195tennis.model.AtpMatch;
+import com.example.cs195tennis.model.Tournament;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
@@ -9,6 +9,7 @@ import io.github.palexdev.materialfx.utils.DateTimeUtils;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import io.github.palexdev.materialfx.utils.others.dates.DateStringConverter;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,89 +24,94 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class ATPTourController implements Initializable {
+import static javax.swing.text.StyleConstants.setAlignment;
 
+public class ATPTourController implements Initializable {
 
     @FXML public MFXButton searchButton;
 
-	@FXML public MFXFilterComboBox<AtpMatch> atpFilterTournament;
+    @FXML public MFXFilterComboBox<Tournament> atpFilterTournament;
 
-	@FXML public MFXFilterComboBox<AtpMatch> atpFilterTournamentStats;
+    @FXML public MFXFilterComboBox<Tournament> atpFilterTournamentStats;
 
     @FXML public Label atpValidate;
 
-	@FXML public MFXTextField atpTextFields;
+    @FXML public MFXTextField atpTextFields;
 
-	@FXML MFXTableView<AtpMatch> atpTournamentViewTable;
+    @FXML MFXTableView<Tournament> atpTournamentViewTable;
 
-	@FXML public MFXDatePicker custDatePicker;
+    @FXML public MFXDatePicker custDatePicker;
 
-	ObservableList<AtpMatch> matchObservable;
-
-
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-
-//		Objects.nonNull(matchObservable);
-
-		custDatePicker.setGridAlgorithm(DateTimeUtils::partialIntMonthMatrix);
-
-		custDatePicker.setConverterSupplier(() -> new DateStringConverter("dd/MM/yyyy", custDatePicker.getLocale()));
+    static ObservableList<Tournament> loadGrandSlams;
+    static ObservableList<Tournament> loadRecentGrandSlamChampions;
 
 
-		StringConverter<AtpMatch> converter = FunctionalStringConverter.to(e -> (e == null) ? "" : e.getTourney_name());
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
 
-		Function<String, Predicate<AtpMatch>> filterFunction = s -> e -> {
-			return StringUtils.containsIgnoreCase(converter.toString(e), s);
-		};
+        Objects.requireNonNull(AtpTourDao.observableTournaments);
 
-		matchObservable = AtpTourDao.getAtpTourObservable();
+        System.out.println(" check database and models: " + AtpTourDao.observableTournaments);
 
-		atpFilterTournamentStats.setItems(matchObservable);
-		atpFilterTournamentStats.setConverter(converter);
-		atpFilterTournamentStats.setFilterFunction(filterFunction);
-
-		atpFilterTournament.setItems(matchObservable);
-		atpFilterTournament.setConverter(converter);
-		atpFilterTournament.setFilterFunction(filterFunction);
-		atpFilterTournament.setResetOnPopupHidden(false);
-
-		try {
-			setupTable();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+        custDatePicker.setGridAlgorithm(DateTimeUtils::partialIntMonthMatrix);
+        custDatePicker.setConverterSupplier(() -> new DateStringConverter("dd/MM/yyyy", custDatePicker.getLocale()));
 
 
-	@SuppressWarnings("unchecked")
-	private void setupTable() throws SQLException {
-		MFXTableColumn<AtpMatch> tourneyNameColumn = new MFXTableColumn<>("tourney_name", true, Comparator.comparing(AtpMatch::getTourney_name));
-		MFXTableColumn<AtpMatch> tourneyDateColumn = new MFXTableColumn<>("tourney_date", true, Comparator.comparing(AtpMatch::getTourney_date));
-		MFXTableColumn<AtpMatch> winnerNameColumn = new MFXTableColumn<>("winner_name", true,  Comparator.comparing(AtpMatch::getWinnerName));
-		MFXTableColumn<AtpMatch> loserNameColumn = new MFXTableColumn<>("loser_name", true,  Comparator.comparing(AtpMatch::getLoserName));
+        StringConverter<Tournament> converter = FunctionalStringConverter.to(e -> (e == null) ? "" : e.getTourney_name());
 
+        Function<String, Predicate<Tournament>> filterFunction = s -> e -> {
+            return StringUtils.containsIgnoreCase(converter.toString(e), s);
+        };
 
-		tourneyNameColumn.setRowCellFactory(match -> new MFXTableRowCell<>(AtpMatch::getTourney_name));
-		tourneyDateColumn.setRowCellFactory(match -> new MFXTableRowCell<>(AtpMatch::getTourney_date));
-		winnerNameColumn.setRowCellFactory(match -> new MFXTableRowCell<>(AtpMatch::getWinnerName));
-		loserNameColumn.setRowCellFactory(match -> new MFXTableRowCell<>(AtpMatch::getLoserName)
-		{{
-			setAlignment(Pos.CENTER_RIGHT);
-		}});
-		loserNameColumn.setAlignment(Pos.CENTER_RIGHT);
+        loadGrandSlams = FXCollections.observableArrayList(AtpTourDao.observableTournaments);
 
-		atpTournamentViewTable.getTableColumns().addAll(tourneyNameColumn, tourneyDateColumn,winnerNameColumn,loserNameColumn);
-		atpTournamentViewTable.getFilters().addAll(
-				new StringFilter<>("tourney_name", AtpMatch::getTourney_name),
-				new StringFilter<>("tourney_date", AtpMatch::getTourney_date),
-				new StringFilter<>("winner_name", AtpMatch::getWinnerName),
-				new StringFilter<>("loser_name", AtpMatch::getLoserName)
-		);
+        atpFilterTournamentStats.setItems(loadGrandSlams);
+        atpFilterTournamentStats.setConverter(converter);
+        atpFilterTournamentStats.setFilterFunction(filterFunction);
 
-//		atpTournamentViewTable.setItems();
-	}
+        loadGrandSlams = null;
 
-	public void AtpPlayersText(ActionEvent event) {
-	}
+        loadRecentGrandSlamChampions = FXCollections.observableArrayList(AtpTourDao.observableTournaments);
+
+        atpFilterTournament.setItems(loadGrandSlams);
+        atpFilterTournament.setConverter(converter);
+        atpFilterTournament.setFilterFunction(filterFunction);
+        atpFilterTournament.setResetOnPopupHidden(false);
+
+        loadRecentGrandSlamChampions = null;
+
+        try {
+            setupTable();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void setupTable() throws SQLException {
+        MFXTableColumn<Tournament> tourneyNameColumn = new MFXTableColumn<>("tourney_name", true, Comparator.comparing(Tournament::getTourney_name));
+        MFXTableColumn<Tournament> tourneyDateColumn = new MFXTableColumn<>("tourney_date", true, Comparator.comparing(Tournament::getTourney_date));
+
+        tourneyNameColumn.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getTourney_name));
+        tourneyDateColumn.setRowCellFactory(match -> new MFXTableRowCell<>(Tournament::getTourney_date)
+        {{
+            setAlignment(Pos.CENTER_RIGHT);
+        }});
+        MFXTableColumn<Tournament> loserNameColumn;
+        tourneyDateColumn.setAlignment(Pos.CENTER_RIGHT);
+
+        atpTournamentViewTable.getTableColumns().addAll(tourneyNameColumn, tourneyDateColumn);
+        Object AtpMatch;
+        atpTournamentViewTable.getFilters().addAll(
+                new StringFilter<>("tourney_name", Tournament::getTourney_name),
+                new StringFilter<>("tourney_date", Tournament::getTourney_date)
+        );
+
+        System.out.println(Objects.nonNull(loadGrandSlams.addAll(AtpTourDao.observableTournaments)));
+
+		atpTournamentViewTable.setItems(loadGrandSlams);
+    }
+
+    public void Tournament(ActionEvent event) {
+    }
 }

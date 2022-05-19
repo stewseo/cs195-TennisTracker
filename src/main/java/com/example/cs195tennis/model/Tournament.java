@@ -3,38 +3,44 @@ package com.example.cs195tennis.model;
 
 import com.example.cs195tennis.database.Database;
 import io.github.palexdev.materialfx.utils.others.dates.DateStringConverter;
-import org.jooq.DSLContext;
-import org.jooq.Field;
-import org.jooq.Query;
-import org.jooq.SQLDialect;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.css.SimpleSelector;
+import org.jooq.*;
+import org.jooq.Record;
+import org.jooq.impl.DSL;
 import org.sqlite.SQLiteLimits;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.using;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignT.TOURNAMENT;
 
 public class Tournament {
 
+    public Tournament() {}
+
     private int tourneyId;
     public String tourney_id,tourney_name,tourney_date;
-    public String surface;
-    public String draw_size;
-    public String tourney_level;
+    public String surface,draw_size,tourney_level;
     public String score;
-    public Player winner, loser;
+    public String winner, loser;
     public Object o1, o2;
-    public List<String> matchStats;
+    String[] matchStats;
+    private Player player;
 
 
-    public Tournament(String tourney_id, String tourney_name, String tourney_date, Player winner, Player loser,  List<String> matchStats) {
+    public Tournament(String tourney_id, String tourney_name, String tourney_date, String winner, String loser, String level, String draw_size,  String drawSize, String[] matchStats) {
         this.tourney_id = tourney_id;
         this.tourney_name = tourney_name;
         this.tourney_date = tourney_date;
         this.winner = winner;
         this.loser = loser;
+        this.tourney_level = level;
+        this.draw_size = draw_size;
         this.matchStats = matchStats;
     }
 
@@ -43,22 +49,76 @@ public class Tournament {
         this.o1 = o; o2 = o1;
     }
 
+
+
     public Tournament(Field<?>[] fields) {
-
-        for(int i=0; i<6; i++){
-
-            this.tourney_id = fields[i].toString();
-        }
-
-        IntStream.range(6,fields.length).forEach(e-> {
-
-            matchStats.add(String.valueOf(e));
-        });
+        System.out.println(Arrays.stream(fields).count());
     }
+
+
 
     DSLContext ctx = using(Database.connect(), SQLDialect.SQLITE);
 
     Query query = ctx.select();
+
+    public Tournament(Object o, Object o1, Object o2, Object o3, Object o4, Object o5, String strings) {
+        this.tourney_name = o.toString();
+        this.tourney_id = o1.toString();
+        this.tourney_name = o2.toString();
+        this.tourney_date = o3.toString();
+        this.winner = o4.toString();
+        this.loser = o5.toString();
+        this.draw_size = strings;
+    }
+
+    List<String> list;
+    public Tournament(Record row) {
+
+        for(int i=0; i< row.size(); i++){
+            System.out.println(list.set(i, row.getValue(i).toString()));
+
+        }
+        this.tourney_id = list.get(0);
+        this.tourney_name = list.get(1);
+        this.tourney_date = list.get(5);
+        this.winner = Objects.requireNonNull(row.get("winner")).toString();
+        this.loser = Objects.requireNonNull(row.get("loser")).toString();
+        this.tourney_level = Objects.requireNonNull(row.get("level")).toString();
+        this.surface = Objects.requireNonNull(row.get("surface")).toString();
+    }
+
+    public Tournament(String id, String name, String date, String winnerName, String loserName) {
+        this.tourney_name = id;
+        this.tourney_id = name;
+        this.tourney_name = date;
+        this.tourney_date = winnerName;
+        this.winner = loserName;
+    }
+
+
+    public void setWinner(String winner) {
+        this.winner = winner;
+    }
+
+    public void setLoser(String loser) {
+        this.loser = loser;
+    }
+
+    public DSLContext getCtx() {
+        return ctx;
+    }
+
+    public void setCtx(DSLContext ctx) {
+        this.ctx = ctx;
+    }
+
+    public Query getQuery() {
+        return query;
+    }
+
+    public void setQuery(Query query) {
+        this.query = query;
+    }
 
     public String toString() {
         StringBuilder sb = new StringBuilder(tourney_id);
@@ -76,9 +136,7 @@ public class Tournament {
         String strDate = formatter.format(date);
 
         return strDate;
-
     }
-
     public int getTourneyId() {
         return tourneyId;
     }
@@ -90,25 +148,6 @@ public class Tournament {
     public void setScore(String score) {
         this.score = score;
     }
-
-    public String getWinnerFullName() {
-        return winner.getFirstName() + " " + winner.getLastName();
-    }
-
-    public void setWinner(Player winner) {
-        this.winner = winner;
-    }
-
-    public String getLoserFullName() {
-        return loser.getFirstName() + " " + loser.getLastName();
-    }
-
-    public void setLoser(Player loser) {
-        this.loser = loser;
-    }
-
-
-    public Tournament() {}
 
     public String getScore() {return score;}
 
@@ -160,11 +199,11 @@ public class Tournament {
         this.tourney_level = tourney_level;
     }
 
-    public Player getWinner() {
+    public String getWinner() {
         return winner;
     }
 
-    public Player getLoser() {
+    public String getLoser() {
         return loser;
     }
 
@@ -184,15 +223,23 @@ public class Tournament {
         this.o2 = o2;
     }
 
-    public List<String> getMatchStats() {
+    public String[] getMatchStats() {
         return matchStats;
     }
 
-    public void setMatchStats(List<String> matchStats) {
+    public void setMatchStats(String[] matchStats) {
         this.matchStats = matchStats;
     }
 
     public Object getMatches() {
         return matchStats;
     }
+
+    public String getWinnerFullName() {
+        return getWinner() + " " + getLoser();
+    }
+    public String getLoserFullName() {
+        return getWinner() + " " + getLoser();
+    }
+
 }
