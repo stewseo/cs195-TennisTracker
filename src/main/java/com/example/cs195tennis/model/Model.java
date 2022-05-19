@@ -23,6 +23,7 @@ import io.github.palexdev.materialfx.font.FontResources;
 import io.github.palexdev.materialfx.utils.FXCollectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.controlsfx.glyphfont.FontAwesome;
 
 import java.util.stream.IntStream;
 
@@ -43,6 +44,8 @@ public class Model {
 	public static ObservableList<String> strings;
 	public static final ObservableList<Person> people;
 	public static final ObservableList<Device> devices;
+
+	private static final FontAwesome.Glyph FontResources = ;
 
 	static {
 		notificationsIcons = new FontResources[]{
