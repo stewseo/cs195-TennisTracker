@@ -87,25 +87,18 @@ public class PlayerRankingController implements Initializable {
     private void setupTable() throws SQLException {
 
         MFXTableColumn<AtpPlayer> atpPlayerNameColumn = new MFXTableColumn<>("fullName", true, Comparator.comparing(AtpPlayer::getFullName));
-        MFXTableColumn<AtpPlayer> atpPlayerDominantHandCol = new MFXTableColumn<>("hand", true, Comparator.comparing(AtpPlayer::getHand));
-        MFXTableColumn<AtpPlayer> atpPlayerHeightCol = new MFXTableColumn<>("height", true, Comparator.comparing(AtpPlayer::getHeight));
-        MFXTableColumn<AtpPlayer> atpPlayerDobCol = new MFXTableColumn<>("Country", true, Comparator.comparing(AtpPlayer::getCountry));
 
-        atpPlayerNameColumn.setRowCellFactory(match -> new MFXTableRowCell<>(AtpPlayer::getFullName));
-        atpPlayerDominantHandCol.setRowCellFactory(match -> new MFXTableRowCell<>(AtpPlayer::getHand));
-        atpPlayerHeightCol.setRowCellFactory(match -> new MFXTableRowCell<>(AtpPlayer::getHeight));
-        atpPlayerDobCol.setRowCellFactory(match -> new MFXTableRowCell<>(AtpPlayer::getCountry)
+
+        atpPlayerNameColumn.setRowCellFactory(match -> new MFXTableRowCell<>(AtpPlayer::getFullName)
+
         {{
             setAlignment(Pos.CENTER_RIGHT);
         }});
         atpPlayerNameColumn.setAlignment(Pos.CENTER_RIGHT);
 
-        atpPlayerTable.getTableColumns().addAll(atpPlayerNameColumn,atpPlayerDominantHandCol,atpPlayerHeightCol,atpPlayerDobCol);
+        atpPlayerTable.getTableColumns().addAll(atpPlayerNameColumn);
         atpPlayerTable.getFilters().addAll(
-                new StringFilter<>("fullName", AtpPlayer::getFullName),
-                new StringFilter<>("hand", AtpPlayer::getHand),
-                new StringFilter<>("height", AtpPlayer::getHeight),
-                new StringFilter<>("Country", AtpPlayer::getCountry)
+                new StringFilter<>("fullName", AtpPlayer::getFullName)
         );
 
         ObservableList<AtpPlayer> observableAtpPlayer = FXCollections.observableArrayList();

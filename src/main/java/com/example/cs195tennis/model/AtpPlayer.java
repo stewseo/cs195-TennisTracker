@@ -10,63 +10,34 @@ import java.util.function.ToLongFunction;
 
 public class AtpPlayer extends Player {
 
-    public String firstName, lastName, height, player_id, country, dateOfBirth, hand, wiki, ranking, fullName;
+    public String fullName, id;
 
-    static PlayerRanking atp;
+    private PlayerRanking playerRanking;
 
-    static List<Player> playerStats;
+    static String[] playerStats;
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public AtpPlayer(String playerId, String firstName, String lastName, String fullName, String hand, String dob, String ioc, String height, String wiki) {
-        this.player_id = playerId;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public AtpPlayer(String id, String fullName, PlayerRanking playerRanking, String[] strings) {
+        this.id = id;
         this.fullName = fullName;
-        this.hand = hand;
-        this.country = dob;
-        this.dateOfBirth = ioc;
-        this.height = height;
-        this.wiki = wiki;
+        this.playerRanking = playerRanking;
+        playerStats = strings;
     }
 
-    public AtpPlayer(String id, String firstName, String lastName, String fullName, String dominantHand, String location) {
-        this.player_id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.fullName = fullName;
-        this.hand = dominantHand;
-        this.country = location;
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AtpPlayer atpPlayer = (AtpPlayer) o;
+
+        return Objects.equals(getFullName(), atpPlayer.getFullName());
     }
 
-    public String toString() {
-        return this.firstName + " " + this.lastName;
-    }
-
-    public String getPlayer_id() {
-        return player_id;
-    }
-
-    public void setPlayer_id(String player_id) {
-        this.player_id = player_id;
-    }
-
-    public void setRanking(String ranking) {
-        this.ranking = ranking;
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getFullName());
     }
 
     public String getFullName() {
@@ -77,70 +48,27 @@ public class AtpPlayer extends Player {
         this.fullName = fullName;
     }
 
-    public static PlayerRanking getAtp() {
-        return atp;
+    public String getId() {
+        return id;
     }
 
-    public static void setAtp(PlayerRanking atp) {
-        AtpPlayer.atp = atp;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public static List<Player> getPlayerStats() {
+    public PlayerRanking getPlayerRanking() {
+        return playerRanking;
+    }
+
+    public void setPlayerRanking(PlayerRanking playerRanking) {
+        this.playerRanking = playerRanking;
+    }
+
+    public static String[] getPlayerStats() {
         return playerStats;
     }
 
-    public static void setPlayerStats(List<Player> playerStats) {
+    public static void setPlayerStats(String[] playerStats) {
         AtpPlayer.playerStats = playerStats;
     }
-
-    @Override
-    public String getFirstName() {
-        return firstName;
-    }
-
-    @Override
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    @Override
-    public String getLastName() {
-        return lastName;
-    }
-
-    @Override
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getHeight() {
-        return height;
-    }
-
-    public void setHeight(String height) {
-        this.height = height;
-    }
-
-
-
-    public String getHand() {
-        return hand;
-    }
-
-    public void setHand(String hand) {
-        this.hand = hand;
-    }
-
-    public String getWiki() {
-        return wiki;
-    }
-
-    public void setWiki(String wiki) {
-        this.wiki = wiki;
-    }
-
-    public String getRanking(){
-        return ranking;
-    }
-
 }

@@ -12,7 +12,9 @@ import org.jooq.Record;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.using;
 
 
@@ -27,6 +29,7 @@ public class PlayerDao {
         return ctx;
     }
 
+
     public static void main(String[] args) {
         Result<Record> tables = ctx().select().fetch();
         List<Table<?>> r = ctx().meta().getTables();
@@ -34,23 +37,50 @@ public class PlayerDao {
 
         System.out.println(ctx().meta().getSchemas());
 
-        populateAtpPlayer();
-        populatePlayerTable();
+        observableAtpPlayer();
 
         System.out.println("meta master table: " + r);
     }
 
     public static ObservableList<AtpPlayer> observableAtpPlayer() {
         ObservableList<AtpPlayer> temp = FXCollections.observableArrayList();
-        List<Table<?>> r = ctx().meta().getTables();
+        Table<?> atpPlayer = ctx().meta().getTables().get(2);
+        Table<?> atpPlayerRank = ctx().meta().getTables().get(1);
+        Table<?> grandSlam = ctx().meta().getTables().get(3);
+        Table<?> player = ctx().meta().getTables().get(4);
 
-        System.out.println(r);
 
-//        Result<Record> playerTable = ctx().select().from("AtpPlayer").join("AtpPlayerRanking").on("player_id").fetch();
+        System.out.println("player "+ atpPlayer.getPrimaryKey());
+        System.out.println("player rank" + atpPlayerRank.getPrimaryKey());
+
+        Result<Record> grandSlamTable = ctx().select().from("GrandSlam").fetch();
+        Result<Record> PLAYERTABLE = ctx().select().from("PLAYER").fetch();
+
+        Result<Record> playerRankTable = ctx().select().from("AtpPlayerRanking").fetch();
         Result<Record> playerTable = ctx().select().from("AtpPlayer").fetch();
-        AtomicInteger i = new AtomicInteger();
+        System.out.println(Arrays.toString(grandSlamTable.fields()));
+        System.out.println(Arrays.toString(PLAYERTABLE.fields()));
+
+//                .on(field("player_id").equals(field("player"));
+//
+
+        grandSlamTable.forEach(e-> {
+
+            for(int i = 0; i< e.size(); i++) {
+                var value = e.getValue(i);
+                var key = e.field(i);
+                System.out.println(key + " " + value);
+            }
+        });
+        playerRankTable.forEach(e-> {
+            String rankDate =   e.getValue("ranking_date").toString();
+            String playerRank = e.getValue("rank").toString();
+            String playerId = e.getValue("player").toString();
+            String rankingPoints = e.getValue("points").toString();
+        });
 
         playerTable.stream().filter(Objects::nonNull).forEach(e -> {
+            System.out.println(e.fieldsRow());
 
             String id = e.getValue("player_id").toString();
             String firstName = e.getValue("name_first").toString();
@@ -62,7 +92,8 @@ public class PlayerDao {
             String height = e.getValue("height").toString();
             String wikiData = e.getValue("wikidata_id").toString();
 
-            temp.add(new AtpPlayer(id, firstName, lastName, fullName, dominantHand, dateOfBirth, location, height, wikiData));
+            temp.add(new AtpPlayer(id,fullName,new PlayerRanking(),new String[]{dominantHand, dateOfBirth,location,height,wikiData}));
+
         });
         return temp;
     }
@@ -79,7 +110,6 @@ public class PlayerDao {
 
         playerRankTable.stream().filter(Objects::nonNull).forEach(e -> {
 
-//            System.out.println(e.fieldsRow());
 
 //            for(int i = 0; i< e.size(); i++) {
 //                var va = e.getValue(i);
