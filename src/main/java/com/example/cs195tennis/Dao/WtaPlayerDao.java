@@ -76,7 +76,7 @@ public class WtaPlayerDao {
     String querys = " select" + lastName + " from " + "PLAYERS" + " join ranking on player.id = ranking.player_id where pos == 1 group by lastName; ";
 
     static ObservableList<PlayerRanking> getPlayerRanks() throws SQLException {
-        playerRanking = DataHandeler.getPlayerRanks();
+        playerRanking = FXCollections.observableArrayList();
 
         return playerRanking;
     }
