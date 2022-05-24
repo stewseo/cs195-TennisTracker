@@ -1,14 +1,14 @@
 package com.example.cs195tennis.Dao.DataModel;
 
 import com.example.cs195tennis.database.Database;
-import com.example.cs195tennis.model.Tournament;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import org.jooq.*;
+import org.jooq.Record;
 import org.jooq.impl.DSL;
+import org.jooq.impl.QOM;
 
+import javax.naming.InvalidNameException;
 import java.io.FileReader;
 import java.nio.file.Files;
 import java.io.IOException;
@@ -18,50 +18,80 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.example.cs195tennis.Dao.DataModel.TournamentTable.TOURNAMENT;
 import static org.jooq.impl.DSL.*;
-import static org.jooq.impl.SQLDataType.INTEGER;
 import static org.jooq.impl.SQLDataType.VARCHAR;
-
+import static org.jooq.impl.SQLDataType.LOCALDATETIME;
 
 public class DataHandeler {
 
     static DSLContext ctx(){
-        DSLContext ctx = using(Database.connect(), SQLDialect.SQLITE);
-        return ctx;
+        return using(Database.connect(), SQLDialect.SQLITE);
     }
 
+    static List<Object> getTable(String tableName) {
+        return ctx().select(table(tableName).fields()).stream().collect(Collectors.toList());
+    }
 
-    static String csvDirectory = "C:\\Users\\seost\\tennis_atp_datasets\\tennis_slam_pointbypoint-master";
+    static String csvDirectory = "C:\\Users\\seost\\tennis_atp_datasets\\New folder";
 
-    public static void main(String[] args) throws IOException {
+    private static void printFields() {
         List<Table<?>> r = ctx().meta().getTables();
-        int count = 0;
-
         IntStream.range(0, r.size()).forEach(e->{
             System.out.println("table: " + e);
 
             if(ctx().fetchCount(DSL.selectFrom(r.get(e))) >= 0){
-                System.out.println("table " + r.get(e));
+                System.out.println(ctx().fetchCount(DSL.selectFrom(r.get(e))));
+                System.out.println("table " + r.get(e).fieldsRow());
             }
         });
-
-        getFilesFromFolder(csvDirectory).stream().filter(files->
-                files.substring(files.length()-11, files.length()).equals("matches.csv")).forEach(e-> {
-            try {
-                List<String> temp = parseCsvToListString(e).get(0);
-
-                IntStream.range(0,temp.size()).forEach(i -> {
-                    ctx().alterTable("GrandSlams").add(field(name(temp.get(i)), VARCHAR)).execute();
-                });
-            }catch (IOException ex) {
-                ex.printStackTrace();
-            });
-        });
     }
+    public static <T> void main(String[] args) throws IOException {
+        printFields();
+    }
+
+
+    static void insertAllRowsToDb(List<List<String>> li) throws IOException {
+
+        int n = "points.csv".hashCode();
+        List<String> list = getFilesFromFolder(csvDirectory).stream().filter(
+                files-> files.substring(files.length()-10, files.length()).hashCode() == n).toList();
+
+        list.forEach(e -> {
+
+            List<String> temp = new ArrayList<>();
+
+            try {
+                temp = parseCsvToListString(e).get(0);
+
+                List<List<String>> l =  parseCsvToListString(e);
+
+
+                l.forEach(col -> {
+                    var v =  col.get(1);
+
+                    int key = col.get(0).hashCode();
+
+                    key ^= key >>> 16;
+
+//                    InsertQuery<?> insert = ctx().insertQuery(DSL.table("GrandSlamPointByPoint"));
+//
+//                    IntStream.range(0, col.size()).forEach(i-> {
+//                        insert.addValue(DSL.field(temp.get(i), String.class), col.get(i));
+//                        insert.execute();
+//                    });
+                });
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+        });
+    };
+
+
 
     static List<String> getFilesFromFolder(String directory) throws IOException {
         return Files.walk(Paths.get(directory))
@@ -75,24 +105,6 @@ public class DataHandeler {
         try (CSVReader csvReader = new CSVReader(new FileReader(path));) {
             String[] values = null;
             List<String> columns = new ArrayList<>();
-
-//            columns.add("match_id");
-//            columns.add("year");
-//            columns.add("slam");
-//            columns.add("match_num");
-//            columns.add("player1");
-//            columns.add("player2");
-//            columns.add("status");
-//            columns.add("winner");
-//            columns.add("event_name");
-//            columns.add("round");
-//            columns.add("court_name");
-//            columns.add("court_id");
-//            columns.add("player1id");
-//            columns.add("player2id");
-//            columns.add("nation1");
-//            columns.add("nation2");
-
             while ((values = csvReader.readNext()) != null) {
                 allMatchesCsv.add(Arrays.asList(values));
             }
@@ -102,34 +114,29 @@ public class DataHandeler {
         return allMatchesCsv;
     }
 
-    static ObservableList<Tournament> create() {
+    private void loadCsvs() throws IOException {
+        Loader<Record> r = ctx().loadInto(table("GrandSlamPointByPoint"))
+                .onDuplicateKeyError()
+                .onErrorAbort()
+                .commitAll()
+                .loadCSV("atp_rankings_00s.csv")
+                .fields()
+                .execute();
+    }
+    private void addColumns(List<Object> fields){
 
-        ObservableList<Tournament> temp = FXCollections.observableArrayList();
-
-        System.out.println(ctx().selectQuery(TOURNAMENT).fetch().size());
-
-       return temp;
     }
 
-    public static void createTable(String tableName, List<String> columns) throws SQLException {
-        int number = columns.size();
+    private void clearTable(String tableName){
+        ctx().delete(table(tableName)).execute();
+    }
 
-        ObservableList<Tournament> tournamentObservable;
-        Map<Object, List<Object >> mapToModel = new HashMap<>();
 
-        StringBuilder queryBuilder = new StringBuilder("CREATE TABLE " + tableName + "(ID INT, ");
-
-        int i = 0;
-
-        columns.forEach(e -> {
-
-            mapToModel.computeIfAbsent((e.toString()), v -> new ArrayList<>());
-
-            mapToModel.get(e.toString()).add(e);
-
-            queryBuilder.append(e).append(" TEXT");
-
-        });
+    public static void createTable(String tableName, List<String> columns) throws SQLException, InvalidNameException {
+        if(tableName == null || tableName.length() == 0){
+            throw new InvalidNameException("Invalid");
+        }
+        ctx().createTableIfNotExists(table(tableName,columns)).execute();
     }
 
     public static List<String> getColumnNames(String tableName) throws SQLException {
@@ -148,17 +155,10 @@ public class DataHandeler {
         return columnNames;
     }
 
-    public static ObservableList<Tournament> getGrandSlams() {
-        ObservableList<Tournament> temp = TOURNAMENT.createGrandSlamHistory();
 
-        return temp;
-    }
-
-
-    public <T> List<T> fetchWithSelect(SelectQuery<?> select, Class<T> clazz) {
-        DSLContext cst = using(Database.connect(), SQLDialect.SQLITE);
+    private <T> List<T> fetchWithSelect(SelectQuery<?> select, Class<T> clazz) {
         return null;
-        }
+    }
 
 }
 
