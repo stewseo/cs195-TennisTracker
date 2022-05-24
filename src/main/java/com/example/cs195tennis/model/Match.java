@@ -24,8 +24,6 @@ public class Match extends Tournament {
 
     public Match(String tourney_id, String winner_name, String loser_name, String tourney_date, String score, String round) {
         super();
-        this.tourney_id = tourney_id;
-        this.tourney_date = tourney_date;
         this.score = score;
         this.round = round;
     }

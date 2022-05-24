@@ -3,12 +3,8 @@ package com.example.cs195tennis.model;
 import java.util.Objects;
 
 public class Player{
-
-    static enum GENDER {
-        M, F
-    }
-
-
+    String name;
+    int playerId;
 
     PlayerRanking ranking;
 
@@ -19,6 +15,15 @@ public class Player{
     public String firstName, lastName, player_id;
 
     static String fullName;
+
+
+    public Player(String winnerName, PlayerRanking playerRanking) {
+        this.name = winnerName;
+    }
+
+    static enum GENDER {
+        M, F
+    }
 
     public Player(){}
 

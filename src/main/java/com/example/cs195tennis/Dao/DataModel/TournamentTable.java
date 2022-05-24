@@ -41,17 +41,6 @@ public class TournamentTable extends CustomTable<TournamentRecord> {
         return TournamentRecord.class;
     }
 
-//    public static Field<String> toChar(Field<?> field, String format) {
-//        return CustomField.of("to_char", VARCHAR, ctx -> {
-//        });
-//    }
-
-//    void tempTableFields() {
-//        Table<Record> TMP = DSL.table(DSL.name("TempGrandSlam"));
-//        Field<String> TYPE = DSL.field(DSL.name("SelectedFields", "type"), String.class);
-//        Field<String> TOKEN = DSL.field(DSL.name("TempToken", "token"), String.class);
-//    }
-
     public ObservableList<Tournament> createGrandSlamHistory() {
 
         ObservableList<Tournament> tournamentModelList = FXCollections.observableArrayList();

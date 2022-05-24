@@ -1,108 +1,105 @@
 package com.example.cs195tennis.Dao.DataModel;
 
 import com.example.cs195tennis.database.Database;
-import com.example.cs195tennis.model.PlayerRanking;
 import com.example.cs195tennis.model.Tournament;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.css.Selector;
 import org.jooq.*;
-import org.jooq.Record;
 import org.jooq.impl.DSL;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.nio.file.Files;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.example.cs195tennis.Dao.DataModel.TournamentTable.TOURNAMENT;
 import static org.jooq.impl.DSL.*;
+import static org.jooq.impl.SQLDataType.INTEGER;
+import static org.jooq.impl.SQLDataType.VARCHAR;
+
 
 public class DataHandeler {
-
-    static String csvDirectory = "C:\\Users\\seost\\tennis_atp_datasets\\tennis_slam_pointbypoint-master";
-
-    public static void main(String[] args) throws IOException {
-        int count = ctx().fetchCount(DSL.selectFrom("Tournament"));
-
-        List<Table<?>> r = ctx().meta().getTables();
-        getFilesFromFolder(csvDirectory);
-
-//        Arrays.stream(s).forEach(e -> {
-//
-//            ctx().meta().getTables(e).forEach(table-> System.out.println(Arrays.toString(table.fields())));
-//
-//        });
-    }
 
     static DSLContext ctx(){
         DSLContext ctx = using(Database.connect(), SQLDialect.SQLITE);
         return ctx;
     }
 
-    static void getFilesFromFolder(String directory) throws IOException {
-        Files.walk(Paths.get(directory))
-                .filter(Files::isRegularFile)
-                .map(Path::toFile).forEach(e-> {
-                    try {
-                        parseCsvToListString(e.toString());
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
+
+    static String csvDirectory = "C:\\Users\\seost\\tennis_atp_datasets\\tennis_slam_pointbypoint-master";
+
+    public static void main(String[] args) throws IOException {
+        List<Table<?>> r = ctx().meta().getTables();
+        int count = 0;
+
+        IntStream.range(0, r.size()).forEach(e->{
+            System.out.println("table: " + e);
+
+            if(ctx().fetchCount(DSL.selectFrom(r.get(e))) >= 0){
+                System.out.println("table " + r.get(e));
+            }
+        });
+
+        getFilesFromFolder(csvDirectory).stream().filter(files->
+                files.substring(files.length()-11, files.length()).equals("matches.csv")).forEach(e-> {
+            try {
+                List<String> temp = parseCsvToListString(e).get(0);
+
+                IntStream.range(0,temp.size()).forEach(i -> {
+                    ctx().alterTable("GrandSlams").add(field(name(temp.get(i)), VARCHAR)).execute();
                 });
+            }catch (IOException ex) {
+                ex.printStackTrace();
+            });
+        });
     }
 
-    static void parseCsvToListString(String path) throws IOException {
+    static List<String> getFilesFromFolder(String directory) throws IOException {
+        return Files.walk(Paths.get(directory))
+                .filter(Files::isRegularFile)
+                .map(Path::toString).toList();
+    }
+
+    static List<List<String>> parseCsvToListString(String path) throws IOException {
         List<List<String>> allMatchesCsv = new ArrayList<List<String>>();
 
         try (CSVReader csvReader = new CSVReader(new FileReader(path));) {
             String[] values = null;
             List<String> columns = new ArrayList<>();
-            columns.add("match_id");
-            columns.add("year");
-            columns.add("slam");
-            columns.add("match_num");
-            columns.add("player1");
-            columns.add("player2");
-            columns.add("status");
-            columns.add("winner");
-            columns.add("event_name");
-            columns.add("round");   
-            columns.add("court_name");
-            columns.add("court_id");
-            columns.add("player1id");
-            columns.add("player2id");
-            columns.add("nation1");
-            columns.add("nation2");
 
-
-
-
-
-
+//            columns.add("match_id");
+//            columns.add("year");
+//            columns.add("slam");
+//            columns.add("match_num");
+//            columns.add("player1");
+//            columns.add("player2");
+//            columns.add("status");
+//            columns.add("winner");
+//            columns.add("event_name");
+//            columns.add("round");
+//            columns.add("court_name");
+//            columns.add("court_id");
+//            columns.add("player1id");
+//            columns.add("player2id");
+//            columns.add("nation1");
+//            columns.add("nation2");
 
             while ((values = csvReader.readNext()) != null) {
-                 System.out.println(Arrays.toString(values));
-//                 System.out.println(Arrays.toString(values));
                 allMatchesCsv.add(Arrays.asList(values));
             }
-
-//            allMatchesCsv.forEach(e -> {
-//                System.out.println(e.get(0));
-//            });
     } catch (CsvValidationException e) {
             e.printStackTrace();
         }
+        return allMatchesCsv;
     }
 
     static ObservableList<Tournament> create() {

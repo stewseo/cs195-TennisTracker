@@ -1,6 +1,8 @@
 package com.example.cs195tennis.Dao;
 
 import com.example.cs195tennis.database.Database;
+import com.example.cs195tennis.model.Player;
+import com.example.cs195tennis.model.PlayerRanking;
 import com.example.cs195tennis.model.Tournament;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -50,17 +52,17 @@ public class TournamentDao {
 
             if((i.getAndIncrement()) > 1000) return;
 
-            String id = e.getValue("tourney_id").toString();
+            int id = (int) e.getValue(0);
             String name = e.getValue("tourney_date").toString();
             String date = e.getValue("tourney_name").toString();
             String winnerName = e.getValue("winner_name").toString();
             String loserName = e.getValue("loser_name").toString();
-            String tourney_level = e.getValue("tourney_level").toString();
-            System.out.println(tourney_level);
+//            Arrays.stream(e.fields()).skip(1);
+            String tourneyLevel = e.getValue("tourney_level").toString();
             String surface = e.getValue("surface").toString();
             String drawSize = e.getValue("draw_size").toString();
 
-            temp.add(new Tournament(id, name, date, winnerName, loserName, tourney_level,surface, drawSize));
+            temp.add(new Tournament(id, name, date, new Player(winnerName, new PlayerRanking()), new Player(winnerName, new PlayerRanking()), new String[] {tourneyLevel, surface, drawSize}));
 
         });
         return temp;

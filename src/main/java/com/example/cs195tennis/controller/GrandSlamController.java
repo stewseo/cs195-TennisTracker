@@ -59,7 +59,7 @@ public class GrandSlamController implements Initializable {
 
     private void grandSlamFilters() {
         StringConverter<Tournament> converter =
-                FunctionalStringConverter.to(e->(e==null) ? "" : e.getTourney_name());
+                FunctionalStringConverter.to(e->(e==null) ? "" : e.getTourneyName());
 
         Function<String, Predicate<Tournament>> filterFunction =
                 s ->
@@ -85,8 +85,8 @@ public class GrandSlamController implements Initializable {
 
     private void setupTable() throws SQLException{
 
-        MFXTableColumn<Tournament> c1=new MFXTableColumn<>("Tourney_name",true,Comparator.comparing(Tournament::getTourney_name));
-        MFXTableColumn<Tournament> c2=new MFXTableColumn<>("tourney_date",true,Comparator.comparing(Tournament::getTourney_date));
+        MFXTableColumn<Tournament> c1=new MFXTableColumn<>("Tourney_name",true,Comparator.comparing(Tournament::getTourneyName));
+        MFXTableColumn<Tournament> c2=new MFXTableColumn<>("tourney_date",true,Comparator.comparing(Tournament::getTourneyDate));
         MFXTableColumn<Tournament> c3=new MFXTableColumn<>("Winner",true,Comparator.comparing(Tournament::getWinner));
         MFXTableColumn<Tournament> c4=new MFXTableColumn<>("Loser",true,Comparator.comparing(Tournament::getLoser));
         MFXTableColumn<Tournament> c5=new MFXTableColumn<>("Tourney_level",true,Comparator.comparing(Tournament::getTourney_level));
@@ -94,8 +94,8 @@ public class GrandSlamController implements Initializable {
 
         System.out.println();
 
-        c1.setRowCellFactory(match->new MFXTableRowCell<>(Tournament::getTourney_name));
-        c2.setRowCellFactory(match->new MFXTableRowCell<>(Tournament::getTourney_date));
+        c1.setRowCellFactory(match->new MFXTableRowCell<>(Tournament::getTourneyName));
+        c2.setRowCellFactory(match->new MFXTableRowCell<>(Tournament::getTourneyDate));
         c3.setRowCellFactory(match->new MFXTableRowCell<>(Tournament::getWinner));
         c4.setRowCellFactory(match->new MFXTableRowCell<>(Tournament::getLoser));
         c5.setRowCellFactory(match->new MFXTableRowCell<>(Tournament::getTourney_level));
@@ -108,8 +108,8 @@ public class GrandSlamController implements Initializable {
 
         grandSlamTable.getTableColumns().addAll(c1, c2, c3, c4, c5, c6);
         grandSlamTable.getFilters().addAll(
-                new StringFilter<>("tourney_name",Tournament::getTourney_name),
-            new StringFilter<>("tourney_date",Tournament::getTourney_date),
+                new StringFilter<>("tourney_name",Tournament::getTourneyName),
+            new StringFilter<>("tourney_date",Tournament::getTourneyDate),
             new StringFilter<>("winner",Tournament::getWinner),
             new StringFilter<>("loser",Tournament::getLoser),
             new StringFilter<>("Tourney_level",Tournament::getTourney_level),
@@ -121,6 +121,8 @@ public class GrandSlamController implements Initializable {
         }
 
     public void handleTextEntry(ActionEvent event) {
+        String dateInput = custDatePicker.getText();
+        System.out.println(dateInput);
         String input = textField.getText();
     }
 
