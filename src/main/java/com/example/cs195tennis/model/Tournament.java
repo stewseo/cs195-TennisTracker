@@ -1,4 +1,3 @@
-
 package com.example.cs195tennis.model;
 
 import com.example.cs195tennis.database.Database;
@@ -22,26 +21,25 @@ public class Tournament {
     public Tournament() {}
 
     private int tourneyId;
-    public String tourneyName,tourneyDate, surface, draw_size, tourney_level;
-    public List<Match> matches;
+    public String tourneyName,tourneyDate, surface, draw_size, tourney_level,courtId,courtName;
     private Player player1, player2;
+    private Map<Integer,String> tInfoMap;
+    public Match match;
 
-    public Tournament(int id, String year, String tourneyName, Player player1, Player player2, Match match) {
-
-        matches = new ArrayList<>();
-        matches.add(match);
-
+    public Tournament(int id, String year, String tourneyName, String courtId, String courtName, Player player1, Player player2, Match match) {
+        this.match = match;
+        tInfoMap = new HashMap<>();
         tourneyId=id;
         tourneyDate=year;
         this.tourneyName=tourneyName;
-
         this.player1 = player1;
         this.player2 = player2;
-
-        if(tourneyName == null) {
-            matches = new ArrayList<>();
-        }
+        this.courtId = courtId;
+        this.courtName = courtName;
     }
+
+//    public Tournament(int id, String year, String tourneyName, Player player, Player player1, Match match) {
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -56,13 +54,6 @@ public class Tournament {
         return Objects.hash(getTourneyId());
     }
 
-    public List<Match> getMatches() {
-        return matches;
-    }
-
-    public void setMatches(List<Match> matches) {
-        this.matches = matches;
-    }
 
     public String getPlayer1() {
         return player1.getFirstName();
@@ -88,10 +79,17 @@ public class Tournament {
     public int getTourneyId() {
         return tourneyId;
     }
+
     public void setTourneyId(int tourneyId) {
         this.tourneyId = tourneyId;
     }
 
+    public Player getPlayerOne() {
+        return player1;
+    }
+    public Player getPlayerTwo() {
+        return player2;
+    }
 
     public String getTourneyName() {
         return tourneyName;
@@ -110,14 +108,13 @@ public class Tournament {
     }
 
     public String getSurface() {
-        if(surface == null) {
-            System.out.println("test");
-        }
         return surface;
     }
+
     public void setSurface(String surface) {
         this.surface = surface;
     }
+
 
     public String getDraw_size() {
         return draw_size;
@@ -133,11 +130,46 @@ public class Tournament {
         this.tourney_level = tourney_level;
     }
 
-    public List<Match> getMatchStats() {
-        return matches;
+    public String getCourtId() {
+        return courtId;
     }
-    public void setMatchStats(List<Match> matchStats) {
-        this.matches = matchStats;
+
+    public void setCourtId(String courtId) {
+        this.courtId = courtId;
+    }
+
+    public String getCourtName() {
+        return courtName;
+    }
+
+    public void setCourtName(String courtName) {
+        this.courtName = courtName;
+    }
+
+    public Match getMatch() {
+        return match;
+    }
+
+    public void setMatch(Match match) {
+        this.match = match;
+    }
+
+    public Map<Integer, String> gettInfoMap() {
+        return tInfoMap;
+    }
+
+    public void settInfoMap(Map<Integer, String> tInfoMap) {
+        this.tInfoMap = tInfoMap;
+    }
+
+    public String getMatchNumber() {
+        return match.getMatch_num();
+    }
+    public String getRound() {
+        return match.getRoundN();
+    }
+    public Tournament match() {
+        return match;
     }
 
 }

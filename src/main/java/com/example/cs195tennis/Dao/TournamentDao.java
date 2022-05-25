@@ -30,7 +30,7 @@ public class TournamentDao {
         System.out.println("meta master table: " + r);
     }
 
-    public static ObservableList<Tournament> populateGrandSlam() {
+    public static <T> ObservableList<Tournament> populateGrandSlam() {
 
         List<Table<?>> r = ctx().meta().getTables();
 
@@ -61,10 +61,24 @@ public class TournamentDao {
             String player2id = e.getValue("player2id").toString();
             String nation1 = e.getValue("nation1").toString();
             String nation2 = e.getValue("nation2").toString();
-            System.out.println(match_num +" "+ status +" " + winner +" "+ eventName +" " + round +" "+ courtName);
 
-            temp.add(new Tournament(id, year,tourneyName, new Player(player1id, player1, nation1), new Player(player2id, player2, nation2),
-                    new Match(match_num,status, winner, new String[]{eventName,round,courtName,courtId})));
+            Map<Integer, String> map = new HashMap<>();
+
+            int k = id + eventName.hashCode();
+            int kRound = id + round.hashCode();
+            int kCourtName = id + courtName.hashCode();
+            int kCourtId = id + courtId.hashCode();
+
+            int key = id + "eventName".hashCode();
+            map.put(k ,eventName);
+            k = id + "round".hashCode();
+
+            map.put(k, round);
+            map.put(courtName.hashCode(), courtName);
+            map.put(courtId.hashCode(), courtId);
+
+            temp.add(new Tournament(id, year,tourneyName,courtId, courtName, new Player(player1id, player1, nation1), new Player(player2id, player2, nation2),
+                    new Match(id, match_num,round, status, winner, eventName)));
         });
         return temp;
     }
@@ -81,8 +95,6 @@ public class TournamentDao {
         Result<org.jooq.Record> players = ctx().select().from("ATPPlayer").fetchSize(50).fetch();
 
         Result<Record> atpRankings = ctx().select().from("AtpPlayerRanking").fetchSize(100).fetch();
-
-        Result<Record> atpTournament = ctx().select().from("Tournament").fetch();
     }
 
 }

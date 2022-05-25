@@ -12,7 +12,7 @@ public class Player{
 
     AtpPlayer atpPlayer;
 
-    public String firstName, lastName, player_id;
+    public String firstName, lastName, player_id, nation1, nation2;
 
     static String fullName;
 

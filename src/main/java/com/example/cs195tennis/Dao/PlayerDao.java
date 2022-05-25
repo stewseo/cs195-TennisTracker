@@ -53,7 +53,6 @@ public class PlayerDao {
             for(int i = 0; i< e.size(); i++) {
                 var value = e.getValue(i);
                 var key = e.field(i);
-//                System.out.println(key + " " + value);
             }
         });
         playerRankTable.forEach(e-> {
@@ -74,8 +73,6 @@ public class PlayerDao {
             String location = e.getValue("ioc").toString();
             String height = e.getValue("height").toString();
             String wikiData = e.getValue("wikidata_id").toString();
-
-//            temp.add(new AtpPlayer(id,fullName,new String[]{dominantHand, dateOfBirth,location,height,wikiData}));
 
         });
         return temp;

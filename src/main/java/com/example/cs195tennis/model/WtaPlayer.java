@@ -22,5 +22,4 @@ public class WtaPlayer {
     public String getFullName() {
         return firstName + " " + lastName;
     }
-
 }
