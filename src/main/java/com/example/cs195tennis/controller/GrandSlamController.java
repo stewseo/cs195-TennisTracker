@@ -25,52 +25,46 @@ import org.jooq.TableField;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class GrandSlamController implements Initializable {
 
-    @FXML
-    public MFXButton searchButton;
+    @FXML public MFXButton searchButton;
 
     @FXML public MFXTextField textField;
 
-    @FXML
-    public MFXFilterComboBox<Tournament> filterCombo;
+    @FXML public MFXFilterComboBox<Tournament> filterCombo;
 
-    @FXML
-    public MFXFilterComboBox<Tournament> custFilterCombo;
+    @FXML public MFXFilterComboBox<Tournament> custFilterCombo;
 
-    @FXML
-    public Label validateWtaTournamentLavel;
+    @FXML public Label validateWtaTournamentLavel;
 
-    @FXML
-    public MFXDatePicker custDatePicker;
+    @FXML public MFXDatePicker custDatePicker;
 
-    @FXML
-    public MFXTableView<Tournament> grandSlamTable;
-
+    @FXML public MFXTableView<Tournament> grandSlamTable;
 
 
     private void grandSlamFilters() {
         StringConverter<Tournament> converter =
-                FunctionalStringConverter.to(e->(e==null) ? "" : e.getTourneyName());
+                FunctionalStringConverter.to(e->(e == null) ? "" : e.getTourneyName());
 
-        Function<String, Predicate<Tournament>> filterFunction =
-                s ->
-                        e -> {
+        System.out.println(converter);
+
+        Function<String, Predicate<Tournament>> filterFunction = s -> e -> {
             return StringUtils.containsIgnoreCase(converter.toString(e), s);
         };
+        System.out.println(filterFunction);
 
         ObservableList<Tournament> observableGrandSlams = FXCollections.observableArrayList();
 
         observableGrandSlams = TournamentDao.populateGrandSlam();
 
+        if(observableGrandSlams == null) {
+            throw new NullPointerException(" null line 65 while trying to load Grand Slams ");
+        }
         filterCombo.setItems(observableGrandSlams);
         filterCombo.setConverter(converter);
         filterCombo.setFilterFunction(filterFunction);
@@ -82,25 +76,23 @@ public class GrandSlamController implements Initializable {
     }
 
 
-
     private void setupTable() throws SQLException{
 
-        MFXTableColumn<Tournament> c1=new MFXTableColumn<>("Tourney_name",true,Comparator.comparing(Tournament::getTourneyName));
-        MFXTableColumn<Tournament> c2=new MFXTableColumn<>("tourney_date",true,Comparator.comparing(Tournament::getTourneyDate));
-        MFXTableColumn<Tournament> c3=new MFXTableColumn<>("Winner",true,Comparator.comparing(Tournament::getWinner));
-        MFXTableColumn<Tournament> c4=new MFXTableColumn<>("Loser",true,Comparator.comparing(Tournament::getLoser));
-        MFXTableColumn<Tournament> c5=new MFXTableColumn<>("Tourney_level",true,Comparator.comparing(Tournament::getTourney_level));
+        MFXTableColumn<Tournament> c1=new MFXTableColumn<>("Tournament Name",true,Comparator.comparing(Tournament::getTourneyName));
+        MFXTableColumn<Tournament> c2=new MFXTableColumn<>("Year",true,Comparator.comparing(Tournament::getTourneyDate));
+        MFXTableColumn<Tournament> c3=new MFXTableColumn<>("Player 1",true,Comparator.comparing(Tournament::getPlayer1));
+        MFXTableColumn<Tournament> c4=new MFXTableColumn<>("Player 2",true,Comparator.comparing(Tournament::getPlayer2));
+        MFXTableColumn<Tournament> c5=new MFXTableColumn<>("Tournament Level",true,Comparator.comparing(Tournament::getTourney_level));
         MFXTableColumn<Tournament> c6=new MFXTableColumn<>("Surface",true,Comparator.comparing(Tournament::getSurface));
 
         System.out.println();
 
         c1.setRowCellFactory(match->new MFXTableRowCell<>(Tournament::getTourneyName));
         c2.setRowCellFactory(match->new MFXTableRowCell<>(Tournament::getTourneyDate));
-        c3.setRowCellFactory(match->new MFXTableRowCell<>(Tournament::getWinner));
-        c4.setRowCellFactory(match->new MFXTableRowCell<>(Tournament::getLoser));
+        c3.setRowCellFactory(match->new MFXTableRowCell<>(Tournament::getPlayer1));
+        c4.setRowCellFactory(match->new MFXTableRowCell<>(Tournament::getPlayer2));
         c5.setRowCellFactory(match->new MFXTableRowCell<>(Tournament::getTourney_level));
         c6.setRowCellFactory(match->new MFXTableRowCell<>(Tournament::getSurface)
-
         {{
             setAlignment(Pos.CENTER_RIGHT);
         }});
@@ -108,11 +100,11 @@ public class GrandSlamController implements Initializable {
 
         grandSlamTable.getTableColumns().addAll(c1, c2, c3, c4, c5, c6);
         grandSlamTable.getFilters().addAll(
-                new StringFilter<>("tourney_name",Tournament::getTourneyName),
-            new StringFilter<>("tourney_date",Tournament::getTourneyDate),
-            new StringFilter<>("winner",Tournament::getWinner),
-            new StringFilter<>("loser",Tournament::getLoser),
-            new StringFilter<>("Tourney_level",Tournament::getTourney_level),
+                new StringFilter<>("Tournament Name",Tournament::getTourneyName),
+            new StringFilter<>("Year",Tournament::getTourneyDate),
+            new StringFilter<>("Player 1",Tournament::getPlayer1),
+            new StringFilter<>("Player 2",Tournament::getPlayer2),
+            new StringFilter<>("Tournament Level",Tournament::getTourney_level),
         new StringFilter<>("Surface",Tournament::getSurface));
 
         ObservableList<Tournament> observableGrandSlams = FXCollections.observableArrayList();

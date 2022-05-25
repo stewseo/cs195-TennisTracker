@@ -5,7 +5,6 @@ module com.example.cs195tennis {
     requires MaterialFX;
     requires VirtualizedFX;
     requires fr.brouillard.oss.cssfx;
-    requires com.google.common;
     requires org.kordamp.ikonli.core;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.ikonli.materialdesign2;
@@ -21,6 +20,7 @@ module com.example.cs195tennis {
     requires org.xerial.sqlitejdbc;
     requires java.sql.rowset;
     requires org.kordamp.bootstrapfx.core;
+    requires org.scenicview.scenicview;
     opens com.example.cs195tennis.model to javafx.base;
     opens com.example.cs195tennis.controller to javafx.fxml;
     exports com.example.cs195tennis;

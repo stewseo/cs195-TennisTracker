@@ -56,7 +56,6 @@ public class PlayerRankingController implements Initializable {
         ObservableList<PlayerRanking> observablePlayerRank = FXCollections.observableArrayList();
 
         observablePlayerRank = PlayerDao.oberservablePlayerRanking();
-
         observableAtpPlayer = PlayerDao.observableAtpPlayer();
 
         filterCombo.setItems(observablePlayerRank);

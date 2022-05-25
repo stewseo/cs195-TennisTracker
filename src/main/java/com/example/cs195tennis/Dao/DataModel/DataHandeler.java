@@ -1,5 +1,4 @@
 package com.example.cs195tennis.Dao.DataModel;
-
 import com.example.cs195tennis.database.Database;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -36,15 +35,20 @@ public class DataHandeler {
         return ctx().select(table(tableName).fields()).stream().collect(Collectors.toList());
     }
 
-    static String csvDirectory = "C:\\Users\\seost\\tennis_atp_datasets\\New folder";
+    static String csvDirectory = "C:\\Users\\seost\\Downloads\\tennis_wta-master\\New folder";
 
     private static void printFields() {
+
         List<Table<?>> r = ctx().meta().getTables();
+
         IntStream.range(0, r.size()).forEach(e->{
+
             System.out.println("table: " + e);
 
             if(ctx().fetchCount(DSL.selectFrom(r.get(e))) >= 0){
+
                 System.out.println(ctx().fetchCount(DSL.selectFrom(r.get(e))));
+
                 System.out.println("table " + r.get(e).fieldsRow());
             }
         });
@@ -52,7 +56,6 @@ public class DataHandeler {
     public static <T> void main(String[] args) throws IOException {
         printFields();
     }
-
 
     static void insertAllRowsToDb(List<List<String>> li) throws IOException {
 
@@ -69,7 +72,7 @@ public class DataHandeler {
 
                 List<List<String>> l =  parseCsvToListString(e);
 
-
+                List<String> finalTemp = temp;
                 l.forEach(col -> {
                     var v =  col.get(1);
 
@@ -80,7 +83,7 @@ public class DataHandeler {
 //                    InsertQuery<?> insert = ctx().insertQuery(DSL.table("GrandSlamPointByPoint"));
 //
 //                    IntStream.range(0, col.size()).forEach(i-> {
-//                        insert.addValue(DSL.field(temp.get(i), String.class), col.get(i));
+//                        insert.addValue(DSL.field(finalTemp.get(i), String.class), col.get(i));
 //                        insert.execute();
 //                    });
                 });
@@ -90,8 +93,6 @@ public class DataHandeler {
 
         });
     };
-
-
 
     static List<String> getFilesFromFolder(String directory) throws IOException {
         return Files.walk(Paths.get(directory))
@@ -153,11 +154,6 @@ public class DataHandeler {
         }
         rs.close();
         return columnNames;
-    }
-
-
-    private <T> List<T> fetchWithSelect(SelectQuery<?> select, Class<T> clazz) {
-        return null;
     }
 
 }

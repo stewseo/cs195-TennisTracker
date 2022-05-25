@@ -21,6 +21,10 @@ public class Player{
         this.name = winnerName;
     }
 
+    public Player(Object o, String name, String[] strings, PlayerRanking playerRanking) {
+
+    }
+
     static enum GENDER {
         M, F
     }

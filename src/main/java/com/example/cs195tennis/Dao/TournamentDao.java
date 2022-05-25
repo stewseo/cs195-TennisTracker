@@ -1,6 +1,7 @@
 package com.example.cs195tennis.Dao;
 
 import com.example.cs195tennis.database.Database;
+import com.example.cs195tennis.model.Match;
 import com.example.cs195tennis.model.Player;
 import com.example.cs195tennis.model.PlayerRanking;
 import com.example.cs195tennis.model.Tournament;
@@ -17,10 +18,6 @@ import static org.jooq.impl.DSL.using;
 
 public class TournamentDao {
 
-    static {
-
-    }
-
     private static DSLContext ctx() {
         DSLContext ctx = using(Database.connect(), SQLDialect.SQLITE);
         return ctx;
@@ -29,12 +26,9 @@ public class TournamentDao {
     public static void main(String[] args) {
         Result<Record> tables = ctx().select().fetch();
         List<Table<?>> r = ctx().meta().getTables();
-
         populateGrandSlam();
-
         System.out.println("meta master table: " + r);
     }
-
 
     public static ObservableList<Tournament> populateGrandSlam() {
 
@@ -42,28 +36,35 @@ public class TournamentDao {
 
         ObservableList<Tournament> temp = FXCollections.observableArrayList();
 
-        Result<Record> qualifierTournaments = ctx().select().from("QualifierTournament").fetch();
+        Result<Record> grandSlams = ctx().select().from("GrandSlams").fetch();
 
         String[] values = null;
 
+        grandSlams.stream().filter(Objects::nonNull).forEach(e -> {
 
-        AtomicInteger i = new AtomicInteger();
-        qualifierTournaments.stream().filter(Objects::nonNull).forEach(e -> {
+            var winner = "null";
+            int id = e.getValue(0).hashCode();
+            String year = e.getValue("year").toString();
+            String tourneyName = e.getValue("slam").toString();
+            String match_num = e.getValue("match_num").toString();
+            String player1 = e.getValue("player1").toString();
+            String player2 = e.getValue("player2").toString();
+            String status = e.getValue("status").toString();
+            if(e.getValue("winner")!=null) {
+                winner = e.getValue("winner").toString();
+            }
+            String eventName = e.getValue("event_name").toString();
+            String round = e.getValue("round").toString();
+            String courtName = e.getValue("court_name").toString();
+            String courtId = e.getValue("court_id").toString();
+            String player1id = e.getValue("player1id").toString();
+            String player2id = e.getValue("player2id").toString();
+            String nation1 = e.getValue("nation1").toString();
+            String nation2 = e.getValue("nation2").toString();
+            System.out.println(match_num +" "+ status +" " + winner +" "+ eventName +" " + round +" "+ courtName);
 
-            if((i.getAndIncrement()) > 1000) return;
-
-            int id = (int) e.getValue(0);
-            String name = e.getValue("tourney_date").toString();
-            String date = e.getValue("tourney_name").toString();
-            String winnerName = e.getValue("winner_name").toString();
-            String loserName = e.getValue("loser_name").toString();
-//            Arrays.stream(e.fields()).skip(1);
-            String tourneyLevel = e.getValue("tourney_level").toString();
-            String surface = e.getValue("surface").toString();
-            String drawSize = e.getValue("draw_size").toString();
-
-            temp.add(new Tournament(id, name, date, new Player(winnerName, new PlayerRanking()), new Player(winnerName, new PlayerRanking()), new String[] {tourneyLevel, surface, drawSize}));
-
+            temp.add(new Tournament(id, year,tourneyName, new Player(player1id, player1, nation1), new Player(player2id, player2, nation2),
+                    new Match(match_num,status, winner, new String[]{eventName,round,courtName,courtId})));
         });
         return temp;
     }
@@ -78,13 +79,10 @@ public class TournamentDao {
 
     private static void populateAtp() {
         Result<org.jooq.Record> players = ctx().select().from("ATPPlayer").fetchSize(50).fetch();
-        System.out.println("size of atp player " + players.size());
 
         Result<Record> atpRankings = ctx().select().from("AtpPlayerRanking").fetchSize(100).fetch();
-        System.out.println("size of atp rankings" + atpRankings.size());
 
         Result<Record> atpTournament = ctx().select().from("Tournament").fetch();
-        System.out.println("size of Tournament" +atpTournament.size());
     }
 
 }

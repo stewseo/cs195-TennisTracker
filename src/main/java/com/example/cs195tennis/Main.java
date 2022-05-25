@@ -1,6 +1,6 @@
 package com.example.cs195tennis;
 
-import com.example.cs195tennis.controller.DemoController;
+import com.example.cs195tennis.controller.MainController;
 import fr.brouillard.oss.cssfx.CSSFX;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +11,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class Main extends Application {
     private double x, y;
@@ -20,7 +19,7 @@ public class Main extends Application {
         public void start(Stage primaryStage) throws IOException {
             CSSFX.start();
             FXMLLoader loader = new FXMLLoader(MFXDemoResourcesLoader.loadURL("Demo.fxml"));
-            loader.setControllerFactory(c -> new DemoController(primaryStage));
+            loader.setControllerFactory(c -> new MainController(primaryStage));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             scene.setFill(Color.TRANSPARENT);

@@ -12,16 +12,17 @@ public class AtpPlayer extends Player {
 
     public String fullName, id;
 
-    private PlayerRanking playerRanking;
+    static PlayerRanking playerRank;
 
     static String[] playerStats;
 
-    public AtpPlayer(String id, String fullName, PlayerRanking playerRanking, String[] strings) {
+    public AtpPlayer(String id, String fullName, String[] stats, PlayerRanking playerRanking) {
         this.id = id;
-        this.fullName = fullName;
-        this.playerRanking = playerRanking;
-        playerStats = strings;
+        this.fullName=fullName;
+        playerStats= stats;
+        playerRanking= playerRank;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -56,13 +57,7 @@ public class AtpPlayer extends Player {
         this.id = id;
     }
 
-    public PlayerRanking getPlayerRanking() {
-        return playerRanking;
-    }
 
-    public void setPlayerRanking(PlayerRanking playerRanking) {
-        this.playerRanking = playerRanking;
-    }
 
     public static String[] getPlayerStats() {
         return playerStats;

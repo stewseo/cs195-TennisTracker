@@ -44,32 +44,16 @@ public class PlayerDao {
 
     public static ObservableList<AtpPlayer> observableAtpPlayer() {
         ObservableList<AtpPlayer> temp = FXCollections.observableArrayList();
-        Table<?> atpPlayer = ctx().meta().getTables().get(2);
-        Table<?> atpPlayerRank = ctx().meta().getTables().get(1);
-        Table<?> grandSlam = ctx().meta().getTables().get(3);
-        Table<?> player = ctx().meta().getTables().get(4);
-
-
-        System.out.println("player "+ atpPlayer.getPrimaryKey());
-        System.out.println("player rank" + atpPlayerRank.getPrimaryKey());
-
-        Result<Record> grandSlamTable = ctx().select().from("GrandSlam").fetch();
-        Result<Record> PLAYERTABLE = ctx().select().from("PLAYER").fetch();
 
         Result<Record> playerRankTable = ctx().select().from("AtpPlayerRanking").fetch();
         Result<Record> playerTable = ctx().select().from("AtpPlayer").fetch();
-        System.out.println(Arrays.toString(grandSlamTable.fields()));
-        System.out.println(Arrays.toString(PLAYERTABLE.fields()));
 
-//                .on(field("player_id").equals(field("player"));
-//
-
-        grandSlamTable.forEach(e-> {
+        playerTable.forEach(e-> {
 
             for(int i = 0; i< e.size(); i++) {
                 var value = e.getValue(i);
                 var key = e.field(i);
-                System.out.println(key + " " + value);
+//                System.out.println(key + " " + value);
             }
         });
         playerRankTable.forEach(e-> {
@@ -80,7 +64,6 @@ public class PlayerDao {
         });
 
         playerTable.stream().filter(Objects::nonNull).forEach(e -> {
-            System.out.println(e.fieldsRow());
 
             String id = e.getValue("player_id").toString();
             String firstName = e.getValue("name_first").toString();
@@ -92,7 +75,7 @@ public class PlayerDao {
             String height = e.getValue("height").toString();
             String wikiData = e.getValue("wikidata_id").toString();
 
-            temp.add(new AtpPlayer(id,fullName,new PlayerRanking(),new String[]{dominantHand, dateOfBirth,location,height,wikiData}));
+//            temp.add(new AtpPlayer(id,fullName,new String[]{dominantHand, dateOfBirth,location,height,wikiData}));
 
         });
         return temp;
@@ -129,7 +112,7 @@ public class PlayerDao {
         List<Table<?>> r = ctx().meta().getTables();
         Result<Record> atpRankings = ctx().select().from("AtpPlayerRanking").fetch();
 
-        Result<Record> wtaRankings = ctx().select().from("WTARank").fetch();
+        Results wtaRankings = ctx().select().from("WTARank").fetchMany();
     }
 
     private static void populatePlayerTable() {
