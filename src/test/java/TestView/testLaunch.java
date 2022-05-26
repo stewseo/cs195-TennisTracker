@@ -1,6 +1,5 @@
 package TestView;
 
-import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
@@ -17,7 +16,8 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 import static org.testfx.util.DebugUtils.informedErrorMessage;
 import static org.testfx.util.NodeQueryUtils.hasText;
 
-public class testLaunch extends Application {
+public class testLaunch ex
+        tends Application {
     static Button button;
 
     @Override

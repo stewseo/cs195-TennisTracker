@@ -13,16 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestJdbcDriver {
 
-
-    static DSLContext create() throws SQLException {
-        Connection conn = DriverManager.getConnection("");
-        assertNotNull(conn);
-
-        DSLContext ctx = using(conn, SQLDialect.SQLITE);
-        assertNotNull(ctx);
-        return ctx;
-    }
-
     @Test
     public void testConnectionToSQLite() throws SQLException {
 
