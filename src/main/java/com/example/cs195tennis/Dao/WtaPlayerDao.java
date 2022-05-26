@@ -41,7 +41,8 @@ public class WtaPlayerDao {
 
         recordList.stream().filter(Objects::nonNull).forEach(e-> {
 
-            var id = e.getValue("player_id") == null ? "" : e.getValue("player_id").toString();
+            var player_id = e.getValue("player_id") == null ? "" : e.getValue("player_id");
+            int id = player_id.hashCode();
             var firstName = e.getValue("name_first") == null ? "" : e.getValue("name_first").toString();
             var lastName = e.getValue("name_last") == null ? "" : e.getValue("name_first").toString();
             var dominantHand = e.getValue("hand") == null ? "" : e.getValue("hand").toString();
@@ -52,9 +53,11 @@ public class WtaPlayerDao {
             var playerId = e.getValue("player") == null ? "" : e.getValue("player").toString();
             var playerRank = e.getValue("rank") == null ? "" : e.getValue("rank").toString();
             var rankingPoints = e.getValue("points") == null ? "" : e.getValue("points").toString();
-            var fullName = firstName + " " + lastName;
+            //number of columns and rows determined by table filter selections
+//            observableWtaPlayerRanks.add(new WtaPlayer(paramObj.columns.get()));
 
-            observableWtaPlayerRanks.add(new WtaPlayer(id, firstName, lastName, dominantHand, dateOfBirth, location, height, rankDate, playerId, playerRank, rankingPoints, fullName));;
+            observableWtaPlayerRanks.add(new WtaPlayer(id, recordList));
+            observableWtaPlayerRanks.add(new WtaPlayer(id, firstName, lastName, dominantHand, dateOfBirth, location, height, rankDate, playerId, playerRank, rankingPoints));;
 
          });
 

@@ -1,4 +1,4 @@
-package TestDatabase;
+package TestData;
 
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.Test;

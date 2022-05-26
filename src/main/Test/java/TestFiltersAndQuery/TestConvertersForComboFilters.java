@@ -1,3 +1,5 @@
+package TestFiltersAndQuery;
+
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.utils.StringUtils;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
@@ -14,7 +16,7 @@ import java.util.function.Predicate;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class testComboBoxData {
+public class TestConvertersForComboFilters {
 
     @FXML public MFXFilterComboBox<Model> filterCombo;
 

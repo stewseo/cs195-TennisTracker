@@ -1,10 +1,10 @@
-package TestData;
+package TestData.TestModel;
 
 import com.example.cs195tennis.model.PlayerRanking;
 
 import java.util.Objects;
 
-public class TestPlayerModel {
+public class TestModelPlayer {
 
     public String fullName, id;
 
@@ -12,7 +12,7 @@ public class TestPlayerModel {
 
     static String[] playerStats;
 
-    public TestPlayerModel(String id, String fullName, String[] stats, PlayerRanking playerRanking) {
+    public TestModelPlayer(String id, String fullName, String[] stats, PlayerRanking playerRanking) {
         this.id = id;
         this.fullName=fullName;
         playerStats= stats;
@@ -27,7 +27,7 @@ public class TestPlayerModel {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        TestPlayerModel atpPlayer = (TestPlayerModel) o;
+        TestModelPlayer atpPlayer = (TestModelPlayer) o;
 
         return Objects.equals(getFullName(), atpPlayer.getFullName());
     }
@@ -60,6 +60,6 @@ public class TestPlayerModel {
     }
 
     public static void setPlayerStats(String[] playerStats) {
-        TestPlayerModel.playerStats = playerStats;
+        TestModelPlayer.playerStats = playerStats;
     }
 }

@@ -1,18 +1,22 @@
 package com.example.cs195tennis.model;
 
+import org.jooq.Record;
+
+import java.util.List;
+
 public class WtaPlayer {
     private PlayerRanking rank;
     private String dominantHand;
     private String dateOfBirth;
     private String location;
     private String rankDate;
+    private int id;
     private String playerId;
     private String playerRank;
     private String rankingPoints;
-    private String fullName;
-    public String firstName,lastName,height,id,ioc,dob,hand,wiki;
+    public String firstName,lastName,height,ioc,dob,hand,wiki;
 
-    public WtaPlayer(String id, String firstName, String lastName, String hand, String dob, String ioc, String height, String wiki) {
+    public WtaPlayer(int id, String firstName, String lastName, String hand, String dob, String ioc, String height, String wiki) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -30,10 +34,9 @@ public class WtaPlayer {
 
 
 
-    public WtaPlayer(String id, String firstName, String lastName, String dominantHand, String dateOfBirth, String location,
+    public WtaPlayer(int id, String lastName, String dominantHand, String dateOfBirth, String location,
                      String height, String rankDate, String playerId, String playerRank, String rankingPoints, String fullName) {
         this.id = id;
-        this.firstName = firstName;
         this.lastName = lastName;
         this.dominantHand = dominantHand;
         this.dateOfBirth = dateOfBirth;
@@ -42,9 +45,10 @@ public class WtaPlayer {
         this.rankDate = rankDate;
         this.playerId = playerId;
         this.playerRank = playerRank;
-        this.rankingPoints = rankingPoints;
-        this.fullName = fullName;
         rank = new PlayerRanking(rankDate, playerId, playerRank, rankingPoints);
+    }
+
+    public WtaPlayer(int id, List<Record> recordList) {
     }
 
     public String getDominantHand() {
@@ -99,13 +103,6 @@ public class WtaPlayer {
         this.height = height;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getIoc() {
         return ioc;
@@ -171,7 +168,4 @@ public class WtaPlayer {
         this.rankingPoints = rankingPoints;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
 }

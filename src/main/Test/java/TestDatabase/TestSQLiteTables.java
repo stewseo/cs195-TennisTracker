@@ -1,4 +1,4 @@
-package TestData;
+package TestDatabase;
 
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
 import java.util.List;
 
-import static TestDataAndDatabase.TestKeys.ctx;
+import static com.example.cs195tennis.Dao.PlayerDao.ctx;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -15,7 +15,6 @@ public class TestSQLiteTables {
 
     @Test
     public void testSqlTables() throws SQLException {
-
         List<Table<?>> r = ctx().meta().getTables();
 
         assertNotEquals(r.size(), 0);

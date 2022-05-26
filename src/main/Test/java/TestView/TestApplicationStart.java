@@ -21,7 +21,7 @@ import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.control.LabeledMatchers.hasText;
 import static org.testfx.util.DebugUtils.informedErrorMessage;
 
-public class ApplicationStartTest extends ApplicationTest {
+public class TestApplicationStart extends ApplicationTest {
 
     @Rule
     public TestFXRule testFXRule = new TestFXRule();

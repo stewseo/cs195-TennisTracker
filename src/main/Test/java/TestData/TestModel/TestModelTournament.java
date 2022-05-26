@@ -1,6 +1,8 @@
+package TestData.TestModel;
+
 import java.util.List;
 
-class testTournamentFromDao {
+class TestModelTournament {
 
     private int tourneyId;
     public String tourneyName,tourneyDate;
@@ -9,7 +11,7 @@ class testTournamentFromDao {
     private Object winner, loser;
 
 
-    public testTournamentFromDao(int id, String year, String tourneyName, Object player, Object player1, Object match) {
+    public TestModelTournament(int id, String year, String tourneyName, Object player, Object player1, Object match) {
         tourneyId=id;
         tourneyDate=year;
         this.tourneyName=tourneyName;

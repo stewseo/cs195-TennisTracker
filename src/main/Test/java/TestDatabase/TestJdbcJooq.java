@@ -1,8 +1,11 @@
+package TestDatabase;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 import java.util.Iterator;
 
+import static org.jooq.impl.DSL.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 

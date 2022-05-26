@@ -1,3 +1,5 @@
+package TestDatabase;
+
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.junit.jupiter.api.Test;
