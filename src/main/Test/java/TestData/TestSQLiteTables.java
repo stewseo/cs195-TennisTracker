@@ -1,3 +1,5 @@
+package TestData;
+
 import org.jooq.Table;
 import org.jooq.impl.DSL;
 import org.junit.jupiter.api.Test;

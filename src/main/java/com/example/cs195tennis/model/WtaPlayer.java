@@ -1,7 +1,7 @@
 package com.example.cs195tennis.model;
 
 public class WtaPlayer {
-
+    private PlayerRanking rank;
     private String dominantHand;
     private String dateOfBirth;
     private String location;
@@ -44,6 +44,7 @@ public class WtaPlayer {
         this.playerRank = playerRank;
         this.rankingPoints = rankingPoints;
         this.fullName = fullName;
+        rank = new PlayerRanking(rankDate, playerId, playerRank, rankingPoints);
     }
 
     public String getDominantHand() {

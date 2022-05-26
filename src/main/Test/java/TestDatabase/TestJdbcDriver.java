@@ -1,4 +1,4 @@
-package TestDataAndDatabase;
+package TestDatabase;
 
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import static org.jooq.impl.DSL.using;
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestConnections {
+class TestJdbcDriver {
 
 
     static DSLContext create() throws SQLException {

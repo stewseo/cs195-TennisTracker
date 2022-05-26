@@ -1,9 +1,10 @@
+package TestData;
+
 import com.example.cs195tennis.model.PlayerRanking;
-import com.example.cs195tennis.model.Player;
 
 import java.util.Objects;
 
-public class TestRootNode extends Player {
+public class TestPlayerModel {
 
     public String fullName, id;
 
@@ -11,7 +12,7 @@ public class TestRootNode extends Player {
 
     static String[] playerStats;
 
-    public TestRootNode(String id, String fullName, String[] stats, PlayerRanking playerRanking) {
+    public TestPlayerModel(String id, String fullName, String[] stats, PlayerRanking playerRanking) {
         this.id = id;
         this.fullName=fullName;
         playerStats= stats;
@@ -26,7 +27,7 @@ public class TestRootNode extends Player {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        TestRootNode atpPlayer = (TestRootNode) o;
+        TestPlayerModel atpPlayer = (TestPlayerModel) o;
 
         return Objects.equals(getFullName(), atpPlayer.getFullName());
     }
@@ -59,6 +60,6 @@ public class TestRootNode extends Player {
     }
 
     public static void setPlayerStats(String[] playerStats) {
-        TestRootNode.playerStats = playerStats;
+        TestPlayerModel.playerStats = playerStats;
     }
 }

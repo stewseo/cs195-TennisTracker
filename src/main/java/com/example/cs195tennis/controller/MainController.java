@@ -78,7 +78,6 @@ public class MainController implements Initializable {
             stage.setAlwaysOnTop(newVal);
         });
 
-
         //tracks mouse movements and actions within this node.
         windowHeader.setOnMousePressed(event -> {
             xOffset = stage.getX() - event.getScreenX();
@@ -93,7 +92,6 @@ public class MainController implements Initializable {
 
         ScrollUtils.addSmoothScrolling(scrollPane);
     }
-
 
     //sidepane toggles:
     private void initializeLoader() {
