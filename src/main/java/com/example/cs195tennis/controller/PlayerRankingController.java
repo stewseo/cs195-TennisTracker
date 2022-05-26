@@ -1,10 +1,6 @@
 package com.example.cs195tennis.controller;
-import com.example.cs195tennis.Dao.AtpPlayerDao;
-import com.example.cs195tennis.Dao.PlayerDao;
-import com.example.cs195tennis.Dao.TournamentDao;
-import com.example.cs195tennis.model.AtpPlayer;
-import com.example.cs195tennis.model.PlayerRanking;
-import com.example.cs195tennis.model.Tournament;
+import com.example.cs195tennis.Dao.WtaPlayerDao;
+import com.example.cs195tennis.model.*;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.StringFilter;
@@ -30,40 +26,31 @@ import java.util.function.Predicate;
 public class PlayerRankingController implements Initializable {
 
     @FXML public MFXDatePicker custDatePicker;
-    @FXML public MFXFilterComboBox<PlayerRanking> filterCombo;
-    @FXML public MFXFilterComboBox<PlayerRanking> custFilterCombo;
+    @FXML public MFXFilterComboBox<WtaPlayer> filterCombo;
+    @FXML public MFXFilterComboBox<WtaPlayer> custFilterCombo;
 
     @FXML public Label validateAtpPlayer;
 
-    @FXML public MFXTableView<AtpPlayer> atpPlayerTable;
+    @FXML public MFXTableView<WtaPlayer> wtaPlayer;
     public MFXTextField textAtpPlayer;
 
 
     private void grandSlamFilters() {
-        StringConverter<PlayerRanking> converter =
-                FunctionalStringConverter.to(e->(e==null) ? "" : "player id: " + e.getPlayerId() + " " + e.getPlayerRank());
+        StringConverter<WtaPlayer> converter = FunctionalStringConverter.to(e->(e== null) ? "" : e.getPlayerRank() +" " + e.getFullName() );
+        StringConverter<WtaPlayer> converterFields = FunctionalStringConverter.to(e->(e== null) ? "" : e.getPlayerRank() +" " + e.getFullName() );
 
-        StringConverter<PlayerRanking> converterRank =
-                FunctionalStringConverter.to(e->(e==null) ? "" : "rank date: " + e.getRankDate());
+        Function<String, Predicate<WtaPlayer>> filterFunction = s -> e -> {return StringUtils.containsIgnoreCase(converter.toString(e), s);};
 
-        Function<String, Predicate<PlayerRanking>> filterFunction =
-                s ->
-                        e -> {
-                            return StringUtils.containsIgnoreCase(converter.toString(e), s);
-                        };
+        ObservableList<WtaPlayer> observablePlayerRank = FXCollections.observableArrayList();
 
-        ObservableList<AtpPlayer> observableAtpPlayer = FXCollections.observableArrayList();
-        ObservableList<PlayerRanking> observablePlayerRank = FXCollections.observableArrayList();
-
-        observablePlayerRank = PlayerDao.oberservablePlayerRanking();
-        observableAtpPlayer = PlayerDao.observableAtpPlayer();
+        observablePlayerRank = WtaPlayerDao.populateWtaPlayerRanks();
 
         filterCombo.setItems(observablePlayerRank);
         filterCombo.setConverter(converter);
         filterCombo.setFilterFunction(filterFunction);
 
         custFilterCombo.setItems(observablePlayerRank);
-        custFilterCombo.setConverter(converterRank);
+        custFilterCombo.setConverter(converter);
         custFilterCombo.setFilterFunction(filterFunction);
         custFilterCombo.setResetOnPopupHidden(false);
     }
@@ -85,26 +72,40 @@ public class PlayerRankingController implements Initializable {
     @SuppressWarnings("unchecked")
     private void setupTable() throws SQLException {
 
-        MFXTableColumn<AtpPlayer> atpPlayerNameColumn = new MFXTableColumn<>("fullName", true, Comparator.comparing(AtpPlayer::getFullName));
+        MFXTableColumn<WtaPlayer> wtacoler = new MFXTableColumn<>("Name", true, Comparator.comparing(WtaPlayer::getFirstName));
+        MFXTableColumn<WtaPlayer> wtaCol1 = new MFXTableColumn<>("Date", true, Comparator.comparing(WtaPlayer::getRankDate));
+        MFXTableColumn<WtaPlayer> wtaCol2 = new MFXTableColumn<>("Rank", true, Comparator.comparing(WtaPlayer::getPlayerRank));
+        MFXTableColumn<WtaPlayer> wtaCpl3 = new MFXTableColumn<>("Rank Points", true, Comparator.comparing(WtaPlayer::getRankingPoints));
+        MFXTableColumn<WtaPlayer> wtaCol4 = new MFXTableColumn<>("Country", true, Comparator.comparing(WtaPlayer::getIoc));
+        MFXTableColumn<WtaPlayer> wtaCol5 = new MFXTableColumn<>("Dominant Hand", true, Comparator.comparing(WtaPlayer::getDominantHand));
 
+        System.out.println();
 
-        atpPlayerNameColumn.setRowCellFactory(match -> new MFXTableRowCell<>(AtpPlayer::getFullName)
-
+        wtacoler.setRowCellFactory(match -> new MFXTableRowCell<>(WtaPlayer::getFirstName));
+        wtaCol1.setRowCellFactory(match->new MFXTableRowCell<>(WtaPlayer::getRankDate));
+        wtaCol2.setRowCellFactory(match->new MFXTableRowCell<>(WtaPlayer::getPlayerRank));
+        wtaCpl3.setRowCellFactory(match->new MFXTableRowCell<>(WtaPlayer::getRankingPoints));
+        wtaCol4.setRowCellFactory(match->new MFXTableRowCell<>(WtaPlayer::getIoc));
+        wtaCol5.setRowCellFactory(match->new MFXTableRowCell<>(WtaPlayer::getDominantHand)
         {{
             setAlignment(Pos.CENTER_RIGHT);
         }});
-        atpPlayerNameColumn.setAlignment(Pos.CENTER_RIGHT);
+        wtaCol5.setAlignment(Pos.CENTER_RIGHT);
 
-        atpPlayerTable.getTableColumns().addAll(atpPlayerNameColumn);
-        atpPlayerTable.getFilters().addAll(
-                new StringFilter<>("fullName", AtpPlayer::getFullName)
-        );
+        wtaPlayer.getTableColumns().addAll(wtacoler,wtaCol1,wtaCol2,wtaCpl3,wtaCol4,wtaCol5 );
 
-        ObservableList<AtpPlayer> observableAtpPlayer = FXCollections.observableArrayList();
+        wtaPlayer.getFilters().addAll(
+                new StringFilter<>("Name", WtaPlayer::getFirstName),
+                new StringFilter<>("DATE",WtaPlayer::getRankDate),
+                        new StringFilter<>("Rank",WtaPlayer::getPlayerRank),
+                        new StringFilter<>("Rank Point",WtaPlayer::getRankingPoints),
+                        new StringFilter<>("Country",WtaPlayer::getIoc),
+                        new StringFilter<>("Dominant Hand",WtaPlayer::getDominantHand));
 
-        observableAtpPlayer = PlayerDao.observableAtpPlayer();
 
-        atpPlayerTable.setItems(observableAtpPlayer);
+        ObservableList<WtaPlayer> observableWtaPlayer = FXCollections.observableArrayList();
+        observableWtaPlayer = WtaPlayerDao.populateWtaPlayerRanks();
+        wtaPlayer.setItems(observableWtaPlayer);
     }
 
     public void handleAtpPlayer(ActionEvent event) {

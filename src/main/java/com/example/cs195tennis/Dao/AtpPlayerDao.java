@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import org.jooq.*;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.jooq.impl.DSL.*;
 
@@ -64,7 +63,6 @@ public class AtpPlayerDao {
                     });
 
 
-//            m.add(new PlayerRanking(v1.toString(), v2.toString(), v3.toString(), v4.toString()));
         });
 
         return m;

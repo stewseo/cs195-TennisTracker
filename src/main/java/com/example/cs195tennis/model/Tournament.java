@@ -1,20 +1,11 @@
 package com.example.cs195tennis.model;
 
-import com.example.cs195tennis.database.Database;
-import io.github.palexdev.materialfx.utils.others.dates.DateStringConverter;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.css.SimpleSelector;
-import org.jooq.*;
 import org.jooq.Record;
-import org.jooq.impl.DSL;
-import org.sqlite.SQLiteLimits;
-import java.text.SimpleDateFormat;
+
 import java.util.*;
-import java.util.stream.IntStream;
 
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.using;
-import static org.kordamp.ikonli.materialdesign2.MaterialDesignT.TOURNAMENT;
 
 public class Tournament {
 
@@ -23,8 +14,10 @@ public class Tournament {
     private int tourneyId;
     public String tourneyName,tourneyDate, surface, draw_size, tourney_level,courtId,courtName;
     private Player player1, player2;
-    private Map<Integer,String> tInfoMap;
+    public Map<Integer,String> tInfoMap;
     public Match match;
+
+
 
     public Tournament(int id, String year, String tourneyName, String courtId, String courtName, Player player1, Player player2, Match match) {
         this.match = match;
@@ -36,6 +29,12 @@ public class Tournament {
         this.player2 = player2;
         this.courtId = courtId;
         this.courtName = courtName;
+    }
+
+    public Tournament(List<Record> v) {
+        v.forEach(e->{
+            System.out.println(e.size());
+        });
     }
 
 //    public Tournament(int id, String year, String tourneyName, Player player, Player player1, Match match) {

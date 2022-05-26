@@ -15,14 +15,16 @@ import java.io.IOException;
 public class Main extends Application {
     private double x, y;
 
+
+
         @Override
         public void start(Stage primaryStage) throws IOException {
-            CSSFX.start();
+            CSSFX.start(); //monitor css for the given window and child nodes of that window
             FXMLLoader loader = new FXMLLoader(MFXDemoResourcesLoader.loadURL("Demo.fxml"));
-            loader.setControllerFactory(c -> new MainController(primaryStage));
-            Parent root = loader.load();
+            loader.setControllerFactory(c -> new MainController(primaryStage)); //dependency injection from fxml to controller
+            Parent root = loader.load(); //rppt pf sceme gra[h
             Scene scene = new Scene(root);
-            scene.setFill(Color.TRANSPARENT);
+            scene.setFill(Color.TRANSPARENT); //The root node of the Scene is given the CSS style class 'root',
             primaryStage.initStyle(StageStyle.TRANSPARENT);
             primaryStage.setScene(scene);
             primaryStage.setTitle("CS 195 Tennis Stats");

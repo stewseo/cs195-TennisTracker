@@ -2,6 +2,7 @@ package com.example.cs195tennis.controller;
 
 import com.example.cs195tennis.Dao.DataModel.DataHandeler;
 import com.example.cs195tennis.Dao.TournamentDao;
+import com.example.cs195tennis.Dao.WtaPlayerDao;
 import com.example.cs195tennis.database.Database;
 import com.example.cs195tennis.model.Match;
 import com.example.cs195tennis.model.Tournament;
@@ -47,26 +48,26 @@ public class GrandSlamController implements Initializable {
 
     @FXML public MFXTableView<Tournament> grandSlamTable;
 
+    Map<Integer, List<String>> pointByPoint;
 
     private void grandSlamFilters() {
         StringConverter<Tournament> converter =
                 FunctionalStringConverter.to(e->(e == null) ? "" : e.getTourneyName());
-
-        System.out.println(converter);
-
+        //filters everything inside of the ssearchbpx.
         Function<String, Predicate<Tournament>> filterFunction = s -> e -> {
             return StringUtils.containsIgnoreCase(converter.toString(e), s);
         };
         System.out.println(filterFunction);
 
+        //Tournament Dao loads
         ObservableList<Tournament> observableGrandSlams = FXCollections.observableArrayList();
+        TournamentDao tournamentDao = new TournamentDao();
 
-        observableGrandSlams = TournamentDao.populateGrandSlam();
+        observableGrandSlams = tournamentDao.populateGrandSlam();
 
         if(observableGrandSlams == null) {
             throw new NullPointerException(" null line 65 while trying to load Grand Slams ");
         }
-
 
         filterCombo.setItems(observableGrandSlams);
         filterCombo.setConverter(converter);
@@ -89,7 +90,6 @@ public class GrandSlamController implements Initializable {
         MFXTableColumn<Tournament> c7=new MFXTableColumn<>("Court Name",true,Comparator.comparing(Tournament::getCourtName));
         MFXTableColumn<Tournament> c8=new MFXTableColumn<>("Event Name",true,Comparator.comparing(e-> e.getMatch().getEventName()));
         MFXTableColumn<Tournament> c9=new MFXTableColumn<>("Winner",true,Comparator.comparing(e-> e.getMatch().getWinner()));
-
 
         System.out.println();
 
@@ -120,21 +120,21 @@ public class GrandSlamController implements Initializable {
                 new StringFilter<>("Winner",e-> e.getMatch().getWinner()));
 
 
-                ObservableList<Tournament> observableGrandSlams = FXCollections.observableArrayList();
-        observableGrandSlams = TournamentDao.populateGrandSlam();
-        grandSlamTable.setItems(observableGrandSlams);
-        }
+        ObservableList<Tournament> observableGrandSlams = FXCollections.observableArrayList();
 
+        observableGrandSlams = TournamentDao.populateGrandSlam();
+
+        grandSlamTable.setItems(observableGrandSlams);
+    }
     public void handleTextEntry(ActionEvent event) {
         String dateInput = custDatePicker.getText();
         System.out.println(dateInput);
         String input = textField.getText();
     }
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        //setup and load filters for combo boxes
         grandSlamFilters();
 
         try {

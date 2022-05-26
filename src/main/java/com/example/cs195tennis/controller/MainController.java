@@ -28,26 +28,26 @@ import java.util.ResourceBundle;
 
 import static com.example.cs195tennis.MFXDemoResourcesLoader.loadURL;
 
+
+//controller class of the parent root pane.
 public class MainController implements Initializable {
     private final Stage stage;
     private double xOffset;
     private double yOffset;
-    private final ToggleGroup toggleGroup;
+    private final ToggleGroup toggleGroup; // control with a Boolean indicating whether it is selected
+                                            //icons passed through toggle
 
     @FXML
     private HBox windowHeader;
 
-    @FXML
-    private MFXFontIcon closeIcon;
+    //the root buttons located top right of gui
+    @FXML private MFXFontIcon closeIcon;
 
-    @FXML
-    private MFXFontIcon minimizeIcon;
+    @FXML private MFXFontIcon minimizeIcon;
 
-    @FXML
-    private MFXFontIcon alwaysOnTopIcon;
-
-    @FXML
-    private AnchorPane rootPane;
+    @FXML private MFXFontIcon alwaysOnTopIcon;
+    //parent backing frame
+    @FXML private AnchorPane rootPane;
 
     @FXML
     private MFXScrollPane scrollPane;
@@ -55,25 +55,31 @@ public class MainController implements Initializable {
     @FXML
     private VBox navBar;
 
+    //stackpane layout area we are using for tableview, node attachments.
     @FXML
     private StackPane contentPane;
 
+    //constructor for when sidepane buttons are activated. Pass root, stage, controller.
     public MainController(Stage stage) {
         this.stage = stage;
         this.toggleGroup = new ToggleGroup();
         ToggleUtils.addAlwaysOneSelectedSupport(toggleGroup);
     }
 
+    //root = top level javafx container Node
+    //FXMLLoader and null pointer exceptions will be thrown without specific ordering. Node root and Controller controller must be specified.
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         closeIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> Platform.exit());
         minimizeIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> ((Stage) rootPane.getScene().getWindow()).setIconified(true));
-        alwaysOnTopIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+        alwaysOnTopIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> { //top of your view stack
             boolean newVal = !stage.isAlwaysOnTop();
             alwaysOnTopIcon.pseudoClassStateChanged(PseudoClass.getPseudoClass("always-on-top"), newVal);
             stage.setAlwaysOnTop(newVal);
         });
 
+
+        //tracks mouse movements and actions within this node.
         windowHeader.setOnMousePressed(event -> {
             xOffset = stage.getX() - event.getScreenX();
             yOffset = stage.getY() - event.getScreenY();
@@ -88,19 +94,29 @@ public class MainController implements Initializable {
         ScrollUtils.addSmoothScrolling(scrollPane);
     }
 
+
+    //sidepane toggles:
     private void initializeLoader() {
+
         MFXLoader loader = new MFXLoader();
-        loader.addView(MFXLoaderBean.of("Atp Players", loadURL("PlayerRanking.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-circle-dot", "Buttons")).setDefaultRoot(true).get());
-//        loader.addView(MFXLoaderBean.of("Atp Tournament", loadURL("AtpTours.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-table", "Tables")).get());
+
+        loader.addView(MFXLoaderBean.of("BUTTONS", loadURL("Buttons.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-circle-dot", "Buttons")).setDefaultRoot(true).get());
+
+        loader.addView(MFXLoaderBean.of("Atp Players", loadURL("PlayerRanking.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-toggle-on", "Checks, Radios, Toggles")).get());
+
         loader.addView(MFXLoaderBean.of("GrandSlams", loadURL("GrandSlam.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-list-dropdown", "ComboBoxes")).get());
+
+//        loader.addView(MFXLoaderBean.of("Atp Tournament", loadURL("AtpTours.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-table", "Tables")).get());
 //        loader.addView(a.of("Wta Players", loadURL("WtaPlayer.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-square-list", "Lists")).get());
 
         loader.setOnLoadedAction(beans -> {
+            //list of viewNodes that were collected from your tree
             List<ToggleButton> nodes = beans.stream()
                     .map(bean -> {
                         ToggleButton toggle = (ToggleButton) bean.getBeanToNodeMapper().get();
                         toggle.setOnAction(event -> contentPane.getChildren().setAll(bean.getRoot()));
                         if (bean.isDefaultView()) {
+                            //the icon used as reference:  stackpane -> (row,column) tableview, tableColumns, rowCells, combo boxes, comboFilters, textfields, labels
                             contentPane.getChildren().setAll(bean.getRoot());
                             toggle.setSelected(true);
                         }
@@ -112,6 +128,7 @@ public class MainController implements Initializable {
         loader.start();
     }
 
+    //Wrapper to bind Ranking or GrandSlam Tournament fixtures to a view node with root.
     private ToggleButton createToggle(String icon, String text) {
         MFXIconWrapper wrapper = new MFXIconWrapper(icon, 24, 32);
         MFXRectangleToggleNode toggleNode = new MFXRectangleToggleNode(text, wrapper);

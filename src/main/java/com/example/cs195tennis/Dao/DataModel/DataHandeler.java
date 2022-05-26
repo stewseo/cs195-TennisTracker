@@ -21,9 +21,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.example.cs195tennis.Dao.PlayerDao.ctx;
 import static org.jooq.impl.DSL.*;
-import static org.jooq.impl.SQLDataType.VARCHAR;
-import static org.jooq.impl.SQLDataType.LOCALDATETIME;
+import static org.jooq.impl.SQLDataType.*;
 
 public class DataHandeler {
 
@@ -35,8 +35,10 @@ public class DataHandeler {
         return ctx().select(table(tableName).fields()).stream().collect(Collectors.toList());
     }
 
-    static String csvDirectory = "C:\\Users\\seost\\Downloads\\tennis_wta-master\\New folder";
-
+    static String csvDirectory = "C:\\Users\\seost\\New folder";
+    static void main(String[]args){
+        printFields();;
+    }
     private static void printFields() {
 
         List<Table<?>> r = ctx().meta().getTables();
@@ -52,16 +54,54 @@ public class DataHandeler {
                 System.out.println("table " + r.get(e).fieldsRow());
             }
         });
-    }
-    public static <T> void main(String[] args) throws IOException {
-        printFields();
+
+
+        //return list of all files at the end of path
+
+        List<String> list = new ArrayList<>();
+
+        List<String> l = getFilesFromFolder(csvDirectory);
+
+        List<String> temp = new ArrayList<>();
+
+        l.forEach(e-> {
+
+            List<List<String>> recordList = new ArrayList<>();
+
+            try {
+                recordList = parseCsvToListString(e);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+            //match point by point data
+            recordList.forEach(col-> {
+
+                var v = col.get(1);
+
+                int key = col.get(0).hashCode();
+                key ^= key >>> 16;
+
+                var v1 = col.get(1);
+                var v2 = col.get(2);
+                var v3=  col.get(3);
+                var v4 = col.get(4);
+
+                ctx().insertInto(table("WtaRanks2000_2022"), field("player_id"), field("name_first"),field("name_last"),field("hand"),field("dob"),field("ioc"))
+                        .values(col.get(0), col.get(1), col.get(2), col.get(3), col.get(4), col.get(5)).execute();
+            });}
+        );
     }
 
+
+    //
     static void insertAllRowsToDb(List<List<String>> li) throws IOException {
 
         int n = "points.csv".hashCode();
+
         List<String> list = getFilesFromFolder(csvDirectory).stream().filter(
                 files-> files.substring(files.length()-10, files.length()).hashCode() == n).toList();
+
 
         list.forEach(e -> {
 
@@ -79,6 +119,7 @@ public class DataHandeler {
                     int key = col.get(0).hashCode();
 
                     key ^= key >>> 16;
+
 
 //                    InsertQuery<?> insert = ctx().insertQuery(DSL.table("GrandSlamPointByPoint"));
 //
@@ -115,28 +156,11 @@ public class DataHandeler {
         return allMatchesCsv;
     }
 
-    private void loadCsvs() throws IOException {
-        Loader<Record> r = ctx().loadInto(table("GrandSlamPointByPoint"))
-                .onDuplicateKeyError()
-                .onErrorAbort()
-                .commitAll()
-                .loadCSV("atp_rankings_00s.csv")
-                .fields()
-                .execute();
-    }
-    private void addColumns(List<Object> fields){
-
-    }
-
-    private void clearTable(String tableName){
-        ctx().delete(table(tableName)).execute();
-    }
-
-
     public static void createTable(String tableName, List<String> columns) throws SQLException, InvalidNameException {
         if(tableName == null || tableName.length() == 0){
             throw new InvalidNameException("Invalid");
         }
+
         ctx().createTableIfNotExists(table(tableName,columns)).execute();
     }
 
@@ -156,7 +180,8 @@ public class DataHandeler {
         return columnNames;
     }
 
-}
+    }
+
 
 
 

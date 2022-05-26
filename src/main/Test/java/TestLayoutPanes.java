@@ -1,8 +1,10 @@
-package com.example.cs195tennis.model;
+import com.example.cs195tennis.model.PlayerRanking;
+import com.example.cs195tennis.model.AtpPlayer;
+import com.example.cs195tennis.model.WtaPlayer;
 
 import java.util.Objects;
 
-public class Player {
+public class TestLayoutPanes {
     String name;
     int playerId;
 
@@ -17,11 +19,11 @@ public class Player {
     static String fullName;
 
 
-    public Player(String winnerName, PlayerRanking playerRanking) {
+    public TestLayoutPanes(String winnerName, PlayerRanking playerRanking) {
         this.name = winnerName;
     }
 
-    public Player(Object o, String name, String[] strings, PlayerRanking playerRanking) {
+    public TestLayoutPanes(Object o, String name, String[] strings, PlayerRanking playerRanking) {
 
     }
 
@@ -29,14 +31,14 @@ public class Player {
         M, F
     }
 
-    public Player(){}
+    public TestLayoutPanes(){}
 
-    public Player(String firstName) {
+    public TestLayoutPanes(String firstName) {
             this.firstName = firstName;
         }
 
 
-    public Player(String id, String firstName, String lastName) {
+    public TestLayoutPanes(String id, String firstName, String lastName) {
         this.player_id = id;
         this.firstName = firstName;
         this.lastName = lastName;

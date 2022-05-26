@@ -24,4 +24,6 @@ module com.example.cs195tennis {
     opens com.example.cs195tennis.model to javafx.base;
     opens com.example.cs195tennis.controller to javafx.fxml;
     exports com.example.cs195tennis;
+    opens UnitTest to javafx.fxml;
+    opens UnitTest.Model to javafx.fxml;
 }

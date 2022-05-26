@@ -1,8 +1,6 @@
 package com.example.cs195tennis.model;
 
-import java.sql.SQLException;
-
-public class PlayerRanking extends Player{
+public class PlayerRanking extends Player {
 
     public String playerRank, rankDate, playerId,rankingPoints;
 

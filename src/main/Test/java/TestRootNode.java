@@ -1,8 +1,9 @@
-package com.example.cs195tennis.model;
+import com.example.cs195tennis.model.PlayerRanking;
+import com.example.cs195tennis.model.Player;
 
 import java.util.Objects;
 
-public class AtpPlayer extends Player {
+public class TestRootNode extends Player {
 
     public String fullName, id;
 
@@ -10,11 +11,11 @@ public class AtpPlayer extends Player {
 
     static String[] playerStats;
 
-    public AtpPlayer(String id, String fullName, String[] stats, PlayerRanking playerRanking) {
+    public TestRootNode(String id, String fullName, String[] stats, PlayerRanking playerRanking) {
         this.id = id;
         this.fullName=fullName;
         playerStats= stats;
-        playerRanking= playerRank;
+        playerRanking= playerRank;c
     }
 
 
@@ -25,7 +26,7 @@ public class AtpPlayer extends Player {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        AtpPlayer atpPlayer = (AtpPlayer) o;
+        TestRootNode atpPlayer = (TestRootNode) o;
 
         return Objects.equals(getFullName(), atpPlayer.getFullName());
     }
@@ -58,6 +59,6 @@ public class AtpPlayer extends Player {
     }
 
     public static void setPlayerStats(String[] playerStats) {
-        AtpPlayer.playerStats = playerStats;
+        TestRootNode.playerStats = playerStats;
     }
 }
