@@ -28,11 +28,8 @@ public class WtaPlayer {
     }
     public WtaPlayer(){}
 
-
     public WtaPlayer(String string, String string1, String string2, String string3) {
     }
-
-
 
     public WtaPlayer(int id, String lastName, String dominantHand, String dateOfBirth, String location,
                      String height, String rankDate, String playerId, String playerRank, String rankingPoints, String fullName) {

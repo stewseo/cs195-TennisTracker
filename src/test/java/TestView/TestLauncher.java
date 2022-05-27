@@ -48,7 +48,6 @@ public class TestLauncher extends FxRobot {
         assertThat(lookup(".button").queryButton()).hasText("Button");
         assertThat(button).hasText("Button");
     }
-    //test toggle button for GrandSlam controller and fxml change
     @Test
     void should_click_on_rootButton() {
         clickOn(".button");

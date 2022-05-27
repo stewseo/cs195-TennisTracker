@@ -8,11 +8,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.jooq.*;
 import org.jooq.Record;
+import org.jooq.impl.DSL;
 
 import java.util.*;
 
-import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.using;
+import static org.jooq.impl.DSL.*;
+import static org.jooq.impl.DSL.table;
 
 
 public class PlayerDao {
@@ -84,9 +85,6 @@ public class PlayerDao {
 
         playerRankTable.stream().filter(Objects::nonNull).forEach(e -> {
 
-//            for(int i = 0; i< e.size(); i++) {
-//                var va = e.getValue(i);
-//            }
             String rankDate =   e.getValue("ranking_date").toString();
             String playerRank = e.getValue("rank").toString();
             String playerId = e.getValue("player").toString();
@@ -105,13 +103,19 @@ public class PlayerDao {
         Results wtaRankings = ctx().select().from("WTARank").fetchMany();
     }
 
-    private static void populatePlayerTable() {
+    private static void populatePlayerTable(String input) {
         ObservableList<Tournament> temp = FXCollections.observableArrayList();
+        Table<?> a = table("WtaPlayerRank");
+        Table<?> b = table("WtaPlayer");
 
-        Result<Record> wtaPlayer = ctx().select().from("ATPPlayer").fetch();
-
-        Result<org.jooq.Record> atpPlayer = ctx().select().from("WTAPlayers").fetch();
-
+        Result<?> result =
+                DSL.using(Database.connect(), SQLDialect.SQLITE)
+                        .select()
+                        .from(a)
+                        .join(b)
+                        .on(field("player", field("player_id")).eq(input))
+                        .orderBy(field("rankPoints"))
+                        .fetch();
     }
 
 }

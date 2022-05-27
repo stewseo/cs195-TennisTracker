@@ -32,8 +32,11 @@ public class TestApplicationStart extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
+
         CountDownLatch setSceneLatch = new CountDownLatch(1);
+
         setButtonTextLatch = new CountDownLatch(1);
+
         InvalidationListener invalidationListener = observable -> setSceneLatch.countDown();
         stage.sceneProperty().addListener(observable -> {
             setSceneLatch.countDown();

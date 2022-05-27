@@ -10,8 +10,6 @@ public class Match extends Tournament {
 
     public String match_id, eventName;
     public String matchNumber,round;
-    public String winnerName;
-    public String loserName;
 
     public String status;
     public String score;
@@ -20,21 +18,6 @@ public class Match extends Tournament {
 
     int matchId;
 
-    public Match(String tourney_id, String winner_name, String loser_name, String tourney_date, String score, String round) {
-        super();
-        this.score = score;
-        this.round = round;
-    }
-
-    public Match(String match_num, String status, String winner, String[] strings) {
-        this.match_id = match_num;
-        this.status = status;
-        this.winnerName = winner;
-        matchStats = strings;
-    }
-
-    public Match(String match_num, String status, String winner, Set<String> set) {
-    }
 
     public Match(int id, String match_num,String round, String status, String winner, String eventName) {
         this.matchId = id;
@@ -42,6 +25,7 @@ public class Match extends Tournament {
         this.round = round;
         this.status = status;
         this.eventName = eventName;
+
         if(winner != null) {
             this.winner = new Player(winner);
         }
@@ -103,22 +87,6 @@ public class Match extends Tournament {
 
     public void setMatch_num(String match_num) {
         this.matchNumber = match_num;
-    }
-
-    public String getWinnerName() {
-        return winnerName;
-    }
-
-    public void setWinnerName(String winnerName) {
-        this.winnerName = winnerName;
-    }
-
-    public String getLoserName() {
-        return loserName;
-    }
-
-    public void setLoserName(String loserName) {
-        this.loserName = loserName;
     }
 
     public  String getRoundN() {

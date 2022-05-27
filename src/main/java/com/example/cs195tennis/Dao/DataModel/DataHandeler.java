@@ -36,10 +36,28 @@ public class DataHandeler {
     }
 
     static String csvDirectory = "C:\\Users\\seost\\New folder";
-    static void main(String[]args){
-        printFields();;
+
+    public static void main(String[]args) throws IOException {
+
+        Table<?> inputTable = table("WtaRanks2000_2022");
+
+        Result<?> result =
+                ctx().select(field("player_id"), field("name_first", field("name_last"), field("ranking_date"),field("player"),field("rank"),field("points")))
+                        .from(inputTable)
+                        .where(field("player_id").isNotNull())
+                        .orderBy(field("rank"))
+                        .fetch();
+
+        result.forEach(e->{
+            if(e.size() > 3) {
+                System.out.println(e);
+            }
+        });
+
     }
-    private static void printFields() {
+
+
+    private static void printFields() throws IOException {
 
         List<Table<?>> r = ctx().meta().getTables();
 

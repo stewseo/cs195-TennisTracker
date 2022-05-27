@@ -8,12 +8,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.jooq.*;
 import org.jooq.Record;
+import org.jooq.impl.DSL;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.jooq.impl.DSL.table;
-import static org.jooq.impl.DSL.using;
+import static org.jooq.impl.DSL.*;
+import static org.jooq.impl.DSL.field;
 
 //class that reads invokes Data Helper to read files,
 public class TournamentDao {
@@ -38,13 +39,13 @@ public class TournamentDao {
         List<Table<?>> r = ctx().meta().getTables();
 
         ObservableList<Tournament> temp = FXCollections.observableArrayList();
+        ObservableList<Match> obselvableMatch = FXCollections.observableArrayList();
 
         Result<Record> grandSlams = ctx().select().from("GrandSlams").fetch();
-
         String[] values = null;
 
 //        loads data from ssqlite to controller.
-        grandSlams.stream().filter(Objects::nonNull).forEach(e -> {"
+        grandSlams.stream().filter(Objects::nonNull).forEach(e -> {
             var winner = "null";
             int id = e.getValue(0).hashCode();
             String year = e.getValue("year").toString();
@@ -66,20 +67,35 @@ public class TournamentDao {
             String nation1 = e.getValue("nation1").toString();
             String nation2 = e.getValue("nation2").toString();
 
-            Map<Integer, String> map = new HashMap<>();
+            //tourneyid = tourney name and date
+            //match id = tourney_id + matchNum
+            //player id pre set
+            //ranks = date + ids + tourneys
 
-            int k = id + eventName.hashCode();
-            int kRound = id + round.hashCode();
-            int kCourtName = id + courtName.hashCode();
-            int kCourtId = id + courtId.hashCode();
+//            if(!e.get("winner").equals(null)) {
+                //Create Champion for player, and tournament
+//            }
 
-            int key = id + "eventName".hashCode();
-            map.put(k ,eventName);
-            k = id + "round".hashCode();
+            Table<?> tableGrandSLam = table("GrandSlams");
 
-            map.put(k, round);
-            map.put(courtName.hashCode(), courtName);
-            map.put(courtId.hashCode(), courtId);
+            Result<?> result =
+                    DSL.using(Database.connect(), SQLDialect.SQLITE)
+                            .select(field("tourneyName"), field("tourneyDate"), field("Player1"), field("Player2"))
+                                    .from(tableGrandSLam)
+                                    .join(table("PointByPointGrandSlams"))
+                                    .on(field("Player1","Player2").eq(field("winner")))
+                                    .orderBy(field("matchNum"))
+                                    .fetch();
+
+            int tourneyId = (tourneyName + year).hashCode();
+
+            int matchId = tourneyId +  Integer.parseInt(match_num);
+
+            //key, name of tournament, Records for court, surface, draw size, tournament level, Player Tournament Champion.
+            temp.add(new Tournament(tourneyId,tourneyName, new Player(), new Result<Record>));
+
+            //key, match number, 2 players, records for player stats and match stats from that match.
+            obselvableMatch.add(new Match(matchId, matchNum, new Player(), new Player(), new Result<Record>));
 
             temp.add(new Tournament(id, year,tourneyName,courtId, courtName, new Player(player1id, player1, nation1), new Player(player2id, player2, nation2),
                     new Match(id, match_num,round, status, winner, eventName)));
