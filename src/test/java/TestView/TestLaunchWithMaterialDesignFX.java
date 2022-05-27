@@ -15,7 +15,7 @@ import org.testfx.framework.junit5.ApplicationTest;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.testfx.assertions.api.Assertions.assertThat;
 
-public class TestLauncher extends FxRobot {
+public class TestLaunchWithMaterialDesignFX extends FxRobot {
     static Button button = new Button();
 
     public static class DemoApplication extends Application {

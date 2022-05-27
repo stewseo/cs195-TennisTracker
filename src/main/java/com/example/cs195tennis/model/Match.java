@@ -6,12 +6,10 @@ public class Match extends Tournament {
 
     private Player winner, loser;
 
-    Tournament tournament;
-
     public String match_id, eventName;
-    public String matchNumber,round;
 
-    public String status;
+    int matchNumber;
+
     public String score;
 
     static String[] matchStats;
@@ -19,16 +17,15 @@ public class Match extends Tournament {
     int matchId;
 
 
-    public Match(int id, String match_num,String round, String status, String winner, String eventName) {
-        this.matchId = id;
+    //display court information in dao, surface, level, round, using tourney_id
+    //display matchStats in dao using matchId and playerId
+    //set ids in dao that are related to the type of record that is needed
+    //
+    public Match(String match_id, String tourneyName, String tourneyDate, int match_num) {
+        super(tourneyName, tourneyDate);
+        this.match_id = tourneyName + tourneyDate + Integer.parseInt(String.valueOf(match_num));
         this.matchNumber = match_num;
-        this.round = round;
-        this.status = status;
-        this.eventName = eventName;
 
-        if(winner != null) {
-            this.winner = new Player(winner);
-        }
     }
 
     public Match() {

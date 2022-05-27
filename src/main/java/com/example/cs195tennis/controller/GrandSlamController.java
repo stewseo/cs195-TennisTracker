@@ -53,7 +53,7 @@ public class GrandSlamController implements Initializable {
     private void grandSlamFilters() {
         StringConverter<Tournament> converter =
                 FunctionalStringConverter.to(e->(e == null) ? "" : e.getTourneyName());
-        //filters everything inside of the ssearchbpx.
+        //filters everything inside of the searchbpx.
         Function<String, Predicate<Tournament>> filterFunction = s -> e -> {
             return StringUtils.containsIgnoreCase(converter.toString(e), s);
         };
@@ -78,9 +78,7 @@ public class GrandSlamController implements Initializable {
         custFilterCombo.setFilterFunction(filterFunction);
         custFilterCombo.setResetOnPopupHidden(false);
     }
-
     private void setupTable() throws SQLException{
-
         MFXTableColumn<Tournament> c1=new MFXTableColumn<>("Tournament Name",true,Comparator.comparing(Tournament::getTourneyName));
         MFXTableColumn<Tournament> c2=new MFXTableColumn<>("Year",true,Comparator.comparing(Tournament::getTourneyDate));
         MFXTableColumn<Tournament> c3=new MFXTableColumn<>("Match Num",true,Comparator.comparing(Tournament::getMatchNumber));
@@ -109,7 +107,7 @@ public class GrandSlamController implements Initializable {
 
         grandSlamTable.getTableColumns().addAll(c1, c2, c3, c4, c5, c6, c7, c8, c9);
         grandSlamTable.getFilters().addAll(
-                new StringFilter<>("Tournament Name",Tournament::getTourneyName),
+//                new StringFilter<>("Tournament Name",Tournament::getTourneyName),
             new StringFilter<>("Year",Tournament::getTourneyDate),
             new StringFilter<>("Match Num",Tournament::getMatchNumber),
                 new StringFilter<>("Round",Tournament::getRound),
@@ -117,8 +115,10 @@ public class GrandSlamController implements Initializable {
                 new StringFilter<>("Player 2",Tournament::getPlayer2),
                 new StringFilter<>("Court Name",Tournament::getCourtName),
                 new StringFilter<>("Event Name",e-> e.getMatch().getEventName()),
-                new StringFilter<>("Winner",e-> e.getMatch().getWinner()));
-
+                new StringFilter<>("Winner", e-> {
+                    return e.getMatch().getWinner().hashCode() == e.getPlayer1().hashCode() ?
+                            e.getMatch().getPlayer2() : e.getPlayer2();
+                }));
 
         ObservableList<Tournament> observableGrandSlams = FXCollections.observableArrayList();
 
@@ -134,7 +134,7 @@ public class GrandSlamController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //setup and load filters for combo boxes
+
         grandSlamFilters();
 
         try {

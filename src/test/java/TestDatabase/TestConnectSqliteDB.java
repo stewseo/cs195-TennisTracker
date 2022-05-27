@@ -1,4 +1,4 @@
-package TestData.TestDatabase;
+package TestDatabase;
 
 import org.jooq.DSLContext;
 

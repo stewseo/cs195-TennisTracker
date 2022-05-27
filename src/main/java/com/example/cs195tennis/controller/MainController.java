@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.example.cs195tennis.MFXDemoResourcesLoader.loadURL;
+import static com.example.cs195tennis.ResourceLoader.loadURL;
 
 
 //controller class of the parent root pane.
@@ -98,9 +98,9 @@ public class MainController implements Initializable {
 
         MFXLoader loader = new MFXLoader();
 
-        loader.addView(MFXLoaderBean.of("BUTTONS", loadURL("Buttons.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-circle-dot", "Buttons")).setDefaultRoot(true).get());
+//        loader.addView(MFXLoaderBean.of("BUTTONS", loadURL("Buttons.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-circle-dot", "Buttons")).setDefaultRoot(true).get());
 
-        loader.addView(MFXLoaderBean.of("Atp Players", loadURL("PlayerRanking.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-toggle-on", "Checks, Radios, Toggles")).get());
+        loader.addView(MFXLoaderBean.of("Atp Players", loadURL("PlayerRanking.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-toggle-on", "Checks, Radios, Toggles")).setDefaultRoot(true).get());
 
         loader.addView(MFXLoaderBean.of("GrandSlams", loadURL("GrandSlam.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-list-dropdown", "ComboBoxes")).get());
 

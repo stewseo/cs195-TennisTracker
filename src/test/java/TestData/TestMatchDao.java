@@ -1,6 +1,5 @@
 package TestData;
 import TestModel.TestMatchModel;
-import com.example.cs195tennis.model.Match;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -27,7 +26,7 @@ public class TestMatchDao {
 
         TestMatchModel m = testMatchDao.getMatchById(1);
 
-        assert m.getName().equals("Australian Open 1101");
+        assert m.getTourneyName().equals("Australian Open 1101");
 
         assert (m.getMatchNum() == 1101);
     }

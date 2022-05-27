@@ -9,28 +9,47 @@ import javafx.collections.ObservableList;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
-
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.jooq.impl.DSL.*;
 import static org.jooq.impl.DSL.field;
 
-//class that reads invokes Data Helper to read files,
 public class TournamentDao {
 
     private static DSLContext ctx() {
         DSLContext ctx = using(Database.connect(), SQLDialect.SQLITE);
         return ctx;
     }
-//Class that prepares data from ddatabase to model. loads and updates data to controller.
     public static void main(String[] args) {
+        //Get table meta for GrandSlams
+        List<Table<?>> metaTab = ctx().meta().getTables().stream().filter(e->e.getName().equals("GrandSlams")).toList();
+        //Make table Object where a row is a match, and columns are data from Objects Tournament, Match, Player
+        Table<?> tableGrandSLam = table("GrandSlams");
+        //get column names
+        Field<?>[] fields = metaTab.get(0).fields();
+        System.out.println(Arrays.toString(fields));
 
-        Result<Record> tables = ctx().select().fetch();
+        String[] player1 = {"Rafael Nadal","Venus Williams"};
+        String[] player2 = {"David Ferr", "Sara Errani"};
 
-        List<Table<?>> r = ctx().meta().getTables();
+        Result<?> result =
+                DSL.using(Database.connect(), SQLDialect.SQLITE)
+                        .select(fields)
+                        .from(tableGrandSLam)
+                        .where(field("player1").eq(player1[1]))
+                        .or(field("player2").eq(player2[1]))
+                        .orderBy(field("match_id"))
+                        .limit(10)
+                        .fetch();
 
-//        populatePointByPointGrandSlams();
+
+//        List<Table<?>> metaTab = ctx().meta().getTables().stream().filter(e->e.getName().equals("GrandSlams")).toList();
+//        System.out.println(Arrays.toString(metaTab.get(0).fields()));
+
+//        Result<Record> tables = ctx().select().fetch();
+//
+//        List<Table<?>> r = ctx().meta().getTables();
     }
 
 
@@ -44,7 +63,6 @@ public class TournamentDao {
         Result<Record> grandSlams = ctx().select().from("GrandSlams").fetch();
         String[] values = null;
 
-//        loads data from ssqlite to controller.
         grandSlams.stream().filter(Objects::nonNull).forEach(e -> {
             var winner = "null";
             int id = e.getValue(0).hashCode();
@@ -54,7 +72,7 @@ public class TournamentDao {
             String player1 = e.getValue("player1").toString();
             String player2 = e.getValue("player2").toString();
             String status = e.getValue("status").toString();
-            //loads Grand Slam Tournament data from db to controller.
+
             if(e.getValue("winner")!=null) {
                 winner = e.getValue("winner").toString();
             } //
@@ -67,36 +85,8 @@ public class TournamentDao {
             String nation1 = e.getValue("nation1").toString();
             String nation2 = e.getValue("nation2").toString();
 
-            //tourneyid = tourney name and date
-            //match id = tourney_id + matchNum
-            //player id pre set
-            //ranks = date + ids + tourneys
-
-//            if(!e.get("winner").equals(null)) {
-                //Create Champion for player, and tournament
-//            }
-
-            Table<?> tableGrandSLam = table("GrandSlams");
-
-            Result<?> result =
-                    DSL.using(Database.connect(), SQLDialect.SQLITE)
-                            .select(field("tourneyName"), field("tourneyDate"), field("Player1"), field("Player2"))
-                                    .from(tableGrandSLam)
-                                    .join(table("PointByPointGrandSlams"))
-                                    .on(field("Player1","Player2").eq(field("winner")))
-                                    .orderBy(field("matchNum"))
-                                    .fetch();
-
-            int tourneyId = (tourneyName + year).hashCode();
-
-            int matchId = tourneyId +  Integer.parseInt(match_num);
-
-            //key, name of tournament, Records for court, surface, draw size, tournament level, Player Tournament Champion.
-            temp.add(new Tournament(tourneyId,tourneyName, new Player(), new Result<Record>));
-
-            //key, match number, 2 players, records for player stats and match stats from that match.
-            obselvableMatch.add(new Match(matchId, matchNum, new Player(), new Player(), new Result<Record>));
-
+            List<Record> tournamentCourtStats;
+            List<Record> matchStats;
             temp.add(new Tournament(id, year,tourneyName,courtId, courtName, new Player(player1id, player1, nation1), new Player(player2id, player2, nation2),
                     new Match(id, match_num,round, status, winner, eventName)));
         });

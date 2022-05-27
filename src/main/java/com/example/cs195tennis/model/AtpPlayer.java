@@ -51,8 +51,7 @@ public class AtpPlayer extends Player {
         this.id = id;
     }
 
-
-
+    
     public static String[] getPlayerStats() {
         return playerStats;
     }

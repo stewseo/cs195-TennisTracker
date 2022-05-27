@@ -11,8 +11,9 @@ import javafx.stage.Stage;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
+import java.util.Objects;
 
-public class TestUi extends Application {
+public class TestStartWithCSSFX extends Application {
     private VBox container;
 
     public Parent getRootNode() {
@@ -29,8 +30,8 @@ public class TestUi extends Application {
 
         container.getChildren().addAll(lblWelcome, lblCSSFX);
 
-        String defaultURI = TestUi.class.getResource("testDefault.css").toExternalForm();
-        String basicURI = TestUi.class.getResource("testContainer.css").toExternalForm();
+        String defaultURI = Objects.requireNonNull(TestStartWithCSSFX.class.getResource("testDefault.css")).toExternalForm();
+        String basicURI = Objects.requireNonNull(TestStartWithCSSFX.class.getResource("testContainer.css")).toExternalForm();
         container.getStylesheets().addAll(defaultURI, basicURI);
         return container;
     }
@@ -47,20 +48,18 @@ public class TestUi extends Application {
         stage.show();
     }
 
-    public Runnable startCSSFX() {
+    public Runnable testIconsFromStyleSheets() {
         try {
-            // The CSS used by the UI
-            URI basicCSS = TestUi.class.getResource("testContainer.css").toURI();
-            // a resource containing the required changes we want to apply to the CSS
-            URI changedBasicCSS = TestUi.class.getResource("basic-cssfx-blue.css").toURI();
+            URI testTextFillForCSSPseudo = TestStartWithCSSFX.class.getResource("testContainer.css").toURI();
 
-            // start CSSFX
+            URI changeIconToNewViewNode = TestStartWithCSSFX.class.getResource("basic-cssfx-blue.css").toURI();
+
             return CSSFX.onlyFor(getRootNode())
                     .noDefaultConverters()
                     .addConverter((uri) -> {
                         try {
-                            if (basicCSS.toURL().toExternalForm().equals(uri)) {
-                                return Paths.get(changedBasicCSS);
+                            if (testTextFillForCSSPseudo.toURL().toExternalForm().equals(uri)) {
+                                return Paths.get(changeIconToNewViewNode);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();

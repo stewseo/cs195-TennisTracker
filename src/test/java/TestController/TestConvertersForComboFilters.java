@@ -1,4 +1,4 @@
-package TestFixtures;
+package TestController;
 
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.utils.StringUtils;
@@ -13,35 +13,41 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class TestFilters {
+public class TestConvertersForComboFilters {
 
     @FXML public MFXFilterComboBox<Model> filterCombo;
 
     @Test
      public void testConverter() {
         ObservableList<Model> observableGrandSlams = FXCollections.observableArrayList();
-        observableGrandSlams.add(new Model(31));
+        observableGrandSlams.addAll(new Model(31));
 
-        assertNotEquals(observableGrandSlams, 0);
+        assertNotEquals(observableGrandSlams.size(), 0);
+
         filterCombo.setItems(observableGrandSlams);
 
-        StringConverter<Model> converter = FunctionalStringConverter.to(e-> assertNotNull(e.getName()););
+        StringConverter<Model> converter = FunctionalStringConverter.to(e-> {
+            if(e.getName() == null) {
+                return "tbd";
+            }
+            return e.getName();
+        });
+        assertEquals(converter.toString(), "");
+
         Function<String, Predicate<Model>> filterFunction = s -> e -> {
-            return StringUtils.containsIgnoreCase(converter.toString(e), s);
-        };
 
         String test = "test";
+
+        int strLength = e.getName().length();
+        int predModelLength = s.length();
+
+        assertTrue(s.toLowerCase().contains(s.toLowerCase()));
+        return StringUtils.containsIgnoreCase(converter.toString(e), s);
+        };
+
         filterCombo.setSearchText("Search");
-        if(test.getClass() == Model.class){
-            if(test = null) {
-                int strLength = e.getName().length();
-                int predModelLength = s.length();
-                assertTrue(s.toLowerCase().contains(s.toLowerCase()));
-            }
-        }
         filterCombo.setConverter(converter);
         filterCombo.setFilterFunction(filterFunction);
     }

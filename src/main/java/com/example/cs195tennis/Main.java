@@ -20,9 +20,9 @@ public class Main extends Application {
         @Override
         public void start(Stage primaryStage) throws IOException {
             CSSFX.start(); //monitor css for the given window and child nodes of that window
-            FXMLLoader loader = new FXMLLoader(MFXDemoResourcesLoader.loadURL("Demo.fxml"));
+            FXMLLoader loader = new FXMLLoader(ResourceLoader.loadURL("Demo.fxml"));
             loader.setControllerFactory(c -> new MainController(primaryStage)); //dependency injection from fxml to controller
-            Parent root = loader.load(); //rppt pf sceme gra[h
+            Parent root = loader.load(); //root of the scene graph
             Scene scene = new Scene(root);
             scene.setFill(Color.TRANSPARENT); //The root node of the Scene is given the CSS style class 'root',
             primaryStage.initStyle(StageStyle.TRANSPARENT);

@@ -37,8 +37,13 @@ public class Tournament {
         });
     }
 
-//    public Tournament(int id, String year, String tourneyName, Player player, Player player1, Match match) {
-//    }
+    //tourneyName + tourneyDate + matchNum + players = Result<Record> or Field<T>[] in daos
+    public Tournament(String tourneyName, String tourneyDate) {
+        this.tourneyName = tourneyName;
+        this.tourneyDate = tourneyDate;
+    }
+
+
 
     @Override
     public boolean equals(Object o) {

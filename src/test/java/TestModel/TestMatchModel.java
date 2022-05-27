@@ -1,43 +1,28 @@
 package TestModel;
 
-public class TestMatchModel {
-    public String name;
+public class TestMatchModel extends TestTournamentModel {
     public int matchNum;
     public int matchId;
+    private TestTournamentModel tournamentModel;
+    private TestPlayerModel winner, loser;
 
-
-
-    public TestMatchModel(String name, int matchNum) {
-        this.name = name;
+    public TestMatchModel(int matchId, int matchNum, TestTournamentModel tournament, TestPlayerModel winner, TestPlayerModel loser) {
         this.matchNum = matchNum;
-        matchId = (matchNum + name.hashCode());
+        this.winner = winner;
+        this.loser = loser;
+        super(tournament);
+        matchId = tournament.getTestTourneyId() +  matchNum;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
-    public int getMatchNum() {
-        return matchNum;
-    }
-
-    public void setMatchNum(int matchNum) {
-        this.matchNum = matchNum;
-    }
+    public int getMatchNum() {return matchNum;}
 
     public int getMatchId() {
         return matchId;
     }
 
-    public void setMatchId(int matchId) {
-        this.matchId = matchId;
-    }
+    public String getTourneyName() {return tournamentModel.getTestTourneyName();}
 
-    public String getName() {
-        return name;
-    }
-    public int matchId() {
-        return matchId;
-    }
+    public String getMatchWinner() {return winner.getFirstName().concat(" ").concat(winner.getLastName());}
+
+    public String getMatchLoser() {return loser.getFirstName().concat(" ").concat(loser.getLastName());}
 }
