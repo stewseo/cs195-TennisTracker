@@ -1,127 +1,77 @@
 package com.example.cs195tennis.model;
 
+import org.jooq.Field;
+
 import java.util.Objects;
 
 public class Player extends Match{
-    String name;
-    int playerId;
 
     PlayerRanking ranking;
 
-    WtaPlayer wtaPlayer;
+    String ATP, WTA;
 
-    AtpPlayer atpPlayer;
-
-    public String firstName, lastName, player_id, nation1, nation2;
-
-    static String fullName;
+    public String playerId, firstName, lastName, nation, fullName, champion,dominantHand,dateOfBirth;
 
 
-    public Player(String grandSlamChampion, PlayerRanking playerRanking) {
-        super();
-        this.name = grandSlamChampion;
+    public Player(){}
+
+    public Player(Object playerId,Object playerName, Object nation, Object dominantHand, Object dateOfBirth) {
+        this.fullName = playerName.toString();
+        this.playerId = playerId.toString();
+        this.nation = nation.toString();
+        this.dominantHand = dominantHand.toString();
+        this.dateOfBirth = dateOfBirth.toString();
     }
 
-    public Player(Object o, String name, String[] strings, PlayerRanking playerRanking) {
-        super();
-
+    public Player(Object playerName, Object playerId, Object nation){
+        this.fullName = playerName.toString();
+        this.playerId = playerId.toString();
+        this.nation = nation.toString();
+        this.dominantHand = null;
+        this.dateOfBirth = null;
     }
 
-    static enum GENDER {
-        M, F
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getPlayerId() {
+    public String getPlayerId() {
         return playerId;
-    }
-
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
     }
 
     public PlayerRanking getRanking() {
         return ranking;
     }
 
-    public void setRanking(PlayerRanking ranking) {
-        this.ranking = ranking;
-    }
-
-    public WtaPlayer getWtaPlayer() {
-        return wtaPlayer;
-    }
-
-    public void setWtaPlayer(WtaPlayer wtaPlayer) {
-        this.wtaPlayer = wtaPlayer;
-    }
-
-    public AtpPlayer getAtpPlayer() {
-        return atpPlayer;
-    }
-
-    public void setAtpPlayer(AtpPlayer atpPlayer) {
-        this.atpPlayer = atpPlayer;
-    }
-
     public String getFirstName() {
         return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public String getDominantHand() {
+        return dominantHand;
     }
 
-    public String getPlayer_id() {
-        return player_id;
+    public String getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setPlayer_id(String player_id) {
-        this.player_id = player_id;
+    public String getChampion() {
+        return champion;
     }
 
-    public String getNation1() {
-        return nation1;
+    public String getATP() {
+        return ATP;
     }
 
-    public void setNation1(String nation1) {
-        this.nation1 = nation1;
+    public String getWTA() {
+        return WTA;
     }
 
-    public String getNation2() {
-        return nation2;
+    public String getNation() {
+        return nation;
     }
 
-    public void setNation2(String nation2) {
-        this.nation2 = nation2;
-    }
-
-    public static String getFullName() {
+    public String getFullName() {
         return fullName;
     }
-
-    public static void setFullName(String fullName) {
-        Player.fullName = fullName;
-    }
-
-    @Override
-    public int hashCode(){
-        return Objects.hash(player_id);
-    }
-
 }

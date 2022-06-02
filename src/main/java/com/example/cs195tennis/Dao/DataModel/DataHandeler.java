@@ -3,9 +3,7 @@ import com.example.cs195tennis.database.Database;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import org.jooq.*;
-import org.jooq.Record;
 import org.jooq.impl.DSL;
-import org.jooq.impl.QOM;
 
 import javax.naming.InvalidNameException;
 import java.io.FileReader;
@@ -17,13 +15,10 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.example.cs195tennis.Dao.PlayerDao.ctx;
 import static org.jooq.impl.DSL.*;
-import static org.jooq.impl.SQLDataType.*;
 
 public class DataHandeler {
 
@@ -57,7 +52,7 @@ public class DataHandeler {
     }
 
 
-    private static void printFields() throws IOException {
+    private static void printTableFields() throws IOException {
 
         List<Table<?>> r = ctx().meta().getTables();
 
@@ -72,9 +67,6 @@ public class DataHandeler {
                 System.out.println("table " + r.get(e).fieldsRow());
             }
         });
-
-
-        //return list of all files at the end of path
 
         List<String> list = new ArrayList<>();
 

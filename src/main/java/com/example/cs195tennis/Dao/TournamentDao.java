@@ -24,73 +24,89 @@ public class TournamentDao {
     public static void main(String[] args) {
         //Get table meta for GrandSlams
         List<Table<?>> metaTab = ctx().meta().getTables().stream().filter(e->e.getName().equals("GrandSlams")).toList();
+        List<Table<?>> metaTabPt = ctx().meta().getTables().stream().filter(e->e.getName().equals("GrandSlamPointByPoint")).toList();
+        System.out.println(metaTab.get(0).fieldsRow());
+        System.out.println(metaTabPt.get(0).fieldsRow());
         //Make table Object where a row is a match, and columns are data from Objects Tournament, Match, Player
+
         Table<?> tableGrandSLam = table("GrandSlams");
-        //get column names
-        Field<?>[] fields = metaTab.get(0).fields();
-        System.out.println(Arrays.toString(fields));
+        Table<?> tableGrandSLamPtbyPt = table("GrandSlamPointByPoint");
+
+        Field<?>[] fieldsGrandSlam = new Field<?>[metaTabPt.get(0).fields().length + metaTabPt.get(0).fields().length];
+
+        for(int i = 0;i<metaTab.get(0).fields().length; i++) {
+            if(metaTab.get(0).fields()[i] != null) {
+                fieldsGrandSlam[i] = metaTab.get(0).fields()[i];
+            }
+        }
+        for(int i = 0;i<metaTabPt.get(0).fields().length; i++) {
+            if(metaTabPt.get(0).fields()[i] != null) {
+                fieldsGrandSlam[i + metaTab.get(0).fields().length] = metaTabPt.get(0).fields()[i];
+            }
+        }
+
+        System.out.println(Arrays.toString(fieldsGrandSlam));
 
         String[] player1 = {"Rafael Nadal","Venus Williams"};
         String[] player2 = {"David Ferr", "Sara Errani"};
 
         Result<?> result =
                 DSL.using(Database.connect(), SQLDialect.SQLITE)
-                        .select(fields)
+                        .select(fieldsGrandSlam)
                         .from(tableGrandSLam)
-                        .where(field("player1").eq(player1[1]))
-                        .or(field("player2").eq(player2[1]))
-                        .orderBy(field("match_id"))
-                        .limit(10)
+                        .innerJoin(tableGrandSLamPtbyPt).on(field("GrandSlams.matchId").eq(field("GrandSlamPointByPoint.match_id")))
+                        .where(field("GrandSlams.matchId").notEqual("match_id"))
+                        .orderBy(field("GrandSlamPointByPoint.match_id"))
+                        .limit(500)
                         .fetch();
 
+        result.forEach(System.out::println);
 
-//        List<Table<?>> metaTab = ctx().meta().getTables().stream().filter(e->e.getName().equals("GrandSlams")).toList();
-//        System.out.println(Arrays.toString(metaTab.get(0).fields()));
-
-//        Result<Record> tables = ctx().select().fetch();
-//
-//        List<Table<?>> r = ctx().meta().getTables();
     }
 
 
-    public static <T> ObservableList<Tournament> populateGrandSlam() {
+    public static ObservableList<Match> populateGrandSlam() {
 
         List<Table<?>> r = ctx().meta().getTables();
 
-        ObservableList<Tournament> temp = FXCollections.observableArrayList();
-        ObservableList<Match> obselvableMatch = FXCollections.observableArrayList();
+        ObservableList<Match> matchObservable = FXCollections.observableArrayList();
 
         Result<Record> grandSlams = ctx().select().from("GrandSlams").fetch();
         String[] values = null;
 
         grandSlams.stream().filter(Objects::nonNull).forEach(e -> {
-            var winner = "null";
+
+            Object winner = e.getValue(field("winner"));
             int id = e.getValue(0).hashCode();
-            String year = e.getValue("year").toString();
-            String tourneyName = e.getValue("slam").toString();
-            String match_num = e.getValue("match_num").toString();
-            String player1 = e.getValue("player1").toString();
-            String player2 = e.getValue("player2").toString();
+            Object tourneyName = e.getValue(field("slam"));
+            Object tourneyDate = e.getValue(field("year"));
+            Object matchNum = e.getValue(field("match_num"));
+
             String status = e.getValue("status").toString();
 
-            if(e.getValue("winner")!=null) {
-                winner = e.getValue("winner").toString();
-            } //
-            String eventName = e.getValue("event_name").toString();
-            String round = e.getValue("round").toString();
-            String courtName = e.getValue("court_name").toString();
-            String courtId = e.getValue("court_id").toString();
-            String player1id = e.getValue("player1id").toString();
-            String player2id = e.getValue("player2id").toString();
-            String nation1 = e.getValue("nation1").toString();
-            String nation2 = e.getValue("nation2").toString();
+            List<Object> tournamentFields = new ArrayList<>();
+            tournamentFields.add(e.getValue(field("court_id")));
+            tournamentFields.add(e.getValue(field("court_name")));
+            tournamentFields.add(e.getValue(field("round")));
+            tournamentFields.add(e.getValue(field("event_name")));
 
-            List<Record> tournamentCourtStats;
-            List<Record> matchStats;
-            temp.add(new Tournament(id, year,tourneyName,courtId, courtName, new Player(player1id, player1, nation1), new Player(player2id, player2, nation2),
-                    new Match(id, match_num,round, status, winner, eventName)));
+            List<Object> playerFields = new ArrayList<>();
+            playerFields.add(e.getValue(field("player1id")));
+            playerFields.add(e.getValue(field("player1")));
+            playerFields.add(e.getValue(field("nation1")));
+            playerFields.add(e.getValue(field("player2")));
+            playerFields.add(e.getValue(field("player2id")));
+            playerFields.add(e.getValue(field("nation2")));
+
+            if(winner != null) {
+                matchObservable.add(new Match(id, tourneyName, tourneyDate, tournamentFields, matchNum, winner, playerFields));
+                System.out.println(winner+ " " + "not null");
+            }
+            else {
+                matchObservable.add(new Match(id, tourneyName, tourneyDate,tournamentFields, matchNum, playerFields));
+            }
         });
-        return temp;
+        return matchObservable;
     }
 
     public static ObservableList<Tournament> populatePointByPointGrandSlams() {
@@ -107,18 +123,13 @@ public class TournamentDao {
 
         list.forEach(e -> {
 
-
                 int key = e.get(0).hashCode();
                 key ^= key >>> 16;
 
                 mapPointByPointGrandSlams.computeIfAbsent(key, v -> new ArrayList<Record>());
                 mapPointByPointGrandSlams.get(key).add(e);
-
         });
 
-        mapPointByPointGrandSlams.forEach((k,  v) -> {
-            pointByPoint.addAll(new Tournament(v));
-        });
         return pointByPoint;
     }
 

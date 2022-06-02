@@ -2,6 +2,7 @@ package com.example.cs195tennis.Dao;
 
 import com.example.cs195tennis.database.Database;
 import com.example.cs195tennis.model.AtpPlayer;
+import com.example.cs195tennis.model.Player;
 import com.example.cs195tennis.model.PlayerRanking;
 import com.example.cs195tennis.model.Tournament;
 import javafx.collections.FXCollections;
@@ -29,70 +30,92 @@ public class PlayerDao {
 
 
     public static void main(String[] args) {
-        Result<Record> tables = ctx().select().fetch();
-        List<Table<?>> r = ctx().meta().getTables();
-        System.out.println(ctx().meta().getTables());
 
-        System.out.println(ctx().meta().getSchemas());
+        List<Table<?>> metaPlayer = ctx().meta().getTables().stream().filter(e->e.getName().equals("AtpPlayerRanking")).toList();
+        List<Table<?>> metaRank = ctx().meta().getTables().stream().filter(e->e.getName().equals("AtpPlayer")).toList();
 
-        observableAtpPlayer();
+        Table<?> tableAtpPlayerRank = table("AtpPlayerRanking");
+        Table<?> tableAtpPlayer = table("AtpPlayer");
 
-        System.out.println("meta master table: " + r);
-    }
+        Field<?>[] fieldsPlayerRank = new Field<?>[metaRank.get(0).fields().length + metaPlayer.get(0).fields().length];
+        System.out.println(Arrays.toString(metaPlayer.get(0).fields()));
 
-    public static ObservableList<AtpPlayer> observableAtpPlayer() {
-        ObservableList<AtpPlayer> temp = FXCollections.observableArrayList();
-
-        Result<Record> playerRankTable = ctx().select().from("AtpPlayerRanking").fetch();
-        Result<Record> playerTable = ctx().select().from("AtpPlayer").fetch();
-
-        playerTable.forEach(e-> {
-
-            for(int i = 0; i< e.size(); i++) {
-                var value = e.getValue(i);
-                var key = e.field(i);
+        for(int i = 0;i < 5; i++) {
+            if(metaPlayer.get(0).fields()[i] != null) {
+                fieldsPlayerRank[i] = metaPlayer.get(0).fields()[i];
             }
-        });
-        playerRankTable.forEach(e-> {
-            String rankDate =   e.getValue("ranking_date").toString();
-            String playerRank = e.getValue("rank").toString();
-            String playerId = e.getValue("player").toString();
-            String rankingPoints = e.getValue("points").toString();
-        });
-
-        playerTable.stream().filter(Objects::nonNull).forEach(e -> {
-
-            String id = e.getValue("player_id").toString();
-            String firstName = e.getValue("name_first").toString();
-            String lastName = e.getValue("name_last").toString();
-            String fullName = firstName + " " + lastName;
-            String dominantHand = e.getValue("hand").toString();
-            String dateOfBirth = e.getValue("dob").toString();
-            String location = e.getValue("ioc").toString();
-            String height = e.getValue("height").toString();
-            String wikiData = e.getValue("wikidata_id").toString();
-        });
-        return temp;
+        }
+        for(int i = 0;i<metaRank.get(0).fields().length-1; i++) {
+            if(metaRank.get(0).fields()[i] != null) {
+                fieldsPlayerRank[i + 5] = metaRank.get(0).fields()[i];
+            }
+        }
+        Result<?> result =
+                DSL.using(Database.connect(), SQLDialect.SQLITE)
+                        .select(fieldsPlayerRank)
+                        .from(tableAtpPlayerRank)
+                        .innerJoin(tableAtpPlayer).on(field("AtpPlayer.player_id").eq(field("AtpPlayerRanking.player")))
+                        .where(field("AtpPlayer.player_id").notEqual("player_id"))
+                        .orderBy(field("AtpPlayerRanking.rank"))
+                        .limit(5000)
+                        .fetch();
+        result.forEach(System.out::println);
+//        Result<Record> tables = ctx().select().fetch();
+//        List<Table<?>> r = ctx().meta().getTables();
+//        System.out.println(ctx().meta().getTables().get(3).fieldsRow());
+//
+//        System.out.println(ctx().meta().getSchemas());
+//
+//        System.out.println("meta master table: " + r);
     }
-    public static ObservableList <PlayerRanking> oberservablePlayerRanking() {
 
-        ObservableList<PlayerRanking> temp = FXCollections.observableArrayList();
-        List<Table<?>> r = ctx().meta().getTables();
+    public static ObservableList<PlayerRanking> observableAtpPlayer() {
+        List<Table<?>> metaPlayer = ctx().meta().getTables().stream().filter(e->e.getName().equals("AtpPlayerRanking")).toList();
+        List<Table<?>> metaRank = ctx().meta().getTables().stream().filter(e->e.getName().equals("AtpPlayer")).toList();
 
-//        System.out.println(r);
+        Table<?> tableAtpPlayerRank = table("AtpPlayerRanking");
+        Table<?> tableAtpPlayer = table("AtpPlayer");
 
-        Result<Record> playerRankTable = ctx().select().from("AtpPlayerRanking").fetch();
+        Field<?>[] fieldsPlayerRank = new Field<?>[metaRank.get(0).fields().length + metaPlayer.get(0).fields().length];
+        System.out.println(Arrays.toString(metaPlayer.get(0).fields()));
 
-        playerRankTable.stream().filter(Objects::nonNull).forEach(e -> {
+        for(int i = 0;i < 5; i++) {
+            if(metaPlayer.get(0).fields()[i] != null) {
+                fieldsPlayerRank[i] = metaPlayer.get(0).fields()[i];
+            }
+        }
+        for(int i = 0;i<metaRank.get(0).fields().length-1; i++) {
+            if(metaRank.get(0).fields()[i] != null) {
+                fieldsPlayerRank[i + 5] = metaRank.get(0).fields()[i];
+            }
+        }
+        Result<?> result =
+                DSL.using(Database.connect(), SQLDialect.SQLITE)
+                        .select(fieldsPlayerRank)
+                        .from(tableAtpPlayerRank)
+                        .innerJoin(tableAtpPlayer).on(field("AtpPlayer.player_id").eq(field("AtpPlayerRanking.player")))
+                        .where(field("AtpPlayer.player_id").notEqual("player_id"))
+                        .orderBy(field("AtpPlayerRanking.rank"))
+                        .fetch();
 
-            String rankDate =   e.getValue("ranking_date").toString();
-            String playerRank = e.getValue("rank").toString();
-            String playerId = e.getValue("player").toString();
-            String rankingPoints = e.getValue("points").toString();
+        ObservableList<PlayerRanking> playerAndRankObservable = FXCollections.observableArrayList();
 
-            temp.add(new PlayerRanking(rankDate, playerRank, playerId,rankingPoints));
+        result.forEach(e-> {
+            Object rankDate =   e.getValue("ranking_date");
+            Object playerRank = e.getValue("rank");
+            Object rankingPoints = e.getValue("points");
+            Object playerId = e.getValue("player_id");
+            Object firstName = e.getValue("name_first");
+            Object lastName = e.getValue("name_last");
+            Object fullName = firstName + " " + lastName;
+            Object dominantHand = e.getValue("hand");
+            Object dateOfBirth = e.getValue("dob");
+            Object location = e.getValue("ioc") == null ? "" :e.getValue("ioc");
+            Object height = e.getValue("height")== null ? "" : e.getValue("height");
+
+            playerAndRankObservable.add(new PlayerRanking(playerId,fullName,rankDate,playerRank,rankingPoints,dominantHand,location,dateOfBirth));
         });
-        return temp;
+        return playerAndRankObservable;
     }
 
     public static void populateAtpPlayer() {

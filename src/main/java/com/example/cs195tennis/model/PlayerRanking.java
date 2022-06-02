@@ -5,40 +5,35 @@ public class PlayerRanking extends Player {
     public String playerRank, rankDate, playerId,rankingPoints;
 
     public PlayerRanking(String ranking_date, String rank, String player, String points) {
-
+        super();
         this.playerRank = rank;
         this.rankDate = ranking_date;
         this.playerId = player;
         this.rankingPoints = points;
     }
-    public PlayerRanking(){}
+    public PlayerRanking(Object playerId, Object fullName, Object rankDate, Object playerRank, Object rankingPoints, Object dominantHand, Object location, Object dateOfBirth) {
+        super(playerId, fullName, location, dominantHand, dateOfBirth);
+        this.rankDate= rankDate.toString();
+        this.playerRank = playerRank.toString();
+        this.playerId = playerId.toString();
+        this.rankingPoints = rankingPoints.toString();
+
+    }
 
     public String toString() {
         return playerId + " " +  rankDate;
     }
+
     public String getPlayerRank() {
         return playerRank;
     }
-    public void setPlayerRank(String playerRank) {
-        this.playerRank = playerRank;
-    }
+
     public String getRankDate() {
         return rankDate;
     }
-    public void setRankDate(String rankDate) {
-        this.rankDate = rankDate;
-    }
-    public String getPlayerId() {
-        return playerId;
-    }
-    public void setPlayerId(String playerId) {
-        this.playerId = playerId;
-    }
+
     public String getRankingPoints() {
         return rankingPoints;
     }
-    public void setRankingPoints(String rankingPoints) {
-        this.rankingPoints = rankingPoints;
-    }
-
 }
+
