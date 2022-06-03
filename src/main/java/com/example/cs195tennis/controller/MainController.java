@@ -98,14 +98,11 @@ public class MainController implements Initializable {
 
         MFXLoader loader = new MFXLoader();
 
-//        loader.addView(MFXLoaderBean.of("BUTTONS", loadURL("Buttons.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-circle-dot", "Buttons")).setDefaultRoot(true).get());
-
-        loader.addView(MFXLoaderBean.of("Atp Players", loadURL("PlayerRanking.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-toggle-on", "Checks, Radios, Toggles")).setDefaultRoot(true).get());
-
-        loader.addView(MFXLoaderBean.of("GrandSlams", loadURL("GrandSlam.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-list-dropdown", "ComboBoxes")).get());
-
-//        loader.addView(MFXLoaderBean.of("Atp Tournament", loadURL("AtpTours.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-table", "Tables")).get());
-//        loader.addView(a.of("Wta Players", loadURL("WtaPlayer.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-square-list", "Lists")).get());
+        loader.addView(MFXLoaderBean.of("Root", loadURL("Buttons.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-circle-dot", "Root")).setDefaultRoot(true).get());
+        loader.addView(MFXLoaderBean.of("Atp Players", loadURL("AtpTour.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-toggle-on", "Atp Tour")).get());
+        loader.addView(MFXLoaderBean.of("GrandSlams", loadURL("GrandSlam.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-list-dropdown", "GrandSlams")).get());
+        loader.addView(MFXLoaderBean.of("WtaPlayer.fxml", loadURL("WtaTour.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-table", "Wta Tour")).get());
+        loader.addView(MFXLoaderBean.of("Tournaments", loadURL("Tournaments.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-square-list", "Tournaments")).get());
 
         loader.setOnLoadedAction(beans -> {
             //list of viewNodes that were collected from your tree
@@ -126,7 +123,6 @@ public class MainController implements Initializable {
         loader.start();
     }
 
-    //Wrapper to bind Ranking or GrandSlam Tournament fixtures to a view node with root.
     private ToggleButton createToggle(String icon, String text) {
         MFXIconWrapper wrapper = new MFXIconWrapper(icon, 24, 32);
         MFXRectangleToggleNode toggleNode = new MFXRectangleToggleNode(text, wrapper);

@@ -36,7 +36,7 @@
     <Label id="validWtaPlayer" fx:id="handleWtaPlayers" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
            textFill="#ef6e6b" visible="false" wrapText="true"/>
 
-    <MFXDatePicker id="customDateWtaPlayers" fx:id="handleWtaDate" closePopupOnChange="false" floatMode="INLINE"
+    <MFXDatePicker id="customDateWtaPlayers" fx:id="WtaTourDatePicker" closePopupOnChange="false" floatMode="INLINE"
                    floatingText="Date Range"
                    GridPane.rowIndex="2" GridPane.columnIndex="3"/>
 

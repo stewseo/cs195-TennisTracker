@@ -20,7 +20,7 @@ public class Main extends Application {
         @Override
         public void start(Stage primaryStage) throws IOException {
             CSSFX.start(); //monitor css for the given window and child nodes of that window
-            FXMLLoader loader = new FXMLLoader(ResourceLoader.loadURL("Demo.fxml"));
+            FXMLLoader loader = new FXMLLoader(ResourceLoader.loadURL("RootView.fxml"));
             loader.setControllerFactory(c -> new MainController(primaryStage)); //dependency injection from fxml to controller
             Parent root = loader.load(); //root of the scene graph
             Scene scene = new Scene(root);

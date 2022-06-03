@@ -1,6 +1,5 @@
 package com.example.cs195tennis.controller;
 import com.example.cs195tennis.Dao.PlayerDao;
-import com.example.cs195tennis.Dao.WtaPlayerDao;
 import com.example.cs195tennis.model.*;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
@@ -24,7 +23,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class PlayerRankingController implements Initializable {
+public class AtpTourController implements Initializable {
 
     @FXML public MFXDatePicker custDatePicker;
     @FXML public MFXFilterComboBox<PlayerRanking> filterCombo;
@@ -33,8 +32,7 @@ public class PlayerRankingController implements Initializable {
     @FXML public Label validateAtpPlayer;
 
     @FXML public MFXTableView<PlayerRanking> playerTable;
-    public MFXTextField textAtpPlayer;
-
+    @FXML public MFXTextField textAtpPlayer;
 
     private void grandSlamFilters() {
         StringConverter<PlayerRanking> converter = FunctionalStringConverter.to(e->(e== null) ? "" : e.getFullName() +" " + e.getPlayerRank() );
@@ -42,15 +40,15 @@ public class PlayerRankingController implements Initializable {
 
         Function<String, Predicate<PlayerRanking>> filterFunction = s -> e -> {return StringUtils.containsIgnoreCase(converter.toString(e), s);};
 
-        ObservableList<PlayerRanking> observablePlayerRank = FXCollections.observableArrayList();
+        ObservableList<PlayerRanking> observableAtp = FXCollections.observableArrayList();
 
-        observablePlayerRank = PlayerDao.observableAtpPlayer();
+        observableAtp = PlayerDao.observableAtpPlayer();
 
-        filterCombo.setItems(observablePlayerRank);
+        filterCombo.setItems(observableAtp);
         filterCombo.setConverter(converter);
         filterCombo.setFilterFunction(filterFunction);
-
-        custFilterCombo.setItems(observablePlayerRank);
+        //atp 250, 500, 1000, championships in the filter boxes
+        custFilterCombo.setItems(observableAtp);
         custFilterCombo.setConverter(converterFields);
         custFilterCombo.setFilterFunction(filterFunction);
         custFilterCombo.setResetOnPopupHidden(false);
@@ -97,18 +95,24 @@ public class PlayerRankingController implements Initializable {
 
         playerTable.getFilters().addAll(
                 new StringFilter<>("Name", PlayerRanking::getFullName),
-                new StringFilter<>("DATE",PlayerRanking::getPlayerRank),
-                        new StringFilter<>("Rank",PlayerRanking::getRankDate),
-                        new StringFilter<>("Rank Point",PlayerRanking::getRankingPoints),
-                        new StringFilter<>("Country",PlayerRanking::getNation),
-                        new StringFilter<>("Dominant Hand",PlayerRanking::getDominantHand));
+                new StringFilter<>("Rank",PlayerRanking::getPlayerRank),
+                new StringFilter<>("Rank Date",PlayerRanking::getRankDate),
+                new StringFilter<>("Rank Points",PlayerRanking::getRankingPoints),
+                new StringFilter<>("Country",PlayerRanking::getNation),
+                new StringFilter<>("Dominant Hand",PlayerRanking::getDominantHand));
 
 
-        ObservableList<PlayerRanking> observablePlayer = FXCollections.observableArrayList();
-        observablePlayer = PlayerDao.observableAtpPlayer();
-        playerTable.setItems(observablePlayer);
+        ObservableList<PlayerRanking> observableAtp = FXCollections.observableArrayList();
+        observableAtp =  PlayerDao.observableAtpPlayer();
+        playerTable.setItems(observableAtp);
     }
 
     public void handleAtpPlayer(ActionEvent event) {
+    }
+
+    public void AtpPlayersText(ActionEvent event) {
+    }
+
+    public void handleTournamentText(ActionEvent event) {
     }
 }

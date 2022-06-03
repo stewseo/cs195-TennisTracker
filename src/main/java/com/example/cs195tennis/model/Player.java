@@ -23,6 +23,14 @@ public class Player extends Match{
         this.dateOfBirth = dateOfBirth.toString();
     }
 
+    public Player(Object playerId,Object playerName, Object nation, Object dominantHand) {
+        this.fullName = playerName.toString();
+        this.playerId = playerId.toString();
+        this.nation = nation.toString();
+        this.dominantHand = dominantHand.toString();
+        this.dateOfBirth = dateOfBirth.toString();
+    }
+
     public Player(Object playerName, Object playerId, Object nation){
         this.fullName = playerName.toString();
         this.playerId = playerId.toString();
@@ -30,6 +38,15 @@ public class Player extends Match{
         this.dominantHand = null;
         this.dateOfBirth = null;
     }
+
+    public Player(Object playerId,Object playerName) {
+        this.fullName = playerName.toString();
+        this.playerId = playerId.toString();
+        this.nation = nation.toString();
+        this.dominantHand = dominantHand.toString();
+        this.dateOfBirth = dateOfBirth.toString();
+    }
+
 
     public String getPlayerId() {
         return playerId;

@@ -1,8 +1,6 @@
 package com.example.cs195tennis.controller;
 
-import com.example.cs195tennis.Dao.DataModel.DataHandeler;
 import com.example.cs195tennis.Dao.TournamentDao;
-import com.example.cs195tennis.Dao.WtaPlayerDao;
 import com.example.cs195tennis.model.Match;
 import com.example.cs195tennis.model.Tournament;
 import io.github.palexdev.materialfx.controls.*;
@@ -69,7 +67,7 @@ public class GrandSlamController implements Initializable {
         filterCombo.setItems(observableGrandSlams);
         filterCombo.setConverter(converter);
         filterCombo.setFilterFunction(filterFunction);
-
+        //use case combo box with atp and wta champions from each year
         custFilterCombo.setItems(observableGrandSlams);
         custFilterCombo.setConverter(converter);
         custFilterCombo.setFilterFunction(filterFunction);
