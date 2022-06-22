@@ -1,4 +1,4 @@
-# cs195-Ato and Wta Rankinngs. Match Point by Point stats. 
+# cs195-Atp and Wta Rankinngs. Match Point by Point stats. 
 CSV files from https://github.com/JeffSackmann
 JavaFX template from MaterialFX demo: https://github.com/palexdev/MaterialFX
 
