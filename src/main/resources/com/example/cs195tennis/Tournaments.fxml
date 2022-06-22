@@ -66,8 +66,8 @@
             <Insets bottom="15.0"/>
         </GridPane.margin>
     </MFXListView>
-    <Label styleClass="sub-header-label" text="Checklist MatchStats" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-    <MFXCheckListView fx:id="checkList" prefWidth="170.0" GridPane.columnIndex="2" GridPane.rowIndex="2"
+    <Label styleClass="sub-header-label" text="Checklist MatchStats"  GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+    <MFXCheckListView fx:id="checkList" prefWidth="170.0" onMouseClicked="#handleMouseClick" GridPane.columnIndex="2" GridPane.rowIndex="2"
                       GridPane.rowSpan="3">
         <GridPane.margin>
             <Insets bottom="15.0"/>

@@ -4,14 +4,27 @@ import org.jooq.Field;
 
 import java.util.Objects;
 
-public class Player extends Match{
+public class Player<T extends Comparable<? super T>> {
 
-    PlayerRanking ranking;
-
-    String ATP, WTA;
+    private PlayerRanking ranking;
+    private Match<T> match;
 
     public String playerId, firstName, lastName, nation, fullName, champion,dominantHand,dateOfBirth;
 
+    static enum League{
+        ATP,
+        WTA;
+
+         League() {}
+
+        public League getAtp() {
+             return ATP;
+        }
+        public League getWTA() {
+            return WTA;
+        }
+
+        }
 
     public Player(){}
 
@@ -76,13 +89,6 @@ public class Player extends Match{
         return champion;
     }
 
-    public String getATP() {
-        return ATP;
-    }
-
-    public String getWTA() {
-        return WTA;
-    }
 
     public String getNation() {
         return nation;

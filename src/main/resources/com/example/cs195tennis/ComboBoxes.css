@@ -4,16 +4,12 @@
 @import 'Common.css';
 @import 'MFXColors.css';
 
-/**************************************************
- * Legacy Combos
-**************************************************/
+
 .mfx-legacy-combo-box {
 	-fx-min-width: 120;
 }
 
-/**************************************************
- * New Combos
-**************************************************/
+
 .mfx-combo-box {
 	-fx-min-width: 150;
 	-fx-font-family: 'Visby Round CF Medium';

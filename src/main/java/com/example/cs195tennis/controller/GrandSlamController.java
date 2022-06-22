@@ -39,7 +39,7 @@ public class GrandSlamController implements Initializable {
 
     @FXML public MFXFilterComboBox<Match> filterCombo;
 
-    @FXML public MFXFilterComboBox<Match> custFilterCombo;
+    @FXML public MFXFilterComboBox<org.jooq.Record> custFilterCombo;
 
     @FXML public Label validateWtaTournamentLavel;
 
@@ -56,11 +56,14 @@ public class GrandSlamController implements Initializable {
         Function<String, Predicate<Match>> filterFunction = s -> e -> {
             return StringUtils.containsIgnoreCase(converter.toString(e), s);
         };
+        ObservableList<Match> recentResults = FXCollections.observableArrayList();
 
         ObservableList<Match> observableGrandSlams = FXCollections.observableArrayList();
         TournamentDao tournamentDao = new TournamentDao();
 
         observableGrandSlams = tournamentDao.populateGrandSlam();
+
+        tournamentDao.getRecentTournaments();
 
         assert equals(observableGrandSlams.size() > 0);
 
@@ -68,9 +71,19 @@ public class GrandSlamController implements Initializable {
         filterCombo.setConverter(converter);
         filterCombo.setFilterFunction(filterFunction);
         //use case combo box with atp and wta champions from each year
-        custFilterCombo.setItems(observableGrandSlams);
-        custFilterCombo.setConverter(converter);
-        custFilterCombo.setFilterFunction(filterFunction);
+
+        ObservableList<org.jooq.Record> pointByPointObservable = FXCollections.observableArrayList();
+        pointByPointObservable = tournamentDao.getObservablePointByPointMatch();
+        StringConverter<org.jooq.Record> pointByPointConverter =
+                FunctionalStringConverter.to(e->(e == null) ? "" : e.get("match_id").toString());
+
+        Function<String, Predicate<org.jooq.Record>> pointByPointFilterFunction = s -> e -> {
+            return StringUtils.containsIgnoreCase(pointByPointConverter.toString(e), s);
+        };
+
+        custFilterCombo.setItems(pointByPointObservable);
+        custFilterCombo.setConverter(pointByPointConverter);
+        custFilterCombo.setFilterFunction(pointByPointFilterFunction);
         custFilterCombo.setResetOnPopupHidden(false);
 
         observableGrandSlams = null;

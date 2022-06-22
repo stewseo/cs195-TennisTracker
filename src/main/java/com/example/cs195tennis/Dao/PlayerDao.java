@@ -2,7 +2,6 @@ package com.example.cs195tennis.Dao;
 
 import com.example.cs195tennis.database.Database;
 import com.example.cs195tennis.model.PlayerRanking;
-import com.example.cs195tennis.model.Tournament;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.jooq.*;
@@ -11,14 +10,14 @@ import org.jooq.impl.DSL;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.jooq.impl.DSL.*;
 import static org.jooq.impl.DSL.table;
 
 
 public class PlayerDao {
-
+    private Table<?> TABLE_AtpPlayerRank,TABLE_WTAPlayers, TABLE_WtaRanks2000_2022, TABLE_AtpPlayerRanking;
+    private Schem SCHEMA_AtpPlayerRank, SCHEMA_WTAPlayers, SCHEMA_WtaRanks2000_2022, SCHEMA_AtpPlayerRanking;
 
     public static DSLContext ctx() {
         DSLContext ctx = using(Database.connect(), SQLDialect.SQLITE);
@@ -35,7 +34,6 @@ public class PlayerDao {
 //        List<String> getFilesFromFolder = dataHandeler.getFilesFromFolder(csvDirectory);
         System.out.println("count: " + ctx().fetchCount(table("GrandSlamPointByPoint")));
 //        dataHandeler.clearTable();
-//        System.out.println("count: " + ctx().fetchCount(table("2010_2022GrandSlams")));
 //        dataHandeler.updateColumn("WtaPlayers", new String[]{"ID"}, true);
         dataHandeler.printTableFields();
 
@@ -72,15 +70,12 @@ public class PlayerDao {
                 fieldsPlayerRank[i + 5] = metaRank.get(0).fields()[i];
             }
         }
-        System.out.println(fieldsPlayerRank.length);
         Result<Record> result =
                 DSL.using(Database.connect(), SQLDialect.SQLITE)
                         .select(fieldsPlayerRank)
                         .from(tableWtaPlayers)
                         .innerJoin(tableWtaPlayerRank).on(field("WtaPlayers.player_id").eq(field("WtaRanks2000_2022.player")))
-//                        .where(field("WtaPlayers.player_id").notEqual("player_id"))
                         .orderBy(field("WtaRanks2000_2022.rank"))
-//                        .limit(100000)
                         .fetch();
 
         ObservableList<PlayerRanking> playerAndRankObservable = FXCollections.observableArrayList();
@@ -136,7 +131,6 @@ public class PlayerDao {
 //                        .where(field("AtpPlayer.player_id").notEqual("player_id"))
                         .orderBy(field("AtpPlayerRanking.rank"))
                         .fetch();
-        System.out.println(result.size());
         ObservableList<PlayerRanking> playerAndRankObservable = FXCollections.observableArrayList();
 
         result.forEach(e-> {
@@ -158,10 +152,42 @@ public class PlayerDao {
 
     public static void populateAtpPlayer() {
         List<Table<?>> r = ctx().meta().getTables();
-
         Result<Record> atpRankings = ctx().select().from("AtpPlayerRanking").fetch();
-
         Results wtaRankings = ctx().select().from("WTARank").fetchMany();
+    }
+
+    //TABLE_AtpPlayerRank,TABLE_WTAPlayers, TABLE_WtaRanks2000_2022, TABLE_AtpPlayerRanking;
+    public ObservableList<Record> getCurrentWtaRanks() {
+        List<Table<?>> metaPlayer = ctx().meta().getTables().stream().filter(e->e.getName().equals("WTAPlayers")).toList();
+        List<Table<?>> metaRank = ctx().meta().getTables().stream().filter(e->e.getName().equals("WtaRanks2000_2022")).toList();
+        Table<?> tableWtaPlayerRank = table("WtaRanks2000_2022");
+        System.out.println("wta players "+ metaPlayer.get(0).fieldsRow());
+        Table<?> tableWtaPlayers = table("WTAPlayers");
+        System.out.println("wta ranks "+metaRank.get(0).fieldsRow());
+        Result<Record6<Object, Object, Object, Object, Object,Object>> rs =
+                using(Database.connect(), SQLDialect.SQLITE)
+                        .select(field("player_id"), field("name_first"), field("ranking_date"), field("name_last"), field("rank"), field("points"))
+                        .from(table("WtaPlayers"))
+                        .innerJoin(table("WtaRanks2000_2022"))
+                        .on(field("WtaRanks2000_2022.player").eq(field("WtaPlayers.player_id")))
+                        .and(field("WtaRanks2000_2022.ranking_date").greaterOrEqual(2020))
+                        .orderBy(field("WtaRanks2000_2022.rank"))
+                        .fetch();
+        ObservableList<Record> ol = FXCollections.observableArrayList();
+        ol.addAll(rs);
+        System.out.println("ol size: " + ol.size());
+//        ol.forEach(System.out::println);
+
+        return ol;
+    }
+
+    public <Record> ObservableList<Record> getCurrentAtpRanks() {
+        return null;
+    }
+
+
+    public <Record> ObservableList<Record> getPlayersWithMostAllTimeWins() {
+        return null;
     }
 }
 
