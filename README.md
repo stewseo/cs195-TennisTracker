@@ -1,7 +1,23 @@
-## Atp and Wta Player Rankings. 
-Grand Slam Tournament Match Point by Point stats. 
-CSV files from https://github.com/JeffSackmann
-JavaFX template from MaterialFX demo: https://github.com/palexdev/MaterialFX
+### Atp and Wta Tour Rankings. Grand Slam Tournament Match Point by Point stats. 
+
+
+## CSV Files loaded into MySql db
+
+Atp Tour Tournaments, Players and Player Rankings for singles, doubles, futures, amateurs and Challengers:
+https://github.com/JeffSackmann/tennis_atp
+
+Wta Tour Tournaments, Players and Player Rankings for singles, doubles, futures, amateurs and Challengers:
+https://github.com/JeffSackmann/tennis_wta
+
+
+GrandSlam Tournaments and Match Point by Point stats:
+
+https://github.com/JeffSackmann/tennis_slam_pointbypoint
+
+## MaterialFX Demo used for TableView and ComboBox layouts
+
+https://github.com/palexdev/MaterialFX
+
 
 ![MySQL_demo_physical_data_model-2022-06-21_23-34](https://user-images.githubusercontent.com/54422342/174959661-39ff945a-4135-4b3a-bcd9-93bb021406eb.png)
 
