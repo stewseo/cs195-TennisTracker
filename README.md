@@ -18,5 +18,4 @@ https://github.com/JeffSackmann/tennis_slam_pointbypoint
 https://github.com/palexdev/MaterialFX
 
 
-![MySQL_demo_physical_data_model-2022-06-22_15-11](https://user-images.githubusercontent.com/54422342/175162998-e0bd3193-97cc-4106-8114-3f6df7d2bbb5.png)
-
+![MySQL_demo_physical_data_model-2022-06-23_12-58](https://user-images.githubusercontent.com/54422342/175386635-886d1cb5-81ea-4003-afd6-d695a81ad1af.png)
