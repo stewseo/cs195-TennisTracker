@@ -1,8 +1,9 @@
 package com.example.cs195tennis.model;
 
-import com.example.cs195tennis.Dao.Record.WtaPlayerRecord;
+import com.example.cs195tennis.Data.Record.WtaPlayerRecord;
 
-import com.example.cs195tennis.Dao.Table.Keys;
+import Data.Schema.Keys;
+import Data.Schema.Public;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
@@ -24,7 +25,7 @@ public class WtaPlayer extends TableImpl<WtaPlayerRecord> {
         return WtaPlayerRecord.class;
     }
 
-    public final TableField<WtaPlayerRecord, Integer> ID = createField(DSL.name("player_id"), SQLDataType.INTEGER.nullable(false), WTA_PLAYER, "");
+    public final TableField<WtaPlayerRecord, Integer> PLAYER_ID = createField(DSL.name("player_id"), SQLDataType.INTEGER.nullable(false), WTA_PLAYER, "");
 
     public final TableField<WtaPlayerRecord, String> FIRST_NAME = createField(DSL.name("name_first"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
 
@@ -56,7 +57,7 @@ public class WtaPlayer extends TableImpl<WtaPlayerRecord> {
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return Public.SCHEMA;
     }
 
     @Override

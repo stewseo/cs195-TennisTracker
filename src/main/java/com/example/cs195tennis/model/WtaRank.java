@@ -1,9 +1,10 @@
 package com.example.cs195tennis.model;
 
 
-import com.example.cs195tennis.Dao.Record.WtaRankRecord;
+import com.example.cs195tennis.Data.Record.WtaRankRecord;
 
-import com.example.cs195tennis.Dao.Table.Keys;
+import Data.Schema.Keys;
+import Data.Schema.Public;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
@@ -32,15 +33,10 @@ public class WtaRank extends TableImpl<WtaRankRecord> {
 
     public final TableField<WtaRankRecord, Integer> POINTS = createField(DSL.name("points"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
-
-    /**
-     * Create a <code>public.WtaRanks2000_2022</code> table reference
-     * AtpPlayerRanking
-     */
     final static String intTable = "WtaRank";
     final static String stringTable = "WtaRanks2000_2022";
     public WtaRank() {
-        this(DSL.name("WtaRank"), null);
+        this(DSL.name(intTable), null);
     }
 
     public WtaRank(Name alias) {
@@ -61,25 +57,25 @@ public class WtaRank extends TableImpl<WtaRankRecord> {
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return Public.SCHEMA;
     }
 
     @Override
     public UniqueKey<WtaRankRecord> getPrimaryKey() {
-        return Keys.WTA_RANK_PKEY;
+        return Keys.WTARANK_PKEY;
     }
 
     @Override
     public List<UniqueKey<WtaRankRecord>> getKeys() {
-        return List.<UniqueKey<WtaRankRecord>>of(Keys.WTA_RANK_PKEY);
+        return List.<UniqueKey<WtaRankRecord>>of(Keys.WTARANK_PKEY);
     }
 
     @Override
     public List<ForeignKey<WtaRankRecord, ?>> getReferences() {
-        return List.<ForeignKey<WtaRankRecord, ?>>of(Keys.WTARANK__XXX);
+        return List.<ForeignKey<WtaRankRecord, ?>>of(Keys.WTARANK__ATP_RANK_PLAYER_ID_FKEY);
     }
 
-    public WtaPlayer player() {return new WtaPlayer(this, Keys.WTARANK__XXX);
+    public WtaPlayer player() {return new WtaPlayer(this, Keys.WTARANK__ATP_RANK_PLAYER_ID_FKEY);
     }
 
     @Override

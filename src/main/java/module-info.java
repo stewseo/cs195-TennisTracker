@@ -22,4 +22,12 @@ module com.example.cs195tennis {
     opens com.example.cs195tennis.model to javafx.base;
     opens com.example.cs195tennis.controller to javafx.fxml;
     exports com.example.cs195tennis;
+    opens com.example.cs195tennis.model.Enum to javafx.base;
+    opens Data.Schema to javafx.base;
+    opens Data to javafx.base;
+    opens Data.Catalog to javafx.base;
+    opens com.example.cs195tennis.Util to javafx.base;
+    opens Data.QueryParts to javafx.base;
+    opens Data.Execution to javafx.base;
+    opens Data.Listeners to javafx.base;
 }

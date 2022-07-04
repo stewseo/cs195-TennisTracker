@@ -1,99 +1,119 @@
 package com.example.cs195tennis.model;
 
-import org.jooq.Field;
-import org.jooq.Record;
+import com.example.cs195tennis.Data.Record.MatchRecord;
+import com.example.cs195tennis.Data.Record.TournamentRecord;
+import com.example.cs195tennis.model.Enum.TournamentLevel;
+import Data.Schema.Keys;
+import Data.Schema.Public;
+import org.jooq.*;
+import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
+import org.jooq.impl.TableImpl;
 
-import java.util.*;
+import java.lang.Record;
+import java.util.Arrays;
+import java.util.List;
 
-import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.using;
+@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+public class Tournament extends TableImpl<TournamentRecord> {
 
-public class Tournament<T> {
-
-    T round;
-    private T tourneyId, tourneyName, tourneyDate, surface,
-            tourneyLevel, courtId, courtName, eventName, tournamentWinner;
-
-    public Tournament() {}
-
-    public Tournament(T tourneyName, T tourneyDate) {
-        this.tourneyName = tourneyName;
-        this.tourneyDate = tourneyDate;
-        surface = null;
-        tourneyLevel = null;
-        courtId = null;
-        courtName = null;
-    }
-
-    public Tournament(T tourneyName, T tourneyDate, T tourneyId, List<T> tournamentCourtStats) {
-        this.tourneyName = tourneyName;
-        this.tourneyId = tourneyId;
-        this.tourneyDate = tourneyDate;
-        courtId = tournamentCourtStats.get(0);
-        courtName = tournamentCourtStats.get(1);
-        round = tournamentCourtStats.get(2);
-        eventName = tournamentCourtStats.get(3);
-        tournamentWinner = null;
-    }
-    public Tournament(T tourneyName, T tourneyDate, List<T> tournamentCourtStats, T tournamentWinner) {
-        this.tourneyName = tourneyName;
-        this.tourneyDate = tourneyDate;
-        courtId = tournamentCourtStats.get(0);
-        courtName = tournamentCourtStats.get(1);
-        round = tournamentCourtStats.get(2);
-        eventName = tournamentCourtStats.get(3);
-        this.tournamentWinner = tournamentWinner;
-    }
+    private static final long serialVersionUID = -798376522;
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tournament<?> that = (Tournament<?>) o;
-        return Objects.equals(getTourneyId(), that.getTourneyId());
+        public static final Tournament TOURNAMENT = new Tournament();
+
+    public Tournament(Match child, ForeignKey<MatchRecord, TournamentRecord> key) {
+        super(child, key, TOURNAMENT);
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getTourneyId());
+    public Class<TournamentRecord> getRecordType() {
+            return TournamentRecord.class;
+        }
+
+        public final TableField<TournamentRecord, Integer> TOURNAMENT_ID = createField(DSL.name("tournament_id"), SQLDataType.INTEGER.nullable(false), TOURNAMENT, "");
+
+        public final TableField<TournamentRecord, String> TOURNAMENT_NAME = createField(DSL.name("tournament_name"), SQLDataType.VARCHAR(65).nullable(false), this, "");
+
+        public final TableField<TournamentRecord, Integer> COURT_ID = createField(DSL.name("court_id"),  SQLDataType.INTEGER.nullable(false), this, "");
+
+        public final TableField<TournamentRecord, TournamentLevel> TOURNAMENT_LEVEL = createField(DSL.name("tournament_level"),  SQLDataType.INTEGER.asEnumDataType(TournamentLevel.class), this, "");
+
+        public final TableField<TournamentRecord, Integer> DATE = createField(DSL.name("tournament_date"), SQLDataType.INTEGER, this, "");
+
+        //
+//    Integer,  varchar 65, Integer, Integer.asEnumData, LocalDate
+        public Tournament() {
+            this(DSL.name("Tournament"), null);
+        }
+
+        public Tournament(String alias) {
+            this(DSL.name(alias), TOURNAMENT);
+        }
+
+        public Tournament(Name alias) {
+            this(alias, TOURNAMENT);
+        }
+
+        private Tournament(Name alias, Table<TournamentRecord> aliased) {
+            this(alias, aliased, null);
+        }
+
+        private Tournament(Name alias, Table<TournamentRecord> aliased, Field<?>[] parameters) {
+            super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+        }
+
+        public <O extends Record & org.jooq.Record> Tournament(Table<O> child, ForeignKey<O, TournamentRecord> key) {
+            super(child, key, TOURNAMENT);
+        }
+
+        @Override
+        public Schema getSchema() {
+            return Public.SCHEMA;
+        }
+
+        @Override
+        public UniqueKey<TournamentRecord> getPrimaryKey() {
+            return Keys.TOURNAMENT_PKEY;
+        }
+
+        @Override
+        public List<UniqueKey<TournamentRecord>> getKeys() {
+            return Arrays.<UniqueKey<TournamentRecord>>asList(Keys.TOURNAMENT_PKEY);
+        }
+
+//    @Override
+//    public List<ForeignKey<TournamentRecord, ?>> getReferences() {
+//        return List.<ForeignKey<TournamentRecord, ?>>of(Keys.T);
+//    }
+
+        @Override
+        public Tournament as(String alias) {
+            return new Tournament(DSL.name(alias), this);
+        }
+
+        @Override
+        public Tournament as(Name alias) {
+            return new Tournament(alias, this);
+        }
+
+        @Override
+        public Tournament rename(String name) {
+            return new Tournament(DSL.name(name), null);
+        }
+
+        @Override
+        public Tournament rename(Name name) {
+            return new Tournament(name, null);
+        }
+
+        // -------------------------------------------------------------------------
+        // Row5 type methods
+        // -------------------------------------------------------------------------
+
+        @Override
+        public  Row5<Integer, String ,Integer,TournamentLevel, Integer> fieldsRow() {
+            return (Row5) super.fieldsRow();
+        }
     }
 
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        return sb.append(", ").append(tourneyName).append(", ").append(tourneyDate).toString();
-    }
-
-    public String getRound() {return round.toString();}
-
-    public String getTourneyLevel() {return tourneyLevel.toString();}
-
-    public String getTourneyId() {
-        return tourneyId.toString();
-    }
-
-    public String getTourneyName() {
-        return tourneyName.toString();
-    }
-
-    public String getTourneyDate() {
-        return tourneyDate.toString();
-    }
-
-    public String getSurface() {
-        return surface.toString();
-    }
-
-    public String getCourtId() {
-        return courtId.toString();
-    }
-
-    public String getCourtName() {
-        return courtName.toString();
-    }
-
-    public String getEventName() {
-        return eventName.toString();
-    }
-
-}

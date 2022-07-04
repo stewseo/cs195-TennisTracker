@@ -1,100 +1,121 @@
 package com.example.cs195tennis.model;
 
-import org.jooq.Field;
+import com.example.cs195tennis.Data.Record.PlayerRecord;
 
-import java.util.Objects;
+import Data.Schema.Keys;
+import Data.Schema.Public;
+import org.jooq.*;
+import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
+import org.jooq.impl.TableImpl;
+import org.jooq.Record;
 
-public class Player<T extends Comparable<? super T>> {
+import java.util.List;
 
-    private PlayerRanking ranking;
-    private Match<T> match;
 
-    public String playerId, firstName, lastName, nation, fullName, champion,dominantHand,dateOfBirth;
 
-    static enum League{
-        ATP,
-        WTA;
+public class Player extends TableImpl<PlayerRecord> {
+    /**
+     * The reference instance of public.player
+     */
+    public static final Player PLAYER = new Player();
 
-         League() {}
 
-        public League getAtp() {
-             return ATP;
-        }
-        public League getWTA() {
-            return WTA;
-        }
+    private static final long serialVersionUID = -798376522;
 
-        }
-
-    public Player(){}
-
-    public Player(Object playerId,Object playerName, Object nation, Object dominantHand, Object dateOfBirth) {
-        this.fullName = playerName.toString();
-        this.playerId = playerId.toString();
-        this.nation = nation.toString();
-        this.dominantHand = dominantHand.toString();
-        this.dateOfBirth = dateOfBirth.toString();
+    @Override
+    public Class<PlayerRecord> getRecordType() {
+        return PlayerRecord.class;
     }
 
-    public Player(Object playerId,Object playerName, Object nation, Object dominantHand) {
-        this.fullName = playerName.toString();
-        this.playerId = playerId.toString();
-        this.nation = nation.toString();
-        this.dominantHand = dominantHand.toString();
-        this.dateOfBirth = dateOfBirth.toString();
-    }
+    public final TableField<PlayerRecord, Integer> PLAYER_ID = createField(DSL.name("player_id"), SQLDataType.INTEGER.nullable(false), PLAYER, "");
 
-    public Player(Object playerName, Object playerId, Object nation){
-        this.fullName = playerName.toString();
-        this.playerId = playerId.toString();
-        this.nation = nation.toString();
-        this.dominantHand = null;
-        this.dateOfBirth = null;
-    }
+    public final TableField<PlayerRecord, String> FIRST_NAME = createField(DSL.name("name_first"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
 
-    public Player(Object playerId,Object playerName) {
-        this.fullName = playerName.toString();
-        this.playerId = playerId.toString();
-        this.nation = nation.toString();
-        this.dominantHand = dominantHand.toString();
-        this.dateOfBirth = dateOfBirth.toString();
+    public final TableField<PlayerRecord, String> LAST_NAME = createField(DSL.name("name_last"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+
+    public final TableField<PlayerRecord, String> COUNTRY_ID = createField(DSL.name("country_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+
+
+    /**
+     * Create a public.player table reference
+     */
+    public Player() {
+        this(DSL.name("AtpPlayer"), null);
     }
 
 
-    public String getPlayerId() {
-        return playerId;
+    /**
+     * Create an aliased public.player table reference
+     */
+    public Player(String alias) {
+        this(DSL.name(alias), PLAYER);
     }
 
-    public PlayerRanking getRanking() {
-        return ranking;
+    /**
+     * Create an aliased public.player table reference
+     */
+    public Player(Name alias) {
+        this(alias, PLAYER);
     }
 
-    public String getFirstName() {
-        return firstName;
+    private Player(Name alias, Table<PlayerRecord> aliased) {
+        this(alias, aliased, null);
     }
 
-    public String getLastName() {
-        return lastName;
+    private Player(Name alias, Table<PlayerRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
-    public String getDominantHand() {
-        return dominantHand;
+    public <O extends Record> Player(Table<O> child, ForeignKey<O, PlayerRecord> key) {
+        super(child, key, PLAYER);
     }
 
-    public String getDateOfBirth() {
-        return dateOfBirth;
+    @Override
+    public Schema getSchema() {
+        return Public.SCHEMA;
     }
 
-    public String getChampion() {
-        return champion;
+    @Override
+    public UniqueKey<PlayerRecord> getPrimaryKey() {
+        return Keys.PLAYER_PKEY;
+    }
+
+    @Override
+    public List<UniqueKey<PlayerRecord>> getKeys() {
+        return List.<UniqueKey<PlayerRecord>>of(Keys.PLAYER_PKEY);
+    }
+
+    @Override
+    public Player as(String alias) {
+        return new Player(DSL.name(alias), this);
+    }
+
+    @Override
+    public Player as(Name alias) {
+        return new Player(alias, this);
     }
 
 
-    public String getNation() {
-        return nation;
+    @Override
+    public Player rename(String name) {
+        return new Player(DSL.name(name), null);
     }
 
-    public String getFullName() {
-        return fullName;
+
+    @Override
+    public Player rename(Name name) {
+        return new Player(name, null);
     }
+
+    // -------------------------------------------------------------------------
+    // Row4 type methods
+    // -------------------------------------------------------------------------
+
+    @Override
+    public Row3<Integer, String, String> fieldsRow() {
+        return (Row3) super.fieldsRow();
+    }
+
 }
+

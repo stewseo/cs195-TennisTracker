@@ -1,3 +1,3 @@
 rootProject.name = "com.example.CS195Tennis"
-include("com.example.cs195tennis.Database")
+include "Database.mySql.DatabaseConnection"
 

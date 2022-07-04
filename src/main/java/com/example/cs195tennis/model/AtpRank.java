@@ -1,7 +1,8 @@
 package com.example.cs195tennis.model;
 
-import com.example.cs195tennis.Dao.Record.AtpRankRecord;
-import com.example.cs195tennis.Dao.Table.Keys;
+import com.example.cs195tennis.Data.Record.AtpRankRecord;
+import Data.Schema.Keys;
+import Data.Schema.Public;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
@@ -30,12 +31,6 @@ import java.util.List;
 
         public final TableField<AtpRankRecord, Integer> POINTS = createField(DSL.name("points"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
-        /**
-         * Create a <code>public.WtaRanks2000_2022</code> table reference
-         * AtpPlayerRanking
-         */
-
-
         public AtpRank() {
             this(DSL.name("AtpRank"), null);
         }
@@ -58,26 +53,27 @@ import java.util.List;
 
         @Override
         public Schema getSchema() {
-            return Public.PUBLIC;
+            return Public.SCHEMA;
         }
 
         @Override
         public UniqueKey<AtpRankRecord> getPrimaryKey() {
-            return Keys.ATP_RANK_PKEY;
+            return Keys.ATPRANK_PKEY;
         }
 
         @Override
         public List<UniqueKey<AtpRankRecord>> getKeys() {
-            return List.<UniqueKey<AtpRankRecord>>of(Keys.ATP_RANK_PKEY);
+            return List.<UniqueKey<AtpRankRecord>>of(Keys.ATPRANK_PKEY);
         }
 
         @Override
         public List<ForeignKey<AtpRankRecord, ?>> getReferences() {
-            return List.<ForeignKey<AtpRankRecord, ?>>of(Keys.ATPRANK__XXX);
+            return List.<ForeignKey<AtpRankRecord, ?>>of(Keys.ATPRANK__ATP_RANK_PLAYER_ID_FKEY);
         }
 
 
-        public AtpPlayer player() {return new AtpPlayer(this, Keys.ATPRANK__XXX);
+        public Player player() {
+            return new Player(this, Keys.ATPRANK__ATP_RANK_PLAYER_ID_FKEY);
         }
 
         @Override
@@ -90,17 +86,11 @@ import java.util.List;
             return new AtpRank(alias, this);
         }
 
-        /**
-         * Rename this table
-         */
         @Override
         public AtpRank rename(String name) {
             return new AtpRank(DSL.name(name), null);
         }
 
-        /**
-         * Rename this table
-         */
         @Override
         public AtpRank rename(Name name) {
             return new AtpRank(name, null);

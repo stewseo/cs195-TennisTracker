@@ -1,12 +1,12 @@
 package com.example.cs195tennis.model;
-import com.example.cs195tennis.Dao.Record.ServeStatsRecord;
+import com.example.cs195tennis.Data.Record.ServeStatsRecord;
+import Data.Schema.Public;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 import java.lang.Record;
-import java.math.BigDecimal;
 
 public class ServeStats extends TableImpl<ServeStatsRecord> {
 
@@ -21,7 +21,7 @@ public class ServeStats extends TableImpl<ServeStatsRecord> {
 
     //Double> SERVE_NUMBER_ID , Integer> SPEED_KMH, Integer> POINT_NUMBER, Integer> SERVE_WIDTH ,
     // Integer> SERVE_DEPTH , Integer> PLAYER1_ACE, Organization> MATCH_ID ,  Integer> PLAYER2_ACE
-    public final TableField<ServeStatsRecord, Double> SERVE_NUMBER_ID = createField(DSL.name("ServeNumber"), SQLDataType.DOUBLE, this, "");
+    public final TableField<ServeStatsRecord, Integer> SERVE_ID = createField(DSL.name("ServeNumber"), SQLDataType.INTEGER, SERVESTATS, "");
 
 
     public final TableField<ServeStatsRecord, Integer> SPEED_KMH = createField(DSL.name("Speed_KMH"), SQLDataType.INTEGER, this, "");
@@ -38,9 +38,7 @@ public class ServeStats extends TableImpl<ServeStatsRecord> {
 
     public final TableField<ServeStatsRecord, Integer> PLAYER1_ACE = createField(DSL.name("P1Ace"), SQLDataType.INTEGER, this, "");
 
-
-    public final TableField<ServeStatsRecord, Organization> MATCH_ID = createField(DSL.name("match_id"), SQLDataType.VARCHAR.asEnumDataType(Organization.class), this, "");
-
+    public final TableField<ServeStatsRecord, Integer> GAME_ID = createField(DSL.name("game_id"), SQLDataType.INTEGER, this, "");
 
     public final TableField<ServeStatsRecord, Integer> PLAYER2_ACE = createField(DSL.name("P2Ace"), SQLDataType.INTEGER, this, "");
 
@@ -49,22 +47,7 @@ public class ServeStats extends TableImpl<ServeStatsRecord> {
     }
 
     private ServeStats(Name alias, Table<ServeStatsRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
-        create view "film_list" as  SELECT film.film_id AS fid,
-          film.title,
-          film.description,
-          category.name AS category,
-          film.rental_rate AS price,
-          film.length,
-          film.rating,
-          group_concat((((actor.first_name)::text || ' '::text) || (actor.last_name)::text)) AS actors
-         FROM ((((category
-           LEFT JOIN film_category ON ((category.category_id = film_category.category_id)))
-           LEFT JOIN film ON ((film_category.film_id = film.film_id)))
-           JOIN film_actor ON ((film.film_id = film_actor.film_id)))
-           JOIN actor ON ((film_actor.actor_id = actor.actor_id)))
-        GROUP BY film.film_id, film.title, film.description, category.name, film.rental_rate, film.length, film.rating;
-        """));
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view());
     }
 
 
@@ -78,7 +61,7 @@ public class ServeStats extends TableImpl<ServeStatsRecord> {
     }
 
     public ServeStats() {
-        this(DSL.name("film_list"), null);
+        this(DSL.name("ServeStats"), null);
     }
 
     public <O extends Record & org.jooq.Record> ServeStats(Table<O> child, ForeignKey<O, ServeStatsRecord> key) {
@@ -87,7 +70,7 @@ public class ServeStats extends TableImpl<ServeStatsRecord> {
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Public.PUBLIC;
+        return aliased() ? null : Public.SCHEMA;
     }
 
     @Override
@@ -116,13 +99,11 @@ public class ServeStats extends TableImpl<ServeStatsRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<Double, Integer, Integer, Integer, Integer, Integer, Organization, String> fieldsRow() {
+    public Row8<Integer, Integer, Integer, Integer, Integer, Integer, Integer, String> fieldsRow() {
         return (Row8) super.fieldsRow();
     }
 
 
-    //Double> SERVE_NUMBER_ID , Integer> SPEED_KMH, Integer> POINT_NUMBER, Integer> SERVE_WIDTH ,
-    // Integer> SERVE_DEPTH , Integer> PLAYER1_ACE, Organization> MATCH_ID ,  Integer> PLAYER2_ACE
 
 //    public <U> SelectField<U> mapping(Function8<? super Long, ? super String, ? super String, ? super String, ? super BigDecimal, ? super Short, ? super Organization, ? super String, ? extends U> from) {
 //        return convertFrom(Records.mapping(from));
