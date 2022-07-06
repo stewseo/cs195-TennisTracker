@@ -1,13 +1,14 @@
 package com.example.cs195tennis.Util;
-import Data.Schema.Public;
+import Database.Schema.Public;
 import org.jooq.*;
 import org.jooq.Record;
 
 import java.util.function.BiPredicate;
 
-import static Data.Database.ctx;
-import static com.example.cs195tennis.model.Match.MATCH;
-import static com.example.cs195tennis.model.Tournament.TOURNAMENT;
+import static Database.Database.ctx;
+
+import static com.example.cs195tennis.model.Tables.MATCH;
+import static com.example.cs195tennis.model.Organization.Tournament.TOURNAMENT;
 import static org.jooq.impl.DSL.count;
 
 public class ConvertDataTypes {

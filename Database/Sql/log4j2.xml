@@ -11,10 +11,10 @@
         </Logger>
 
         <Logger name="org.jooq" level="trace">
-            <AppenderRef ref="trace"/>
+            <AppenderRef ref="Console"/>
         </Logger>
 
-        <Root level="Console">
+        <Root level="debug">
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>

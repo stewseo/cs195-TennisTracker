@@ -1,7 +1,7 @@
 package com.example.cs195tennis;
 
 import com.example.cs195tennis.Data.Dao.DataHandeler;
-import com.example.cs195tennis.Data.Record.MatchRecord;
+import com.example.cs195tennis.model.Record.MatchRecord;
 import com.example.cs195tennis.Util.Tools;
 import org.jooq.*;
 import org.jooq.impl.*;
@@ -11,9 +11,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
-import static Data.Database.ctx;
-import static com.example.cs195tennis.model.Game.GAME;
-import static com.example.cs195tennis.model.Match.MATCH;
+import static Database.Database.ctx;
+import static com.example.cs195tennis.model.Tables.GAME;
+import static com.example.cs195tennis.model.Tables.MATCH;
+
 import static java.lang.System.out;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.table;

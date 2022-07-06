@@ -1,6 +1,6 @@
 package com.example.cs195tennis.model.Enum;
 
-import Data.Schema.Public;
+import Database.Schema.Public;
 import org.jooq.Catalog;
 import org.jooq.EnumType;
 import org.jooq.Schema;

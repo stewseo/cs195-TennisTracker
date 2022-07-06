@@ -1,33 +1,27 @@
-module com.example.cs195tennis {
+module com.example.cs195tennis.main {
     requires org.jooq.meta;
     requires org.jooq;
+    requires com.opencsv;
     requires MaterialFX;
     requires VirtualizedFX;
     requires fr.brouillard.oss.cssfx;
     requires org.kordamp.ikonli.core;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.ikonli.materialdesign2;
-    requires com.opencsv;
-    requires javafx.base;
     requires javafx.controls;
     requires javafx.web;
     requires javafx.fxml;
     requires java.logging;
     requires org.apache.logging.log4j;
-    requires org.controlsfx.controls;
     requires java.sql;
     requires org.xerial.sqlitejdbc;
-    requires java.sql.rowset;
     requires org.kordamp.bootstrapfx.core;
-    opens com.example.cs195tennis.model to javafx.base;
     opens com.example.cs195tennis.controller to javafx.fxml;
+    opens Database.Schema to javafx.base;
+    opens Database.Catalog to javafx.base;
+    opens Database.QueryParts to javafx.base;
+    opens Database.Listeners to javafx.base;
     exports com.example.cs195tennis;
-    opens com.example.cs195tennis.model.Enum to javafx.base;
-    opens Data.Schema to javafx.base;
-    opens Data to javafx.base;
-    opens Data.Catalog to javafx.base;
-    opens com.example.cs195tennis.Util to javafx.base;
-    opens Data.QueryParts to javafx.base;
-    opens Data.Execution to javafx.base;
-    opens Data.Listeners to javafx.base;
+    opens Database.Model.SakilaModel.Record to org.jooq;
+    opens com.example.cs195tennis.model to org.jooq;
 }

@@ -1,13 +1,12 @@
 package com.example.cs195tennis.Data.Dao;
 
-import Data.Database;
+import Database.Database;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import org.jooq.*;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
-import javax.naming.InvalidNameException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.Record;
@@ -178,20 +177,6 @@ public class DataHandeler {
         return allMatchesCsv;
     }
 
-    /**
-     *
-     * @param tableName of table being created in the db4
-     * @param fields that will be added to this table
-     * @throws SQLException
-     * @throws InvalidNameException
-     */
-    private void createTable(String tableName, List<String> fields) throws SQLException, InvalidNameException {
-        if(tableName == null || tableName.length() == 0){
-            throw new InvalidNameException("Invalid");
-        }
-
-        ctx().createTableIfNotExists(table(tableName, fields)).execute();
-    }
 
 
 
