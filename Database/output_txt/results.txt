@@ -1,0 +1,59 @@
+Sql String:
+ SELECT c.category_name, p.product_name, p.list_price
+FROM Products p
+CROSS JOIN Categories c
+
+Estimated Plan: +----+-----------+-----+----------+-----+-------------+-------------+-------+------+----+--------+-----------------------------+
+|  id|select_type|table|partitions|type |possible_keys|key          |key_len|ref   |rows|filtered|Extra                        |
++----+-----------+-----+----------+-----+-------------+-------------+-------+------+----+--------+-----------------------------+
+|   1|SIMPLE     |c    |{null}    |index|{null}       |category_name|1022   |{null}|   4|   100.0|Using index                  |
+|   1|SIMPLE     |p    |{null}    |ALL  |{null}       |{null}       |{null} |{null}|  10|   100.0|Using join buffer (hash join)|
++----+-----------+-----+----------+-----+-------------+-------------+-------+------+----+--------+-----------------------------+
+
+Estimated Rows: 4.0
+Estimated Cost:  NaN
+Result Records:
+  +-------------+------------------------------------+----------+
+|category_name|product_name                        |list_price|
++-------------+------------------------------------+----------+
+|Keyboards    |Fender Stratocaster                 |    699.00|
+|Guitars      |Fender Stratocaster                 |    699.00|
+|Drums        |Fender Stratocaster                 |    699.00|
+|Basses       |Fender Stratocaster                 |    699.00|
+|Keyboards    |Gibson Les Paul                     |   1199.00|
+|Guitars      |Gibson Les Paul                     |   1199.00|
+|Drums        |Gibson Les Paul                     |   1199.00|
+|Basses       |Gibson Les Paul                     |   1199.00|
+|Keyboards    |Gibson SG                           |   2517.00|
+|Guitars      |Gibson SG                           |   2517.00|
+|Drums        |Gibson SG                           |   2517.00|
+|Basses       |Gibson SG                           |   2517.00|
+|Keyboards    |Yamaha FG700S                       |    489.99|
+|Guitars      |Yamaha FG700S                       |    489.99|
+|Drums        |Yamaha FG700S                       |    489.99|
+|Basses       |Yamaha FG700S                       |    489.99|
+|Keyboards    |Washburn D10S                       |    299.00|
+|Guitars      |Washburn D10S                       |    299.00|
+|Drums        |Washburn D10S                       |    299.00|
+|Basses       |Washburn D10S                       |    299.00|
+|Keyboards    |Rodriguez Caballero 11              |    415.00|
+|Guitars      |Rodriguez Caballero 11              |    415.00|
+|Drums        |Rodriguez Caballero 11              |    415.00|
+|Basses       |Rodriguez Caballero 11              |    415.00|
+|Keyboards    |Fender Precision                    |    799.99|
+|Guitars      |Fender Precision                    |    799.99|
+|Drums        |Fender Precision                    |    799.99|
+|Basses       |Fender Precision                    |    799.99|
+|Keyboards    |Hofner Icon                         |    499.99|
+|Guitars      |Hofner Icon                         |    499.99|
+|Drums        |Hofner Icon                         |    499.99|
+|Basses       |Hofner Icon                         |    499.99|
+|Keyboards    |Ludwig 5-piece Drum Set with Cymbals|    699.99|
+|Guitars      |Ludwig 5-piece Drum Set with Cymbals|    699.99|
+|Drums        |Ludwig 5-piece Drum Set with Cymbals|    699.99|
+|Basses       |Ludwig 5-piece Drum Set with Cymbals|    699.99|
+|Keyboards    |Tama 5-Piece Drum Set with Cymbals  |    799.99|
+|Guitars      |Tama 5-Piece Drum Set with Cymbals  |    799.99|
+|Drums        |Tama 5-Piece Drum Set with Cymbals  |    799.99|
+|Basses       |Tama 5-Piece Drum Set with Cymbals  |    799.99|
++-------------+------------------------------------+----------+

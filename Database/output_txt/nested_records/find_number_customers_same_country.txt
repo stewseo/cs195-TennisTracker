@@ -1,0 +1,725 @@
+nested_records/find_number_customers_same_country
+Problem:
+return customers in same country
+Table1: customer
+Records: 599
+Primary Key: constraint "PRIMARY"
+  primary key ("customer_id")
+References: [constraint "fk_customer_address"
+  foreign key ("address_id")
+  references "sakila"."address" ("address_id"), constraint "fk_customer_store"
+  foreign key ("store_id")
+  references "sakila"."store" ("store_id")]
+Indexes: ["sakila"."idx_fk_address_id", "sakila"."idx_fk_store_id", "sakila"."idx_last_name"]
+Identity: "sakila"."customer"."customer_id"
+ Records in customer
++-----------+--------+----------+---------+-----------------------------------+----------+------+---------------------+---------------------+
+|customer_id|store_id|first_name|last_name|email                              |address_id|active|create_date          |last_update          |
++-----------+--------+----------+---------+-----------------------------------+----------+------+---------------------+---------------------+
+|          1|       1|MARY      |SMITH    |MARY.SMITH@sakilacustomer.org      |         5|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|          2|       1|PATRICIA  |JOHNSON  |PATRICIA.JOHNSON@sakilacustomer.org|         6|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|          3|       1|LINDA     |WILLIAMS |LINDA.WILLIAMS@sakilacustomer.org  |         7|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|          4|       2|BARBARA   |JONES    |BARBARA.JONES@sakilacustomer.org   |         8|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|          5|       1|ELIZABETH |BROWN    |ELIZABETH.BROWN@sakilacustomer.org |         9|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|          6|       2|JENNIFER  |DAVIS    |JENNIFER.DAVIS@sakilacustomer.org  |        10|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|          7|       1|MARIA     |MILLER   |MARIA.MILLER@sakilacustomer.org    |        11|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|          8|       2|SUSAN     |WILSON   |SUSAN.WILSON@sakilacustomer.org    |        12|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|          9|       2|MARGARET  |MOORE    |MARGARET.MOORE@sakilacustomer.org  |        13|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|         10|       1|DOROTHY   |TAYLOR   |DOROTHY.TAYLOR@sakilacustomer.org  |        14|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|         11|       2|LISA      |ANDERSON |LISA.ANDERSON@sakilacustomer.org   |        15|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|         12|       1|NANCY     |THOMAS   |NANCY.THOMAS@sakilacustomer.org    |        16|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|         13|       2|KAREN     |JACKSON  |KAREN.JACKSON@sakilacustomer.org   |        17|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|         14|       2|BETTY     |WHITE    |BETTY.WHITE@sakilacustomer.org     |        18|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|         15|       1|HELEN     |HARRIS   |HELEN.HARRIS@sakilacustomer.org    |        19|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|         16|       2|SANDRA    |MARTIN   |SANDRA.MARTIN@sakilacustomer.org   |        20|false |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|         17|       1|DONNA     |THOMPSON |DONNA.THOMPSON@sakilacustomer.org  |        21|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|         18|       2|CAROL     |GARCIA   |CAROL.GARCIA@sakilacustomer.org    |        22|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|         19|       1|RUTH      |MARTINEZ |RUTH.MARTINEZ@sakilacustomer.org   |        23|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|         20|       2|SHARON    |ROBINSON |SHARON.ROBINSON@sakilacustomer.org |        24|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|         21|       1|MICHELLE  |CLARK    |MICHELLE.CLARK@sakilacustomer.org  |        25|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|         22|       1|LAURA     |RODRIGUEZ|LAURA.RODRIGUEZ@sakilacustomer.org |        26|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|         23|       2|SARAH     |LEWIS    |SARAH.LEWIS@sakilacustomer.org     |        27|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|         24|       2|KIMBERLY  |LEE      |KIMBERLY.LEE@sakilacustomer.org    |        28|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|         25|       1|DEBORAH   |WALKER   |DEBORAH.WALKER@sakilacustomer.org  |        29|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
++-----------+--------+----------+---------+-----------------------------------+----------+------+---------------------+---------------------+
+
+
+Table2: address
+Records: 603
+Primary Key: constraint "PRIMARY"
+  primary key ("address_id")
+References: [constraint "fk_address_city"
+  foreign key ("city_id")
+  references "sakila"."city" ("city_id")]
+Indexes: ["sakila"."idx_fk_city_id"]
+Identity: "sakila"."address"."address_id"
+ Records in address
++----------+----------------------------------+--------+--------+-------+-----------+-----+---------------------+
+|address_id|address                           |address2|district|city_id|postal_code|phone|last_update          |
++----------+----------------------------------+--------+--------+-------+-----------+-----+---------------------+
+|         1|47 MySakila Drive                 |{null}  |        |    300|{null}     |     |2006-02-15 04:45:30.0|
+|         2|28 MySQL Boulevard                |{null}  |        |    576|{null}     |     |2006-02-15 04:45:30.0|
+|         3|23 Workhaven Lane                 |{null}  |        |    300|{null}     |     |2006-02-15 04:45:30.0|
+|         4|1411 Lillydale Drive              |{null}  |        |    576|{null}     |     |2006-02-15 04:45:30.0|
+|         5|1913 Hanoi Way                    |{null}  |        |    463|35200      |     |2006-02-15 04:45:30.0|
+|         6|1121 Loja Avenue                  |{null}  |        |    449|17886      |     |2006-02-15 04:45:30.0|
+|         7|692 Joliet Street                 |{null}  |        |     38|83579      |     |2006-02-15 04:45:30.0|
+|         8|1566 Inegl Manor                  |{null}  |        |    349|53561      |     |2006-02-15 04:45:30.0|
+|         9|53 Idfu Parkway                   |{null}  |        |    361|42399      |     |2006-02-15 04:45:30.0|
+|        10|1795 Santiago de Compostela Way   |{null}  |        |    295|18743      |     |2006-02-15 04:45:30.0|
+|        11|900 Santiago de Compostela Parkway|{null}  |        |    280|93896      |     |2006-02-15 04:45:30.0|
+|        12|478 Joliet Way                    |{null}  |        |    200|77948      |     |2006-02-15 04:45:30.0|
+|        13|613 Korolev Drive                 |{null}  |        |    329|45844      |     |2006-02-15 04:45:30.0|
+|        14|1531 Sal Drive                    |{null}  |        |    162|53628      |     |2006-02-15 04:45:30.0|
+|        15|1542 Tarlac Parkway               |{null}  |        |    440|1027       |     |2006-02-15 04:45:30.0|
+|        16|808 Bhopal Manor                  |{null}  |        |    582|10672      |     |2006-02-15 04:45:30.0|
+|        17|270 Amroha Parkway                |{null}  |        |    384|29610      |     |2006-02-15 04:45:30.0|
+|        18|770 Bydgoszcz Avenue              |{null}  |        |    120|16266      |     |2006-02-15 04:45:30.0|
+|        19|419 Iligan Lane                   |{null}  |        |     76|72878      |     |2006-02-15 04:45:30.0|
+|        20|360 Toulouse Parkway              |{null}  |        |    495|54308      |     |2006-02-15 04:45:30.0|
+|        21|270 Toulon Boulevard              |{null}  |        |    156|81766      |     |2006-02-15 04:45:30.0|
+|        22|320 Brest Avenue                  |{null}  |        |    252|43331      |     |2006-02-15 04:45:30.0|
+|        23|1417 Lancaster Avenue             |{null}  |        |    267|72192      |     |2006-02-15 04:45:30.0|
+|        24|1688 Okara Way                    |{null}  |        |    327|21954      |     |2006-02-15 04:45:30.0|
+|        25|262 A Corua (La Corua) Parkway    |{null}  |        |    525|34418      |     |2006-02-15 04:45:30.0|
++----------+----------------------------------+--------+--------+-------+-----------+-----+---------------------+
+
+
+Query Sql String:
+     SELECT
+       cu.first_name,
+       cu.last_name,
+       (
+         SELECT count(*)
+         FROM customer as cu2
+           JOIN address
+             USING (address_id)
+           JOIN city as ci2
+             USING (city_id)
+         WHERE ci2.country_id = ci.country_id
+       ) as customers_from_same_country
+     FROM customer as cu
+       JOIN address
+         USING (address_id)
+       JOIN city as ci
+         USING (city_id)
+
+The formatted plan as returned by the database:
+ +----+------------------+-------+----------+------+-------------------------+-----------------+-------+-------------------------+----+--------+-----------+
+|  id|select_type       |table  |partitions|type  |possible_keys            |key              |key_len|ref                      |rows|filtered|Extra      |
++----+------------------+-------+----------+------+-------------------------+-----------------+-------+-------------------------+----+--------+-----------+
+|   1|PRIMARY           |cu     |{null}    |ALL   |idx_fk_address_id        |{null}           |{null} |{null}                   | 599|   100.0|{null}     |
+|   1|PRIMARY           |address|{null}    |eq_ref|PRIMARY,idx_fk_city_id   |PRIMARY          |4      |sakila.cu.address_id     |   1|   100.0|{null}     |
+|   1|PRIMARY           |ci     |{null}    |eq_ref|PRIMARY                  |PRIMARY          |4      |sakila.address.city_id   |   1|   100.0|{null}     |
+|   2|DEPENDENT SUBQUERY|ci2    |{null}    |ref   |PRIMARY,idx_fk_country_id|idx_fk_country_id|4      |sakila.ci.country_id     |   5|   100.0|Using index|
+|   2|DEPENDENT SUBQUERY|address|{null}    |ref   |PRIMARY,idx_fk_city_id   |idx_fk_city_id   |4      |sakila.ci2.city_id       |   1|   100.0|Using index|
+|   2|DEPENDENT SUBQUERY|cu2    |{null}    |ref   |idx_fk_address_id        |idx_fk_address_id|4      |sakila.address.address_id|   1|   100.0|Using index|
++----+------------------+-------+----------+------+-------------------------+-----------------+-------+-------------------------+----+--------+-----------+
+
+The cost the database associated with the execution of the query:  NaN
+The estimated number of rows (cardinality) that is to be returned by the query: 599.0
+The actual number of rows (cardinality) returned by the query:  599
+Result Records:
+  +----------+---------+---------------------------+
+|first_name|last_name|customers_from_same_country|
++----------+---------+---------------------------+
+|MARY      |SMITH    |                         31|
+|PATRICIA  |JOHNSON  |                         36|
+|LINDA     |WILLIAMS |                          2|
+|BARBARA   |JONES    |                          2|
+|ELIZABETH |BROWN    |                         10|
+|JENNIFER  |DAVIS    |                         36|
+|MARIA     |MILLER   |                          2|
+|SUSAN     |WILSON   |                          1|
+|MARGARET  |MOORE    |                          2|
+|DOROTHY   |TAYLOR   |                          8|
+|LISA      |ANDERSON |                         31|
+|NANCY     |THOMAS   |                         60|
+|KAREN     |JACKSON  |                         15|
+|BETTY     |WHITE    |                         36|
+|HELEN     |HARRIS   |                         60|
+|SANDRA    |MARTIN   |                          9|
+|DONNA     |THOMPSON |                         28|
+|CAROL     |GARCIA   |                         13|
+|RUTH      |MARTINEZ |                         11|
+|SHARON    |ROBINSON |                          5|
+|MICHELLE  |CLARK    |                          3|
+|LAURA     |RODRIGUEZ|                          3|
+|SARAH     |LEWIS    |                          2|
+|KIMBERLY  |LEE      |                         13|
+|DEBORAH   |WALKER   |                          5|
+|JESSICA   |HALL     |                          1|
+|SHIRLEY   |ALLEN    |                         20|
+|CYNTHIA   |YOUNG    |                         60|
+|ANGELA    |HERNANDEZ|                         31|
+|MELISSA   |KING     |                         10|
+|BRENDA    |WRIGHT   |                         60|
+|AMY       |LOPEZ    |                         60|
+|ANNA      |HILL     |                          7|
+|REBECCA   |SCOTT    |                         31|
+|VIRGINIA  |GREEN    |                          4|
+|KATHLEEN  |ADAMS    |                          8|
+|PAMELA    |BAKER    |                         53|
+|MARTHA    |GONZALEZ |                          1|
+|DEBRA     |NELSON   |                         28|
+|AMANDA    |CARTER   |                          3|
+|STEPHANIE |MITCHELL |                          1|
+|CAROLYN   |PEREZ    |                          3|
+|CHRISTINE |ROBERTS  |                          2|
+|MARIE     |TURNER   |                         28|
+|JANET     |PHILLIPS |                          3|
+|CATHERINE |CAMPBELL |                         28|
+|FRANCES   |PARKER   |                         28|
+|ANN       |EVANS    |                         28|
+|JOYCE     |EDWARDS  |                          5|
+|DIANE     |COLLINS  |                          2|
+|ALICE     |STEWART  |                         36|
+|JULIE     |SANCHEZ  |                          5|
+|HEATHER   |MORRIS   |                         31|
+|TERESA    |ROGERS   |                         31|
+|DORIS     |REED     |                         28|
+|GLORIA    |COOK     |                          2|
+|EVELYN    |MORGAN   |                          1|
+|JEAN      |BELL     |                          3|
+|CHERYL    |MURPHY   |                         60|
+|MILDRED   |BAILEY   |                         60|
+|KATHERINE |RIVERA   |                          3|
+|JOAN      |COOPER   |                         36|
+|ASHLEY    |RICHAR...|                         36|
+|JUDITH    |COX      |                         53|
+|ROSE      |HOWARD   |                          1|
+|JANICE    |WARD     |                          1|
+|KELLY     |TORRES   |                         53|
+|NICOLE    |PETERSON |                         60|
+|JUDY      |GRAY     |                          3|
+|CHRISTINA |RAMIREZ  |                          5|
+|KATHY     |JAMES    |                         20|
+|THERESA   |WATSON   |                         20|
+|BEVERLY   |BROOKS   |                         10|
+|DENISE    |KELLY    |                         28|
+|TAMMY     |SANDERS  |                         10|
+|IRENE     |PRICE    |                          2|
+|JANE      |BENNETT  |                         28|
+|LORI      |WOOD     |                         60|
+|RACHEL    |BARNES   |                         31|
+|MARILYN   |ROSS     |                         13|
+|ANDREA    |HENDERSON|                          1|
+|KATHRYN   |COLEMAN  |                          6|
+|LOUISE    |JENKINS  |                         11|
+|SARA      |PERRY    |                         30|
+|ANNE      |POWELL   |                          9|
+|JACQUELINE|LONG     |                          3|
+|WANDA     |PATTERSON|                          6|
+|BONNIE    |HUGHES   |                          5|
+|JULIA     |FLORES   |                         13|
+|RUBY      |WASHIN...|                         53|
+|LOIS      |BUTLER   |                          1|
+|TINA      |SIMMONS  |                         28|
+|PHYLLIS   |FOSTER   |                         53|
+|NORMA     |GONZALES |                         20|
+|PAULA     |BRYANT   |                         60|
+|DIANA     |ALEXANDER|                         36|
+|ANNIE     |RUSSELL  |                          3|
+|LILLIAN   |GRIFFIN  |                          3|
+|EMILY     |DIAZ     |                          5|
+|ROBIN     |HAYES    |                         28|
+|PEGGY     |MYERS    |                          5|
+|CRYSTAL   |FORD     |                          4|
+|GLADYS    |HAMILTON |                         13|
+|RITA      |GRAHAM   |                          4|
+|DAWN      |SULLIVAN |                          1|
+|CONNIE    |WALLACE  |                         28|
+|FLORENCE  |WOODS    |                         13|
+|TRACY     |COLE     |                         30|
+|EDNA      |WEST     |                         11|
+|TIFFANY   |JORDAN   |                         53|
+|CARMEN    |OWENS    |                          7|
+|ROSA      |REYNOLDS |                         36|
+|CINDY     |FISHER   |                          7|
+|GRACE     |ELLIS    |                          7|
+|WENDY     |HARRISON |                         30|
+|VICTORIA  |GIBSON   |                         14|
+|EDITH     |MCDONALD |                         60|
+|KIM       |CRUZ     |                         36|
+|SHERRY    |MARSHALL |                          6|
+|SYLVIA    |ORTIZ    |                          6|
+|JOSEPHINE |GOMEZ    |                         60|
+|THELMA    |MURRAY   |                          4|
+|SHANNON   |FREEMAN  |                         60|
+|SHEILA    |WELLS    |                         15|
+|ETHEL     |WEBB     |                         11|
+|ELLEN     |SIMPSON  |                         28|
+|ELAINE    |STEVENS  |                         28|
+|MARJORIE  |TUCKER   |                          8|
+|CARRIE    |PORTER   |                         53|
+|CHARLOTTE |HUNTER   |                         28|
+|MONICA    |HICKS    |                          6|
+|ESTHER    |CRAWFORD |                         11|
+|PAULINE   |HENRY    |                         30|
+|EMMA      |BOYD     |                          6|
+|JUANITA   |MASON    |                         60|
+|ANITA     |MORALES  |                         60|
+|RHONDA    |KENNEDY  |                          5|
+|HAZEL     |WARREN   |                         53|
+|AMBER     |DIXON    |                         10|
+|EVA       |RAMOS    |                         36|
+|DEBBIE    |REYES    |                         31|
+|APRIL     |BURNS    |                          9|
+|LESLIE    |GORDON   |                         15|
+|CLARA     |SHAW     |                          2|
+|LUCILLE   |HOLMES   |                         11|
+|JAMIE     |RICE     |                         36|
+|JOANNE    |ROBERTSON|                         31|
+|ELEANOR   |HUNT     |                          1|
+|VALERIE   |BLACK    |                         36|
+|DANIELLE  |DANIELS  |                         30|
+|MEGAN     |PALMER   |                         53|
+|ALICIA    |MILLS    |                         60|
+|SUZANNE   |NICHOLS  |                         14|
+|MICHELE   |GRANT    |                         53|
+|GAIL      |KNIGHT   |                          3|
+|BERTHA    |FERGUSON |                         13|
+|DARLENE   |ROSE     |                          1|
+|VERONICA  |STONE    |                         36|
+|JILL      |HAWKINS  |                          3|
+|ERIN      |DUNN     |                         28|
+|GERALDINE |PERKINS  |                          4|
+|LAUREN    |HUDSON   |                          4|
+|CATHY     |SPENCER  |                         31|
+|JOANN     |GARDNER  |                         15|
+|LORRAINE  |STEPHENS |                         53|
+|LYNN      |PAYNE    |                          1|
+|SALLY     |PIERCE   |                         60|
+|REGINA    |BERRY    |                         53|
+|ERICA     |MATTHEWS |                         53|
+|BEATRICE  |ARNOLD   |                         60|
+|DOLORES   |WAGNER   |                          3|
+|BERNICE   |WILLIS   |                         15|
+|AUDREY    |RAY      |                          3|
+|YVONNE    |WATKINS  |                          7|
+|ANNETTE   |OLSON    |                         60|
+|JUNE      |CARROLL  |                          3|
+|SAMANTHA  |DUNCAN   |                         30|
+|MARION    |SNYDER   |                         28|
+|DANA      |HART     |                         28|
+|STACY     |CUNNIN...|                          6|
+|ANA       |BRADLEY  |                         36|
+|RENEE     |LANE     |                         36|
+|IDA       |ANDREWS  |                         28|
+|VIVIAN    |RUIZ     |                          5|
+|ROBERTA   |HARPER   |                          8|
+|HOLLY     |FOX      |                         60|
+|BRITTANY  |RILEY    |                          6|
+|MELANIE   |ARMSTRONG|                         20|
+|LORETTA   |CARPENTER|                          5|
+|YOLANDA   |WEAVER   |                          3|
+|JEANETTE  |GREENE   |                         28|
+|LAURIE    |LAWRENCE |                         60|
+|KATIE     |ELLIOTT  |                          2|
+|KRISTEN   |CHAVEZ   |                         31|
+|VANESSA   |SIMS     |                          7|
+|ALMA      |AUSTIN   |                          7|
+|SUE       |PETERS   |                         53|
+|ELSIE     |KELLEY   |                         13|
+|BETH      |FRANKLIN |                          6|
+|JEANNE    |LAWSON   |                          1|
+|VICKI     |FIELDS   |                          7|
+|CARLA     |GUTIERREZ|                         60|
+|TARA      |RYAN     |                         14|
+|ROSEMARY  |SCHMIDT  |                         15|
+|EILEEN    |CARR     |                          3|
+|TERRI     |VASQUEZ  |                         28|
+|GERTRUDE  |CASTILLO |                          1|
+|LUCY      |WHEELER  |                         60|
+|TONYA     |CHAPMAN  |                         60|
+|ELLA      |OLIVER   |                          4|
+|STACEY    |MONTGO...|                         53|
+|WILMA     |RICHARDS |                         36|
+|GINA      |WILLIA...|                          4|
+|KRISTIN   |JOHNSTON |                         36|
+|JESSIE    |BANKS    |                          2|
+|NATALIE   |MEYER    |                         28|
+|AGNES     |BISHOP   |                         60|
+|VERA      |MCCOY    |                          1|
+|WILLIE    |HOWELL   |                         13|
+|CHARLENE  |ALVAREZ  |                          3|
+|BESSIE    |MORRISON |                          7|
+|DELORES   |HANSEN   |                         28|
+|MELINDA   |FERNANDEZ|                          5|
+|PEARL     |GARZA    |                         60|
+|ARLENE    |HARVEY   |                         60|
+|MAUREEN   |LITTLE   |                          3|
+|COLLEEN   |BURTON   |                          7|
+|ALLISON   |STANLEY  |                          2|
+|TAMARA    |NGUYEN   |                         28|
+|JOY       |GEORGE   |                          2|
+|GEORGIA   |JACOBS   |                         60|
+|CONSTANCE |REID     |                         13|
+|LILLIE    |KIM      |                          6|
+|CLAUDIA   |FULLER   |                          1|
+|JACKIE    |LYNCH    |                          6|
+|MARCIA    |DEAN     |                         20|
+|TANYA     |GILBERT  |                          5|
+|NELLIE    |GARRETT  |                         60|
+|MINNIE    |ROMERO   |                         14|
+|MARLENE   |WELCH    |                         31|
+|HEIDI     |LARSON   |                         53|
+|GLENDA    |FRAZIER  |                         53|
+|LYDIA     |BURKE    |                         13|
+|VIOLA     |HANSON   |                         20|
+|COURTNEY  |DAY      |                          5|
+|MARIAN    |MENDOZA  |                         28|
+|STELLA    |MORENO   |                         30|
+|CAROLINE  |BOWMAN   |                         36|
+|DORA      |MEDINA   |                         53|
+|JO        |FOWLER   |                         13|
+|VICKIE    |BREWER   |                          7|
+|MATTIE    |HOFFMAN  |                          9|
+|TERRY     |CARLSON  |                         31|
+|MAXINE    |SILVA    |                         28|
+|IRMA      |PEARSON  |                         20|
+|MABEL     |HOLLAND  |                          2|
+|MARSHA    |DOUGLAS  |                          3|
+|MYRTLE    |FLEMING  |                          3|
+|LENA      |JENSEN   |                         60|
+|CHRISTY   |VARGAS   |                         53|
+|DEANNA    |BYRD     |                         20|
+|PATSY     |DAVIDSON |                          3|
+|HILDA     |HOPKINS  |                         20|
+|GWENDOLYN |MAY      |                         31|
+|JENNIE    |TERRY    |                          1|
+|NORA      |HERRERA  |                          3|
+|MARGIE    |WADE     |                         53|
+|NINA      |SOTO     |                         60|
+|CASSANDRA |WALTERS  |                         36|
+|LEAH      |CURTIS   |                          8|
+|PENNY     |NEAL     |                         60|
+|KAY       |CALDWELL |                         53|
+|PRISCILLA |LOWE     |                         30|
+|NAOMI     |JENNINGS |                         60|
+|CAROLE    |BARNETT  |                         36|
+|BRANDY    |GRAVES   |                         36|
+|OLGA      |JIMENEZ  |                         13|
+|BILLIE    |HORTON   |                         15|
+|DIANNE    |SHELTON  |                          8|
+|TRACEY    |BARRETT  |                         13|
+|LEONA     |OBRIEN   |                         53|
+|JENNY     |CASTRO   |                          2|
+|FELICIA   |SUTTON   |                         53|
+|SONIA     |GREGORY  |                         13|
+|MIRIAM    |MCKINNEY |                         31|
+|VELMA     |LUCAS    |                         13|
+|BECKY     |MILES    |                         60|
+|BOBBIE    |CRAIG    |                         30|
+|VIOLET    |RODRIQUEZ|                          1|
+|KRISTINA  |CHAMBERS |                          7|
+|TONI      |HOLT     |                         36|
+|MISTY     |LAMBERT  |                          3|
+|MAE       |FLETCHER |                          5|
+|SHELLY    |WATTS    |                         36|
+|DAISY     |BATES    |                         28|
+|RAMONA    |HALE     |                         60|
+|SHERRI    |RHODES   |                         60|
+|ERIKA     |PENA     |                          1|
+|JAMES     |GANNON   |                         31|
+|JOHN      |FARNSW...|                         60|
+|ROBERT    |BAUGHMAN |                         28|
+|MICHAEL   |SILVERMAN|                         53|
+|WILLIAM   |SATTER...|                          4|
+|DAVID     |ROYAL    |                          4|
+|RICHARD   |MCCRARY  |                         36|
+|CHARLES   |KOWALSKI |                          3|
+|JOSEPH    |JOY      |                         28|
+|THOMAS    |GRIGSBY  |                         36|
+|CHRISTO...|GRECO    |                          7|
+|DANIEL    |CABRAL   |                         28|
+|PAUL      |TROUT    |                         28|
+|MARK      |RINEHART |                          5|
+|DONALD    |MAHON    |                         53|
+|GEORGE    |LINTON   |                         28|
+|KENNETH   |GOODEN   |                          4|
+|STEVEN    |CURLEY   |                         60|
+|EDWARD    |BAUGH    |                          1|
+|BRIAN     |WYMAN    |                          8|
+|RONALD    |WEINER   |                         30|
+|ANTHONY   |SCHWAB   |                          1|
+|KEVIN     |SCHULER  |                          1|
+|JASON     |MORRISSEY|                         13|
+|MATTHEW   |MAHAN    |                         30|
+|GARY      |COY      |                         53|
+|TIMOTHY   |BUNN     |                         28|
+|JOSE      |ANDREW   |                          1|
+|LARRY     |THRASHER |                         15|
+|JEFFREY   |SPEAR    |                         14|
+|FRANK     |WAGGONER |                          3|
+|SCOTT     |SHELLEY  |                         36|
+|ERIC      |ROBERT   |                         13|
+|STEPHEN   |QUALLS   |                          3|
+|ANDREW    |PURDY    |                          2|
+|RAYMOND   |MCWHORTER|                          2|
+|GREGORY   |MAULDIN  |                          1|
+|JOSHUA    |MARK     |                         60|
+|JERRY     |JORDON   |                         31|
+|DENNIS    |GILMAN   |                         11|
+|WALTER    |PERRYMAN |                         53|
+|PATRICK   |NEWSOM   |                          6|
+|PETER     |MENARD   |                          5|
+|HAROLD    |MARTINO  |                         28|
+|DOUGLAS   |GRAF     |                         30|
+|HENRY     |BILLIN...|                          1|
+|CARL      |ARTIS    |                          3|
+|ARTHUR    |SIMPKINS |                         28|
+|RYAN      |SALISBURY|                          2|
+|ROGER     |QUINTA...|                         10|
+|JOE       |GILLILAND|                         20|
+|JUAN      |FRALEY   |                         28|
+|JACK      |FOUST    |                         28|
+|ALBERT    |CROUSE   |                          2|
+|JONATHAN  |SCARBO...|                         30|
+|JUSTIN    |NGO      |                         28|
+|TERRY     |GRISSOM  |                         31|
+|GERALD    |FULTZ    |                         60|
+|KEITH     |RICO     |                          1|
+|SAMUEL    |MARLOW   |                         60|
+|WILLIE    |MARKHAM  |                         13|
+|RALPH     |MADRIGAL |                          2|
+|LAWRENCE  |LAWTON   |                          2|
+|NICHOLAS  |BARFIELD |                         28|
+|ROY       |WHITING  |                          2|
+|BENJAMIN  |VARNEY   |                         30|
+|BRUCE     |SCHWARZ  |                         31|
+|BRANDON   |HUEY     |                         15|
+|ADAM      |GOOCH    |                         60|
+|HARRY     |ARCE     |                          8|
+|FRED      |WHEAT    |                         30|
+|WAYNE     |TRUONG   |                         60|
+|BILLY     |POULIN   |                         20|
+|STEVE     |MACKENZIE|                         14|
+|LOUIS     |LEONE    |                         20|
+|JEREMY    |HURTADO  |                         28|
+|AARON     |SELBY    |                          2|
+|RANDY     |GAITHER  |                         28|
+|HOWARD    |FORTNER  |                          8|
+|EUGENE    |CULPEPPER|                         53|
+|CARLOS    |COUGHLIN |                         60|
+|RUSSELL   |BRINSON  |                          8|
+|BOBBY     |BOUDREAU |                          1|
+|VICTOR    |BARKLEY  |                         36|
+|MARTIN    |BALES    |                          2|
+|ERNEST    |STEPP    |                         53|
+|PHILLIP   |HOLM     |                         31|
+|TODD      |TAN      |                          6|
+|JESSE     |SCHILLING|                          2|
+|CRAIG     |MORRELL  |                         20|
+|ALAN      |KAHN     |                         53|
+|SHAWN     |HEATON   |                          3|
+|CLARENCE  |GAMEZ    |                         31|
+|SEAN      |DOUGLASS |                          1|
+|PHILIP    |CAUSEY   |                         28|
+|CHRIS     |BROTHERS |                          5|
+|JOHNNY    |TURPIN   |                          2|
+|EARL      |SHANKS   |                         31|
+|JIMMY     |SCHRADER |                         28|
+|ANTONIO   |MEEK     |                         28|
+|DANNY     |ISOM     |                          5|
+|BRYAN     |HARDISON |                         36|
+|TONY      |CARRANZA |                         31|
+|LUIS      |YANEZ    |                          4|
+|MIKE      |WAY      |                         60|
+|STANLEY   |SCROGGINS|                         31|
+|LEONARD   |SCHOFIELD|                         13|
+|NATHAN    |RUNYON   |                          1|
+|DALE      |RATCLIFF |                         11|
+|MANUEL    |MURRELL  |                          1|
+|RODNEY    |MOELLER  |                         13|
+|CURTIS    |IRBY     |                          5|
+|NORMAN    |CURRIER  |                         14|
+|ALLEN     |BUTTER...|                         60|
+|MARVIN    |YEE      |                         60|
+|VINCENT   |RALSTON  |                         30|
+|GLENN     |PULLEN   |                          5|
+|JEFFERY   |PINSON   |                          5|
+|TRAVIS    |ESTEP    |                          5|
+|JEFF      |EAST     |                          3|
+|CHAD      |CARBONE  |                         60|
+|JACOB     |LANCE    |                         36|
+|LEE       |HAWKS    |                         60|
+|MELVIN    |ELLINGTON|                         53|
+|ALFRED    |CASILLAS |                          6|
+|KYLE      |SPURLOCK |                         53|
+|FRANCIS   |SIKES    |                         30|
+|BRADLEY   |MOTLEY   |                         60|
+|JESUS     |MCCARTNEY|                         28|
+|HERBERT   |KRUGER   |                         28|
+|FREDERICK |ISBELL   |                         31|
+|RAY       |HOULE    |                         28|
+|JOEL      |FRANCISCO|                          2|
+|EDWIN     |BURK     |                         11|
+|DON       |BONE     |                          3|
+|EDDIE     |TOMLIN   |                         20|
+|RICKY     |SHELBY   |                         53|
+|TROY      |QUIGLEY  |                          5|
+|RANDALL   |NEUMANN  |                          3|
+|BARRY     |LOVELACE |                          1|
+|ALEXANDER |FENNELL  |                          7|
+|BERNARD   |COLBY    |                         60|
+|MARIO     |CHEATHAM |                          3|
+|LEROY     |BUSTAM...|                         53|
+|FRANCISCO |SKIDMORE |                         28|
+|MARCUS    |HIDALGO  |                          1|
+|MICHEAL   |FORMAN   |                         13|
+|THEODORE  |CULP     |                         60|
+|CLIFFORD  |BOWENS   |                         28|
+|MIGUEL    |BETANC...|                          7|
+|OSCAR     |AQUINO   |                          8|
+|JAY       |ROBB     |                         14|
+|JIM       |REA      |                         30|
+|TOM       |MILNER   |                          3|
+|CALVIN    |MARTEL   |                          7|
+|ALEX      |GRESHAM  |                         30|
+|JON       |WILES    |                          2|
+|RONNIE    |RICKETTS |                          1|
+|BILL      |GAVIN    |                         36|
+|LLOYD     |DOWD     |                         14|
+|TOMMY     |COLLAZO  |                          8|
+|LEON      |BOSTIC   |                          6|
+|DEREK     |BLAKELY  |                         20|
+|WARREN    |SHERROD  |                         28|
+|DARRELL   |POWER    |                          5|
+|JEROME    |KENYON   |                          3|
+|FLOYD     |GANDY    |                         30|
+|LEO       |EBERT    |                         53|
+|ALVIN     |DELOACH  |                         30|
+|TIM       |CARY     |                         60|
+|WESLEY    |BULL     |                          5|
+|GORDON    |ALLARD   |                          4|
+|DEAN      |SAUER    |                         11|
+|GREG      |ROBINS   |                          6|
+|JORGE     |OLIVARES |                         14|
+|DUSTIN    |GILLETTE |                          5|
+|PEDRO     |CHESTNUT |                          6|
+|DERRICK   |BOURQUE  |                          5|
+|DAN       |PAINE    |                          9|
+|LEWIS     |LYMAN    |                          4|
+|ZACHARY   |HITE     |                         36|
+|COREY     |HAUSER   |                         15|
+|HERMAN    |DEVORE   |                          3|
+|MAURICE   |CRAWLEY  |                         30|
+|VERNON    |CHAPA    |                         15|
+|ROBERTO   |VU       |                         53|
+|CLYDE     |TOBIAS   |                         53|
+|GLEN      |TALBERT  |                         30|
+|HECTOR    |POINDE...|                         28|
+|SHANE     |MILLARD  |                         30|
+|RICARDO   |MEADOR   |                         31|
+|SAM       |MCDUFFIE |                          6|
+|RICK      |MATTOX   |                          6|
+|LESTER    |KRAUS    |                         60|
+|BRENT     |HARKINS  |                         15|
+|RAMON     |CHOATE   |                          3|
+|CHARLIE   |BESS     |                         53|
+|TYLER     |WREN     |                         53|
+|GILBERT   |SLEDGE   |                          9|
+|GENE      |SANBORN  |                          2|
+|MARC      |OUTLAW   |                          7|
+|REGINALD  |KINDER   |                         14|
+|RUBEN     |GEARY    |                          8|
+|BRETT     |CORNWELL |                         60|
+|ANGEL     |BARCLAY  |                         31|
+|NATHANIEL |ADAM     |                         36|
+|RAFAEL    |ABNEY    |                         20|
+|LESLIE    |SEWARD   |                         14|
+|EDGAR     |RHOADS   |                         15|
+|MILTON    |HOWLAND  |                         60|
+|RAUL      |FORTIER  |                         60|
+|BEN       |EASTER   |                         28|
+|CHESTER   |BENNER   |                         53|
+|CECIL     |VINES    |                          9|
+|DUANE     |TUBBS    |                          1|
+|FRANKLIN  |TROUTMAN |                         53|
+|ANDRE     |RAPP     |                          3|
+|ELMER     |NOE      |                          2|
+|BRAD      |MCCURDY  |                         10|
+|GABRIEL   |HARDER   |                         15|
+|RON       |DELUCA   |                         31|
+|MITCHELL  |WESTMO...|                          6|
+|ROLAND    |SOUTH    |                         53|
+|ARNOLD    |HAVENS   |                         20|
+|HARVEY    |GUAJARDO |                          6|
+|JARED     |ELY      |                         14|
+|ADRIAN    |CLARY    |                          7|
+|KARL      |SEAL     |                         36|
+|CORY      |MEEHAN   |                          2|
+|CLAUDE    |HERZOG   |                          2|
+|ERIK      |GUILLEN  |                         60|
+|DARRYL    |ASHCRAFT |                         13|
+|JAMIE     |WAUGH    |                         31|
+|NEIL      |RENNER   |                          6|
+|JESSIE    |MILAM    |                         53|
+|CHRISTIAN |JUNG     |                         60|
+|JAVIER    |ELROD    |                          1|
+|FERNANDO  |CHURCHILL|                          5|
+|CLINTON   |BUFORD   |                         36|
+|TED       |BREAUX   |                         53|
+|MATHEW    |BOLIN    |                          7|
+|TYRONE    |ASHER    |                          2|
+|DARREN    |WINDHAM  |                          7|
+|LONNIE    |TIRADO   |                         14|
+|LANCE     |PEMBERTON|                          3|
+|CODY      |NOLEN    |                         28|
+|JULIO     |NOLAND   |                          6|
+|KELLY     |KNOTT    |                         53|
+|KURT      |EMMONS   |                         31|
+|ALLAN     |CORNISH  |                         20|
+|NELSON    |CHRIST...|                          5|
+|GUY       |BROWNLEE |                         53|
+|CLAYTON   |BARBEE   |                         28|
+|HUGH      |WALDROP  |                         53|
+|MAX       |PITT     |                          2|
+|DWAYNE    |OLVERA   |                         60|
+|DWIGHT    |LOMBARDI |                         11|
+|ARMANDO   |GRUBER   |                          9|
+|FELIX     |GAFFNEY  |                          1|
+|JIMMIE    |EGGLESTON|                          8|
+|EVERETT   |BANDA    |                          6|
+|JORDAN    |ARCHULETA|                         13|
+|IAN       |STILL    |                         36|
+|WALLACE   |SLONE    |                         13|
+|KEN       |PREWITT  |                          2|
+|BOB       |PFEIFFER |                         53|
+|JAIME     |NETTLES  |                          4|
+|CASEY     |MENA     |                         15|
+|ALFREDO   |MCADAMS  |                         28|
+|ALBERTO   |HENNING  |                          7|
+|DAVE      |GARDINER |                         53|
+|IVAN      |CROMWELL |                         30|
+|JOHNNIE   |CHISHOLM |                          8|
+|SIDNEY    |BURLESON |                          8|
+|BYRON     |BOX      |                          2|
+|JULIAN    |VEST     |                         31|
+|ISAAC     |OGLESBY  |                         30|
+|MORRIS    |MCCARTER |                         10|
+|CLIFTON   |MALCOLM  |                         10|
+|WILLARD   |LUMPKIN  |                         30|
+|DARYL     |LARUE    |                          1|
+|ROSS      |GREY     |                         20|
+|VIRGIL    |WOFFORD  |                         30|
+|ANDY      |VANHORN  |                         30|
+|MARSHALL  |THORN    |                          9|
+|SALVADOR  |TEEL     |                          1|
+|PERRY     |SWAFFORD |                         13|
+|KIRK      |STCLAIR  |                         10|
+|SERGIO    |STANFIELD|                         30|
+|MARION    |OCAMPO   |                         53|
+|TRACY     |HERRMANN |                          3|
+|SETH      |HANNON   |                          1|
+|KENT      |ARSENAULT|                         28|
+|TERRANCE  |ROUSH    |                          1|
+|RENE      |MCALISTER|                         36|
+|EDUARDO   |HIATT    |                         53|
+|TERRENCE  |GUNDERSON|                         53|
+|ENRIQUE   |FORSYTHE |                          2|
+|FREDDIE   |DUGGAN   |                          4|
+|WADE      |DELVALLE |                          3|
+|AUSTIN    |CINTRON  |                         53|
++----------+---------+---------------------------+

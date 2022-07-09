@@ -2,7 +2,7 @@
 //
 //import com.example.cs195tennis.Util.ConvertDataTypes;
 //import com.example.cs195tennis.Util.Tools;
-//import Database.Catalog.MyCatalog;
+//import Database.MyCatalog;
 //import Database.Schema.Public;
 //import org.jooq.*;
 //import org.jooq.Record;
@@ -14,7 +14,7 @@
 //
 //import static Tables.MATCH;
 //import static com.example.cs195tennis.Util.Tools.print;
-//import static Database.Database.ctx;
+//import static Database.Connection.Database.ctx;
 //import static com.example.cs195tennis.model.Match.MATCH;
 //import static com.example.cs195tennis.model.Organization.Player.PLAYER;
 //import static com.example.cs195tennis.model.Organization.Tournament.TOURNAMENT;

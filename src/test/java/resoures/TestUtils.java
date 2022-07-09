@@ -1,6 +1,6 @@
 package resoures;
 
-import Database.Database;
+import Database.Connection.Database;
 import org.jooq.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;

@@ -1,6 +1,6 @@
 package Database.Model.SakilaModel.Record;
 
-import Database.Model.SakilaModel.Table.CustomerTable;
+import Database.Model.SakilaModel.Table.Customer;
 import org.jooq.Table;
 import org.jooq.impl.CustomRecord;
 
@@ -10,6 +10,7 @@ public class CustomerRecord extends CustomRecord<CustomerRecord> {
     }
 
     protected CustomerRecord() {
-        super(CustomerTable.CUSTOMER);
+        super(Customer.CUSTOMER);
     }
+
 }

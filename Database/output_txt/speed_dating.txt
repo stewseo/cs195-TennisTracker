@@ -1,1 +1,0 @@
-men_participants("speed_dating"."men_participants"."men_participant_id", "speed_dating"."men_participants"."first_name")women_participants("speed_dating"."women_participants"."women_participant_id", "speed_dating"."women_participants"."first_name")

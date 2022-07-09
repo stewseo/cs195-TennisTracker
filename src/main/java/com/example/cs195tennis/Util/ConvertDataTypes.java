@@ -5,7 +5,7 @@ import org.jooq.Record;
 
 import java.util.function.BiPredicate;
 
-import static Database.Database.ctx;
+import static Database.Connection.Database.ctx;
 
 import static com.example.cs195tennis.model.Tables.MATCH;
 import static com.example.cs195tennis.model.Organization.Tournament.TOURNAMENT;

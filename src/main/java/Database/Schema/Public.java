@@ -1,5 +1,5 @@
 package Database.Schema;
-import Database.Catalog.MyCatalog;
+import Database.MyCatalog;
 
 import com.example.cs195tennis.model.Location.Country;
 import com.example.cs195tennis.model.Organization.*;
@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
-import static Database.Database.ctx;
+import static Database.Connection.Database.ctx;
 import static com.example.cs195tennis.Util.Tools.print;
 
 public class Public extends SchemaImpl {

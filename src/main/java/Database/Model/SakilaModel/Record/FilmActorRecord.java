@@ -1,7 +1,6 @@
 package Database.Model.SakilaModel.Record;
 
-import Database.Model.SakilaModel.Table.CustomerTable;
-import Database.Model.SakilaModel.Table.FilmActorTable;
+import Database.Model.SakilaModel.Table.FilmActor;
 import org.jooq.Table;
 import org.jooq.impl.CustomRecord;
 
@@ -12,6 +11,6 @@ public class FilmActorRecord extends CustomRecord<FilmActorRecord> {
         }
 
         protected FilmActorRecord() {
-            super(FilmActorTable.FILM_ACTOR);
+            super(FilmActor.FILM_ACTOR);
         }
     }

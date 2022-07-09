@@ -1,6 +1,6 @@
 package com.example.cs195tennis.Util;
 
-import Database.Catalog.MyCatalog;
+import Database.MyCatalog;
 import com.example.cs195tennis.Data.Dao.DataHandeler;
 import Database.Listeners.StatisticsListener;
 import Database.Schema.Public;
@@ -15,7 +15,7 @@ import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.util.*;
 
-import static Database.Database.ctx;
+import static Database.Connection.Database.ctx;
 import static Database.Schema.Public.SCHEMA;
 import static java.lang.System.out;
 import static org.jooq.impl.DSL.*;

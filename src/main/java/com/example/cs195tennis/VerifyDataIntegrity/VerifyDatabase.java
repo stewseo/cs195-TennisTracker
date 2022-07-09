@@ -1,16 +1,14 @@
 package com.example.cs195tennis.VerifyDataIntegrity;
 
-import Database.Database;
+import Database.Connection.Database;
 import Database.Listeners.CustomVisitListener;
-import Database.QueryParts.BuildQuery;
-import Database.Model.SakilaModel.Table.ActorTable;
-import Database.Model.SakilaModel.Table.FilmTable;
 import com.example.cs195tennis.Util.Tools;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.conf.ParseWithMetaLookups;
 import org.jooq.conf.Settings;
 import org.jooq.exception.DataAccessException;
+import org.jooq.exception.NoDataFoundException;
 import org.jooq.impl.*;
 import org.jooq.tools.JooqLogger;
 
@@ -29,13 +27,12 @@ import static com.example.cs195tennis.Util.Tools.print;
 import static java.lang.System.out;
 
 import static org.jooq.impl.DSL.*;
-import static org.jooq.impl.DSL.currentSchema;
 import static org.jooq.impl.SQLDataType.VARCHAR;
 
 public abstract class VerifyDatabase {
 
     private static Parser parser;
-    protected static DSLContext ctx;
+    public static DSLContext ctx;
     protected static final JooqLogger log = JooqLogger.getLogger(VerifyDatabase.class);
 
     static Predicate<Schema> schemasInCatalog = schema ->
@@ -45,8 +42,7 @@ public abstract class VerifyDatabase {
                     schema.getName().equals("my_guitar_shop") ||
                     schema.getName().equals("mysql") ||
                     schema.getName().equals("sys") ||
-                    schema.getName().equals("information_schema")
-            ;
+                    schema.getName().equals("information_schema");
 
     public static void main(String[] args) {
 
@@ -171,8 +167,8 @@ public abstract class VerifyDatabase {
     private static void sqlLogicalOrder(Query query) {
         try {
             Tools.title("                           Fetch Records returned by Query String execution");
-            if(!query.isExecutable()) {
-                throw new DataAccessException("Query not executable: " +  query.toString()
+            if (!query.isExecutable()) {
+                throw new DataAccessException("Query not executable: " + query.toString()
                 );
             }
             out.println(query.getSQL());
@@ -182,8 +178,6 @@ public abstract class VerifyDatabase {
             String tableFormat = result.format();
 
             Tools.title("                           Result<Record> size " + result.size() + " Record Values: ");
-
-            writeResultsToFile("resultAggregateBeforeGroupBy", tableFormat);
 
 
         } catch (Exception e) {
@@ -198,20 +192,6 @@ public abstract class VerifyDatabase {
         Field<?>[] selectedFields =
                 getFieldsFromJoinedTables(tablesArray
                 );
-        BuildQuery.build(
-
-                query("" +
-                        "SELECT count(*) " +
-                        "FROM products " +
-                        "WHERE product_id = 1 "
-                )
-        );
-
-
-//
-//        parser.parse(
-//                query.getSQL()
-//        );
 
     }
 
@@ -221,6 +201,7 @@ public abstract class VerifyDatabase {
     //============================================================================
 
     Predicate<Table<?>> informationSchemaFilter = VerifyDatabase::selectInformationSchemaTables;
+
     public static boolean selectInformationSchemaTables(Table<?> e) {
         return
                 e.getName().equals("Schemata") ||
@@ -238,18 +219,19 @@ public abstract class VerifyDatabase {
     //                          Schema Getters
     //============================================================================
     public static List<Schema> getSchemaList() {
-        return
-                DSL.using(Database.connect()
-                        )
-                        .meta()
-                        .getSchemas()
-                        .stream()
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.toList()
-                        )
-                ;
+        List<Schema> schemaList = DSL.using(Database.connect()
+                )
+                .meta()
+                .getSchemas()
+                .stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList()
+                );
+    println(schemaList);
+    return schemaList;
     }
-    public static Schema getSchema(Schema schemaName) {
+
+    public static Schema getSchema(String schemaName) {
 
         try {
             List<Schema> schemaList =
@@ -261,8 +243,7 @@ public abstract class VerifyDatabase {
                             )
                             .toList();
             if (schemaList.size() == 1) {
-                return schemaList.get(0)
-                        ;
+                return schemaList.get(0);
 
             }
         } catch (Exception e) {
@@ -274,18 +255,15 @@ public abstract class VerifyDatabase {
     //============================================================================
     //                          Table<?> Getters
     //============================================================================
-    private static Table<?> getTable(String schemaString, String tableName)
+    private static Table<?> getTable(String schemaName, String tableName)
             throws SQLException {
 
-        Schema schema =
-                getSchema(
-                        schema(schemaString
-                        )
-                );
+        print(tableName +" " + schemaName);
+        return create(schemaName)
+                .meta()
+                .getSchemas(schemaName).get(0)
+                .getTable(tableName);
 
-        return schema
-                .getTable(tableName)
-                ;
     }
 
     public static Table<?> lookupTable(String tableName) throws Exception {
@@ -305,123 +283,30 @@ public abstract class VerifyDatabase {
                 )
                 .dsl();
 
-        Field<?>field =
+        Field<?> field =
                 meta
                         .getTables("speed_dating")
                         .stream()
                         .toList()
                         .get(0)
-                        .field(1)
-                ;
-
+                        .field(1);
 
 
         try {
             c.parser().parseSelect("select id from book");
-        }
-        catch (ParserException e) {
+        } catch (ParserException e) {
 
             e.printStackTrace();
         }
         return table("speed_dating");
     }
 
-    private static void writeQueryPlanToTxt(Explain explain, QueryPart queryPart, String sqlString) {
-        String TXT = "explain_plan.txt";
-        File file = null;
-        Result<Record> result = null;
-        log.info("info ");
-
-
-        StringBuilder sb = new StringBuilder("Database/output_txt/").append(TXT);
-
-        file = new File(sb.toString());
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(file), "utf-8"))) {
-
-            writer.write("Estimated Plan:\n " + explain.plan());
-            writer.write("\nEstimated Rows: " + explain.rows());
-            writer.write("\nEstimated Cost:  " + explain.cost());
-            writer.write("\nQueryParts: \n" + queryPart);
-            writer.write("\nSqlString: \n" + sqlString);
-
-
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        log.trace("Trace");
-    }
-    private static void writeSqlStringToTxt(String name) throws FileNotFoundException {
-
-        String TXT = "explain_plan.txt";
-        File file = null;
-        Result<Record> result = null;
-        log.info("info ");
-
-        Schema schema = ctx.meta().getSchemas("sakila").get(0);
-
-        List<Table<?>> tables = ctx
-                .meta()
-                .getSchemas(schema.getName())
-                .get(0)
-                .getTables();
-
-            StringBuilder sb = new StringBuilder("Database/output_txt/").append(TXT);
-
-            file = new File(sb.toString());
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(file), "utf-8"))) {
-            tables.forEach(table-> {
-                try {
-                    writer.write(table.toString() + "\n");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        log.trace("Trace");
-    }
-    private static void writeResultQueryPlanToTxt(Explain explainResultQuery) throws FileNotFoundException {
-
-        String TXT = "ResultQuery_Plan.txt";
-        File file = null;
-        Result<Record> result = null;
-        log.info("info ");
-
-
-        StringBuilder sb = new StringBuilder("Database/output_txt/").append(TXT);
-
-        file = new File(sb.toString());
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(file), "utf-8"))) {
-
-            writer.write("Estimated Plan:\n " + explainResultQuery.plan());
-            writer.write("\nEstimated Rows: " + explainResultQuery.rows());
-            writer.write("\nEstimated Cost:  " + explainResultQuery.cost());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        log.trace("Trace");
-    }
-
 
     public static List<Table<?>> getTableList(String schemaName) {
-        Schema schema = getSchema(schema(schemaName)
-        );
-        return new ArrayList<>(getSchema(schema)
-                .getTables()
-        )
-                ;
+
+        Schema schema = getSchema("my_guitar_shop");
+
+        return schema.getTables();
     }
 
     //===================================================================================
@@ -588,7 +473,7 @@ public abstract class VerifyDatabase {
     //=======================================================================================
 
     /**
-     * @return  List of Correct query strings used to Check the Lexical vs Logical SQL order
+     * @return List of Correct query strings used to Check the Lexical vs Logical SQL order
      */
     private static List<String> getCorrectQueries() {
         List<String> list = new ArrayList<>();
@@ -777,79 +662,21 @@ public abstract class VerifyDatabase {
         return ctx;
     }
 
-    //======================================================================================
-    //                           Output to txt files
-    //=======================================================================================
-    private static void writeResultsToFile(String schema, String result)
-            throws IOException {
-
-        Schema sch = getSchema(schema(schema)
-        );
-        if (sch == null) {
-            return;
+    List<Table<?>> listOfTablesInSchema(String schemaName) {
+        List<Table<?>> listOfTables = ctx
+                .meta()
+                .getSchemas(schemaName)
+                .get(0)
+                .getTables()
+                .stream()
+                .collect(Collectors.toList()
+                );
+        if (listOfTables.isEmpty()) {
+            throw new DataAccessException("no tables in schema");
         }
-        StringBuilder sb = new StringBuilder("/com/example/cs195tennis/text_files/");
-        File file = new File(schema + ".txt");
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(file), "utf-8"))) {
-
-            writer.write(result);
-
-        }
+        return listOfTables;
     }
 
-    static void logSchemaToTextFile(String name) throws IOException {
-        if (name == null || name.isBlank()) {
-            throw new org.jooq.exception.NoDataFoundException();
-        }
-        log.debug("Debug");
-
-        String TXT = "sakila.txt";
-        File file = null;
-        Result<Record1<String>> result = null;
-        List<Table<?>> listOfTables = null;
-
-        try {
-            listOfTables =
-                    ctx
-                            .meta()
-                            .getSchemas(name)
-                            .get(0)
-                            .getTables()
-                            .stream()
-                            .collect(Collectors.toList()
-                            );
-
-            Cursor cursorToCurrentSchema = ctx.select(currentSchema()).fetchLazy();
-
-            StringBuilder sb = new StringBuilder("Database/output_txt/")
-                    .append(TXT);
-
-            file = new File(sb.toString());
-            
-            Files.deleteIfExists(file.toPath());
-
-        } catch (DataAccessException e) {
-            e.printStackTrace();
-        }
-
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(file), "utf-8"))) {
-
-            listOfTables.forEach(e-> {
-                try {
-                    writer.write(e.toString() + "\n");
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-
-            });
-
-        }
-
-        log.trace("Trace");
-        
-    }
 
     //======================================================================================
     //                       String to Query Object
@@ -864,20 +691,41 @@ public abstract class VerifyDatabase {
         );
         return query1;
     }
-    
-    void verifyQuerySyntax(Query query, String correcySqlSyntax) throws FileNotFoundException {
-        String resultQueryToSql = query.getSQL();
 
-        Explain explain = ctx.explain(query);
-        QueryPart queryPart = list(query);
-
-        writeQueryPlanToTxt(explain, query, correcySqlSyntax);
+    //======================================================================================
+    //                Check syntax of valid mySql String against Query Sql String
+    //=======================================================================================
+    void explainQueryPlan(Explain explain) {
 
     }
+
+    //======================================================================================
+    //                Check syntax of valid mySql String against Query Sql String
+    //=======================================================================================
+    void verifyQuerySyntax(Query query, String correctSqlSyntax) throws IOException {
+        ResultQuery resultQuery = ctx.resultQuery(query.getSQL());
+
+        resultQuery = ctx.resultQuery(correctSqlSyntax);
+
+        Explain explain = ctx.explain(resultQuery);
+
+        QueryPart queryPart = list(query);
+
+        queryAndSqlStringToTxtFile(query, correctSqlSyntax);
+
+    }
+
     void verifyQueryResults(ResultQuery resulyQuery) throws FileNotFoundException {
         Explain explain = ctx.explain(resulyQuery);
         writeResultQueryPlanToTxt(explain);
     }
+
+    boolean constraintsToTxt(List<Table<?>> listOfTables) throws Exception {
+        writeContraintsToText(listOfTables);
+        return true;
+    }
+
+
 
     int getSteps(Cursor cursor) {
         int count = 0;
@@ -932,6 +780,351 @@ public abstract class VerifyDatabase {
                 .fetchLazy();
         
         return cursor.hasNext();
+    }
+
+    //======================================================================================
+    //                           Write output to txt file
+    //=======================================================================================
+    void tablesToTxtFile(String schemaName)
+            throws IOException {
+        if (schemaName == null || schemaName.isBlank()) {
+            throw new NoDataFoundException();
+        }
+        log.debug("Debug");
+
+
+        File file = createTxtFile("sakila_schema.txt");
+        Result<Record1<String>> result = null;
+        List<Table<?>> tablesInSchema = null;
+
+        try {
+            tablesInSchema = listOfTablesInSchema(schemaName);
+
+            file = createTxtFile("sakila_schema.txt");
+
+            Files.deleteIfExists(file.toPath());
+
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(file), "utf-8"))) {
+
+            writer.write("Schema: " + schemaName +
+                    "\nNumber of tables in schema: " + tablesInSchema.size());
+
+            tablesInSchema.forEach(e -> {
+                try {
+                    writer.write("" +
+                            "\n\nTable: " + e.getName() +
+                            "\nRecords: "+ ctx.fetchCount(e) +
+                            "\nNumber of fields in table: " + e.fieldsRow().size() +
+                            "\nField names in table: " + e.fieldsRow()
+                    );
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+            });
+
+        }
+
+        log.trace("Trace");
+
+
+    }
+
+    void tablesToTxtFile(List<Table<?>> tablesInSchema)
+            throws IOException {
+
+        if (tablesInSchema == null || tablesInSchema.isEmpty()) {
+            throw new org.jooq.exception.NoDataFoundException();
+        }
+
+        File file = null;
+
+        try {
+
+            file = createTxtFile("sakila_table_info");
+
+            Files.deleteIfExists(file.toPath());
+
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(file), "utf-8"))) {
+
+            tablesInSchema.forEach(e-> {
+                try {
+                    writer.write("" +
+                            "Schema: " + e.getSchema().getName() + ", Table: " + e.getName()+
+                            " Fields: "+ e.fields().length + " Records: "+ ctx.fetchCount(e)
+                    );
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+            });
+
+        }
+
+        log.info("Table name, number of fields in each table, number of records in each table logged to sakila_table_info.txt");
+
+    }
+    private void queryAndSqlStringToTxtFile(QueryPart queryPart, String sqlString) throws IOException {
+        File file = null;
+
+        try {
+            file = createTxtFile("queryParts_mySqlString_syntax.txt");
+
+            Files.deleteIfExists(file.toPath());
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+
+
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(file), "utf-8"))) {
+
+            writer.write("QueryParts: \n" + queryPart);
+            writer.write("\n\nSqlString: \n" + sqlString);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        log.info("Logged parsed QueryPart object and mySql String to queryParts_mySqlString_syntax.txt");
+    }
+
+    private void writeResultQueryPlanToTxt(Explain explainResultQuery)
+            throws FileNotFoundException {
+
+        File file = null;
+        Result<Record> result = null;
+
+        file = createTxtFile("sql_syntax.txt");
+
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(file), "utf-8"))) {
+
+            writer.write("Estimated Plan:\n " + explainResultQuery.plan());
+            writer.write("\nEstimated Rows: " + explainResultQuery.rows());
+            writer.write("\nEstimated Cost:  " + explainResultQuery.cost());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void writeSyntax(String fileName, Query query){
+        StringBuilder m5QueryBuilder = new StringBuilder(
+                fileName)
+                .append("\nDynamic Sql Parts:\n")
+                .append(query.getSQL()
+                )
+                .append("\n")
+                .append("\nParams:\n")
+                .append(query.getParams()
+                )
+                .append("\nBind Values:\n")
+                .append(query.getBindValues()
+                )
+                ;
+
+        File file = createTxtFile(fileName.concat(".txt"));
+
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(file), "utf-8"))) {
+
+            writer.write(m5QueryBuilder.toString());
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    String build(Query query){
+
+        Result<Record> result = ctx.fetch(query.getSQL());
+
+        ResultQuery<Record> resultQuery = resultQuery(query.getSQL());
+
+        Explain explainResultQuery = ctx.explain(resultQuery(query.getSQL()));
+
+        StringBuilder sb = new StringBuilder();
+
+        sb
+                .append("\n\nQuery Sql String:\n")
+                .append(resultQuery.getSQL()
+                )
+                .append("\nThe formatted plan as returned by the database:\n " )
+                .append(explainResultQuery.plan()
+                )
+                .append("\nThe cost the database associated with the execution of the query:  " )
+                .append(explainResultQuery.cost()
+                )
+                .append("\nThe estimated number of rows (cardinality) that is to be returned by the query: ")
+                .append(explainResultQuery.rows()
+                )
+                .append("\nThe actual number of rows (cardinality) returned by the query:  " )
+                .append(result.size()
+                )
+                .append("\nResult Records:\n  " )
+                .append(result.format());
+
+
+        return sb.toString();
+    }
+
+    void writeResultsToTxt(Query query, String problem, String fileName, String table1Name, String table2Name, String schemaName)
+            throws FileNotFoundException, SQLException {
+
+        StringBuilder m5QueryBuilder = new StringBuilder(
+                fileName)
+                .append("\nProblem:\n")
+                .append(problem)
+                .append("\n");
+
+        File file = null;
+
+        if(table1Name != null && !table1Name.isBlank()) {
+            Table<?> table1 = getTable(schemaName, table1Name);
+
+            Result<Record> table1Records  =
+                    ctx
+                            .select()//does not use select *
+                            .from(table1)
+                            .limit(25)
+                            .fetch();
+
+             m5QueryBuilder
+                     .append("Table1: ")
+                    .append(table1.getName()
+                    )
+                    .append("\nRecords: ")
+                    .append(ctx.fetchCount(table1)
+                    )
+                    .append("\nPrimary Key: ")
+                    .append(table1.getPrimaryKey()
+                    )
+                    .append("\nReferences: ")
+                    .append(table1.getReferences()
+                    )
+                     .append("\nIndexes: ")
+                     .append(table1.getIndexes()
+                     )
+                     .append("\nIdentity: ")
+                     .append(table1.getIdentity()
+                     )
+                    .append("\n Records in ")
+                    .append(table1.getName()
+                    )
+                    .append("\n")
+                    .append(table1Records);
+        }
+
+        if(table2Name != null && !table2Name.isBlank()) {
+            Table<?> table2 = getTable(schemaName, table2Name);
+
+            Result<Record> table2Records =
+                    ctx
+                            .select()//does not use select *
+                            .from(table2)
+                            .limit(25)
+                            .fetch();
+
+            m5QueryBuilder
+                    .append("\n\nTable2: ")
+                    .append(table2.getName())
+                    .append("\nRecords: ")
+                    .append(ctx.fetchCount(table2)
+                    )
+                    .append("\nPrimary Key: ")
+                    .append(table2.getPrimaryKey())
+                    .append("\nReferences: ")
+                    .append(table2.getReferences()
+                    )
+                    .append("\nIndexes: ")
+                    .append(table2.getIndexes()
+                    )
+                    .append("\nIdentity: ")
+                    .append(table2.getIdentity()
+                    )
+                    .append("\n Records in ")
+                    .append(table2.getName()
+                    )
+                    .append("\n")
+                    .append(table2Records);
+        }
+
+        m5QueryBuilder.append(build(query));
+
+        file = createTxtFile(fileName.concat(".txt"));
+
+        Result<Record> result = ctx.fetch(query.getSQL());
+
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(file), "utf-8"))) {
+
+            writer.write(m5QueryBuilder.toString());
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void writeContraintsToText(List<Table<?>> table) throws Exception {
+        if (table == null || table.isEmpty()) {
+            throw new Exception("Empty Table in writeContraintsToText line 940");
+        }
+
+        File file = null;
+
+        try {
+
+            file = createTxtFile("sakila_table_constraints.txt");
+
+            Files.deleteIfExists(file.toPath());
+
+        } catch (DataAccessException | IOException e) {
+            e.printStackTrace();
+        }
+
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(file), "utf-8"))) {
+
+            table.forEach(t -> {
+                try {
+                    writer.write("" +
+                            "\n\nTable: " + t.getName()+
+                            "\nPrimary Key: " + t.getPrimaryKey() +
+                            "\nReferences: " + t.getReferences()+
+                            "\nIndexes: "+ t.getIndexes() +
+                            "\nIdentity: "+ t.getIdentity() +
+                            "\nChecks: "+ t.getChecks()
+                    );
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            });
+        }
+        log.info("Logged all table constraints, indentities to sakila_table_constraints.txt ");
+    }
+
+    private File createTxtFile(String fileName) {
+
+            StringBuilder sb = new StringBuilder("Database/output_txt/").append(fileName);
+
+            File file = new File(sb.toString());
+
+            return file;
     }
 
 }

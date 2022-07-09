@@ -1,6 +1,6 @@
 package com.example.cs195tennis.Data.Dao;
 
-import Database.Database;
+import Database.Connection.Database;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import org.jooq.*;
@@ -13,7 +13,6 @@ import java.lang.Record;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;

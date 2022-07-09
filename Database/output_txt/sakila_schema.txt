@@ -1,0 +1,215 @@
+Schema: sakila
+Number of tables in schema: 23
+
+Table: actor
+Records: 200
+Number of fields in table: 4
+Field names in table: ("sakila"."actor"."actor_id", "sakila"."actor"."first_name", "sakila"."actor"."last_name", "sakila"."actor"."last_update")
+
+Table: address
+Records: 603
+Number of fields in table: 8
+Field names in table: (
+  "sakila"."address"."address_id",
+  "sakila"."address"."address",
+  "sakila"."address"."address2",
+  "sakila"."address"."district",
+  "sakila"."address"."city_id",
+  "sakila"."address"."postal_code",
+  "sakila"."address"."phone",
+  "sakila"."address"."last_update"
+)
+
+Table: category
+Records: 16
+Number of fields in table: 3
+Field names in table: ("sakila"."category"."category_id", "sakila"."category"."name", "sakila"."category"."last_update")
+
+Table: city
+Records: 600
+Number of fields in table: 4
+Field names in table: ("sakila"."city"."city_id", "sakila"."city"."city", "sakila"."city"."country_id", "sakila"."city"."last_update")
+
+Table: country
+Records: 109
+Number of fields in table: 3
+Field names in table: ("sakila"."country"."country_id", "sakila"."country"."country", "sakila"."country"."last_update")
+
+Table: customer
+Records: 599
+Number of fields in table: 9
+Field names in table: (
+  "sakila"."customer"."customer_id",
+  "sakila"."customer"."store_id",
+  "sakila"."customer"."first_name",
+  "sakila"."customer"."last_name",
+  "sakila"."customer"."email",
+  "sakila"."customer"."address_id",
+  "sakila"."customer"."active",
+  "sakila"."customer"."create_date",
+  "sakila"."customer"."last_update"
+)
+
+Table: film
+Records: 1000
+Number of fields in table: 13
+Field names in table: (
+  "sakila"."film"."film_id",
+  "sakila"."film"."title",
+  "sakila"."film"."description",
+  "sakila"."film"."release_year",
+  "sakila"."film"."language_id",
+  "sakila"."film"."original_language_id",
+  "sakila"."film"."rental_duration",
+  "sakila"."film"."rental_rate",
+  "sakila"."film"."length",
+  "sakila"."film"."replacement_cost",
+  "sakila"."film"."rating",
+  "sakila"."film"."special_features",
+  "sakila"."film"."last_update"
+)
+
+Table: film_actor
+Records: 5462
+Number of fields in table: 3
+Field names in table: ("sakila"."film_actor"."actor_id", "sakila"."film_actor"."film_id", "sakila"."film_actor"."last_update")
+
+Table: film_category
+Records: 1000
+Number of fields in table: 3
+Field names in table: ("sakila"."film_category"."film_id", "sakila"."film_category"."category_id", "sakila"."film_category"."last_update")
+
+Table: film_text
+Records: 1000
+Number of fields in table: 3
+Field names in table: ("sakila"."film_text"."film_id", "sakila"."film_text"."title", "sakila"."film_text"."description")
+
+Table: inventory
+Records: 4581
+Number of fields in table: 4
+Field names in table: ("sakila"."inventory"."inventory_id", "sakila"."inventory"."film_id", "sakila"."inventory"."store_id", "sakila"."inventory"."last_update")
+
+Table: language
+Records: 6
+Number of fields in table: 3
+Field names in table: ("sakila"."language"."language_id", "sakila"."language"."name", "sakila"."language"."last_update")
+
+Table: payment
+Records: 16049
+Number of fields in table: 7
+Field names in table: (
+  "sakila"."payment"."payment_id",
+  "sakila"."payment"."customer_id",
+  "sakila"."payment"."staff_id",
+  "sakila"."payment"."rental_id",
+  "sakila"."payment"."amount",
+  "sakila"."payment"."payment_date",
+  "sakila"."payment"."last_update"
+)
+
+Table: rental
+Records: 16044
+Number of fields in table: 7
+Field names in table: (
+  "sakila"."rental"."rental_id",
+  "sakila"."rental"."rental_date",
+  "sakila"."rental"."inventory_id",
+  "sakila"."rental"."customer_id",
+  "sakila"."rental"."return_date",
+  "sakila"."rental"."staff_id",
+  "sakila"."rental"."last_update"
+)
+
+Table: staff
+Records: 2
+Number of fields in table: 11
+Field names in table: (
+  "sakila"."staff"."staff_id",
+  "sakila"."staff"."first_name",
+  "sakila"."staff"."last_name",
+  "sakila"."staff"."address_id",
+  "sakila"."staff"."picture",
+  "sakila"."staff"."email",
+  "sakila"."staff"."store_id",
+  "sakila"."staff"."active",
+  "sakila"."staff"."username",
+  "sakila"."staff"."password",
+  "sakila"."staff"."last_update"
+)
+
+Table: store
+Records: 2
+Number of fields in table: 4
+Field names in table: ("sakila"."store"."store_id", "sakila"."store"."manager_staff_id", "sakila"."store"."address_id", "sakila"."store"."last_update")
+
+Table: actor_info
+Records: 200
+Number of fields in table: 4
+Field names in table: ("sakila"."actor_info"."actor_id", "sakila"."actor_info"."first_name", "sakila"."actor_info"."last_name", "sakila"."actor_info"."film_info")
+
+Table: customer_list
+Records: 599
+Number of fields in table: 9
+Field names in table: (
+  "sakila"."customer_list"."ID",
+  "sakila"."customer_list"."name",
+  "sakila"."customer_list"."address",
+  "sakila"."customer_list"."zip code",
+  "sakila"."customer_list"."phone",
+  "sakila"."customer_list"."city",
+  "sakila"."customer_list"."country",
+  "sakila"."customer_list"."notes",
+  "sakila"."customer_list"."SID"
+)
+
+Table: film_list
+Records: 997
+Number of fields in table: 8
+Field names in table: (
+  "sakila"."film_list"."FID",
+  "sakila"."film_list"."title",
+  "sakila"."film_list"."description",
+  "sakila"."film_list"."category",
+  "sakila"."film_list"."price",
+  "sakila"."film_list"."length",
+  "sakila"."film_list"."rating",
+  "sakila"."film_list"."actors"
+)
+
+Table: nicer_but_slower_film_list
+Records: 997
+Number of fields in table: 8
+Field names in table: (
+  "sakila"."nicer_but_slower_film_list"."FID",
+  "sakila"."nicer_but_slower_film_list"."title",
+  "sakila"."nicer_but_slower_film_list"."description",
+  "sakila"."nicer_but_slower_film_list"."category",
+  "sakila"."nicer_but_slower_film_list"."price",
+  "sakila"."nicer_but_slower_film_list"."length",
+  "sakila"."nicer_but_slower_film_list"."rating",
+  "sakila"."nicer_but_slower_film_list"."actors"
+)
+
+Table: sales_by_film_category
+Records: 16
+Number of fields in table: 2
+Field names in table: ("sakila"."sales_by_film_category"."category", "sakila"."sales_by_film_category"."total_sales")
+
+Table: sales_by_store
+Records: 2
+Number of fields in table: 3
+Field names in table: ("sakila"."sales_by_store"."store", "sakila"."sales_by_store"."manager", "sakila"."sales_by_store"."total_sales")
+
+Table: staff_list
+Records: 2
+Number of fields in table: 8
+Field names in table: (
+  "sakila"."staff_list"."ID",
+  "sakila"."staff_list"."name",
+  "sakila"."staff_list"."address",
+  "sakila"."staff_list"."zip code",
+  "sakila"."staff_list"."phone",
+  "sakila"."staff_list"."city",
+  "sakila"."staff_list"."country",
+  "sakila"."staff_list"."SID"
+)

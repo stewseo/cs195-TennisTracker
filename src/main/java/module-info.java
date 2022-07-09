@@ -18,10 +18,10 @@ module com.example.cs195tennis.main {
     requires org.kordamp.bootstrapfx.core;
     opens com.example.cs195tennis.controller to javafx.fxml;
     opens Database.Schema to javafx.base;
-    opens Database.Catalog to javafx.base;
-    opens Database.QueryParts to javafx.base;
+    opens Database.Model.SakilaModel.QueryParts to javafx.base;
     opens Database.Listeners to javafx.base;
     exports com.example.cs195tennis;
     opens Database.Model.SakilaModel.Record to org.jooq;
     opens com.example.cs195tennis.model to org.jooq;
+    opens Database to javafx.base;
 }

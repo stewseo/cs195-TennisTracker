@@ -1,0 +1,222 @@
+
+
+Table: actor
+Primary Key: constraint "PRIMARY"
+  primary key ("actor_id")
+References: []
+Indexes: ["sakila"."idx_actor_last_name"]
+Identity: "sakila"."actor"."actor_id"
+Checks: []
+
+Table: address
+Primary Key: constraint "PRIMARY"
+  primary key ("address_id")
+References: [constraint "fk_address_city"
+  foreign key ("city_id")
+  references "sakila"."city" ("city_id")]
+Indexes: ["sakila"."idx_fk_city_id"]
+Identity: "sakila"."address"."address_id"
+Checks: []
+
+Table: category
+Primary Key: constraint "PRIMARY"
+  primary key ("category_id")
+References: []
+Indexes: []
+Identity: "sakila"."category"."category_id"
+Checks: []
+
+Table: city
+Primary Key: constraint "PRIMARY"
+  primary key ("city_id")
+References: [constraint "fk_city_country"
+  foreign key ("country_id")
+  references "sakila"."country" ("country_id")]
+Indexes: ["sakila"."idx_fk_country_id"]
+Identity: "sakila"."city"."city_id"
+Checks: []
+
+Table: country
+Primary Key: constraint "PRIMARY"
+  primary key ("country_id")
+References: []
+Indexes: []
+Identity: "sakila"."country"."country_id"
+Checks: []
+
+Table: customer
+Primary Key: constraint "PRIMARY"
+  primary key ("customer_id")
+References: [constraint "fk_customer_address"
+  foreign key ("address_id")
+  references "sakila"."address" ("address_id"), constraint "fk_customer_store"
+  foreign key ("store_id")
+  references "sakila"."store" ("store_id")]
+Indexes: ["sakila"."idx_fk_address_id", "sakila"."idx_fk_store_id", "sakila"."idx_last_name"]
+Identity: "sakila"."customer"."customer_id"
+Checks: []
+
+Table: film
+Primary Key: constraint "PRIMARY"
+  primary key ("film_id")
+References: [constraint "fk_film_language"
+  foreign key ("language_id")
+  references "sakila"."language" ("language_id"), constraint "fk_film_language_original"
+  foreign key ("original_language_id")
+  references "sakila"."language" ("language_id")]
+Indexes: ["sakila"."idx_fk_language_id", "sakila"."idx_fk_original_language_id", "sakila"."idx_title"]
+Identity: "sakila"."film"."film_id"
+Checks: []
+
+Table: film_actor
+Primary Key: constraint "PRIMARY"
+  primary key ("actor_id", "film_id")
+References: [constraint "fk_film_actor_actor"
+  foreign key ("actor_id")
+  references "sakila"."actor" ("actor_id"), constraint "fk_film_actor_film"
+  foreign key ("film_id")
+  references "sakila"."film" ("film_id")]
+Indexes: ["sakila"."idx_fk_film_id"]
+Identity: null
+Checks: []
+
+Table: film_category
+Primary Key: constraint "PRIMARY"
+  primary key ("film_id", "category_id")
+References: [constraint "fk_film_category_category"
+  foreign key ("category_id")
+  references "sakila"."category" ("category_id"), constraint "fk_film_category_film"
+  foreign key ("film_id")
+  references "sakila"."film" ("film_id")]
+Indexes: []
+Identity: null
+Checks: []
+
+Table: film_text
+Primary Key: constraint "PRIMARY"
+  primary key ("film_id")
+References: []
+Indexes: ["sakila"."idx_title_description"]
+Identity: null
+Checks: []
+
+Table: inventory
+Primary Key: constraint "PRIMARY"
+  primary key ("inventory_id")
+References: [constraint "fk_inventory_film"
+  foreign key ("film_id")
+  references "sakila"."film" ("film_id"), constraint "fk_inventory_store"
+  foreign key ("store_id")
+  references "sakila"."store" ("store_id")]
+Indexes: ["sakila"."idx_fk_film_id", "sakila"."idx_store_id_film_id"]
+Identity: "sakila"."inventory"."inventory_id"
+Checks: []
+
+Table: language
+Primary Key: constraint "PRIMARY"
+  primary key ("language_id")
+References: []
+Indexes: []
+Identity: "sakila"."language"."language_id"
+Checks: []
+
+Table: payment
+Primary Key: constraint "PRIMARY"
+  primary key ("payment_id")
+References: [constraint "fk_payment_customer"
+  foreign key ("customer_id")
+  references "sakila"."customer" ("customer_id"), constraint "fk_payment_rental"
+  foreign key ("rental_id")
+  references "sakila"."rental" ("rental_id"), constraint "fk_payment_staff"
+  foreign key ("staff_id")
+  references "sakila"."staff" ("staff_id")]
+Indexes: ["sakila"."idx_fk_customer_id", "sakila"."idx_fk_staff_id"]
+Identity: "sakila"."payment"."payment_id"
+Checks: []
+
+Table: rental
+Primary Key: constraint "PRIMARY"
+  primary key ("rental_id")
+References: [constraint "fk_rental_customer"
+  foreign key ("customer_id")
+  references "sakila"."customer" ("customer_id"), constraint "fk_rental_inventory"
+  foreign key ("inventory_id")
+  references "sakila"."inventory" ("inventory_id"), constraint "fk_rental_staff"
+  foreign key ("staff_id")
+  references "sakila"."staff" ("staff_id")]
+Indexes: ["sakila"."idx_fk_customer_id", "sakila"."idx_fk_inventory_id", "sakila"."idx_fk_staff_id"]
+Identity: "sakila"."rental"."rental_id"
+Checks: []
+
+Table: staff
+Primary Key: constraint "PRIMARY"
+  primary key ("staff_id")
+References: [constraint "fk_staff_address"
+  foreign key ("address_id")
+  references "sakila"."address" ("address_id"), constraint "fk_staff_store"
+  foreign key ("store_id")
+  references "sakila"."store" ("store_id")]
+Indexes: ["sakila"."idx_fk_address_id", "sakila"."idx_fk_store_id"]
+Identity: "sakila"."staff"."staff_id"
+Checks: []
+
+Table: store
+Primary Key: constraint "PRIMARY"
+  primary key ("store_id")
+References: [constraint "fk_store_address"
+  foreign key ("address_id")
+  references "sakila"."address" ("address_id"), constraint "fk_store_staff"
+  foreign key ("manager_staff_id")
+  references "sakila"."staff" ("staff_id")]
+Indexes: ["sakila"."idx_fk_address_id"]
+Identity: "sakila"."store"."store_id"
+Checks: []
+
+Table: actor_info
+Primary Key: null
+References: []
+Indexes: []
+Identity: null
+Checks: []
+
+Table: customer_list
+Primary Key: null
+References: []
+Indexes: []
+Identity: null
+Checks: []
+
+Table: film_list
+Primary Key: null
+References: []
+Indexes: []
+Identity: null
+Checks: []
+
+Table: nicer_but_slower_film_list
+Primary Key: null
+References: []
+Indexes: []
+Identity: null
+Checks: []
+
+Table: sales_by_film_category
+Primary Key: null
+References: []
+Indexes: []
+Identity: null
+Checks: []
+
+Table: sales_by_store
+Primary Key: null
+References: []
+Indexes: []
+Identity: null
+Checks: []
+
+Table: staff_list
+Primary Key: null
+References: []
+Indexes: []
+Identity: null
+Checks: []

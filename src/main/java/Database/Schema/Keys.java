@@ -1,9 +1,12 @@
 package Database.Schema;
 
+import Database.Model.SakilaModel.Record.*;
+import Database.Model.SakilaModel.Table.*;
 import com.example.cs195tennis.model.Location.Country;
 import com.example.cs195tennis.model.Organization.*;
 import com.example.cs195tennis.model.Player.AtpRank;
 import com.example.cs195tennis.model.Record.*;
+import com.example.cs195tennis.model.Record.CountryRecord;
 import com.example.cs195tennis.model.Statistics.ServeStats;
 import org.jooq.ForeignKey;
 import org.jooq.TableField;
@@ -14,6 +17,33 @@ import org.jooq.impl.Internal;
 
 @SuppressWarnings({"all", "unchecked", "rawtypes"})
 public class Keys {
+
+    public static final UniqueKey<ActorRecord> ACTOR_PKEY =
+            Internal.createUniqueKey(Actor.ACTOR,
+                    DSL.name("actor_pkey"), new TableField[] { Actor.ACTOR.ACTOR_ID }, true);
+    public static final UniqueKey<AddressRecord> ADDRESS_PKEY =
+            Internal.createUniqueKey(Address.ADDRESS,
+                    DSL.name("address_pkey"), new TableField[] { Address.ADDRESS.ADDRESS_ID }, true);
+    public static final UniqueKey<CityRecord> CITY_PKEY =
+            Internal.createUniqueKey(City.CITY,
+                    DSL.name("city_pkey"), new TableField[] { City.CITY.CITY_ID }, true);
+
+    public static final UniqueKey<CountryRecord> COUNTRY_PKEY =
+            Internal.createUniqueKey(Country.COUNTRY,
+                    DSL.name("country_pkey"), new TableField[] { Country.COUNTRY.COUNTRY_ID }, true);
+
+    public static final UniqueKey<CustomerRecord> CUSTOMER_PKEY =
+            Internal.createUniqueKey(Customer.CUSTOMER,
+                    DSL.name("customer_pkey"), new TableField[] { Customer.CUSTOMER.CUSTOMER_ID }, true);
+
+    public static final UniqueKey<FilmRecord> FILM_PKEY =
+            Internal.createUniqueKey(Film.FILM,
+                    DSL.name("film_pkey"), new TableField[] { Film.FILM.FILM_ID }, true);
+
+    public static final UniqueKey<FilmActorRecord> FILM_ACTOR_PKEY =
+            Internal.createUniqueKey(
+                    FilmActor.FILM_ACTOR, DSL.name("film_actor_pkey"),
+                    new TableField[] { FilmActor.FILM_ACTOR.ACTOR_ID, FilmActor.FILM_ACTOR.FILM_ID }, true);
 
 
     public static final UniqueKey<CountryRecord> COUNTRY_KEY =
@@ -93,6 +123,32 @@ public class Keys {
     // FOREIGN KEY: Match_Match_Tournament_id = Tournament_Tournament_id
     // -------------------------------------------------------------------------
 
+
+    public static final ForeignKey<CityRecord, CountryRecord> CITY__CITY_COUNTRY_ID_FKEY =
+            Internal.createForeignKey(City.CITY, DSL.name("city_country_id_fkey"),
+                    new TableField[] { City.CITY.COUNTRY_ID }, Keys.COUNTRY_PKEY,
+                    new TableField[] { Country.COUNTRY.COUNTRY_ID }, true);
+
+    public static final ForeignKey<FilmActorRecord, ActorRecord> FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY =
+            Internal.createForeignKey(FilmActor.FILM_ACTOR, DSL.name("film_actor_actor_id_fkey"),
+                    new TableField[] { FilmActor.FILM_ACTOR.ACTOR_ID },
+                    Keys.ACTOR_PKEY, new TableField[] { Actor.ACTOR.ACTOR_ID }, true);
+
+    public static final ForeignKey<FilmActorRecord, FilmRecord> FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY =
+            Internal.createForeignKey(FilmActor.FILM_ACTOR, DSL.name("film_actor_film_id_fkey"),
+                    new TableField[] { FilmActor.FILM_ACTOR.FILM_ID },
+                    Keys.FILM_PKEY, new TableField[] { Film.FILM.FILM_ID }, true);
+
+    public static final ForeignKey<CustomerRecord, AddressRecord> CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY =
+            Internal.createForeignKey(Customer.CUSTOMER, DSL.name("customer_address_id_fkey"),
+                    new TableField[] { Customer.CUSTOMER.ADDRESS_ID },
+                    Keys.ADDRESS_PKEY, new TableField[] { Address.ADDRESS.ADDRESS_ID }, true);
+
+    public static final ForeignKey<AddressRecord, CityRecord> ADDRESS__ADDRESS_CITY_ID_FKEY =
+            Internal.createForeignKey(Address.ADDRESS, DSL.name("address_city_id_fkey"),
+                    new TableField[] { Address.ADDRESS.CITY_ID },
+                    Keys.CITY_PKEY, new TableField[] {
+                            City.CITY.CITY_ID }, true);
     public static final ForeignKey<MatchRecord, TournamentRecord> MATCH__MATCH_GRAND_SLAM_TOURNAMENT_ID_FKEY =
             Internal.createForeignKey(
                     Match.MATCH,

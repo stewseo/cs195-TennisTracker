@@ -2,7 +2,7 @@ package Database.Alter;
 
 import org.jooq.*;
 
-import static Database.Database.ctx;
+import static Database.Connection.Database.ctx;
 import static org.jooq.impl.DSL.constraint;
 
 public class ModifyTable {
