@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.cs195tennis.VerifyDataIntegrity.VerifySakilaDBTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2022-07-10T01:50:37" hostname="STEWS" time="2.587">
+  <properties/>
+  <testcase name="testMySqlSyntax()" classname="com.example.cs195tennis.VerifyDataIntegrity.VerifySakilaDBTest" time="2.578"/>
+  <testcase name="testDynamicSql()" classname="com.example.cs195tennis.VerifyDataIntegrity.VerifySakilaDBTest" time="0.001"/>
+  <testcase name="testQueryParts()" classname="com.example.cs195tennis.VerifyDataIntegrity.VerifySakilaDBTest" time="0.001"/>
+  <testcase name="testVerifyNestedRecords()" classname="com.example.cs195tennis.VerifyDataIntegrity.VerifySakilaDBTest" time="0.001"/>
+  <testcase name="testNestedRecords()" classname="com.example.cs195tennis.VerifyDataIntegrity.VerifySakilaDBTest" time="0.001"/>
+  <testcase name="testSchema()" classname="com.example.cs195tennis.VerifyDataIntegrity.VerifySakilaDBTest" time="0.001"/>
+  <testcase name="testConstraints()" classname="com.example.cs195tennis.VerifyDataIntegrity.VerifySakilaDBTest" time="0.001"/>
+  <system-out><![CDATA[
+Verify aggregate function count(*)
+----------------------------------
+parts array length == 7
+"ACTOR"
+]]></system-out>
+  <system-err><![CDATA[Jul 09, 2022 6:50:40 PM org.jooq.tools.JooqLogger lambda$info$5
+INFO: 
+                                      
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@  @@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@  @@  @@    @@@@@@@@@@
+@@@@@@@@@@  @@@@  @@  @@    @@@@@@@@@@
+@@@@@@@@@@        @@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@        @@        @@@@@@@@@@
+@@@@@@@@@@    @@  @@  @@@@  @@@@@@@@@@
+@@@@@@@@@@    @@  @@  @@@@  @@@@@@@@@@
+@@@@@@@@@@        @@  @  @  @@@@@@@@@@
+@@@@@@@@@@        @@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@  @@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  Thank you for using jOOQ 3.16.6
+                                      
+Jul 09, 2022 6:50:40 PM org.jooq.tools.JooqLogger lambda$info$5
+INFO: 
+
+jOOQ tip of the day: You don't have to use jOOQ's DSL. You can use all of jOOQ's API with native SQL as well: https://blog.jooq.org/using-java-13-text-blocks-for-plain-sql-with-jooq/
+
+]]></system-err>
+</testsuite>

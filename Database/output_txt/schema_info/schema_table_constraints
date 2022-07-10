@@ -1,0 +1,75 @@
+
+
+Table: addresses
+Primary Key: constraint "PRIMARY"
+  primary key ("address_id")
+References: [constraint "addresses_fk_customers"
+  foreign key ("customer_id")
+  references "my_guitar_shop"."customers" ("customer_id")]
+Indexes: []
+Identity: "my_guitar_shop"."addresses"."address_id"
+Checks: []
+
+Table: administrators
+Primary Key: constraint "PRIMARY"
+  primary key ("admin_id")
+References: []
+Indexes: []
+Identity: "my_guitar_shop"."administrators"."admin_id"
+Checks: []
+
+Table: categories
+Primary Key: constraint "PRIMARY"
+  primary key ("category_id")
+References: []
+Indexes: []
+Identity: "my_guitar_shop"."categories"."category_id"
+Checks: []
+
+Table: customers
+Primary Key: constraint "PRIMARY"
+  primary key ("customer_id")
+References: []
+Indexes: []
+Identity: "my_guitar_shop"."customers"."customer_id"
+Checks: []
+
+Table: order_items
+Primary Key: constraint "PRIMARY"
+  primary key ("item_id")
+References: [constraint "items_fk_orders"
+  foreign key ("order_id")
+  references "my_guitar_shop"."orders" ("order_id"), constraint "items_fk_products"
+  foreign key ("product_id")
+  references "my_guitar_shop"."products" ("product_id")]
+Indexes: []
+Identity: "my_guitar_shop"."order_items"."item_id"
+Checks: []
+
+Table: orders
+Primary Key: constraint "PRIMARY"
+  primary key ("order_id")
+References: [constraint "orders_fk_customers"
+  foreign key ("customer_id")
+  references "my_guitar_shop"."customers" ("customer_id")]
+Indexes: []
+Identity: "my_guitar_shop"."orders"."order_id"
+Checks: []
+
+Table: products
+Primary Key: constraint "PRIMARY"
+  primary key ("product_id")
+References: [constraint "products_fk_categories"
+  foreign key ("category_id")
+  references "my_guitar_shop"."categories" ("category_id")]
+Indexes: []
+Identity: "my_guitar_shop"."products"."product_id"
+Checks: []
+
+Table: tax_and_total
+Primary Key: constraint "PRIMARY"
+  primary key ("tax_and_total_id")
+References: []
+Indexes: []
+Identity: null
+Checks: []

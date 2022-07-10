@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static Database.Connection.Database.ctx;
+import static com.example.database.db_connection.Connection.Database.ctx;
 import static org.jooq.impl.DSL.*;
 import static org.junit.jupiter.api.Assertions.*;
 

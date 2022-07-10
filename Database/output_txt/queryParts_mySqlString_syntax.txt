@@ -1,23 +1,16 @@
 QueryParts: 
-        SELECT f.title, array(
-            SELECT json_array(a.actor_id, a.first_name, a.last_name) AS `nested`
-             FROM actor AS a
-              JOIN film_actor AS fa
-                using (actor_id)
-            WHERE fa.film_id = f.film_id
-            ORDER BY a.actor_id
-         )
-        FROM film AS f
-        ORDER BY f.title
-
+select
+  "ACTOR"."FIRST_NAME",
+  "ACTOR"."LAST_NAME",
+  count(*) x
+from "ACTOR"
+where (Actor.LAST_NAME like 'A%' )
+group by "ACTOR"."FIRST_NAME", "ACTOR"."LAST_NAME"
+order by "ACTOR"."FIRST_NAME" asc
 
 SqlString: 
-            SELECT json_array(
-                a.actor_id,
-                a.first_name,
-                a.last_name)
-                AS `nested`
-            FROM actor AS a
-              JOIN film_actor AS fa
-                using (actor_id)
-            ORDER BY a.actor_id
+SELECT Actor.first_name, Actor.last_name, count(*)
+FROM Sakila.Actor
+WHERE Actor.last_name LIKE 'a%'
+GROUP BY Actor.first_name, Actor.last_name
+ORDER BY Actor.first_name asc

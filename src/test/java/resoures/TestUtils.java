@@ -1,6 +1,6 @@
 package resoures;
 
-import Database.Connection.Database;
+import com.example.database.db_connection.Connection.Database;
 import org.jooq.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,18 +17,13 @@ public abstract class TestUtils {
 
     @BeforeAll
     public static void beforeClass() throws SQLException {
-
-        ctx = using(Database.connection("sakila"));
+        ctx = using(Database.connect("sakila"));
 
         ctx.selectOne().toString();
 
 
     }
 
-//    @AfterClass
-//    public static void afterClass() {
-//        jdbc.close();
-//    }
 
     @BeforeEach
     public void setup() throws SQLException {
