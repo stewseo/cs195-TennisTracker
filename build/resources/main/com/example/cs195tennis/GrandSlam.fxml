@@ -3,7 +3,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-<GridPane alignment="TOP_CENTER" hgap="10.0" styleClass="grid-pane" stylesheets="@ComboBoxes.css" vgap="10.0"
+<GridPane alignment="TOP_CENTER" hgap="10.0" styleClass="grid-pane" stylesheets="@css/ComboBoxes.css" vgap="10.0"
           xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="com.example.cs195tennis.controller.GrandSlamController">
     <columnConstraints>
@@ -26,7 +26,7 @@
     <Label alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" styleClass="header-label" text="Tourneys"
            GridPane.columnSpan="6" GridPane.rowSpan="2">
     </Label>
-    <MFXTextField fx:id="textField" onAction="#handleTextEntry" promptText="Enter Tournament" stylesheets="@TextFields.css"
+    <MFXTextField fx:id="textField" onAction="#handleTextEntry" promptText="Enter Tournament" stylesheets="@css/TextFields.css"
                   GridPane.rowIndex="2" GridPane.columnIndex="1"/>
     <Label id="validationLabel" fx:id="validateWtaTournamentLavel" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
            textFill="#ef6e6b" visible="false" wrapText="true"/>

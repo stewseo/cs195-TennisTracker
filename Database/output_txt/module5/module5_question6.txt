@@ -1,0 +1,87 @@
+module5/module5_question6
+Problem:
+Write a SELECT statement that returns these two columns:
+CategoryName: The CategoryName column from the Categories table
+ProductID: The ProductID column from the Products table
+Return one row for each category that has never been used.
+Hint: Use an outer join and only return rows where the ProductID column contains a null value.
+
+Table1: products
+Records: 10
+Primary Key: constraint "PRIMARY"
+  primary key ("product_id")
+References: [constraint "products_fk_categories"
+  foreign key ("category_id")
+  references "my_guitar_shop"."categories" ("category_id")]
+Indexes: []
+Identity: "my_guitar_shop"."products"."product_id"
+ Records in products
++----------+-----------+------------+------------------------------------+--------------------------------------------------+----------+----------------+---------------------+
+|product_id|category_id|product_code|product_name                        |description                                       |list_price|discount_percent|date_added           |
++----------+-----------+------------+------------------------------------+--------------------------------------------------+----------+----------------+---------------------+
+|         1|          1|strat       |Fender Stratocaster                 |The Fender Stratocaster is the electric guitar ...|    699.00|           30.00|2014-10-30 09:32:40.0|
+|         2|          1|les_paul    |Gibson Les Paul                     |This Les Paul guitar offers a carved top and hu...|   1199.00|           30.00|2014-12-05 16:33:13.0|
+|         3|          1|sg          |Gibson SG                           |This Gibson SG electric guitar takes the best o...|   2517.00|           52.00|2015-02-04 11:04:31.0|
+|         4|          1|fg700s      |Yamaha FG700S                       |The Yamaha FG700S solid top acoustic guitar has...|    489.99|           38.00|2015-06-01 11:12:59.0|
+|         5|          1|washburn    |Washburn D10S                       |The Washburn D10S acoustic guitar is superbly c...|    299.00|            0.00|2015-07-30 13:58:35.0|
+|         6|          1|rodriguez   |Rodriguez Caballero 11              |Featuring a carefully chosen, solid Canadian ce...|    415.00|           39.00|2015-07-30 14:12:41.0|
+|         7|          2|precision   |Fender Precision                    |The Fender Precision bass guitar delivers the s...|    799.99|           30.00|2015-06-01 11:29:35.0|
+|         8|          2|hofner      |Hofner Icon                         |With authentic details inspired by the original...|    499.99|           25.00|2015-07-30 14:18:33.0|
+|         9|          3|ludwig      |Ludwig 5-piece Drum Set with Cymbals|This product includes a Ludwig 5-piece drum set...|    699.99|           30.00|2015-07-30 12:46:40.0|
+|        10|          3|tama        |Tama 5-Piece Drum Set with Cymbals  |The Tama 5-piece Drum Set is the most affordabl...|    799.99|           15.00|2015-07-30 13:14:15.0|
++----------+-----------+------------+------------------------------------+--------------------------------------------------+----------+----------------+---------------------+
+
+
+Table2: categories
+Records: 4
+Primary Key: constraint "PRIMARY"
+  primary key ("category_id")
+References: []
+Indexes: []
+Identity: "my_guitar_shop"."categories"."category_id"
+ Records in categories
++-----------+-------------+
+|category_id|category_name|
++-----------+-------------+
+|          2|Basses       |
+|          3|Drums        |
+|          1|Guitars      |
+|          4|Keyboards    |
++-----------+-------------+
+
+
+Query Sql String:
+SELECT
+    c.category_name,
+    p.product_id
+FROM products p
+    LEFT OUTER JOIN categories c
+        ON p.category_id = c.category_id
+WHERE p.category_id IS NULL
+UNION ALL
+SELECT
+    c.category_name,
+    p.product_id
+FROM products p
+    RIGHT OUTER JOIN categories c
+        ON p.category_id = c.category_id
+WHERE p.category_id IS NULL
+
+The formatted plan as returned by the database:
+ +----+-----------+------+----------+------+----------------------+----------------------+-------+----------------------------+------+--------+------------------------------------+
+|  id|select_type|table |partitions|type  |possible_keys         |key                   |key_len|ref                         |  rows|filtered|Extra                               |
++----+-----------+------+----------+------+----------------------+----------------------+-------+----------------------------+------+--------+------------------------------------+
+|   1|PRIMARY    |{null}|{null}    |{null}|{null}                |{null}                |{null} |{null}                      |{null}|  {null}|Impossible WHERE                    |
+|   2|UNION      |c     |{null}    |index |{null}                |category_name         |1022   |{null}                      |     4|   100.0|Using index                         |
+|   2|UNION      |p     |{null}    |ref   |products_fk_categories|products_fk_categories|4      |my_guitar_shop.c.category_id|     3|   100.0|Using where; Not exists; Using index|
++----+-----------+------+----------+------+----------------------+----------------------+-------+----------------------------+------+--------+------------------------------------+
+
+The cost the database associated with the execution of the query:  NaN
+The estimated number of rows (cardinality) that is to be returned by the query: 0.0
+The actual number of rows (cardinality) returned by the query:  1
+Result Records:
+  +-------------+----------+
+|category_name|product_id|
++-------------+----------+
+|Keyboards    |    {null}|
++-------------+----------+

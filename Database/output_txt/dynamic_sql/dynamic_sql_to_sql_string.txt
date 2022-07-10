@@ -1,0 +1,14 @@
+dynamic_sql/dynamic_sql_to_sql_string
+Dynamic Sql Parts:
+select `ACTOR`.`FIRST_NAME`, `ACTOR`.`LAST_NAME`
+from `ACTOR`
+where `ACTOR`.`ACTOR_ID` in (
+  ?, ?, ?
+)
+order by `ACTOR`.`FIRST_NAME`
+limit ?
+
+Params:
+{1=1, 2=2, 3=3, 4=5}
+Bind Values:
+[1, 2, 3, 5]

@@ -1,0 +1,50 @@
+consume_records_for_each/result_extends_iterable_example
+Problem:
+Result<Record> extends Iterable
+
+
+Query Sql String:
+select `ACTOR`.`FIRST_NAME`, `ACTOR`.`LAST_NAME` from `ACTOR` where (ACTOR.ACTOR_ID < '5L')
+The formatted plan as returned by the database:
+ +----+-----------+-----+----------+-----+-------------+-------+-------+------+----+--------+-----------+
+|  id|select_type|table|partitions|type |possible_keys|key    |key_len|ref   |rows|filtered|Extra      |
++----+-----------+-----+----------+-----+-------------+-------+-------+------+----+--------+-----------+
+|   1|SIMPLE     |ACTOR|{null}    |range|PRIMARY      |PRIMARY|4      |{null}|   4|   100.0|Using where|
++----+-----------+-----+----------+-----+-------------+-------+-------+------+----+--------+-----------+
+
+The cost the database associated with the execution of the query:  NaN
+The estimated number of rows (cardinality) that is to be returned by the query: 4.0
+The actual number of rows (cardinality) returned by the query:  4
+
+Result Records:
+  +----------+---------+
+|FIRST_NAME|LAST_NAME|
++----------+---------+
+|PENELOPE  |GUINESS  |
+|NICK      |WAHLBERG |
+|ED        |CHASE    |
+|JENNIFER  |DAVIS    |
++----------+---------+
+
+data source(s):
+
+
+Table Name: actor
+unqualified name: "actor"
+qualified name: "sakila"."actor"
+Identity: "sakila"."actor"."actor_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("actor_id")
+Indexes: ["sakila"."idx_actor_last_name"]
+Number of records: 200
+Number of fields: 4
+ Records in actor
++--------+----------+------------+---------------------+
+|actor_id|first_name|last_name   |last_update          |
++--------+----------+------------+---------------------+
+|       1|PENELOPE  |GUINESS     |2006-02-15 04:34:33.0|
+|       2|NICK      |WAHLBERG    |2006-02-15 04:34:33.0|
+|       3|ED        |CHASE       |2006-02-15 04:34:33.0|
+|       4|JENNIFER  |DAVIS       |2006-02-15 04:34:33.0|
+|       5|JOHNNY    |LOLLOBRIGIDA|2006-02-15 04:34:33.0|
++--------+----------+------------+---------------------+

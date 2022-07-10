@@ -1,15 +1,6 @@
 plugins {
-    id 'org.openjfx.javafxplugin' version '0.0.12'
-    id 'org.beryx.jlink' version '2.24.4'
     id 'idea'
-    id 'java-library'
-    id 'application'
     id 'org.javamodularity.moduleplugin' version '1.8.10'
-}
-
-javafx {
-    version = "18"
-    modules = ['javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.base']
 }
 
 group 'com.example'
@@ -22,65 +13,9 @@ repositories {
 sourceCompatibility = '17'
 targetCompatibility = '17'
 
-
-application {
-    mainModule = 'com.example.cs195tennis'
-    mainClass = 'com.example.cs195tennis.Main'
-}
-
 dependencies {
-    implementation 'mysql:mysql-connector-java:8.0.29'
-    testImplementation 'org.dbunit:dbunit:2.7.3'
-    testImplementation 'org.hamcrest:hamcrest-core:2.2'
-    testImplementation 'org.hamcrest:hamcrest:2.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0-M1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.0-M1'
-    implementation 'io.github.palexdev:scenicview:17.0.2'
-    testImplementation 'org.testfx:openjfx-monocle:jdk-12.0.1+2'
-    testImplementation 'org.testfx:testfx-junit5:4.0.16-alpha'
-    testImplementation 'org.testfx:testfx-core:4.0.16-alpha'
-    implementation 'org.jooq:joor:0.9.14'
-    implementation 'org.jooq:jooq-meta:3.16.6'
-    implementation 'org.jooq:jooq:3.16.6'
-    implementation('fr.brouillard.oss:cssfx:11.5.1') { exclude group: 'org.openjfx' }
-    implementation 'io.github.palexdev:materialfx:11.14.0-EA3'
-    implementation group: 'com.opencsv', name: 'opencsv', version: '5.6'
-    implementation 'org.apache.logging.log4j:log4j-core:2.17.2'
-    implementation 'org.controlsfx:controlsfx:11.1.1'
-    implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
-    implementation'org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0'
-    implementation 'org.apache.logging.log4j:log4j-api'
-    implementation'org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0'
-    implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'
-    implementation'org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0'
-    implementation 'org.kordamp.ikonli:ikonli-materialdesign2-pack:12.3.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0-M1'
 }
 
-run {
-    jvmArgs = ["--add-exports=javafx.graphics/com.sun.javafx.application=org.testfx",
-               "--add-exports=java.base/java.lang.reflect=org.testfx",
-               "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=org.testfx",
-               "--add-exports=javafx.controls/com.sun.javafx.scene.control=org.testfx",
-               "--add-exports=javafx.base/com.sun.javafx.binding=org.testfx",
-               "--add-exports=java.base/com.sun.javafx.binding=org.testfx",
-               "--add-exports=javafx.graphics/com.sun.javafx.stage=org.testfx"
-    ]
-}
-
-jlink {
-    imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip") as RegularFile
-    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
-    launcher {
-        name = 'cs195Tennis'
-    }
-
-}
-
-jlinkZip {
-    group = 'distribution'
-}
-
-test {
-    useJUnitPlatform()
-}
 

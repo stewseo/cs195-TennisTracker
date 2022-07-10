@@ -3,4 +3,9 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="17" />
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="com.example.CS195Tennis.main" options="--add-exports org.jooq.meta/org.jooq.meta.mysql.information_schema=com.example.cs195tennis" />
+    </option>
+  </component>
 </project>

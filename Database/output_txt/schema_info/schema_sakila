@@ -1,0 +1,406 @@
+Schema: sakila
+
+Table Name: actor
+unqualified name: "actor"
+qualified name: "sakila"."actor"
+Identity: "sakila"."actor"."actor_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("actor_id")
+Indexes: ["sakila"."idx_actor_last_name"]
+Number of records: 200
+Number of fields: 4
+Fields:
+("sakila"."actor"."actor_id", "sakila"."actor"."first_name", "sakila"."actor"."last_name", "sakila"."actor"."last_update")
+
+Table Name: address
+unqualified name: "address"
+qualified name: "sakila"."address"
+Identity: "sakila"."address"."address_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("address_id")
+Foreign Keys: [constraint "fk_address_city"
+  foreign key ("city_id")
+  references "sakila"."city" ("city_id")]
+Indexes: ["sakila"."idx_fk_city_id"]
+Number of records: 603
+Number of fields: 8
+Fields:
+(
+  "sakila"."address"."address_id",
+  "sakila"."address"."address",
+  "sakila"."address"."address2",
+  "sakila"."address"."district",
+  "sakila"."address"."city_id",
+  "sakila"."address"."postal_code",
+  "sakila"."address"."phone",
+  "sakila"."address"."last_update"
+)
+
+Table Name: category
+unqualified name: "category"
+qualified name: "sakila"."category"
+Identity: "sakila"."category"."category_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("category_id")
+Number of records: 16
+Number of fields: 3
+Fields:
+("sakila"."category"."category_id", "sakila"."category"."name", "sakila"."category"."last_update")
+
+Table Name: city
+unqualified name: "city"
+qualified name: "sakila"."city"
+Identity: "sakila"."city"."city_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("city_id")
+Foreign Keys: [constraint "fk_city_country"
+  foreign key ("country_id")
+  references "sakila"."country" ("country_id")]
+Indexes: ["sakila"."idx_fk_country_id"]
+Number of records: 600
+Number of fields: 4
+Fields:
+("sakila"."city"."city_id", "sakila"."city"."city", "sakila"."city"."country_id", "sakila"."city"."last_update")
+
+Table Name: country
+unqualified name: "country"
+qualified name: "sakila"."country"
+Identity: "sakila"."country"."country_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("country_id")
+Number of records: 109
+Number of fields: 3
+Fields:
+("sakila"."country"."country_id", "sakila"."country"."country", "sakila"."country"."last_update")
+
+Table Name: customer
+unqualified name: "customer"
+qualified name: "sakila"."customer"
+Identity: "sakila"."customer"."customer_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("customer_id")
+Foreign Keys: [constraint "fk_customer_address"
+  foreign key ("address_id")
+  references "sakila"."address" ("address_id"), constraint "fk_customer_store"
+  foreign key ("store_id")
+  references "sakila"."store" ("store_id")]
+Indexes: ["sakila"."idx_fk_address_id", "sakila"."idx_fk_store_id", "sakila"."idx_last_name"]
+Number of records: 599
+Number of fields: 9
+Fields:
+(
+  "sakila"."customer"."customer_id",
+  "sakila"."customer"."store_id",
+  "sakila"."customer"."first_name",
+  "sakila"."customer"."last_name",
+  "sakila"."customer"."email",
+  "sakila"."customer"."address_id",
+  "sakila"."customer"."active",
+  "sakila"."customer"."create_date",
+  "sakila"."customer"."last_update"
+)
+
+Table Name: film
+unqualified name: "film"
+qualified name: "sakila"."film"
+Identity: "sakila"."film"."film_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("film_id")
+Foreign Keys: [constraint "fk_film_language"
+  foreign key ("language_id")
+  references "sakila"."language" ("language_id"), constraint "fk_film_language_original"
+  foreign key ("original_language_id")
+  references "sakila"."language" ("language_id")]
+Indexes: ["sakila"."idx_fk_language_id", "sakila"."idx_fk_original_language_id", "sakila"."idx_title"]
+Number of records: 1000
+Number of fields: 13
+Fields:
+(
+  "sakila"."film"."film_id",
+  "sakila"."film"."title",
+  "sakila"."film"."description",
+  "sakila"."film"."release_year",
+  "sakila"."film"."language_id",
+  "sakila"."film"."original_language_id",
+  "sakila"."film"."rental_duration",
+  "sakila"."film"."rental_rate",
+  "sakila"."film"."length",
+  "sakila"."film"."replacement_cost",
+  "sakila"."film"."rating",
+  "sakila"."film"."special_features",
+  "sakila"."film"."last_update"
+)
+
+Table Name: film_actor
+unqualified name: "film_actor"
+qualified name: "sakila"."film_actor"
+Primary Key: constraint "PRIMARY"
+  primary key ("actor_id", "film_id")
+Foreign Keys: [constraint "fk_film_actor_actor"
+  foreign key ("actor_id")
+  references "sakila"."actor" ("actor_id"), constraint "fk_film_actor_film"
+  foreign key ("film_id")
+  references "sakila"."film" ("film_id")]
+Indexes: ["sakila"."idx_fk_film_id"]
+Number of records: 5462
+Number of fields: 3
+Fields:
+("sakila"."film_actor"."actor_id", "sakila"."film_actor"."film_id", "sakila"."film_actor"."last_update")
+
+Table Name: film_category
+unqualified name: "film_category"
+qualified name: "sakila"."film_category"
+Primary Key: constraint "PRIMARY"
+  primary key ("film_id", "category_id")
+Foreign Keys: [constraint "fk_film_category_category"
+  foreign key ("category_id")
+  references "sakila"."category" ("category_id"), constraint "fk_film_category_film"
+  foreign key ("film_id")
+  references "sakila"."film" ("film_id")]
+Number of records: 1000
+Number of fields: 3
+Fields:
+("sakila"."film_category"."film_id", "sakila"."film_category"."category_id", "sakila"."film_category"."last_update")
+
+Table Name: film_text
+unqualified name: "film_text"
+qualified name: "sakila"."film_text"
+Primary Key: constraint "PRIMARY"
+  primary key ("film_id")
+Indexes: ["sakila"."idx_title_description"]
+Number of records: 1000
+Number of fields: 3
+Fields:
+("sakila"."film_text"."film_id", "sakila"."film_text"."title", "sakila"."film_text"."description")
+
+Table Name: inventory
+unqualified name: "inventory"
+qualified name: "sakila"."inventory"
+Identity: "sakila"."inventory"."inventory_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("inventory_id")
+Foreign Keys: [constraint "fk_inventory_film"
+  foreign key ("film_id")
+  references "sakila"."film" ("film_id"), constraint "fk_inventory_store"
+  foreign key ("store_id")
+  references "sakila"."store" ("store_id")]
+Indexes: ["sakila"."idx_fk_film_id", "sakila"."idx_store_id_film_id"]
+Number of records: 4581
+Number of fields: 4
+Fields:
+("sakila"."inventory"."inventory_id", "sakila"."inventory"."film_id", "sakila"."inventory"."store_id", "sakila"."inventory"."last_update")
+
+Table Name: language
+unqualified name: "language"
+qualified name: "sakila"."language"
+Identity: "sakila"."language"."language_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("language_id")
+Number of records: 6
+Number of fields: 3
+Fields:
+("sakila"."language"."language_id", "sakila"."language"."name", "sakila"."language"."last_update")
+
+Table Name: payment
+unqualified name: "payment"
+qualified name: "sakila"."payment"
+Identity: "sakila"."payment"."payment_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("payment_id")
+Foreign Keys: [constraint "fk_payment_customer"
+  foreign key ("customer_id")
+  references "sakila"."customer" ("customer_id"), constraint "fk_payment_rental"
+  foreign key ("rental_id")
+  references "sakila"."rental" ("rental_id"), constraint "fk_payment_staff"
+  foreign key ("staff_id")
+  references "sakila"."staff" ("staff_id")]
+Indexes: ["sakila"."idx_fk_customer_id", "sakila"."idx_fk_staff_id"]
+Number of records: 16049
+Number of fields: 7
+Fields:
+(
+  "sakila"."payment"."payment_id",
+  "sakila"."payment"."customer_id",
+  "sakila"."payment"."staff_id",
+  "sakila"."payment"."rental_id",
+  "sakila"."payment"."amount",
+  "sakila"."payment"."payment_date",
+  "sakila"."payment"."last_update"
+)
+
+Table Name: rental
+unqualified name: "rental"
+qualified name: "sakila"."rental"
+Identity: "sakila"."rental"."rental_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("rental_id")
+Foreign Keys: [constraint "fk_rental_customer"
+  foreign key ("customer_id")
+  references "sakila"."customer" ("customer_id"), constraint "fk_rental_inventory"
+  foreign key ("inventory_id")
+  references "sakila"."inventory" ("inventory_id"), constraint "fk_rental_staff"
+  foreign key ("staff_id")
+  references "sakila"."staff" ("staff_id")]
+Indexes: ["sakila"."idx_fk_customer_id", "sakila"."idx_fk_inventory_id", "sakila"."idx_fk_staff_id"]
+Unique Keys: [constraint "rental_date"
+  unique ("rental_date", "inventory_id", "customer_id")]
+Number of records: 16044
+Number of fields: 7
+Fields:
+(
+  "sakila"."rental"."rental_id",
+  "sakila"."rental"."rental_date",
+  "sakila"."rental"."inventory_id",
+  "sakila"."rental"."customer_id",
+  "sakila"."rental"."return_date",
+  "sakila"."rental"."staff_id",
+  "sakila"."rental"."last_update"
+)
+
+Table Name: staff
+unqualified name: "staff"
+qualified name: "sakila"."staff"
+Identity: "sakila"."staff"."staff_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("staff_id")
+Foreign Keys: [constraint "fk_staff_address"
+  foreign key ("address_id")
+  references "sakila"."address" ("address_id"), constraint "fk_staff_store"
+  foreign key ("store_id")
+  references "sakila"."store" ("store_id")]
+Indexes: ["sakila"."idx_fk_address_id", "sakila"."idx_fk_store_id"]
+Number of records: 2
+Number of fields: 11
+Fields:
+(
+  "sakila"."staff"."staff_id",
+  "sakila"."staff"."first_name",
+  "sakila"."staff"."last_name",
+  "sakila"."staff"."address_id",
+  "sakila"."staff"."picture",
+  "sakila"."staff"."email",
+  "sakila"."staff"."store_id",
+  "sakila"."staff"."active",
+  "sakila"."staff"."username",
+  "sakila"."staff"."password",
+  "sakila"."staff"."last_update"
+)
+
+Table Name: store
+unqualified name: "store"
+qualified name: "sakila"."store"
+Identity: "sakila"."store"."store_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("store_id")
+Foreign Keys: [constraint "fk_store_address"
+  foreign key ("address_id")
+  references "sakila"."address" ("address_id"), constraint "fk_store_staff"
+  foreign key ("manager_staff_id")
+  references "sakila"."staff" ("staff_id")]
+Indexes: ["sakila"."idx_fk_address_id"]
+Unique Keys: [constraint "idx_unique_manager"
+  unique ("manager_staff_id")]
+Number of records: 2
+Number of fields: 4
+Fields:
+("sakila"."store"."store_id", "sakila"."store"."manager_staff_id", "sakila"."store"."address_id", "sakila"."store"."last_update")
+
+Table Name: actor_info
+unqualified name: "actor_info"
+qualified name: "sakila"."actor_info"
+Primary Key: null
+Number of records: 200
+Number of fields: 4
+Fields:
+("sakila"."actor_info"."actor_id", "sakila"."actor_info"."first_name", "sakila"."actor_info"."last_name", "sakila"."actor_info"."film_info")
+
+Table Name: customer_list
+unqualified name: "customer_list"
+qualified name: "sakila"."customer_list"
+Primary Key: null
+Number of records: 599
+Number of fields: 9
+Fields:
+(
+  "sakila"."customer_list"."ID",
+  "sakila"."customer_list"."name",
+  "sakila"."customer_list"."address",
+  "sakila"."customer_list"."zip code",
+  "sakila"."customer_list"."phone",
+  "sakila"."customer_list"."city",
+  "sakila"."customer_list"."country",
+  "sakila"."customer_list"."notes",
+  "sakila"."customer_list"."SID"
+)
+
+Table Name: film_list
+unqualified name: "film_list"
+qualified name: "sakila"."film_list"
+Primary Key: null
+Number of records: 997
+Number of fields: 8
+Fields:
+(
+  "sakila"."film_list"."FID",
+  "sakila"."film_list"."title",
+  "sakila"."film_list"."description",
+  "sakila"."film_list"."category",
+  "sakila"."film_list"."price",
+  "sakila"."film_list"."length",
+  "sakila"."film_list"."rating",
+  "sakila"."film_list"."actors"
+)
+
+Table Name: nicer_but_slower_film_list
+unqualified name: "nicer_but_slower_film_list"
+qualified name: "sakila"."nicer_but_slower_film_list"
+Primary Key: null
+Number of records: 997
+Number of fields: 8
+Fields:
+(
+  "sakila"."nicer_but_slower_film_list"."FID",
+  "sakila"."nicer_but_slower_film_list"."title",
+  "sakila"."nicer_but_slower_film_list"."description",
+  "sakila"."nicer_but_slower_film_list"."category",
+  "sakila"."nicer_but_slower_film_list"."price",
+  "sakila"."nicer_but_slower_film_list"."length",
+  "sakila"."nicer_but_slower_film_list"."rating",
+  "sakila"."nicer_but_slower_film_list"."actors"
+)
+
+Table Name: sales_by_film_category
+unqualified name: "sales_by_film_category"
+qualified name: "sakila"."sales_by_film_category"
+Primary Key: null
+Number of records: 16
+Number of fields: 2
+Fields:
+("sakila"."sales_by_film_category"."category", "sakila"."sales_by_film_category"."total_sales")
+
+Table Name: sales_by_store
+unqualified name: "sales_by_store"
+qualified name: "sakila"."sales_by_store"
+Primary Key: null
+Number of records: 2
+Number of fields: 3
+Fields:
+("sakila"."sales_by_store"."store", "sakila"."sales_by_store"."manager", "sakila"."sales_by_store"."total_sales")
+
+Table Name: staff_list
+unqualified name: "staff_list"
+qualified name: "sakila"."staff_list"
+Primary Key: null
+Number of records: 2
+Number of fields: 8
+Fields:
+(
+  "sakila"."staff_list"."ID",
+  "sakila"."staff_list"."name",
+  "sakila"."staff_list"."address",
+  "sakila"."staff_list"."zip code",
+  "sakila"."staff_list"."phone",
+  "sakila"."staff_list"."city",
+  "sakila"."staff_list"."country",
+  "sakila"."staff_list"."SID"
+)

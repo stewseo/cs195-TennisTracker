@@ -1,0 +1,394 @@
+Schema: sakilaTable: actor
+Field: actor_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: first_name
+	DataType: varchar(45) /* java.lang.String */
+	Type: class java.lang.String
+Field: last_name
+	DataType: varchar(45) /* java.lang.String */
+	Type: class java.lang.String
+Field: last_update
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.TimestampTable: address
+Field: address_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: address
+	DataType: varchar(50) /* java.lang.String */
+	Type: class java.lang.String
+Field: address2
+	DataType: varchar(50) /* java.lang.String */
+	Type: class java.lang.String
+Field: district
+	DataType: varchar(20) /* java.lang.String */
+	Type: class java.lang.String
+Field: city_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: postal_code
+	DataType: varchar(10) /* java.lang.String */
+	Type: class java.lang.String
+Field: phone
+	DataType: varchar(20) /* java.lang.String */
+	Type: class java.lang.String
+Field: last_update
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.TimestampTable: category
+Field: category_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: name
+	DataType: varchar(25) /* java.lang.String */
+	Type: class java.lang.String
+Field: last_update
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.TimestampTable: city
+Field: city_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: city
+	DataType: varchar(50) /* java.lang.String */
+	Type: class java.lang.String
+Field: country_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: last_update
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.TimestampTable: country
+Field: country_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: country
+	DataType: varchar(50) /* java.lang.String */
+	Type: class java.lang.String
+Field: last_update
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.TimestampTable: customer
+Field: customer_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: store_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: first_name
+	DataType: varchar(45) /* java.lang.String */
+	Type: class java.lang.String
+Field: last_name
+	DataType: varchar(45) /* java.lang.String */
+	Type: class java.lang.String
+Field: email
+	DataType: varchar(50) /* java.lang.String */
+	Type: class java.lang.String
+Field: address_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: active
+	DataType: bit /* java.lang.Boolean */
+	Type: class java.lang.Boolean
+Field: create_date
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.Timestamp
+Field: last_update
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.TimestampTable: film
+Field: film_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: title
+	DataType: varchar(255) /* java.lang.String */
+	Type: class java.lang.String
+Field: description
+	DataType: clob /* java.lang.String */
+	Type: class java.lang.String
+Field: release_year
+	DataType: date /* java.sql.Date */
+	Type: class java.sql.Date
+Field: language_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: original_language_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: rental_duration
+	DataType: tinyint unsigned /* org.jooq.types.UByte */
+	Type: class org.jooq.types.UByte
+Field: rental_rate
+	DataType: decimal(4, 2) /* java.math.BigDecimal */
+	Type: class java.math.BigDecimal
+Field: length
+	DataType: smallint unsigned /* org.jooq.types.UShort */
+	Type: class org.jooq.types.UShort
+Field: replacement_cost
+	DataType: decimal(5, 2) /* java.math.BigDecimal */
+	Type: class java.math.BigDecimal
+Field: rating
+	DataType: varchar(5) /* java.lang.String */
+	Type: class java.lang.String
+Field: special_features
+	DataType: varchar(54) /* java.lang.String */
+	Type: class java.lang.String
+Field: last_update
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.TimestampTable: film_actor
+Field: actor_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: film_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: last_update
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.TimestampTable: film_category
+Field: film_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: category_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: last_update
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.TimestampTable: film_text
+Field: film_id
+	DataType: integer /* java.lang.Integer */
+	Type: class java.lang.Integer
+Field: title
+	DataType: varchar(255) /* java.lang.String */
+	Type: class java.lang.String
+Field: description
+	DataType: clob /* java.lang.String */
+	Type: class java.lang.StringTable: inventory
+Field: inventory_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: film_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: store_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: last_update
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.TimestampTable: language
+Field: language_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: name
+	DataType: char(20) /* java.lang.String */
+	Type: class java.lang.String
+Field: last_update
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.TimestampTable: payment
+Field: payment_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: customer_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: staff_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: rental_id
+	DataType: integer /* java.lang.Integer */
+	Type: class java.lang.Integer
+Field: amount
+	DataType: decimal(5, 2) /* java.math.BigDecimal */
+	Type: class java.math.BigDecimal
+Field: payment_date
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.Timestamp
+Field: last_update
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.TimestampTable: rental
+Field: rental_id
+	DataType: integer /* java.lang.Integer */
+	Type: class java.lang.Integer
+Field: rental_date
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.Timestamp
+Field: inventory_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: customer_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: return_date
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.Timestamp
+Field: staff_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: last_update
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.TimestampTable: staff
+Field: staff_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: first_name
+	DataType: varchar(45) /* java.lang.String */
+	Type: class java.lang.String
+Field: last_name
+	DataType: varchar(45) /* java.lang.String */
+	Type: class java.lang.String
+Field: address_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: picture
+	DataType: blob /* [B */
+	Type: class [B
+Field: email
+	DataType: varchar(50) /* java.lang.String */
+	Type: class java.lang.String
+Field: store_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: active
+	DataType: bit /* java.lang.Boolean */
+	Type: class java.lang.Boolean
+Field: username
+	DataType: varchar(16) /* java.lang.String */
+	Type: class java.lang.String
+Field: password
+	DataType: varchar(40) /* java.lang.String */
+	Type: class java.lang.String
+Field: last_update
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.TimestampTable: store
+Field: store_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: manager_staff_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: address_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: last_update
+	DataType: timestamp /* java.sql.Timestamp */
+	Type: class java.sql.TimestampTable: actor_info
+Field: actor_id
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: first_name
+	DataType: varchar(45) /* java.lang.String */
+	Type: class java.lang.String
+Field: last_name
+	DataType: varchar(45) /* java.lang.String */
+	Type: class java.lang.String
+Field: film_info
+	DataType: clob /* java.lang.String */
+	Type: class java.lang.StringTable: customer_list
+Field: ID
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: name
+	DataType: varchar(91) /* java.lang.String */
+	Type: class java.lang.String
+Field: address
+	DataType: varchar(50) /* java.lang.String */
+	Type: class java.lang.String
+Field: zip code
+	DataType: varchar(10) /* java.lang.String */
+	Type: class java.lang.String
+Field: phone
+	DataType: varchar(20) /* java.lang.String */
+	Type: class java.lang.String
+Field: city
+	DataType: varchar(50) /* java.lang.String */
+	Type: class java.lang.String
+Field: country
+	DataType: varchar(50) /* java.lang.String */
+	Type: class java.lang.String
+Field: notes
+	DataType: varchar(6) /* java.lang.String */
+	Type: class java.lang.String
+Field: SID
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UIntegerTable: film_list
+Field: FID
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: title
+	DataType: varchar(255) /* java.lang.String */
+	Type: class java.lang.String
+Field: description
+	DataType: clob /* java.lang.String */
+	Type: class java.lang.String
+Field: category
+	DataType: varchar(25) /* java.lang.String */
+	Type: class java.lang.String
+Field: price
+	DataType: decimal(4, 2) /* java.math.BigDecimal */
+	Type: class java.math.BigDecimal
+Field: length
+	DataType: smallint unsigned /* org.jooq.types.UShort */
+	Type: class org.jooq.types.UShort
+Field: rating
+	DataType: varchar(5) /* java.lang.String */
+	Type: class java.lang.String
+Field: actors
+	DataType: clob /* java.lang.String */
+	Type: class java.lang.StringTable: nicer_but_slower_film_list
+Field: FID
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: title
+	DataType: varchar(255) /* java.lang.String */
+	Type: class java.lang.String
+Field: description
+	DataType: clob /* java.lang.String */
+	Type: class java.lang.String
+Field: category
+	DataType: varchar(25) /* java.lang.String */
+	Type: class java.lang.String
+Field: price
+	DataType: decimal(4, 2) /* java.math.BigDecimal */
+	Type: class java.math.BigDecimal
+Field: length
+	DataType: smallint unsigned /* org.jooq.types.UShort */
+	Type: class org.jooq.types.UShort
+Field: rating
+	DataType: varchar(5) /* java.lang.String */
+	Type: class java.lang.String
+Field: actors
+	DataType: clob /* java.lang.String */
+	Type: class java.lang.StringTable: sales_by_film_category
+Field: category
+	DataType: varchar(25) /* java.lang.String */
+	Type: class java.lang.String
+Field: total_sales
+	DataType: decimal(27, 2) /* java.math.BigDecimal */
+	Type: class java.math.BigDecimalTable: sales_by_store
+Field: store
+	DataType: varchar(101) /* java.lang.String */
+	Type: class java.lang.String
+Field: manager
+	DataType: varchar(91) /* java.lang.String */
+	Type: class java.lang.String
+Field: total_sales
+	DataType: decimal(27, 2) /* java.math.BigDecimal */
+	Type: class java.math.BigDecimalTable: staff_list
+Field: ID
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
+Field: name
+	DataType: varchar(91) /* java.lang.String */
+	Type: class java.lang.String
+Field: address
+	DataType: varchar(50) /* java.lang.String */
+	Type: class java.lang.String
+Field: zip code
+	DataType: varchar(10) /* java.lang.String */
+	Type: class java.lang.String
+Field: phone
+	DataType: varchar(20) /* java.lang.String */
+	Type: class java.lang.String
+Field: city
+	DataType: varchar(50) /* java.lang.String */
+	Type: class java.lang.String
+Field: country
+	DataType: varchar(50) /* java.lang.String */
+	Type: class java.lang.String
+Field: SID
+	DataType: integer unsigned /* org.jooq.types.UInteger */
+	Type: class org.jooq.types.UInteger
