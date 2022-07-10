@@ -1,19 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.database.SakilaDBTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-07-10T17:53:29" hostname="STEWS" time="0.252">
+<testsuite name="com.example.database.SakilaDBTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-07-10T18:42:28" hostname="STEWS" time="0.267">
   <properties/>
-  <testcase name="testSyntaxJooqQueryPartsMySql()" classname="com.example.database.SakilaDBTest" time="0.252"/>
+  <testcase name="nestedRecordsWithAdHocConverterTest()" classname="com.example.database.SakilaDBTest" time="0.267"/>
   <system-out><![CDATA[jdbc:mysql://localhost:3306/sakila
-
-Verify aggregate function count(*)
-----------------------------------
 parts array length == 7
-"ACTOR"
+"Country"
+parts array length == 7
+"Customer"
+parts array length == 7
+join
+parts array length == 7
+"Address"
+parts array length == 7
+on
+parts array length == 7
+"Customer"."address_id" = "Address"."address_id"
+parts array length == 7
+"City"
+parts array length == 7
+"Address"."city_id" = "City"."city_id"
+parts array length == 7
+"City"."country_id" = "Country"."country_id"
+Customer[firstName=AARON, lastName=SELBY, country=Country[name=Congo, The Democratic Republic of the]]
+Customer[firstName=ADAM, lastName=GOOCH, country=Country[name=India]]
+Customer[firstName=ADRIAN, lastName=CLARY, country=Country[name=Italy]]
+Customer[firstName=AGNES, lastName=BISHOP, country=Country[name=India]]
+Customer[firstName=ALAN, lastName=KAHN, country=Country[name=China]]
 ]]></system-out>
-  <system-err><![CDATA[Jul 10, 2022 10:53:29 AM org.jooq.tools.JooqLogger lambda$info$5
+  <system-err><![CDATA[Jul 10, 2022 11:42:28 AM org.jooq.tools.JooqLogger lambda$info$5
 INFO: Connecting               
-Jul 10, 2022 10:53:29 AM org.jooq.tools.JooqLogger lambda$info$5
+Jul 10, 2022 11:42:28 AM org.jooq.tools.JooqLogger lambda$info$5
 INFO: Connected                
-Jul 10, 2022 10:53:29 AM org.jooq.tools.JooqLogger lambda$info$5
+Jul 10, 2022 11:42:29 AM org.jooq.tools.JooqLogger lambda$info$5
 INFO: 
                                       
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -34,10 +52,10 @@ INFO:
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  Thank you for using jOOQ 3.16.6
                                       
-Jul 10, 2022 10:53:29 AM org.jooq.tools.JooqLogger lambda$info$5
+Jul 10, 2022 11:42:29 AM org.jooq.tools.JooqLogger lambda$info$5
 INFO: 
 
-jOOQ tip of the day: To version control jOOQ generated code or not? There are pros and cons to both approaches: https://www.jooq.org/doc/latest/manual/code-generation/codegen-version-control/
+jOOQ tip of the day: Whenever jOOQ doesn't support a native SQL feature, use plain SQL templating: https://www.jooq.org/doc/latest/manual/sql-building/plain-sql-templating/
 
 ]]></system-err>
 </testsuite>

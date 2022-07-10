@@ -2,11 +2,13 @@ package com.example.database.sakila_database.verifyData;
 
 import com.example.database.sakila_database.SakilaModel.Record.ActorRecord;
 import com.example.database.sakila_database.SakilaModel.Table.Actor;
+import com.example.database.sakila_database.SakilaModel.Table.City;
 import com.example.database.sakila_database.SakilaModel.Table.FilmActor;
 import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -14,10 +16,14 @@ import java.util.stream.Stream;
 
 
 import static com.example.database.sakila_database.SakilaModel.Table.Actor.ACTOR;
+import static com.example.database.sakila_database.SakilaModel.Table.Address.ADDRESS;
+import static com.example.database.sakila_database.SakilaModel.Table.City.CITY;
+import static com.example.database.sakila_database.SakilaModel.Table.Country.COUNTRY;
 import static com.example.database.sakila_database.SakilaModel.Table.Customer.CUSTOMER;
 import static com.example.database.sakila_database.SakilaModel.Table.Film.FILM;
 import static com.example.database.sakila_database.SakilaModel.Table.FilmActor.FILM_ACTOR;
 import static java.lang.System.out;
+import static org.jooq.Records.mapping;
 import static org.jooq.impl.DSL.*;
 
 public class VerifySakilaDB extends VerifyDatabase {
@@ -600,6 +606,67 @@ public class VerifySakilaDB extends VerifyDatabase {
         println(reduceCondition(List.of()));
         println(reduceCondition(List.of(1)));
         println(reduceCondition(List.of(1, 2, 3)));
+    }
+
+    public void writeNestedRowsWithAdHocConverters(String schemaName) throws SQLException, FileNotFoundException {
+        record Country(String name) {
+        }
+        record Customer(String firstName, String lastName, Country country) {
+        }
+
+        title("convert from Result<Record> to List<Customer>");
+
+        ResultQuery<Record3<String, String, Country>> resultQuery =
+                ctx.select(
+                        CUSTOMER.FIRST_NAME,
+                        CUSTOMER.LAST_NAME,
+                        COUNTRY.COUNTRY_.convertFrom(Country::new))
+                .from(CUSTOMER)
+                .join(ADDRESS).on(CUSTOMER.ADDRESS_ID.eq(ADDRESS.ADDRESS_ID))
+                .join(CITY).on(ADDRESS.CITY_ID.eq(CITY.CITY_ID))
+                .join(COUNTRY).on(CITY.COUNTRY_ID.eq(COUNTRY.COUNTRY_ID))
+                .orderBy('1', '2')
+                .limit('5');
+
+        String sql = """
+                SELECT cu.first_name, cu.last_name, co.country
+                FROM customer cu
+                INNER JOIN address a
+                    ON cu.address_id = a.address_id
+                INNER JOIN city c
+                    ON a.city_id = c.city_id
+                INNER JOIN country co
+                    ON c.country_id = co.country_id
+                ORDER BY 1, 2
+                LIMIT 5
+                """;
+
+        query = query(sql);
+
+        List<Customer> r =
+                ctx.select(
+                                CUSTOMER.FIRST_NAME,
+                                CUSTOMER.LAST_NAME,
+                                COUNTRY.COUNTRY_.convertFrom(Country::new))
+                        .from(CUSTOMER)
+                        .join(ADDRESS).on(CUSTOMER.ADDRESS_ID.eq(ADDRESS.ADDRESS_ID))
+                        .join(CITY).on(ADDRESS.CITY_ID.eq(CITY.CITY_ID))
+                        .join(COUNTRY).on(CITY.COUNTRY_ID.eq(COUNTRY.COUNTRY_ID))
+                        .orderBy(1, 2)
+                        .limit(5)
+                        .fetch(mapping(Customer::new));
+
+        r.forEach(VerifySakilaDB::println);
+
+        description = "Nested records with ad hoc converter";
+
+        queryInfoToTxt(query, //Query
+                description,
+                "nested_records_ad_hoc_converter/customer_first_last_country_convertFrom",  //file_name
+                List.of("customer", "address", "city","country"),
+                "sakila" //schema in use
+        );
+
     }
     private Condition reduceCondition(List<Integer> ids) {
         title("List: " + ids);

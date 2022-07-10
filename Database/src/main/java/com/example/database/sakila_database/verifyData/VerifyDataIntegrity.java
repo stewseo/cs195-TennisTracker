@@ -15,7 +15,7 @@ public class VerifyDataIntegrity {
 
         currentSchemaName = schema.getName();
 
-        int verification = 2;
+        int verification = 13;
         //===============================================================
         //              Verify Data integrity Sakila DB
         //===============================================================
@@ -43,6 +43,8 @@ public class VerifyDataIntegrity {
             case 11 -> sakilaTests.verifyNestedRecords(currentSchemaName);
 
             case 12 -> sakilaTests.testDynamicSql(currentSchemaName);
+
+            case 13 -> sakilaTests.writeNestedRowsWithAdHocConverters(currentSchemaName);
         }
 
 
