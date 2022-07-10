@@ -20,7 +20,7 @@ class SakilaDBTest extends VerifyDatabase {
     void testSyntaxJooqQueryPartsMySql() {
         title("Verify aggregate function count(*)");
         Field<?> COUNT1 = field("count(*) x");
-        create("sakila");
+
         Query query = ctx
                 .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME, COUNT1)
                 .from(ACTOR)

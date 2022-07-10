@@ -49,7 +49,7 @@ public class Film extends CustomTable<FilmRecord> {
 
     public List<Index> getIndexes() {
         Connect connect = new Connect();
-         return connect.create()
+         return connect.create("sakila")
                  .meta()
                  .getSchemas("sakila")
                  .get(0)

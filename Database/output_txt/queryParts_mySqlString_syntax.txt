@@ -1,16 +1,9 @@
 QueryParts: 
-select
-  "ACTOR"."FIRST_NAME",
-  "ACTOR"."LAST_NAME",
-  count(*) x
-from "ACTOR"
-where (Actor.LAST_NAME like 'A%' )
-group by "ACTOR"."FIRST_NAME", "ACTOR"."LAST_NAME"
-order by "ACTOR"."FIRST_NAME" asc
+select `ACTOR`.`FIRST_NAME`, `ACTOR`.`LAST_NAME`
+from `ACTOR`
+where `ACTOR`.`ACTOR_ID` < 5
 
 SqlString: 
-SELECT Actor.first_name, Actor.last_name, count(*)
+SELECT Actor.first_name, Actor.last_name
 FROM Sakila.Actor
-WHERE Actor.last_name LIKE 'a%'
-GROUP BY Actor.first_name, Actor.last_name
-ORDER BY Actor.first_name asc
+WHERE Actor.actor_id < '5L'

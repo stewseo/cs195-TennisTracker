@@ -61,7 +61,7 @@ public class Customer extends CustomTable<CustomerRecord> {
 
     public Table<?> getCustomerTable() {
         Connect connect = new Connect();
-        Table<?> table = connect.create()
+        Table<?> table = connect.create("sakila")
                 .meta()
                 .getSchemas("sakila")
                 .get(0)

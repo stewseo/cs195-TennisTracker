@@ -1,7 +1,6 @@
 package com.example.database.sakila_database.verifyData;
 
-import com.example.database.db_connection.Connect;
-import com.example.database.db_connection.DatabaseConnection;
+import com.example.database.db_connection.Database;
 import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.conf.ParseWithMetaLookups;
@@ -12,6 +11,7 @@ import org.jooq.tools.JooqLogger;
 
 import java.io.File;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -27,8 +27,12 @@ import static org.jooq.impl.DSL.*;
 
 public abstract class VerifyDatabase {
     private static Parser parser;
-    public static DSLContext ctx;
+
     private static Schema schema;
+
+    protected static DSLContext ctx;
+
+    protected static Configuration configuration;
     protected static final JooqLogger log = JooqLogger.getLogger(VerifyDatabase.class);
 
     static Predicate<Schema> schemasInCatalog = schema ->
@@ -77,9 +81,6 @@ public abstract class VerifyDatabase {
                         e.getName().equals("VIEWS");
     }
 
-    private void create(){
-        ctx = DatabaseConnection.create();
-    }
 
     //============================================================================
     //                          get list of schemas in catalog
@@ -98,7 +99,7 @@ public abstract class VerifyDatabase {
     }
 
     public Schema getSchema(String schemaName) {
-        ctx = DatabaseConnection.create();
+
         try {
             List<Schema> schemaList = ctx.meta().getSchemas(schemaName);
             if (schemaList.size() > 0) {
@@ -347,21 +348,11 @@ public abstract class VerifyDatabase {
 
 
     //======================================================================================
-    //                           Get Database Connection
+    //
     //=======================================================================================
 
-    public void create(String dbName) {
-
-        Connection connection = DatabaseConnection.connect(dbName);
-
-        Configuration configuration = DatabaseConnection.getConfigurationWithVisitListener().set(connection);
-        ctx = using(configuration);
-
-        out.println("size: " + ctx.meta().getSchemas().size());
-    }
-
     List<Table<?>> listOfTablesInSchema(String schemaName) {
-         create(schemaName);
+
         List<Table<?>> listOfTables = new ArrayList<>(ctx
                 .meta()
                 .getSchemas(schemaName)
@@ -412,7 +403,9 @@ public abstract class VerifyDatabase {
 
     void schemaToTxt(Schema schema) throws Exception {
         List<Table<?>> listOfTables = getTableList(schema.getName());
+        log.info("list of tables size: " + listOfTables.size());
         tablesToTxt(listOfTables, schema.getName());
+        log.info("schema constraints, field data types, table info in output_txt");
     }
     void tablesToTxt(List<Table<?>> tablesInSchema, String schemaName)
             throws IOException {
@@ -444,7 +437,7 @@ public abstract class VerifyDatabase {
         );
 
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(file), "utf-8"))) {
+                new FileOutputStream(file), StandardCharsets.UTF_8))) {
 
             writer.write(tableInfo.toString());
 
@@ -453,7 +446,7 @@ public abstract class VerifyDatabase {
         file = createTxtFile(fields_file_name);
 
         try (Writer writeFields = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(file), "utf-8"))) {
+                new FileOutputStream(file), StandardCharsets.UTF_8))) {
 
             writeFields.write(fieldInfo.toString());
 
@@ -505,12 +498,10 @@ public abstract class VerifyDatabase {
         File file = createTxtFile(fileName.concat(".txt"));
 
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(file), "utf-8"))) {
+                new FileOutputStream(file), StandardCharsets.UTF_8))) {
 
             writer.write(m5QueryBuilder.toString());
 
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -581,15 +572,15 @@ public abstract class VerifyDatabase {
             });
         }
 
+        out.println("file name: "+ fileName);
+
         file = createTxtFile(fileName.concat(".txt"));
 
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(file), "utf-8"))) {
+                new FileOutputStream(file), StandardCharsets.UTF_8))) {
 
             writer.write(outputBuilder.toString());
 
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -659,12 +650,10 @@ public abstract class VerifyDatabase {
                 fields
                         .append("\nField: ")
                         .append(field.getName())
-                        .append("\nDataType: ")
+                        .append("\n\tDataType: ")
                         .append(field.getDataType())
-                        .append("\nType: ")
+                        .append("\n\tType: ")
                         .append(field.getType())
-                        .append("\nQom $dataType: ")
-                        .append(field.$dataType())
                 );
         return fields.toString();
     }
@@ -739,6 +728,18 @@ public abstract class VerifyDatabase {
     public static <T> T println(T t) {
         System.out.println(t);
         return t;
+    }
+
+    void create(String schemaName){
+        log.info("Connecting with: " + schemaName);
+        ctx = DSL.using(Database.getConfigurationWithVisitListener(schemaName));
+        log.info("Connected");
+    }
+
+    static {
+        log.info("Connecting");
+        ctx = DSL.using(Database.getConfigurationWithVisitListener("sakila"));
+        log.info("Connected");
     }
 
 }

@@ -5,7 +5,6 @@ import com.example.database.sakila_database.SakilaModel.Table.Actor;
 import com.example.database.sakila_database.SakilaModel.Table.FilmActor;
 import org.jooq.Record;
 import org.jooq.*;
-import org.jooq.exception.NoDataFoundException;
 import org.jooq.impl.DSL;
 
 import java.io.IOException;
@@ -18,6 +17,7 @@ import static com.example.database.sakila_database.SakilaModel.Table.Actor.ACTOR
 import static com.example.database.sakila_database.SakilaModel.Table.Customer.CUSTOMER;
 import static com.example.database.sakila_database.SakilaModel.Table.Film.FILM;
 import static com.example.database.sakila_database.SakilaModel.Table.FilmActor.FILM_ACTOR;
+import static java.lang.System.out;
 import static org.jooq.impl.DSL.*;
 
 public class VerifySakilaDB extends VerifyDatabase {
@@ -26,53 +26,37 @@ public class VerifySakilaDB extends VerifyDatabase {
     static String sql;
     static String description;
 
-    //    =====================================================================================
-//                 Create instance with DSLContext using "Sakila" as db
-//                 Query Plan, Estimated number of row(s) returned, Estimated Query cost
-//    =====================================================================================
+    //=====================================================================================
+    //                 Constructors to create instance of DSLContext ctx
+    //=====================================================================================
     public VerifySakilaDB() {
-        try {
-            create("sakila");
-
-        } catch (NoDataFoundException e) {
-            e.printStackTrace();
-        }
-        log.info("Use Sakila");
+        this("sakila");
     }
-    public VerifySakilaDB(String name) {
-        try {
-            create(name);
-
-        } catch (NoDataFoundException e) {
-            e.printStackTrace();
+    public VerifySakilaDB(String schemaName) {
+        if(ctx == null) {
+            create(schemaName);
         }
-        log.info("Use "+ name);
     }
 
-    //======================================================================================
+    //============================================================================================================
     //         Verify current schema in use is 'Sakila', number of tables in sakila, name of each table in sakila
     //         Verify Number of Fields in each table, Name of each field, Data type of each field.
-    //======================================================================================
+    //=============================================================================================================
     public void verifySchema(String schemaName) throws Exception {
         title(schemaName + " information being logged to sakila_table_constraints.txt and sakila_general_table_info.txt ");
 
-        Schema schema = getSchema("sakila");
-//        println(schema.getName());
-//        schemaToTxt(schema);
+        Schema schema = getSchema(schemaName);
+        schemaToTxt(schema);
         log.info("Logged to output_txt/schema_info/"+ schemaName);
 
     }
 
-    //=============================================================================================
-    //          Verify Number of Fields in each table, Name of each field, Data type of each field.
-    //=============================================================================================
-
     //=================================================================================
-    //    Verify Records of a simple query
-    //    write analysis of query, Query String, and actual String txt file
+    //    Verify my sql string and jooq methods return same result
+    //    write to output_txt/verifyMySqlSyntax
     //==================================================================================
-    public void verifyAggregateFunctions(String schemaName) throws IOException {
-        title("Verify aggregate function count(*)");
+    public void verifyMySqlSyntax(String schemaName) throws IOException, SQLException {
+        log.info(schemaName);
         Field<?> COUNT1 = field("count(*) x");
 
         Query query = ctx
@@ -90,18 +74,15 @@ public class VerifySakilaDB extends VerifyDatabase {
                 ORDER BY Actor.first_name asc
                 """;
 
-        verifyQuerySyntax(query, sqlString);
+        description = "Consume records for each";
+        queryInfoToTxt(query, //Query
+                description,
+                "consume_records_for_each/consume_records_for_ea",  //file_name
+                List.of("actor"),
+                "sakila" //schema in use
+        );
 
-        ResultQuery<Record> resultQuery = ctx.resultQuery(query.getSQL());
-        verifyQueryResults(resultQuery);
 
-        log.info(query);
-
-        Cursor<Record> cursor = ctx.fetchLazy(query.getSQL());
-
-        println("iterations: " + getSteps(cursor));
-
-        title("Iterate and consume records for each");
         for (var r : ctx
                 .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
                 .from(ACTOR)
@@ -111,17 +92,29 @@ public class VerifySakilaDB extends VerifyDatabase {
         }
 
         ctx.select(FILM.FILM_ID, FILM.TITLE)
-                .from("FILM ")
+                .from(FILM)
                 .limit(5)
-                .forEach(r -> println("Film %s: %s".formatted(r.value1(), r.value2()
-                                )
-                        )
+                .forEach(r -> println("Film %s: %s".formatted(r.value1(), r.value2()))
                 );
 
+        description = "Result<Record> extends Iterable";
+
+        query = ctx
+                .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+                .from(ACTOR)
+                .where("ACTOR.ACTOR_ID < '5L'");
+
+        queryInfoToTxt(query, //Query
+                description,
+                "consume_records_for_each/result_extends_iterable_example",  //file_name
+                List.of("actor"),
+                "sakila" //schema in use
+        );
     }
 
-    protected void verifyConsumingLargeRecords(String schemaName) throws IOException {
-        title("Imperative consumption of large results using Cursor, keeping an open ResultSet behind the scenes");
+
+    protected void verifyConsumingLargeRecordsWithCursor(String schemaName) throws IOException, SQLException {
+
         try (Cursor<Record2<String, String>> c = ctx
                 .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
                 .from(ACTOR)
@@ -137,18 +130,22 @@ public class VerifySakilaDB extends VerifyDatabase {
                         .from(ACTOR)
                         .where(ACTOR.ACTOR_ID.lt(5L));
 
+        Cursor<Record> cursor = ctx.fetchLazy(query.getSQL());
+
         String sqlString = """
                 SELECT Actor.first_name, Actor.last_name
                 FROM Sakila.Actor
                 WHERE Actor.actor_id < '5L'
                 """;
 
-        verifyQuerySyntax(query, sqlString);
+        description = "imperative consumption of large results using Cursor, keeping an open ResultSet behind the scenes";
 
-        ResultQuery<Record> resultQuery = ctx.resultQuery(query.getSQL());
-
-
-        title("Functional consumption of large results using Stream, keeping an open ResultSet behind the scenes");
+        queryInfoToTxt(query, //Query
+                description,
+                "consume_large_records/imperative_consumption_using_cursor",  //file_name
+                List.of("actor"),
+                "sakila" //schema in use
+        );
 
         try (Stream<Record2<String, String>> s = ctx
                 .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
@@ -158,6 +155,22 @@ public class VerifySakilaDB extends VerifyDatabase {
         ) {
             s.forEach(r -> println("Actor: %s %s".formatted(r.value1(), r.value2())));
         }
+
+        query =
+                ctx
+                        .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+                        .from(ACTOR)
+                        .where(ACTOR.ACTOR_ID.lt(5L));
+
+        description = "Functional consumption of large results using Stream, keeping an open ResultSet behind the scenes";
+
+        queryInfoToTxt(query, //Query
+                description,
+                "consume_large_records/functional_consumption_using_stream",  //file_name
+                List.of("actor"),
+                "sakila" //schema in use
+        );
+
     }
 
     public void verifyActiveRecords(String schemaName) throws IOException {

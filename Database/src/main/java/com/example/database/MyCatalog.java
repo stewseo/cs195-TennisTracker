@@ -1,6 +1,7 @@
 package com.example.database;
 
 import com.example.database.db_connection.Connect;
+import com.example.database.db_connection.Database;
 import org.jooq.*;
 import org.jooq.impl.CatalogImpl;
 import java.sql.SQLException;
@@ -42,17 +43,5 @@ public class MyCatalog extends CatalogImpl {
                 .get(0);
     }
 
-    public final Table<?> getTables(String tableName) {
-        Connect connect = new Connect();
-        return connect.create()
-                        .meta()
-                        .getTables(tableName)
-                        .stream()
-                        .filter(Objects::nonNull)
-                        .limit(1)
-                        .toList()
-                        .get(0)
-                ;
-    }
 }
 

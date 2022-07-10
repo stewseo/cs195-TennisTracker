@@ -26,7 +26,6 @@ dependencies {
     implementation 'org.jooq:jooq-meta:3.16.6'
     implementation 'org.jooq:jooq:3.16.6'
     implementation group: 'com.opencsv', name: 'opencsv', version: '5.6'
-
 }
 
 
