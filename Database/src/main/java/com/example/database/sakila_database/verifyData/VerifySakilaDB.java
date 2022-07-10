@@ -602,46 +602,14 @@ public class VerifySakilaDB extends VerifyDatabase {
         querySyntaxToTxt("dynamic_sql/dynamic_sql_to_sql_string3", query);
     }
 
-    public void testQueryParts() {
-        println(reduceCondition(List.of()));
-        println(reduceCondition(List.of(1)));
-        println(reduceCondition(List.of(1, 2, 3)));
-    }
-
     public void writeNestedRowsWithAdHocConverters(String schemaName) throws SQLException, FileNotFoundException {
         record Country(String name) {
         }
         record Customer(String firstName, String lastName, Country country) {
         }
 
-        title("convert from Result<Record> to List<Customer>");
+        title("Convert to Result<Record3<String, String, Country>> or List<Customer>");
 
-        ResultQuery<Record3<String, String, Country>> resultQuery =
-                ctx.select(
-                        CUSTOMER.FIRST_NAME,
-                        CUSTOMER.LAST_NAME,
-                        COUNTRY.COUNTRY_.convertFrom(Country::new))
-                .from(CUSTOMER)
-                .join(ADDRESS).on(CUSTOMER.ADDRESS_ID.eq(ADDRESS.ADDRESS_ID))
-                .join(CITY).on(ADDRESS.CITY_ID.eq(CITY.CITY_ID))
-                .join(COUNTRY).on(CITY.COUNTRY_ID.eq(COUNTRY.COUNTRY_ID))
-                .orderBy('1', '2')
-                .limit('5');
-
-        String sql = """
-                SELECT cu.first_name, cu.last_name, co.country
-                FROM customer cu
-                INNER JOIN address a
-                    ON cu.address_id = a.address_id
-                INNER JOIN city c
-                    ON a.city_id = c.city_id
-                INNER JOIN country co
-                    ON c.country_id = co.country_id
-                ORDER BY 1, 2
-                LIMIT 5
-                """;
-
-        query = query(sql);
 
         List<Customer> r =
                 ctx.select(
@@ -656,7 +624,24 @@ public class VerifySakilaDB extends VerifyDatabase {
                         .limit(5)
                         .fetch(mapping(Customer::new));
 
+        String sql = """
+                SELECT cu.first_name, cu.last_name, co.country
+                FROM customer cu
+                INNER JOIN address a
+                    ON cu.address_id = a.address_id
+                INNER JOIN city c
+                    ON a.city_id = c.city_id
+                INNER JOIN country co
+                    ON c.country_id = co.country_id
+                ORDER BY 1, 2
+                LIMIT 5
+                """;
+
+
         r.forEach(VerifySakilaDB::println);
+
+
+        query = query(sql);
 
         description = "Nested records with ad hoc converter";
 
@@ -667,7 +652,52 @@ public class VerifySakilaDB extends VerifyDatabase {
                 "sakila" //schema in use
         );
 
+
+        r =
+                ctx.select(DSL.row(
+                                CUSTOMER.FIRST_NAME,
+                                CUSTOMER.LAST_NAME,
+                                row(COUNTRY.COUNTRY_).mapping(Country::new)
+                        ).mapping(Customer::new))
+                        .from(CUSTOMER)
+                        .join(ADDRESS).on(CUSTOMER.ADDRESS_ID.eq(ADDRESS.ADDRESS_ID))
+                        .join(CITY).on(ADDRESS.CITY_ID.eq(CITY.CITY_ID))
+                        .join(COUNTRY).on(CITY.COUNTRY_ID.eq(COUNTRY.COUNTRY_ID))
+                        .orderBy(CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME)
+                        .limit(5)
+                        .fetch(Record1::value1);
+
+        r.forEach(VerifySakilaDB::println);
+
+
+        sql = """
+                SELECT 
+                    cu.first_name as 'row.first_name',
+                    cu.last_name as 'row.last_name',
+                    co.country as 'row.row.country'
+                FROM customer cu
+                    INNER JOIN address a
+                        ON cu.address_id = a.address_id
+                    INNER JOIN city c
+                        ON a.city_id = c.city_id
+                    INNER JOIN country co
+                        ON c.country_id = co.country_id
+                ORDER BY cu.first_name, cu.last_name
+                """;
+
+        query = query(sql);
+
+        description = "deeply_nested_row_value_ad_hoc_converter";
+
+        queryInfoToTxt(query, //Query
+                description,
+                "nested_records_ad_hoc_converter/deeply_nested_row_value_ad_hoc_converter",  //file_name
+                List.of("customer", "address", "city","country"),
+                "sakila" //schema in use
+        );
+
     }
+    
     private Condition reduceCondition(List<Integer> ids) {
         title("List: " + ids);
         return ids
@@ -675,6 +705,12 @@ public class VerifySakilaDB extends VerifyDatabase {
                 .map(Long::valueOf)
                 .map(ACTOR.ACTOR_ID::eq)
                 .reduce(noCondition(), Condition::or);
+    }
+
+    public void testQueryParts() {
+        println(reduceCondition(List.of()));
+        println(reduceCondition(List.of(1)));
+        println(reduceCondition(List.of(1, 2, 3)));
     }
 }
 

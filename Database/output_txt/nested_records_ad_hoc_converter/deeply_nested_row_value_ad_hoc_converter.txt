@@ -1,0 +1,733 @@
+nested_records_ad_hoc_converter/deeply_nested_row_value_ad_hoc_converter
+Problem:
+deeply_nested_row_value_ad_hoc_converter
+
+
+Query Sql String:
+SELECT
+    cu.first_name as 'row.first_name',
+    cu.last_name as 'row.last_name',
+    co.country as 'row.row.country'
+FROM customer cu
+    INNER JOIN address a
+        ON cu.address_id = a.address_id
+    INNER JOIN city c
+        ON a.city_id = c.city_id
+    INNER JOIN country co
+        ON c.country_id = co.country_id
+ORDER BY cu.first_name, cu.last_name
+
+The formatted plan as returned by the database:
+ +----+-----------+-----+----------+----+-------------------------+-----------------+-------+--------------------+----+--------+-------------------------------+
+|  id|select_type|table|partitions|type|possible_keys            |key              |key_len|ref                 |rows|filtered|Extra                          |
++----+-----------+-----+----------+----+-------------------------+-----------------+-------+--------------------+----+--------+-------------------------------+
+|   1|SIMPLE     |co   |{null}    |ALL |PRIMARY                  |{null}           |{null} |{null}              | 109|   100.0|Using temporary; Using filesort|
+|   1|SIMPLE     |c    |{null}    |ref |PRIMARY,idx_fk_country_id|idx_fk_country_id|4      |sakila.co.country_id|   5|   100.0|Using index                    |
+|   1|SIMPLE     |a    |{null}    |ref |PRIMARY,idx_fk_city_id   |idx_fk_city_id   |4      |sakila.c.city_id    |   1|   100.0|Using index                    |
+|   1|SIMPLE     |cu   |{null}    |ref |idx_fk_address_id        |idx_fk_address_id|4      |sakila.a.address_id |   1|   100.0|{null}                         |
++----+-----------+-----+----------+----+-------------------------+-----------------+-------+--------------------+----+--------+-------------------------------+
+
+The cost the database associated with the execution of the query:  NaN
+The estimated number of rows (cardinality) that is to be returned by the query: 109.0
+The actual number of rows (cardinality) returned by the query:  599
+
+Result Records:
+  +--------------+-------------+-------------------------------------+
+|row.first_name|row.last_name|row.row.country                      |
++--------------+-------------+-------------------------------------+
+|AARON         |SELBY        |Congo, The Democratic Republic of the|
+|ADAM          |GOOCH        |India                                |
+|ADRIAN        |CLARY        |Italy                                |
+|AGNES         |BISHOP       |India                                |
+|ALAN          |KAHN         |China                                |
+|ALBERT        |CROUSE       |Cameroon                             |
+|ALBERTO       |HENNING      |Venezuela                            |
+|ALEX          |GRESHAM      |Mexico                               |
+|ALEXANDER     |FENNELL      |Italy                                |
+|ALFRED        |CASILLAS     |Egypt                                |
+|ALFREDO       |MCADAMS      |Russian Federation                   |
+|ALICE         |STEWART      |United States                        |
+|ALICIA        |MILLS        |India                                |
+|ALLAN         |CORNISH      |Philippines                          |
+|ALLEN         |BUTTERFIELD  |India                                |
+|ALLISON       |STANLEY      |Cambodia                             |
+|ALMA          |AUSTIN       |Germany                              |
+|ALVIN         |DELOACH      |Mexico                               |
+|AMANDA        |CARTER       |Morocco                              |
+|AMBER         |DIXON        |Taiwan                               |
+|AMY           |LOPEZ        |India                                |
+|ANA           |BRADLEY      |United States                        |
+|ANDRE         |RAPP         |Chile                                |
+|ANDREA        |HENDERSON    |Madagascar                           |
+|ANDREW        |PURDY        |Azerbaijan                           |
+|ANDY          |VANHORN      |Mexico                               |
+|ANGEL         |BARCLAY      |Japan                                |
+|ANGELA        |HERNANDEZ    |Japan                                |
+|ANITA         |MORALES      |India                                |
+|ANN           |EVANS        |Russian Federation                   |
+|ANNA          |HILL         |Italy                                |
+|ANNE          |POWELL       |United Kingdom                       |
+|ANNETTE       |OLSON        |India                                |
+|ANNIE         |RUSSELL      |Mozambique                           |
+|ANTHONY       |SCHWAB       |American Samoa                       |
+|ANTONIO       |MEEK         |Brazil                               |
+|APRIL         |BURNS        |United Kingdom                       |
+|ARLENE        |HARVEY       |India                                |
+|ARMANDO       |GRUBER       |United Kingdom                       |
+|ARNOLD        |HAVENS       |Philippines                          |
+|ARTHUR        |SIMPKINS     |Russian Federation                   |
+|ASHLEY        |RICHARDSON   |United States                        |
+|AUDREY        |RAY          |Austria                              |
+|AUSTIN        |CINTRON      |China                                |
+|BARBARA       |JONES        |Myanmar                              |
+|BARRY         |LOVELACE     |Zambia                               |
+|BEATRICE      |ARNOLD       |India                                |
+|BECKY         |MILES        |India                                |
+|BEN           |EASTER       |Russian Federation                   |
+|BENJAMIN      |VARNEY       |Mexico                               |
+|BERNARD       |COLBY        |India                                |
+|BERNICE       |WILLIS       |Turkey                               |
+|BERTHA        |FERGUSON     |Nigeria                              |
+|BESSIE        |MORRISON     |Italy                                |
+|BETH          |FRANKLIN     |Vietnam                              |
+|BETTY         |WHITE        |United States                        |
+|BEVERLY       |BROOKS       |Taiwan                               |
+|BILL          |GAVIN        |United States                        |
+|BILLIE        |HORTON       |Turkey                               |
+|BILLY         |POULIN       |Philippines                          |
+|BOB           |PFEIFFER     |China                                |
+|BOBBIE        |CRAIG        |Mexico                               |
+|BOBBY         |BOUDREAU     |Anguilla                             |
+|BONNIE        |HUGHES       |South Korea                          |
+|BRAD          |MCCURDY      |Taiwan                               |
+|BRADLEY       |MOTLEY       |India                                |
+|BRANDON       |HUEY         |Turkey                               |
+|BRANDY        |GRAVES       |United States                        |
+|BRENDA        |WRIGHT       |India                                |
+|BRENT         |HARKINS      |Turkey                               |
+|BRETT         |CORNWELL     |India                                |
+|BRIAN         |WYMAN        |Poland                               |
+|BRITTANY      |RILEY        |Ukraine                              |
+|BRUCE         |SCHWARZ      |Japan                                |
+|BRYAN         |HARDISON     |United States                        |
+|BYRON         |BOX          |Kazakstan                            |
+|CALVIN        |MARTEL       |Venezuela                            |
+|CARL          |ARTIS        |Paraguay                             |
+|CARLA         |GUTIERREZ    |India                                |
+|CARLOS        |COUGHLIN     |India                                |
+|CARMEN        |OWENS        |Venezuela                            |
+|CAROL         |GARCIA       |Nigeria                              |
+|CAROLE        |BARNETT      |United States                        |
+|CAROLINE      |BOWMAN       |United States                        |
+|CAROLYN       |PEREZ        |Thailand                             |
+|CARRIE        |PORTER       |China                                |
+|CASEY         |MENA         |Turkey                               |
+|CASSANDRA     |WALTERS      |United States                        |
+|CATHERINE     |CAMPBELL     |Russian Federation                   |
+|CATHY         |SPENCER      |Japan                                |
+|CECIL         |VINES        |United Kingdom                       |
+|CHAD          |CARBONE      |India                                |
+|CHARLENE      |ALVAREZ      |Tanzania                             |
+|CHARLES       |KOWALSKI     |Malaysia                             |
+|CHARLIE       |BESS         |China                                |
+|CHARLOTTE     |HUNTER       |Brazil                               |
+|CHERYL        |MURPHY       |India                                |
+|CHESTER       |BENNER       |China                                |
+|CHRIS         |BROTHERS     |Spain                                |
+|CHRISTIAN     |JUNG         |India                                |
+|CHRISTINA     |RAMIREZ      |Saudi Arabia                         |
+|CHRISTINE     |ROBERTS      |French Polynesia                     |
+|CHRISTOPHER   |GRECO        |Italy                                |
+|CHRISTY       |VARGAS       |China                                |
+|CINDY         |FISHER       |Venezuela                            |
+|CLARA         |SHAW         |Belarus                              |
+|CLARENCE      |GAMEZ        |Japan                                |
+|CLAUDE        |HERZOG       |Angola                               |
+|CLAUDIA       |FULLER       |Kuwait                               |
+|CLAYTON       |BARBEE       |Brazil                               |
+|CLIFFORD      |BOWENS       |Russian Federation                   |
+|CLIFTON       |MALCOLM      |Taiwan                               |
+|CLINTON       |BUFORD       |United States                        |
+|CLYDE         |TOBIAS       |China                                |
+|CODY          |NOLEN        |Brazil                               |
+|COLLEEN       |BURTON       |Germany                              |
+|CONNIE        |WALLACE      |Russian Federation                   |
+|CONSTANCE     |REID         |Nigeria                              |
+|COREY         |HAUSER       |Turkey                               |
+|CORY          |MEEHAN       |Belarus                              |
+|COURTNEY      |DAY          |South Korea                          |
+|CRAIG         |MORRELL      |Philippines                          |
+|CRYSTAL       |FORD         |Israel                               |
+|CURTIS        |IRBY         |Canada                               |
+|CYNTHIA       |YOUNG        |India                                |
+|DAISY         |BATES        |Russian Federation                   |
+|DALE          |RATCLIFF     |South Africa                         |
+|DAN           |PAINE        |United Kingdom                       |
+|DANA          |HART         |Russian Federation                   |
+|DANIEL        |CABRAL       |Brazil                               |
+|DANIELLE      |DANIELS      |Mexico                               |
+|DANNY         |ISOM         |Pakistan                             |
+|DARLENE       |ROSE         |North Korea                          |
+|DARRELL       |POWER        |Canada                               |
+|DARREN        |WINDHAM      |Italy                                |
+|DARRYL        |ASHCRAFT     |Argentina                            |
+|DARYL         |LARUE        |Iraq                                 |
+|DAVE          |GARDINER     |China                                |
+|DAVID         |ROYAL        |Peru                                 |
+|DAWN          |SULLIVAN     |Tuvalu                               |
+|DEAN          |SAUER        |South Africa                         |
+|DEANNA        |BYRD         |Philippines                          |
+|DEBBIE        |REYES        |Japan                                |
+|DEBORAH       |WALKER       |Pakistan                             |
+|DEBRA         |NELSON       |Brazil                               |
+|DELORES       |HANSEN       |Russian Federation                   |
+|DENISE        |KELLY        |Brazil                               |
+|DENNIS        |GILMAN       |South Africa                         |
+|DEREK         |BLAKELY      |Philippines                          |
+|DERRICK       |BOURQUE      |Canada                               |
+|DIANA         |ALEXANDER    |United States                        |
+|DIANE         |COLLINS      |Sudan                                |
+|DIANNE        |SHELTON      |Iran                                 |
+|DOLORES       |WAGNER       |Malaysia                             |
+|DON           |BONE         |Mozambique                           |
+|DONALD        |MAHON        |China                                |
+|DONNA         |THOMPSON     |Russian Federation                   |
+|DORA          |MEDINA       |China                                |
+|DORIS         |REED         |Russian Federation                   |
+|DOROTHY       |TAYLOR       |Iran                                 |
+|DOUGLAS       |GRAF         |Mexico                               |
+|DUANE         |TUBBS        |Nauru                                |
+|DUSTIN        |GILLETTE     |Netherlands                          |
+|DWAYNE        |OLVERA       |India                                |
+|DWIGHT        |LOMBARDI     |South Africa                         |
+|EARL          |SHANKS       |Japan                                |
+|EDDIE         |TOMLIN       |Philippines                          |
+|EDGAR         |RHOADS       |Turkey                               |
+|EDITH         |MCDONALD     |India                                |
+|EDNA          |WEST         |South Africa                         |
+|EDUARDO       |HIATT        |China                                |
+|EDWARD        |BAUGH        |Faroe Islands                        |
+|EDWIN         |BURK         |South Africa                         |
+|EILEEN        |CARR         |Paraguay                             |
+|ELAINE        |STEVENS      |Russian Federation                   |
+|ELEANOR       |HUNT         |Runion                               |
+|ELIZABETH     |BROWN        |Taiwan                               |
+|ELLA          |OLIVER       |Yemen                                |
+|ELLEN         |SIMPSON      |Brazil                               |
+|ELMER         |NOE          |Cambodia                             |
+|ELSIE         |KELLEY       |Nigeria                              |
+|EMILY         |DIAZ         |South Korea                          |
+|EMMA          |BOYD         |Egypt                                |
+|ENRIQUE       |FORSYTHE     |Greece                               |
+|ERIC          |ROBERT       |Argentina                            |
+|ERICA         |MATTHEWS     |China                                |
+|ERIK          |GUILLEN      |India                                |
+|ERIKA         |PENA         |Finland                              |
+|ERIN          |DUNN         |Russian Federation                   |
+|ERNEST        |STEPP        |China                                |
+|ESTHER        |CRAWFORD     |South Africa                         |
+|ETHEL         |WEBB         |South Africa                         |
+|EUGENE        |CULPEPPER    |China                                |
+|EVA           |RAMOS        |United States                        |
+|EVELYN        |MORGAN       |Liechtenstein                        |
+|EVERETT       |BANDA        |Egypt                                |
+|FELICIA       |SUTTON       |China                                |
+|FELIX         |GAFFNEY      |Lithuania                            |
+|FERNANDO      |CHURCHILL    |South Korea                          |
+|FLORENCE      |WOODS        |Argentina                            |
+|FLOYD         |GANDY        |Mexico                               |
+|FRANCES       |PARKER       |Brazil                               |
+|FRANCIS       |SIKES        |Mexico                               |
+|FRANCISCO     |SKIDMORE     |Brazil                               |
+|FRANK         |WAGGONER     |Bangladesh                           |
+|FRANKLIN      |TROUTMAN     |China                                |
+|FRED          |WHEAT        |Mexico                               |
+|FREDDIE       |DUGGAN       |Peru                                 |
+|FREDERICK     |ISBELL       |Japan                                |
+|GABRIEL       |HARDER       |Turkey                               |
+|GAIL          |KNIGHT       |Switzerland                          |
+|GARY          |COY          |China                                |
+|GENE          |SANBORN      |Oman                                 |
+|GEORGE        |LINTON       |Brazil                               |
+|GEORGIA       |JACOBS       |India                                |
+|GERALD        |FULTZ        |India                                |
+|GERALDINE     |PERKINS      |Israel                               |
+|GERTRUDE      |CASTILLO     |Greenland                            |
+|GILBERT       |SLEDGE       |United Kingdom                       |
+|GINA          |WILLIAMSON   |Yemen                                |
+|GLADYS        |HAMILTON     |Nigeria                              |
+|GLEN          |TALBERT      |Mexico                               |
+|GLENDA        |FRAZIER      |China                                |
+|GLENN         |PULLEN       |Netherlands                          |
+|GLORIA        |COOK         |French Polynesia                     |
+|GORDON        |ALLARD       |Yemen                                |
+|GRACE         |ELLIS        |Germany                              |
+|GREG          |ROBINS       |Vietnam                              |
+|GREGORY       |MAULDIN      |Tunisia                              |
+|GUY           |BROWNLEE     |China                                |
+|GWENDOLYN     |MAY          |Japan                                |
+|HAROLD        |MARTINO      |Brazil                               |
+|HARRY         |ARCE         |Iran                                 |
+|HARVEY        |GUAJARDO     |Vietnam                              |
+|HAZEL         |WARREN       |China                                |
+|HEATHER       |MORRIS       |Japan                                |
+|HECTOR        |POINDEXTER   |Russian Federation                   |
+|HEIDI         |LARSON       |China                                |
+|HELEN         |HARRIS       |India                                |
+|HENRY         |BILLINGSLEY  |Tonga                                |
+|HERBERT       |KRUGER       |Russian Federation                   |
+|HERMAN        |DEVORE       |Tanzania                             |
+|HILDA         |HOPKINS      |Philippines                          |
+|HOLLY         |FOX          |India                                |
+|HOWARD        |FORTNER      |Iran                                 |
+|HUGH          |WALDROP      |China                                |
+|IAN           |STILL        |United States                        |
+|IDA           |ANDREWS      |Brazil                               |
+|IRENE         |PRICE        |Kazakstan                            |
+|IRMA          |PEARSON      |Philippines                          |
+|ISAAC         |OGLESBY      |Mexico                               |
+|IVAN          |CROMWELL     |Mexico                               |
+|JACK          |FOUST        |Russian Federation                   |
+|JACKIE        |LYNCH        |Colombia                             |
+|JACOB         |LANCE        |United States                        |
+|JACQUELINE    |LONG         |Thailand                             |
+|JAIME         |NETTLES      |Peru                                 |
+|JAMES         |GANNON       |Japan                                |
+|JAMIE         |RICE         |United States                        |
+|JAMIE         |WAUGH        |Japan                                |
+|JANE          |BENNETT      |Brazil                               |
+|JANET         |PHILLIPS     |Chile                                |
+|JANICE        |WARD         |Sweden                               |
+|JARED         |ELY          |Indonesia                            |
+|JASON         |MORRISSEY    |Argentina                            |
+|JAVIER        |ELROD        |Chad                                 |
+|JAY           |ROBB         |Indonesia                            |
+|JEAN          |BELL         |Malaysia                             |
+|JEANETTE      |GREENE       |Russian Federation                   |
+|JEANNE        |LAWSON       |Turkmenistan                         |
+|JEFF          |EAST         |Dominican Republic                   |
+|JEFFERY       |PINSON       |Pakistan                             |
+|JEFFREY       |SPEAR        |Indonesia                            |
+|JENNIE        |TERRY        |Czech Republic                       |
+|JENNIFER      |DAVIS        |United States                        |
+|JENNY         |CASTRO       |Puerto Rico                          |
+|JEREMY        |HURTADO      |Brazil                               |
+|JEROME        |KENYON       |Chile                                |
+|JERRY         |JORDON       |Japan                                |
+|JESSE         |SCHILLING    |Congo, The Democratic Republic of the|
+|JESSICA       |HALL         |Holy See (Vatican City State)        |
+|JESSIE        |BANKS        |Bulgaria                             |
+|JESSIE        |MILAM        |China                                |
+|JESUS         |MCCARTNEY    |Brazil                               |
+|JILL          |HAWKINS      |Austria                              |
+|JIM           |REA          |Mexico                               |
+|JIMMIE        |EGGLESTON    |Poland                               |
+|JIMMY         |SCHRADER     |Russian Federation                   |
+|JO            |FOWLER       |Nigeria                              |
+|JOAN          |COOPER       |United States                        |
+|JOANN         |GARDNER      |Turkey                               |
+|JOANNE        |ROBERTSON    |Japan                                |
+|JOE           |GILLILAND    |Philippines                          |
+|JOEL          |FRANCISCO    |Bolivia                              |
+|JOHN          |FARNSWORTH   |India                                |
+|JOHNNIE       |CHISHOLM     |Poland                               |
+|JOHNNY        |TURPIN       |Sudan                                |
+|JON           |WILES        |Bolivia                              |
+|JONATHAN      |SCARBOROUGH  |Mexico                               |
+|JORDAN        |ARCHULETA    |Argentina                            |
+|JORGE         |OLIVARES     |Indonesia                            |
+|JOSE          |ANDREW       |Saint Vincent and the Grenadines     |
+|JOSEPH        |JOY          |Brazil                               |
+|JOSEPHINE     |GOMEZ        |India                                |
+|JOSHUA        |MARK         |India                                |
+|JOY           |GEORGE       |Romania                              |
+|JOYCE         |EDWARDS      |Saudi Arabia                         |
+|JUAN          |FRALEY       |Russian Federation                   |
+|JUANITA       |MASON        |India                                |
+|JUDITH        |COX          |China                                |
+|JUDY          |GRAY         |Algeria                              |
+|JULIA         |FLORES       |Argentina                            |
+|JULIAN        |VEST         |Japan                                |
+|JULIE         |SANCHEZ      |Spain                                |
+|JULIO         |NOLAND       |Ukraine                              |
+|JUNE          |CARROLL      |Algeria                              |
+|JUSTIN        |NGO          |Brazil                               |
+|KAREN         |JACKSON      |Turkey                               |
+|KARL          |SEAL         |United States                        |
+|KATHERINE     |RIVERA       |Switzerland                          |
+|KATHLEEN      |ADAMS        |Iran                                 |
+|KATHRYN       |COLEMAN      |Ukraine                              |
+|KATHY         |JAMES        |Philippines                          |
+|KATIE         |ELLIOTT      |Kenya                                |
+|KAY           |CALDWELL     |China                                |
+|KEITH         |RICO         |Slovakia                             |
+|KELLY         |KNOTT        |China                                |
+|KELLY         |TORRES       |China                                |
+|KEN           |PREWITT      |Romania                              |
+|KENNETH       |GOODEN       |Israel                               |
+|KENT          |ARSENAULT    |Brazil                               |
+|KEVIN         |SCHULER      |Nepal                                |
+|KIM           |CRUZ         |United States                        |
+|KIMBERLY      |LEE          |Argentina                            |
+|KIRK          |STCLAIR      |Taiwan                               |
+|KRISTEN       |CHAVEZ       |Japan                                |
+|KRISTIN       |JOHNSTON     |United States                        |
+|KRISTINA      |CHAMBERS     |Venezuela                            |
+|KURT          |EMMONS       |Japan                                |
+|KYLE          |SPURLOCK     |China                                |
+|LANCE         |PEMBERTON    |Morocco                              |
+|LARRY         |THRASHER     |Turkey                               |
+|LAURA         |RODRIGUEZ    |Morocco                              |
+|LAUREN        |HUDSON       |France                               |
+|LAURIE        |LAWRENCE     |India                                |
+|LAWRENCE      |LAWTON       |Cameroon                             |
+|LEAH          |CURTIS       |Poland                               |
+|LEE           |HAWKS        |India                                |
+|LENA          |JENSEN       |India                                |
+|LEO           |EBERT        |China                                |
+|LEON          |BOSTIC       |Colombia                             |
+|LEONA         |OBRIEN       |China                                |
+|LEONARD       |SCHOFIELD    |Argentina                            |
+|LEROY         |BUSTAMANTE   |China                                |
+|LESLIE        |GORDON       |Turkey                               |
+|LESLIE        |SEWARD       |Indonesia                            |
+|LESTER        |KRAUS        |India                                |
+|LEWIS         |LYMAN        |Israel                               |
+|LILLIAN       |GRIFFIN      |United Arab Emirates                 |
+|LILLIE        |KIM          |Egypt                                |
+|LINDA         |WILLIAMS     |Greece                               |
+|LISA          |ANDERSON     |Japan                                |
+|LLOYD         |DOWD         |Indonesia                            |
+|LOIS          |BUTLER       |Brunei                               |
+|LONNIE        |TIRADO       |Indonesia                            |
+|LORETTA       |CARPENTER    |Canada                               |
+|LORI          |WOOD         |India                                |
+|LORRAINE      |STEPHENS     |China                                |
+|LOUIS         |LEONE        |Philippines                          |
+|LOUISE        |JENKINS      |South Africa                         |
+|LUCILLE       |HOLMES       |South Africa                         |
+|LUCY          |WHEELER      |India                                |
+|LUIS          |YANEZ        |France                               |
+|LYDIA         |BURKE        |Argentina                            |
+|LYNN          |PAYNE        |Malawi                               |
+|MABEL         |HOLLAND      |Myanmar                              |
+|MAE           |FLETCHER     |Spain                                |
+|MANUEL        |MURRELL      |Sri Lanka                            |
+|MARC          |OUTLAW       |Italy                                |
+|MARCIA        |DEAN         |Philippines                          |
+|MARCUS        |HIDALGO      |Estonia                              |
+|MARGARET      |MOORE        |Oman                                 |
+|MARGIE        |WADE         |China                                |
+|MARIA         |MILLER       |Yugoslavia                           |
+|MARIAN        |MENDOZA      |Brazil                               |
+|MARIE         |TURNER       |Russian Federation                   |
+|MARILYN       |ROSS         |Nigeria                              |
+|MARIO         |CHEATHAM     |Algeria                              |
+|MARION        |OCAMPO       |China                                |
+|MARION        |SNYDER       |Brazil                               |
+|MARJORIE      |TUCKER       |Poland                               |
+|MARK          |RINEHART     |Saudi Arabia                         |
+|MARLENE       |WELCH        |Japan                                |
+|MARSHA        |DOUGLAS      |Mozambique                           |
+|MARSHALL      |THORN        |United Kingdom                       |
+|MARTHA        |GONZALEZ     |Moldova                              |
+|MARTIN        |BALES        |Angola                               |
+|MARVIN        |YEE          |India                                |
+|MARY          |SMITH        |Japan                                |
+|MATHEW        |BOLIN        |Venezuela                            |
+|MATTHEW       |MAHAN        |Mexico                               |
+|MATTIE        |HOFFMAN      |United Kingdom                       |
+|MAUREEN       |LITTLE       |Paraguay                             |
+|MAURICE       |CRAWLEY      |Mexico                               |
+|MAX           |PITT         |Yugoslavia                           |
+|MAXINE        |SILVA        |Brazil                               |
+|MEGAN         |PALMER       |China                                |
+|MELANIE       |ARMSTRONG    |Philippines                          |
+|MELINDA       |FERNANDEZ    |Pakistan                             |
+|MELISSA       |KING         |Taiwan                               |
+|MELVIN        |ELLINGTON    |China                                |
+|MICHAEL       |SILVERMAN    |China                                |
+|MICHEAL       |FORMAN       |Argentina                            |
+|MICHELE       |GRANT        |China                                |
+|MICHELLE      |CLARK        |Bangladesh                           |
+|MIGUEL        |BETANCOURT   |Germany                              |
+|MIKE          |WAY          |India                                |
+|MILDRED       |BAILEY       |India                                |
+|MILTON        |HOWLAND      |India                                |
+|MINNIE        |ROMERO       |Indonesia                            |
+|MIRIAM        |MCKINNEY     |Japan                                |
+|MISTY         |LAMBERT      |United Arab Emirates                 |
+|MITCHELL      |WESTMORELAND |Vietnam                              |
+|MONICA        |HICKS        |Ukraine                              |
+|MORRIS        |MCCARTER     |Taiwan                               |
+|MYRTLE        |FLEMING      |Dominican Republic                   |
+|NANCY         |THOMAS       |India                                |
+|NAOMI         |JENNINGS     |India                                |
+|NATALIE       |MEYER        |Brazil                               |
+|NATHAN        |RUNYON       |Virgin Islands, U.S.                 |
+|NATHANIEL     |ADAM         |United States                        |
+|NEIL          |RENNER       |Vietnam                              |
+|NELLIE        |GARRETT      |India                                |
+|NELSON        |CHRISTENSON  |Spain                                |
+|NICHOLAS      |BARFIELD     |Brazil                               |
+|NICOLE        |PETERSON     |India                                |
+|NINA          |SOTO         |India                                |
+|NORA          |HERRERA      |Austria                              |
+|NORMA         |GONZALES     |Philippines                          |
+|NORMAN        |CURRIER      |Indonesia                            |
+|OLGA          |JIMENEZ      |Nigeria                              |
+|OSCAR         |AQUINO       |Iran                                 |
+|PAMELA        |BAKER        |China                                |
+|PATRICIA      |JOHNSON      |United States                        |
+|PATRICK       |NEWSOM       |Vietnam                              |
+|PATSY         |DAVIDSON     |Ecuador                              |
+|PAUL          |TROUT        |Russian Federation                   |
+|PAULA         |BRYANT       |India                                |
+|PAULINE       |HENRY        |Mexico                               |
+|PEARL         |GARZA        |India                                |
+|PEDRO         |CHESTNUT     |Ukraine                              |
+|PEGGY         |MYERS        |Saudi Arabia                         |
+|PENNY         |NEAL         |India                                |
+|PERRY         |SWAFFORD     |Argentina                            |
+|PETER         |MENARD       |Netherlands                          |
+|PHILIP        |CAUSEY       |Russian Federation                   |
+|PHILLIP       |HOLM         |Japan                                |
+|PHYLLIS       |FOSTER       |China                                |
+|PRISCILLA     |LOWE         |Mexico                               |
+|RACHEL        |BARNES       |Japan                                |
+|RAFAEL        |ABNEY        |Philippines                          |
+|RALPH         |MADRIGAL     |Puerto Rico                          |
+|RAMON         |CHOATE       |Ecuador                              |
+|RAMONA        |HALE         |India                                |
+|RANDALL       |NEUMANN      |Dominican Republic                   |
+|RANDY         |GAITHER      |Russian Federation                   |
+|RAUL          |FORTIER      |India                                |
+|RAY           |HOULE        |Russian Federation                   |
+|RAYMOND       |MCWHORTER    |Azerbaijan                           |
+|REBECCA       |SCOTT        |Japan                                |
+|REGINA        |BERRY        |China                                |
+|REGINALD      |KINDER       |Indonesia                            |
+|RENE          |MCALISTER    |United States                        |
+|RENEE         |LANE         |United States                        |
+|RHONDA        |KENNEDY      |Netherlands                          |
+|RICARDO       |MEADOR       |Japan                                |
+|RICHARD       |MCCRARY      |United States                        |
+|RICK          |MATTOX       |Egypt                                |
+|RICKY         |SHELBY       |China                                |
+|RITA          |GRAHAM       |France                               |
+|ROBERT        |BAUGHMAN     |Russian Federation                   |
+|ROBERTA       |HARPER       |Iran                                 |
+|ROBERTO       |VU           |China                                |
+|ROBIN         |HAYES        |Russian Federation                   |
+|RODNEY        |MOELLER      |Nigeria                              |
+|ROGER         |QUINTANILLA  |Taiwan                               |
+|ROLAND        |SOUTH        |China                                |
+|RON           |DELUCA       |Japan                                |
+|RONALD        |WEINER       |Mexico                               |
+|RONNIE        |RICKETTS     |Senegal                              |
+|ROSA          |REYNOLDS     |United States                        |
+|ROSE          |HOWARD       |French Guiana                        |
+|ROSEMARY      |SCHMIDT      |Turkey                               |
+|ROSS          |GREY         |Philippines                          |
+|ROY           |WHITING      |Kenya                                |
+|RUBEN         |GEARY        |Poland                               |
+|RUBY          |WASHINGTON   |China                                |
+|RUSSELL       |BRINSON      |Poland                               |
+|RUTH          |MARTINEZ     |South Africa                         |
+|RYAN          |SALISBURY    |Latvia                               |
+|SALLY         |PIERCE       |India                                |
+|SALVADOR      |TEEL         |Gambia                               |
+|SAM           |MCDUFFIE     |Colombia                             |
+|SAMANTHA      |DUNCAN       |Mexico                               |
+|SAMUEL        |MARLOW       |India                                |
+|SANDRA        |MARTIN       |United Kingdom                       |
+|SARA          |PERRY        |Mexico                               |
+|SARAH         |LEWIS        |Latvia                               |
+|SCOTT         |SHELLEY      |United States                        |
+|SEAN          |DOUGLASS     |Ethiopia                             |
+|SERGIO        |STANFIELD    |Mexico                               |
+|SETH          |HANNON       |Bahrain                              |
+|SHANE         |MILLARD      |Mexico                               |
+|SHANNON       |FREEMAN      |India                                |
+|SHARON        |ROBINSON     |Pakistan                             |
+|SHAWN         |HEATON       |Thailand                             |
+|SHEILA        |WELLS        |Turkey                               |
+|SHELLY        |WATTS        |United States                        |
+|SHERRI        |RHODES       |India                                |
+|SHERRY        |MARSHALL     |Egypt                                |
+|SHIRLEY       |ALLEN        |Philippines                          |
+|SIDNEY        |BURLESON     |Poland                               |
+|SONIA         |GREGORY      |Nigeria                              |
+|STACEY        |MONTGOMERY   |China                                |
+|STACY         |CUNNINGHAM   |Colombia                             |
+|STANLEY       |SCROGGINS    |Japan                                |
+|STELLA        |MORENO       |Mexico                               |
+|STEPHANIE     |MITCHELL     |Armenia                              |
+|STEPHEN       |QUALLS       |Bangladesh                           |
+|STEVE         |MACKENZIE    |Indonesia                            |
+|STEVEN        |CURLEY       |India                                |
+|SUE           |PETERS       |China                                |
+|SUSAN         |WILSON       |New Zealand                          |
+|SUZANNE       |NICHOLS      |Indonesia                            |
+|SYLVIA        |ORTIZ        |Colombia                             |
+|TAMARA        |NGUYEN       |Brazil                               |
+|TAMMY         |SANDERS      |Taiwan                               |
+|TANYA         |GILBERT      |South Korea                          |
+|TARA          |RYAN         |Indonesia                            |
+|TED           |BREAUX       |China                                |
+|TERESA        |ROGERS       |Japan                                |
+|TERRANCE      |ROUSH        |Hungary                              |
+|TERRENCE      |GUNDERSON    |China                                |
+|TERRI         |VASQUEZ      |Brazil                               |
+|TERRY         |CARLSON      |Japan                                |
+|TERRY         |GRISSOM      |Japan                                |
+|THELMA        |MURRAY       |Peru                                 |
+|THEODORE      |CULP         |India                                |
+|THERESA       |WATSON       |Philippines                          |
+|THOMAS        |GRIGSBY      |United States                        |
+|TIFFANY       |JORDAN       |China                                |
+|TIM           |CARY         |India                                |
+|TIMOTHY       |BUNN         |Brazil                               |
+|TINA          |SIMMONS      |Brazil                               |
+|TODD          |TAN          |Ukraine                              |
+|TOM           |MILNER       |United Arab Emirates                 |
+|TOMMY         |COLLAZO      |Iran                                 |
+|TONI          |HOLT         |United States                        |
+|TONY          |CARRANZA     |Japan                                |
+|TONYA         |CHAPMAN      |India                                |
+|TRACEY        |BARRETT      |Nigeria                              |
+|TRACY         |COLE         |Mexico                               |
+|TRACY         |HERRMANN     |Ecuador                              |
+|TRAVIS        |ESTEP        |Saudi Arabia                         |
+|TROY          |QUIGLEY      |Canada                               |
+|TYLER         |WREN         |China                                |
+|TYRONE        |ASHER        |Bulgaria                             |
+|VALERIE       |BLACK        |United States                        |
+|VANESSA       |SIMS         |Germany                              |
+|VELMA         |LUCAS        |Nigeria                              |
+|VERA          |MCCOY        |Afghanistan                          |
+|VERNON        |CHAPA        |Turkey                               |
+|VERONICA      |STONE        |United States                        |
+|VICKI         |FIELDS       |Germany                              |
+|VICKIE        |BREWER       |Germany                              |
+|VICTOR        |BARKLEY      |United States                        |
+|VICTORIA      |GIBSON       |Indonesia                            |
+|VINCENT       |RALSTON      |Mexico                               |
+|VIOLA         |HANSON       |Philippines                          |
+|VIOLET        |RODRIQUEZ    |Hong Kong                            |
+|VIRGIL        |WOFFORD      |Mexico                               |
+|VIRGINIA      |GREEN        |France                               |
+|VIVIAN        |RUIZ         |Netherlands                          |
+|WADE          |DELVALLE     |Switzerland                          |
+|WALLACE       |SLONE        |Nigeria                              |
+|WALTER        |PERRYMAN     |China                                |
+|WANDA         |PATTERSON    |Colombia                             |
+|WARREN        |SHERROD      |Russian Federation                   |
+|WAYNE         |TRUONG       |India                                |
+|WENDY         |HARRISON     |Mexico                               |
+|WESLEY        |BULL         |Spain                                |
+|WILLARD       |LUMPKIN      |Mexico                               |
+|WILLIAM       |SATTERFIELD  |Yemen                                |
+|WILLIE        |HOWELL       |Argentina                            |
+|WILLIE        |MARKHAM      |Argentina                            |
+|WILMA         |RICHARDS     |United States                        |
+|YOLANDA       |WEAVER       |Tanzania                             |
+|YVONNE        |WATKINS      |Venezuela                            |
+|ZACHARY       |HITE         |United States                        |
++--------------+-------------+-------------------------------------+
+
+data source(s):
+
+
+Table Name: customer
+unqualified name: "customer"
+qualified name: "sakila"."customer"
+Identity: "sakila"."customer"."customer_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("customer_id")
+Foreign Keys: [constraint "fk_customer_address"
+  foreign key ("address_id")
+  references "sakila"."address" ("address_id"), constraint "fk_customer_store"
+  foreign key ("store_id")
+  references "sakila"."store" ("store_id")]
+Indexes: ["sakila"."idx_fk_address_id", "sakila"."idx_fk_store_id", "sakila"."idx_last_name"]
+Number of records: 599
+Number of fields: 9
+ Records in customer
++-----------+--------+----------+---------+-----------------------------------+----------+------+---------------------+---------------------+
+|customer_id|store_id|first_name|last_name|email                              |address_id|active|create_date          |last_update          |
++-----------+--------+----------+---------+-----------------------------------+----------+------+---------------------+---------------------+
+|          1|       1|MARY      |SMITH    |MARY.SMITH@sakilacustomer.org      |         5|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|          2|       1|PATRICIA  |JOHNSON  |PATRICIA.JOHNSON@sakilacustomer.org|         6|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|          3|       1|LINDA     |WILLIAMS |LINDA.WILLIAMS@sakilacustomer.org  |         7|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|          4|       2|BARBARA   |JONES    |BARBARA.JONES@sakilacustomer.org   |         8|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
+|          5|       1|ELIZABETH |BROWN    |ELIZABETH.BROWN@sakilacustomer.org |         9|true  |2006-02-14 22:04:36.0|2006-02-15 04:57:20.0|
++-----------+--------+----------+---------+-----------------------------------+----------+------+---------------------+---------------------+
+
+
+Table Name: address
+unqualified name: "address"
+qualified name: "sakila"."address"
+Identity: "sakila"."address"."address_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("address_id")
+Foreign Keys: [constraint "fk_address_city"
+  foreign key ("city_id")
+  references "sakila"."city" ("city_id")]
+Indexes: ["sakila"."idx_fk_city_id"]
+Number of records: 603
+Number of fields: 8
+ Records in address
++----------+--------------------+--------+--------+-------+-----------+-----+---------------------+
+|address_id|address             |address2|district|city_id|postal_code|phone|last_update          |
++----------+--------------------+--------+--------+-------+-----------+-----+---------------------+
+|         1|47 MySakila Drive   |{null}  |        |    300|{null}     |     |2006-02-15 04:45:30.0|
+|         2|28 MySQL Boulevard  |{null}  |        |    576|{null}     |     |2006-02-15 04:45:30.0|
+|         3|23 Workhaven Lane   |{null}  |        |    300|{null}     |     |2006-02-15 04:45:30.0|
+|         4|1411 Lillydale Drive|{null}  |        |    576|{null}     |     |2006-02-15 04:45:30.0|
+|         5|1913 Hanoi Way      |{null}  |        |    463|35200      |     |2006-02-15 04:45:30.0|
++----------+--------------------+--------+--------+-------+-----------+-----+---------------------+
+
+
+Table Name: city
+unqualified name: "city"
+qualified name: "sakila"."city"
+Identity: "sakila"."city"."city_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("city_id")
+Foreign Keys: [constraint "fk_city_country"
+  foreign key ("country_id")
+  references "sakila"."country" ("country_id")]
+Indexes: ["sakila"."idx_fk_country_id"]
+Number of records: 600
+Number of fields: 4
+ Records in city
++-------+------------------+----------+---------------------+
+|city_id|city              |country_id|last_update          |
++-------+------------------+----------+---------------------+
+|      1|A Corua (La Corua)|        87|2006-02-15 04:45:25.0|
+|      2|Abha              |        82|2006-02-15 04:45:25.0|
+|      3|Abu Dhabi         |       101|2006-02-15 04:45:25.0|
+|      4|Acua              |        60|2006-02-15 04:45:25.0|
+|      5|Adana             |        97|2006-02-15 04:45:25.0|
++-------+------------------+----------+---------------------+
+
+
+Table Name: country
+unqualified name: "country"
+qualified name: "sakila"."country"
+Identity: "sakila"."country"."country_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("country_id")
+Number of records: 109
+Number of fields: 3
+ Records in country
++----------+--------------+---------------------+
+|country_id|country       |last_update          |
++----------+--------------+---------------------+
+|         1|Afghanistan   |2006-02-15 04:44:00.0|
+|         2|Algeria       |2006-02-15 04:44:00.0|
+|         3|American Samoa|2006-02-15 04:44:00.0|
+|         4|Angola        |2006-02-15 04:44:00.0|
+|         5|Anguilla      |2006-02-15 04:44:00.0|
++----------+--------------+---------------------+

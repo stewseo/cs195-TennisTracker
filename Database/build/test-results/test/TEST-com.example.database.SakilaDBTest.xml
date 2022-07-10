@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.database.SakilaDBTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-07-10T18:42:28" hostname="STEWS" time="0.267">
+<testsuite name="com.example.database.SakilaDBTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-07-10T18:56:00" hostname="STEWS" time="0.268">
   <properties/>
-  <testcase name="nestedRecordsWithAdHocConverterTest()" classname="com.example.database.SakilaDBTest" time="0.267"/>
+  <testcase name="nestedRecordsWithAdHocConverterTest()" classname="com.example.database.SakilaDBTest" time="0.268"/>
   <system-out><![CDATA[jdbc:mysql://localhost:3306/sakila
 parts array length == 7
 "Country"
@@ -27,11 +27,11 @@ Customer[firstName=ADRIAN, lastName=CLARY, country=Country[name=Italy]]
 Customer[firstName=AGNES, lastName=BISHOP, country=Country[name=India]]
 Customer[firstName=ALAN, lastName=KAHN, country=Country[name=China]]
 ]]></system-out>
-  <system-err><![CDATA[Jul 10, 2022 11:42:28 AM org.jooq.tools.JooqLogger lambda$info$5
+  <system-err><![CDATA[Jul 10, 2022 11:55:59 AM org.jooq.tools.JooqLogger lambda$info$5
 INFO: Connecting               
-Jul 10, 2022 11:42:28 AM org.jooq.tools.JooqLogger lambda$info$5
+Jul 10, 2022 11:56:00 AM org.jooq.tools.JooqLogger lambda$info$5
 INFO: Connected                
-Jul 10, 2022 11:42:29 AM org.jooq.tools.JooqLogger lambda$info$5
+Jul 10, 2022 11:56:00 AM org.jooq.tools.JooqLogger lambda$info$5
 INFO: 
                                       
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -52,10 +52,10 @@ INFO:
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  Thank you for using jOOQ 3.16.6
                                       
-Jul 10, 2022 11:42:29 AM org.jooq.tools.JooqLogger lambda$info$5
+Jul 10, 2022 11:56:00 AM org.jooq.tools.JooqLogger lambda$info$5
 INFO: 
 
-jOOQ tip of the day: Whenever jOOQ doesn't support a native SQL feature, use plain SQL templating: https://www.jooq.org/doc/latest/manual/sql-building/plain-sql-templating/
+jOOQ tip of the day: A Field<Boolean> can be turned into a Condition using DSL.condition(Field<Boolean>) for use in WHERE, HAVING, etc.: https://www.jooq.org/doc/latest/manual/sql-building/conditional-expressions/boolean-column/
 
 ]]></system-err>
 </testsuite>
