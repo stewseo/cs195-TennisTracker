@@ -1,9 +1,8 @@
 package com.example.database.sakila_database.verifyData;
 
-import com.example.database.db_connection.Database;
+import com.example.database.connection.Database;
 import org.jooq.Record;
 import org.jooq.*;
-import org.jooq.conf.ParseWithMetaLookups;
 import org.jooq.exception.DataAccessException;
 import org.jooq.exception.NoDataFoundException;
 import org.jooq.impl.DSL;
@@ -13,7 +12,6 @@ import java.io.File;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,13 +24,8 @@ import static java.lang.System.out;
 import static org.jooq.impl.DSL.*;
 
 public abstract class VerifyDatabase {
-    private static Parser parser;
-
-    private static Schema schema;
 
     protected static DSLContext ctx;
-
-    protected static Configuration configuration;
     protected static final JooqLogger log = JooqLogger.getLogger(VerifyDatabase.class);
 
     static Predicate<Schema> schemasInCatalog = schema ->
@@ -44,24 +37,6 @@ public abstract class VerifyDatabase {
                     schema.getName().equals("sys") ||
                     schema.getName().equals("information_schema");
 
-
-    private void fromInnerJoinOn(String tableString1, String tableString2, String conditionString) {
-        Query query = null;
-        try {
-            Table<?> table1 = table(tableString1);
-
-            Table<?> table2 = table(tableString2);
-
-            Condition condition = condition(conditionString);
-
-            table1
-                    .innerJoin(table2)
-                    .on(condition);
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-    }
 
     //============================================================================
     //              information schema filter
@@ -124,25 +99,7 @@ public abstract class VerifyDatabase {
                 .getTable(tableName);
 
     }
-    public static Table<?> lookupTable(String tableName) throws Exception {
-        if (tableName == null || tableName.isBlank()) {
-            throw new Exception("Line 142 Lookup Table");
-        }
 
-        Meta meta = ctx.meta(table(tableName));
-
-        DSLContext c = ctx
-                .configuration()
-                .derive((MetaProvider) () -> meta)
-                .deriveSettings(s ->
-                        s.withParseWithMetaLookups(
-                                ParseWithMetaLookups.THROW_ON_FAILURE
-                        )
-                )
-                .dsl();
-
-        return table(tableName);
-    }
     public List<Table<?>> getTableList(String schemaName) {
 
         Schema schema = getSchema(schemaName);
@@ -208,143 +165,6 @@ public abstract class VerifyDatabase {
     //======================================================================================
     //                          Example Query Strings
     //=======================================================================================
-
-    /**
-     * @return List of Correct query strings used to Check the Lexical vs Logical SQL order
-     */
-    private static List<String> getCorrectQueries() {
-        List<String> list = new ArrayList<>();
-        int i = 0;
-
-        //-- Correct: Because aggregate functions are calculated
-        //-- *after* GROUP BY but *before* HAVING, so they're
-        //-- available to the HAVING clause.
-        list.add("" +
-                "SELECT product_name, count(*) " +
-                "FROM products " +
-                "GROUP BY product_name " +
-                "HAVING count(*) > 0 "
-        );
-
-        //-- Correct: Because aggregate functions are calculated
-        //-- *after* GROUP BY but *before* HAVING, so they're
-        //-- available to the HAVING clause.
-        list.add("" +
-                "SELECT product_name, count(*)\n" +
-                "FROM products\n" +
-                "GROUP BY product_name\n" +
-                "ORDER BY count(*) DESC"
-        );
-
-        //-- Correct: Because aggregate functions are calculated
-        //-- *after* GROUP BY but *before* HAVING, so they're
-        //-- available to the HAVING clause.
-        list.add("" +
-                "SELECT product_name, MAX(product_id), count(*)\n" +
-                "FROM products\n" +
-                "GROUP BY product_name"
-
-        );
-
-        //-- Correct: Because aggregate functions are calculated
-        //-- *after* GROUP BY but *before* HAVING, so they're
-        //-- available to the HAVING clause.
-        list.add("" +
-                "SELECT product_name || ' ' || MAX(product_id), count(*)\n" +
-                "FROM products\n" +
-                "GROUP BY product_name"
-        );
-
-        //-- Correct: Because aggregate functions are calculated
-        //-- *after* GROUP BY but *before* HAVING, so they're
-        //-- available to the HAVING clause.
-        list.add("" +
-                "SELECT MAX(product_name || ' ' || product_id), count(*)\n" +
-                "FROM products\n" +
-                "GROUP BY product_name"
-        );
-
-        return list;
-    }
-
-    /**
-     * @return List of Incorrect query strings used to Check the Lexical vs Logical SQL order
-     */
-    private static List<String> getIncorrectQueries() {
-        List<String> list = new ArrayList<>();
-
-        //-- Wrong: Because aggregate functions are calculated
-        //-- *after* GROUP BY, and WHERE is applied *before* GROUP BY
-        //
-        //-- logical order         -- available columns after operation
-        //-------------------------------------------------------------
-        //FROM products            -- products.*
-        //WHERE ??? > 1            -- products.* (count not yet available!)
-        //GROUP BY product_name      -- product_name (customer.* for aggs only)
-        //<aggregate> count(*)     -- product_name, count
-        //SELECT product_name, count -- product_name, count
-        list.add(
-                "SELECT product_name, count(*) " +
-                        "FROM products " +
-                        "WHERE count(*) > 0 " +
-                        "GROUP BY product_name "
-        );
-        parser.parseQuery(
-                        list.get(0)
-                )
-                .getSQL()
-        ;
-
-
-        //         * Wrong:
-//         * Because the GROUP BY clause creates groups of
-//         * product names, and all the remaining products columns
-//         * are aggregated into a list, which is only visiblbe to
-//         * aggregate functions
-//         *
-//         * -- logical order         -- available columns after operation
-//         * ----------------------------------------------------------------
-//         * FROM products            -- products.*
-//         * GROUP BY product_name      -- product_name (products.* for aggs only)
-//         * <aggregate> count(*)     -- product_name, count
-//         * -- product_name, count (product_id removed)
-//         *  SELECT product_name, ???, count
-//
-        list.add(
-                "SELECT product_name, product_id, count(*)\n" +
-                        "        FROM products\n" +
-                        "        GROUP BY product_name"
-        );
-        parser.parseQuery(
-                        list.get(1)
-                )
-                .getSQL()
-        ;
-
-        //-- Wrong: Because we still cannot access the last name column
-        //-- which is in that list after the GROUP BY clause.
-        //
-        //-- logical order         -- available columns after operation
-        //-----------------------------------------------------------------
-        //FROM products            -- products.*
-        //GROUP BY product_name    -- product_name (products.* for aggs only)
-        //<aggregate> count(*)     -- product_name, count
-        //                         -- product_name, count (last_name product_id)
-        //SELECT product_name || ' ' || ???, count
-        list.add("" +
-                "SELECT product_name || ' ' || product_id, count(*) " +
-                "FROM products " +
-                "GROUP BY product_name"
-        );
-
-        parser.parseQuery(
-                        list.get(2)
-                )
-                .getSQL()
-        ;
-
-        return list;
-    }
 
 
     //======================================================================================
@@ -506,19 +326,17 @@ public abstract class VerifyDatabase {
             e.printStackTrace();
         }
     }
-    String queryInfo(Query query){
 
-        ResultQuery<Record> resultQuery = resultQuery(query.getSQL());
-
-        Result<Record> result = ctx.fetch(query.getSQL());
-
-        Explain explainResultQuery = ctx.explain(resultQuery(query.getSQL()));
-
+    String multiSetQueryInfo(ResultQuery<?> query, Result<?> result){
+        QueryPart queryPart = list(query);
+        Explain explainResultQuery = ctx.explain(query);
         StringBuilder sb = new StringBuilder();
-
         sb
-                .append("\n\nQuery Sql String:\n")
-                .append(resultQuery.getSQL()
+                .append("\n\nQuery Parts:\n")
+                .append(queryPart
+                )
+                .append("\nSql String")
+                .append(sql(query.getSQL())
                 )
                 .append("\nThe formatted plan as returned by the database:\n " )
                 .append(explainResultQuery.plan()
@@ -533,13 +351,100 @@ public abstract class VerifyDatabase {
                 .append(result.size()
                 )
                 .append("\n\nResult Records:\n  " )
-                .append(result.format());
+                .append(result);
 
+        return sb.toString();
+    }
+    protected <T> String queryInfo(T t) {
+        StringBuilder sb = new StringBuilder();
+
+
+        if(t instanceof Select<?> select) {
+            Query query = query(select.getSQL());
+            Explain explainSelect = ctx.explain(select);
+
+            var result  = ctx.fetch(select);
+
+            QueryPart queryPart = list(select);
+            sb
+                    .append("\n\nQuery Parts:\n")
+                    .append(queryPart)
+                    .append("\nSql String")
+                    .append(query.getSQL())
+                    .append("\nThe formatted plan as returned by the database:\n " )
+                    .append(explainSelect.plan()
+                    )
+                    .append("\nThe cost the database associated with the execution of the query:  " )
+                    .append(explainSelect.cost()
+                    )
+                    .append("\nThe estimated number of rows (cardinality) that is to be returned by the query: ")
+                    .append(explainSelect.rows()
+                    )
+                    .append("\nThe actual number of rows (cardinality) returned by the query:  ")
+                    .append(result.size()
+                    )
+                    .append("\n\nResult Records:\n  ")
+                    .append(result.format());
+        }
+
+        else if (t instanceof Query query) {
+            log.info("checking sql string from query");
+            String sql = query.getSQL();
+            
+            QueryPart queryPart = list(query);
+
+            var result  = ctx.fetch(query.getSQL());
+
+            log.info("appending explain info");
+            Explain explainResultQuery = ctx.explain(query);
+            sb
+                    .append("\n\nQuery Parts:\n")
+                    .append(queryPart)
+                    .append("\nSql String")
+                    .append(sql)
+                    .append("\nThe formatted plan as returned by the database:\n ")
+                    .append(explainResultQuery.plan()
+                    )
+                    .append("\nThe cost the database associated with the execution of the query:  ")
+                    .append(explainResultQuery.cost()
+                    )
+                    .append("\nThe estimated number of rows (cardinality) that is to be returned by the query: ")
+                    .append(explainResultQuery.rows()
+                    )
+                    .append("\nThe actual number of rows (cardinality) returned by the query:  ")
+                    .append(result.size()
+                    )
+                    .append("\n\nResult Records:\n  ")
+                    .append(result.format());
+        }
 
         return sb.toString();
     }
 
-    void queryInfoToTxt(Query query, String problem, String fileName, List<String> listOfTableNames, String schemaName)
+    public<T> T resultQueryToTxt(T resultQuery,Result<?> result,String description, String fileName, List<String> listOfTableNames, String schemaName){
+        StringBuilder outputBuilder = new StringBuilder(
+                fileName)
+                .append("\n")
+                .append(description)
+                .append("\n");
+
+        File file = null;
+        outputBuilder.append(multiSetQueryInfo((ResultQuery<?>) resultQuery, result));
+
+        file = createTxtFile(fileName.concat(".txt"));
+
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(file), StandardCharsets.UTF_8))) {
+
+            writer.write(outputBuilder.toString());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return resultQuery;
+    }
+
+    public <T>T queryInfoToTxt(T query, String problem, String fileName, List<String> listOfTableNames, String schemaName)
             throws FileNotFoundException, SQLException {
 
         StringBuilder outputBuilder = new StringBuilder(
@@ -550,11 +455,11 @@ public abstract class VerifyDatabase {
 
         File file = null;
 
-        outputBuilder.append(queryInfo(query));
+        outputBuilder.append(queryInfo((Query) query));
 
         if(!listOfTableNames.isEmpty()) {
             outputBuilder.append("\ndata source(s):\n");
-            listOfTableNames.stream().forEach(tableName -> {
+            listOfTableNames.forEach(tableName -> {
                 Table<?> table = null;
 
                 try {
@@ -572,7 +477,6 @@ public abstract class VerifyDatabase {
             });
         }
 
-        out.println("file name: "+ fileName);
 
         file = createTxtFile(fileName.concat(".txt"));
 
@@ -584,6 +488,7 @@ public abstract class VerifyDatabase {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return query;
     }
 
     //===============================================================================================================
@@ -715,8 +620,10 @@ public abstract class VerifyDatabase {
         return false;
     }
 
-    private File createTxtFile(String fileName) {
-            return new File("Database/output_txt/".concat(fileName));
+    protected File createTxtFile(String fileName) {
+        log.info("Creating file" + fileName);
+        return new File("Database/output_txt/".concat(fileName));
+
     }
 
     public static void title(Object title) {

@@ -5,5 +5,5 @@ module com.example.Database {
     requires com.opencsv;
     requires org.apache.logging.log4j;
     exports com.example.database;
-    exports com.example.database.db_connection;
+    exports com.example.database.connection;
 }

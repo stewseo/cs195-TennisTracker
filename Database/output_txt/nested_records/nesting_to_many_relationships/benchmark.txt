@@ -1,0 +1,29 @@
+nested_records/nesting_to_many_relationships/benchmark
+Problem:
+Benchmark
+
+
+Query Sql String:
+set @t = @@group_concat_max_len; set @@group_concat_max_len = 4294967295; select `ACTOR`.`ACTOR_ID`, `ACTOR`.`FIRST_NAME`, `ACTOR`.`LAST_NAME`, (select coalesce(json_merge_preserve('[]', concat('[', group_concat(json_array(`v0`, `v1`, json_extract(`v2`, '$')) separator ','), ']')), json_array()) from (select `Film`.`FILM_ID` as `v0`, `Film`.`TITLE` as `v1`, (select coalesce(json_merge_preserve('[]', concat('[', group_concat(json_array(`v0`) separator ','), ']')), json_array()) from (select `category`.`name` as `v0` from `category` join `film_category` on `category`.`category_id` = `film_category`.`category_id` where `film_category`.`film_id` = `FILM_ACTOR`.`FILM_ID`) as `t`) as `v2` from `Film` join `FILM_ACTOR` on `Film`.`FILM_ID` = `FILM_ACTOR`.`FILM_ID` where `FILM_ACTOR`.`ACTOR_ID` = `ACTOR`.`ACTOR_ID`) as `t`) from `ACTOR`; set @@group_concat_max_len = @t;
+The formatted plan as returned by the database:
+ +----+------------------+-------------+----------+------+---------------------------------+-------+-------+--------------------------------+----+--------+-----------+
+|  id|select_type       |table        |partitions|type  |possible_keys                    |key    |key_len|ref                             |rows|filtered|Extra      |
++----+------------------+-------------+----------+------+---------------------------------+-------+-------+--------------------------------+----+--------+-----------+
+|   1|PRIMARY           |ACTOR        |{null}    |ALL   |{null}                           |{null} |{null} |{null}                          | 200|   100.0|{null}     |
+|   2|DEPENDENT SUBQUERY|<derived3>   |{null}    |ALL   |{null}                           |{null} |{null} |{null}                          |  27|   100.0|{null}     |
+|   3|DEPENDENT DERIVED |FILM_ACTOR   |{null}    |ref   |PRIMARY,idx_fk_film_id           |PRIMARY|4      |sakila.ACTOR.actor_id           |  27|   100.0|Using index|
+|   3|DEPENDENT DERIVED |Film         |{null}    |eq_ref|PRIMARY                          |PRIMARY|4      |sakila.FILM_ACTOR.film_id       |   1|   100.0|{null}     |
+|   4|DEPENDENT SUBQUERY|film_category|{null}    |ref   |PRIMARY,fk_film_category_category|PRIMARY|4      |sakila.FILM_ACTOR.film_id       |   1|   100.0|Using index|
+|   4|DEPENDENT SUBQUERY|category     |{null}    |eq_ref|PRIMARY                          |PRIMARY|4      |sakila.film_category.category_id|   1|   100.0|{null}     |
++----+------------------+-------------+----------+------+---------------------------------+-------+-------+--------------------------------+----+--------+-----------+
+
+The cost the database associated with the execution of the query:  NaN
+The estimated number of rows (cardinality) that is to be returned by the query: 200.0
+The actual number of rows (cardinality) returned by the query:  1
+
+Result Records:
+  +------------+
+|UPDATE_COUNT|
++------------+
+|           0|
++------------+

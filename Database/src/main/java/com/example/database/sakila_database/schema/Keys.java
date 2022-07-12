@@ -1,209 +1,127 @@
-//package com.example.database.sakila_database.schema;
-//
-//import com.example.database.sakila_database.SakilaModel.Record.*;
-//import com.example.database.sakila_database.SakilaModel.Record.CountryRecord;
-//import com.example.database.sakila_database.SakilaModel.Table.*;
-//import org.jooq.ForeignKey;
-//import org.jooq.TableField;
-//import org.jooq.UniqueKey;
-//import org.jooq.impl.DSL;
-//import org.jooq.impl.Internal;
-//
-//
-//@SuppressWarnings({"all", "unchecked", "rawtypes"})
-//public class Keys {
-//
-//    public static final UniqueKey<ActorRecord> ACTOR_PKEY =
-//            Internal.createUniqueKey(Actor.ACTOR,
-//                    DSL.name("actor_pkey"), new TableField[] { Actor.ACTOR.ACTOR_ID }, true);
-//    public static final UniqueKey<AddressRecord> ADDRESS_PKEY =
-//            Internal.createUniqueKey(Address.ADDRESS,
-//                    DSL.name("address_pkey"), new TableField[] { Address.ADDRESS.ADDRESS_ID }, true);
-//    public static final UniqueKey<CityRecord> CITY_PKEY =
-//            Internal.createUniqueKey(City.CITY,
-//                    DSL.name("city_pkey"), new TableField[] { City.CITY.CITY_ID }, true);
-//
-//    public static final UniqueKey<CountryRecord> COUNTRY_PKEY =
-//            Internal.createUniqueKey(Country.COUNTRY,
-//                    DSL.name("country_pkey"), new TableField[] { Country.COUNTRY.COUNTRY_ID }, true);
-//
-//    public static final UniqueKey<CustomerRecord> CUSTOMER_PKEY =
-//            Internal.createUniqueKey(Customer.CUSTOMER,
-//                    DSL.name("customer_pkey"), new TableField[] { Customer.CUSTOMER.CUSTOMER_ID }, true);
-//
-//    public static final UniqueKey<FilmRecord> FILM_PKEY =
-//            Internal.createUniqueKey(Film.FILM,
-//                    DSL.name("film_pkey"), new TableField[] { Film.FILM.FILM_ID }, true);
-//
-//    public static final UniqueKey<FilmActorRecord> FILM_ACTOR_PKEY =
-//            Internal.createUniqueKey(
-//                    FilmActor.FILM_ACTOR, DSL.name("film_actor_pkey"),
-//                    new TableField[] { FilmActor.FILM_ACTOR.ACTOR_ID, FilmActor.FILM_ACTOR.FILM_ID }, true);
-//
-//
-//    public static final UniqueKey<CountryRecord> COUNTRY_KEY =
-//            Internal.createUniqueKey(
-//                    Country.COUNTRY,
-//                    DSL.name("country_pkey"),
-//                    new TableField[]{Country.COUNTRY.COUNTRY_ID},
-//                    true
-//            );
-//
-//    public static final UniqueKey<TournamentRecord> TOURNAMENT_PKEY =
-//            Internal.createUniqueKey(
-//                    Tournament.TOURNAMENT,
-//                    DSL.name("tournament_pkey"),
-//                    new TableField[]{Tournament.TOURNAMENT.TOURNAMENT_ID},
-//                    true
-//            );
-//
-//    public static final UniqueKey<MatchRecord> MATCH_PKEY =
-//            Internal.createUniqueKey(
-//                    Match.MATCH,
-//                    DSL.name("match_pkey"),
-//                    new TableField[]{ Match.MATCH.MATCH_ID },
-//                    true
-//            );
-//
-//    public static final UniqueKey<SetRecord> SET_PKEY =
-//            Internal.createUniqueKey(
-//                    Set.SET,
-//                    DSL.name("set_pkey"),
-//                    new TableField[]{Set.SET.SET_ID},
-//                    true
-//            );
-//
-//    public static final UniqueKey<GameRecord> GAME_PKEY =
-//            Internal.createUniqueKey(
-//                    Game.GAME,
-//                    DSL.name("game_pkey"),
-//                    new TableField[]{Game.GAME.GAME_ID},
-//                    true);
-//
-//    public static final UniqueKey<WtaPlayerRecord> WTAPLAYER_PKEY =
-//            Internal.createUniqueKey(
-//            WtaPlayer.WTA_PLAYER,
-//            DSL.name("wta_player_pkey"),
-//            new TableField[]{WtaPlayer.WTA_PLAYER.PLAYER_ID},
-//            true);
-//
-//    public static final UniqueKey<PlayerRecord> PLAYER_PKEY =
-//            Internal.createUniqueKey(
-//                    Player.PLAYER,
-//                    DSL.name("player_pkey"),
-//                    new TableField[]{Player.PLAYER.PLAYER_ID},
-//                    true
-//            );
-//    public static final UniqueKey<AtpRankRecord> ATPRANK_PKEY =
-//            Internal.createUniqueKey(AtpRank.ATP_RANK,
-//                    DSL.name("atp_rank_pkey"),
-//                    new TableField[]{AtpRank.ATP_RANK.ID},
-//                    true
-//            );
-//    public static final UniqueKey<WtaRankRecord> WTARANK_PKEY =
-//            Internal.createUniqueKey(
-//                    WtaRank.WTA_RANK,
-//                    DSL.name("wta_rank_pkey"),
-//                    new TableField[]{WtaRank.WTA_RANK.ID},
-//                    true
-//            );
-//
-//    public static final UniqueKey<ServeStatsRecord> SERVE_STATS_RECORD =
-//            Internal.createUniqueKey(ServeStats.SERVESTATS, "serve_stats_pkey",
-//                    new TableField[]{ServeStats.SERVESTATS.SERVE_ID}, true);
-//
-//
-//
-//    // -------------------------------------------------------------------------
-//    // FOREIGN KEY: Match_Match_Tournament_id = Tournament_Tournament_id
-//    // -------------------------------------------------------------------------
-//
-//
-//    public static final ForeignKey<CityRecord, CountryRecord> CITY__CITY_COUNTRY_ID_FKEY =
-//            Internal.createForeignKey(City.CITY, DSL.name("city_country_id_fkey"),
-//                    new TableField[] { City.CITY.COUNTRY_ID }, Keys.COUNTRY_PKEY,
-//                    new TableField[] { Country.COUNTRY.COUNTRY_ID }, true);
-//
-//    public static final ForeignKey<FilmActorRecord, ActorRecord> FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY =
-//            Internal.createForeignKey(FilmActor.FILM_ACTOR, DSL.name("film_actor_actor_id_fkey"),
-//                    new TableField[] { FilmActor.FILM_ACTOR.ACTOR_ID },
-//                    Keys.ACTOR_PKEY, new TableField[] { Actor.ACTOR.ACTOR_ID }, true);
-//
-//    public static final ForeignKey<FilmActorRecord, FilmRecord> FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY =
-//            Internal.createForeignKey(FilmActor.FILM_ACTOR, DSL.name("film_actor_film_id_fkey"),
-//                    new TableField[] { FilmActor.FILM_ACTOR.FILM_ID },
-//                    Keys.FILM_PKEY, new TableField[] { Film.FILM.FILM_ID }, true);
-//
-//    public static final ForeignKey<CustomerRecord, AddressRecord> CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY =
-//            Internal.createForeignKey(Customer.CUSTOMER, DSL.name("customer_address_id_fkey"),
-//                    new TableField[] { Customer.CUSTOMER.ADDRESS_ID },
-//                    Keys.ADDRESS_PKEY, new TableField[] { Address.ADDRESS.ADDRESS_ID }, true);
-//
-//    public static final ForeignKey<AddressRecord, CityRecord> ADDRESS__ADDRESS_CITY_ID_FKEY =
-//            Internal.createForeignKey(Address.ADDRESS, DSL.name("address_city_id_fkey"),
-//                    new TableField[] { Address.ADDRESS.CITY_ID },
-//                    Keys.CITY_PKEY, new TableField[] {
-//                            City.CITY.CITY_ID }, true);
-//    public static final ForeignKey<MatchRecord, TournamentRecord> MATCH__MATCH_GRAND_SLAM_TOURNAMENT_ID_FKEY =
-//            Internal.createForeignKey(
-//                    Match.MATCH,
-//                    DSL.name("match_grand_slam_tournament_id_fkey"),
-//                    new TableField[]{Match.MATCH.TOURNAMENT_ID},
-//                    Keys.TOURNAMENT_PKEY,
-//                    new TableField[] { Tournament.TOURNAMENT.TOURNAMENT_ID},
-//                    true
-//            );
-//
-//    public static final ForeignKey<SetRecord, MatchRecord> SET__SET_MATCH_ID_FKEY =
-//            Internal.createForeignKey(
-//                    Set.SET,
-//                    DSL.name("set_match_id_fkey"),
-//                    new TableField[] { Set.SET.MATCH_ID },
-//                    Keys.MATCH_PKEY,
-//                    new TableField[] { Match.MATCH.MATCH_ID},
-//                    true
-//            );
-//
-//
-//    public static final ForeignKey<GameRecord, SetRecord> GAME__GAME_SET_ID_FKEY =
-//            Internal.createForeignKey(
-//                    Game.GAME,
-//                    DSL.name("game_set_id_fkey"),
-//                    new TableField[]{Game.GAME.SET_ID},
-//                    Keys.SET_PKEY,
-//                    new TableField[] { Set.SET.SET_ID},
-//                    true
-//            );
-//
-//    public static final ForeignKey<MatchRecord, PlayerRecord> MATCH__MATCH_ATP_PLAYER_ID_FKEY =
-//                Internal.createForeignKey(
-//                        Match.MATCH,
-//                        DSL.name("match_player_id_fkey"),
-//                        new TableField[] { Match.MATCH.PLAYER_ID },
-//                        Keys.PLAYER_PKEY,
-//                        new TableField[] { Player.PLAYER.PLAYER_ID },
-//                        true
-//                );
-//
-//    public static final ForeignKey<AtpRankRecord, PlayerRecord> ATPRANK__ATP_RANK_PLAYER_ID_FKEY =
-//            Internal.createForeignKey(
-//                    AtpRank.ATP_RANK,
-//                    DSL.name("atp_rank_atp_player_id_fkey"),
-//                    new TableField[]{AtpRank.ATP_RANK.ID},
-//                    Keys.PLAYER_PKEY,
-//                    new TableField[] { Player.PLAYER.PLAYER_ID},
-//                    true
-//            );
-//
-//    public static final ForeignKey<WtaRankRecord, WtaPlayerRecord> WTARANK__ATP_RANK_PLAYER_ID_FKEY =
-//            Internal.createForeignKey(
-//                    WtaRank.WTA_RANK,
-//                    DSL.name("wta_rank_wta_player_id_fkey"),
-//                    new TableField[]{WtaRank.WTA_RANK.PLAYER_ID},
-//                    Keys.WTAPLAYER_PKEY,
-//                    new TableField[] { WtaPlayer.WTA_PLAYER.PLAYER_ID},
-//                    true
-//            );
-//
-//
-//}
+package com.example.database.sakila_database.schema;
+
+import com.example.database.sakila_database.model.Table.*;
+import com.example.database.sakila_database.model.Table.Payments.Payment;
+import com.example.database.sakila_database.model.Table.Record.*;
+import org.jooq.ForeignKey;
+import org.jooq.TableField;
+import org.jooq.UniqueKey;
+import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
+
+@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+public class Keys {
+
+        // -------------------------------------------------------------------------
+        // UNIQUE and PRIMARY KEY definitions
+        // -------------------------------------------------------------------------
+
+        public static final UniqueKey<ActorRecord> ACTOR_PKEY =
+                Internal.createUniqueKey(Actor.ACTOR,
+                        DSL.name("actor_pkey"),
+                        new TableField[] { Actor.ACTOR.ACTOR_ID }, true);
+        public static final UniqueKey<AddressRecord> ADDRESS_PKEY =
+                Internal.createUniqueKey(Address.ADDRESS,
+                        DSL.name("address_pkey"),
+                        new TableField[] { Address.ADDRESS.ADDRESS_ID }, true);
+        public static final UniqueKey<CategoryRecord> CATEGORY_PKEY =
+                Internal.createUniqueKey(Category.CATEGORY,
+                        DSL.name("category_pkey"),
+                        new TableField[] { Category.CATEGORY.CATEGORY_ID }, true);
+        public static final UniqueKey<CityRecord> CITY_PKEY =
+                Internal.createUniqueKey(City.CITY,
+                        DSL.name("city_pkey"),
+                        new TableField[] { City.CITY.CITY_ID }, true);
+        public static final UniqueKey<CountryRecord> COUNTRY_PKEY =
+                Internal.createUniqueKey(Country.COUNTRY,
+                        DSL.name("country_pkey"),
+                        new TableField[] { Country.COUNTRY.COUNTRY_ID }, true);
+        public static final UniqueKey<CustomerRecord> CUSTOMER_PKEY =
+                Internal.createUniqueKey(Customer.CUSTOMER,
+                        DSL.name("customer_pkey"),
+                        new TableField[] { Customer.CUSTOMER.CUSTOMER_ID }, true);
+        public static final UniqueKey<FilmRecord> FILM_PKEY =
+                Internal.createUniqueKey(Film.FILM,
+                        DSL.name("film_pkey"),
+                        new TableField[] { Film.FILM.FILM_ID }, true);
+
+        public static final UniqueKey<FilmActorRecord> FILM_ACTOR_PKEY =
+                Internal.createUniqueKey(FilmActor.FILM_ACTOR,
+                        DSL.name("film_actor_pkey"),
+                        new TableField[] {
+                                FilmActor.FILM_ACTOR.ACTOR_ID,
+                                FilmActor.FILM_ACTOR.FILM_ID },
+                        true);
+
+        public static final UniqueKey<FilmCategoryRecord> FILM_CATEGORY_PKEY =
+                Internal.createUniqueKey(FilmCategory.FILM_CATEGORY,
+                        DSL.name("film_category_pkey"),
+                        new TableField[] { FilmCategory.FILM_CATEGORY.FILM_ID,
+                                FilmCategory.FILM_CATEGORY.CATEGORY_ID },
+                        true);
+        public static final UniqueKey<InventoryRecord> INVENTORY_PKEY =
+                Internal.createUniqueKey(Inventory.INVENTORY,
+                        DSL.name("inventory_pkey"),
+                        new TableField[] { Inventory.INVENTORY.INVENTORY_ID },
+                        true);
+
+        public static final UniqueKey<PaymentRecord> PAYMENT_PKEY =
+                Internal.createUniqueKey(Payment.PAYMENT,
+                        DSL.name("payment_pkey"),
+                        new TableField[] { Payment.PAYMENT.PAYMENT_ID },
+                        true);
+        public static final UniqueKey<RentalRecord> RENTAL_PKEY =
+                Internal.createUniqueKey(Rental.RENTAL,
+                        DSL.name("rental_pkey"),
+                        new TableField[] { Rental.RENTAL.RENTAL_ID },
+                        true);
+    public static final UniqueKey<LanguageRecord> LANGUAGE_PKEY =
+            Internal.createUniqueKey(Language.LANGUAGE,
+                    DSL.name("language_pkey"),
+                    new TableField[] { Language.LANGUAGE.LANGUAGE_ID },
+                    true);
+
+    public static final UniqueKey<StoreRecord> STORE_PKEY =
+            Internal.createUniqueKey(Store.STORE,
+                    DSL.name("store_pkey"),
+                    new TableField[] { Store.STORE.STORE_ID },
+                    true);
+
+
+
+    // -------------------------------------------------------------------------
+        // FOREIGN KEY definitions
+        // -------------------------------------------------------------------------
+
+        public static final ForeignKey<AddressRecord, CityRecord> ADDRESS__ADDRESS_CITY_ID_FKEY =
+                Internal.createForeignKey(Address.ADDRESS, DSL.name("address_city_id_fkey"), new TableField[] { Address.ADDRESS.CITY_ID }, Keys.CITY_PKEY, new TableField[] { City.CITY.CITY_ID }, true);
+
+        public static final ForeignKey<CityRecord, CountryRecord> CITY__CITY_COUNTRY_ID_FKEY =
+                Internal.createForeignKey(City.CITY, DSL.name("city_country_id_fkey"), new TableField[] { City.CITY.COUNTRY_ID }, Keys.COUNTRY_PKEY, new TableField[] { Country.COUNTRY.COUNTRY_ID }, true);
+
+        public static final ForeignKey<CustomerRecord, AddressRecord> CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY =
+                Internal.createForeignKey(Customer.CUSTOMER, DSL.name("customer_address_id_fkey"), new TableField[] { Customer.CUSTOMER.ADDRESS_ID }, Keys.ADDRESS_PKEY, new TableField[] { Address.ADDRESS.ADDRESS_ID }, true);
+        public static final ForeignKey<CustomerRecord, StoreRecord> CUSTOMER__CUSTOMER_STORE_ID_FKEY =
+            Internal.createForeignKey(Customer.CUSTOMER,
+                    DSL.name("customer_store_id_fkey"),
+                    new TableField[] { Customer.CUSTOMER.STORE_ID }, Keys.STORE_PKEY, new TableField[] { Store.STORE.STORE_ID }, true);
+
+
+        public static final ForeignKey<FilmRecord, LanguageRecord> FILM__FILM_LANGUAGE_ID_FKEY =
+                Internal.createForeignKey(Film.FILM, DSL.name("film_language_id_fkey"), new TableField[] { Film.FILM.LANGUAGE_ID }, Keys.LANGUAGE_PKEY, new TableField[] { Language.LANGUAGE.LANGUAGE_ID }, true);
+        public static final ForeignKey<FilmRecord, LanguageRecord> FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY =
+                Internal.createForeignKey(Film.FILM, DSL.name("film_original_language_id_fkey"), new TableField[] { Film.FILM.ORIGINAL_LANGUAGE_ID }, Keys.LANGUAGE_PKEY, new TableField[] { Language.LANGUAGE.LANGUAGE_ID }, true);
+        public static final ForeignKey<FilmActorRecord, ActorRecord> FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY =
+                Internal.createForeignKey(FilmActor.FILM_ACTOR, DSL.name("film_actor_actor_id_fkey"), new TableField[] { FilmActor.FILM_ACTOR.ACTOR_ID }, Keys.ACTOR_PKEY, new TableField[] { Actor.ACTOR.ACTOR_ID }, true);
+        public static final ForeignKey<FilmActorRecord, FilmRecord> FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY =
+                Internal.createForeignKey(FilmActor.FILM_ACTOR, DSL.name("film_actor_film_id_fkey"), new TableField[] { FilmActor.FILM_ACTOR.FILM_ID }, Keys.FILM_PKEY, new TableField[] { Film.FILM.FILM_ID }, true);
+        public static final ForeignKey<FilmCategoryRecord, CategoryRecord> FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY = Internal.createForeignKey(FilmCategory.FILM_CATEGORY, DSL.name("film_category_category_id_fkey"), new TableField[] { FilmCategory.FILM_CATEGORY.CATEGORY_ID }, Keys.CATEGORY_PKEY, new TableField[] { Category.CATEGORY.CATEGORY_ID }, true);
+        public static final ForeignKey<FilmCategoryRecord, FilmRecord> FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY = Internal.createForeignKey(FilmCategory.FILM_CATEGORY, DSL.name("film_category_film_id_fkey"), new TableField[] { FilmCategory.FILM_CATEGORY.FILM_ID }, Keys.FILM_PKEY, new TableField[] { Film.FILM.FILM_ID }, true);
+        public static final ForeignKey<InventoryRecord, FilmRecord> INVENTORY__INVENTORY_FILM_ID_FKEY = Internal.createForeignKey(Inventory.INVENTORY, DSL.name("inventory_film_id_fkey"), new TableField[] { Inventory.INVENTORY.FILM_ID }, Keys.FILM_PKEY, new TableField[] { Film.FILM.FILM_ID }, true);
+        public static final ForeignKey<InventoryRecord, StoreRecord> INVENTORY__INVENTORY_STORE_ID_FKEY = Internal.createForeignKey(Inventory.INVENTORY, DSL.name("inventory_store_id_fkey"), new TableField[] { Inventory.INVENTORY.STORE_ID }, Keys.STORE_PKEY, new TableField[] { Store.STORE.STORE_ID }, true);
+        public static final ForeignKey<PaymentRecord, CustomerRecord> PAYMENT__PAYMENT_CUSTOMER_ID_FKEY = Internal.createForeignKey(Payment.PAYMENT, DSL.name("payment_customer_id_fkey"), new TableField[] { Payment.PAYMENT.CUSTOMER_ID }, Keys.CUSTOMER_PKEY, new TableField[] { Customer.CUSTOMER.CUSTOMER_ID }, true);
+        public static final ForeignKey<PaymentRecord, RentalRecord> PAYMENT__PAYMENT_RENTAL_ID_FKEY = Internal.createForeignKey(Payment.PAYMENT, DSL.name("payment_rental_id_fkey"), new TableField[] { Payment.PAYMENT.RENTAL_ID }, Keys.RENTAL_PKEY, new TableField[] { Rental.RENTAL.RENTAL_ID }, true);
+        public static final ForeignKey<RentalRecord, CustomerRecord> RENTAL__RENTAL_CUSTOMER_ID_FKEY = Internal.createForeignKey(Rental.RENTAL, DSL.name("rental_customer_id_fkey"), new TableField[] { Rental.RENTAL.CUSTOMER_ID }, Keys.CUSTOMER_PKEY, new TableField[] { Customer.CUSTOMER.CUSTOMER_ID }, true);
+        public static final ForeignKey<RentalRecord, InventoryRecord> RENTAL__RENTAL_INVENTORY_ID_FKEY = Internal.createForeignKey(Rental.RENTAL, DSL.name("rental_inventory_id_fkey"), new TableField[] { Rental.RENTAL.INVENTORY_ID }, Keys.INVENTORY_PKEY, new TableField[] { Inventory.INVENTORY.INVENTORY_ID }, true);
+        public static final ForeignKey<StoreRecord, AddressRecord> STORE__STORE_ADDRESS_ID_FKEY = Internal.createForeignKey(Store.STORE, DSL.name("store_address_id_fkey"), new TableField[] { Store.STORE.ADDRESS_ID }, Keys.ADDRESS_PKEY, new TableField[] { Address.ADDRESS.ADDRESS_ID }, true);
+    }

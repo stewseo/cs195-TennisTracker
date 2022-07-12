@@ -1,9 +1,0 @@
-QueryParts: 
-select `ACTOR`.`FIRST_NAME`, `ACTOR`.`LAST_NAME`
-from `ACTOR`
-where `ACTOR`.`ACTOR_ID` < 5
-
-SqlString: 
-SELECT Actor.first_name, Actor.last_name
-FROM Sakila.Actor
-WHERE Actor.actor_id < '5L'

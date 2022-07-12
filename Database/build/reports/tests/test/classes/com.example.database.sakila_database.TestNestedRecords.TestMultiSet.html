@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - TestMultiSet</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>TestMultiSet</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.example.database.sakila_database.TestNestedRecords.html">com.example.database.sakila_database.TestNestedRecords</a> &gt; TestMultiSet</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.253s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">multisetAsCategoriesTest()</td>
+<td class="success">0.253s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>23:03:29.586 [Test worker] INFO com.example.database.sakila_database.verifyData.VerifyDatabase.com.example.database.sakila_database.verifyData.VerifyDatabase - Connecting               
+23:03:30.071 [Test worker] INFO com.example.database.sakila_database.verifyData.VerifyDatabase.com.example.database.sakila_database.verifyData.VerifyDatabase - Connected                
+23:03:30.071 [Test worker] INFO com.example.database.TestDatabase.com.example.database.TestDatabase - Before class Connecting  
+23:03:30.247 [Test worker] INFO org.jooq.Constants.org.jooq.Constants - 
+                                      
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@  @@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@  @@  @@    @@@@@@@@@@
+@@@@@@@@@@  @@@@  @@  @@    @@@@@@@@@@
+@@@@@@@@@@        @@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@        @@        @@@@@@@@@@
+@@@@@@@@@@    @@  @@  @@@@  @@@@@@@@@@
+@@@@@@@@@@    @@  @@  @@@@  @@@@@@@@@@
+@@@@@@@@@@        @@  @  @  @@@@@@@@@@
+@@@@@@@@@@        @@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@  @@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  Thank you for using jOOQ 3.16.6
+                                      
+23:03:30.249 [Test worker] INFO org.jooq.Constants.org.jooq.Constants - 
+
+jOOQ tip of the day: Views (and table valued functions) are the most underrated SQL feature! They work very well together with jOOQ and jOOQ's code generator! https://www.jooq.org/doc/latest/manual/code-generation/codegen-advanced/codegen-config-database/codegen-database-table-valued-functions/
+
+23:03:30.266 [Test worker] INFO com.example.database.TestDatabase.com.example.database.TestDatabase - Finished setup           
+23:03:30.271 [Test worker] INFO com.example.database.TestDatabase.com.example.database.TestDatabase - Before each              
+23:03:30.302 [Test worker] INFO com.example.database.TestDatabase.com.example.database.TestDatabase - checking string          
+23:03:30.302 [Test worker] INFO com.example.database.TestDatabase.com.example.database.TestDatabase - checking query           
+23:03:30.384 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener - Executing query          : set @t = @@group_concat_max_len; set @@group_concat_max_len = 4294967295; explain select `sakila`.`film`.`title`, (select coalesce(json_merge_preserve('[]', concat('[', group_concat(json_array(`v0`) separator ','), ']')), json_array()) from (select `category`.`name` as `v0` from `film_category` join `category` on `category`.`category_id` = `film_category`.`category_id` where `film_category`.`film_id` = `sakila`.`film`.`film_id`) as `t`) as `categories` from `sakila`.`film` where `sakila`.`film`.`title` like ? order by `sakila`.`film`.`title` limit ?; set @@group_concat_max_len = @t;
+23:03:30.386 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener - -&gt; with bind values      : set @t = @@group_concat_max_len; set @@group_concat_max_len = 4294967295; explain select `sakila`.`film`.`title`, (select coalesce(json_merge_preserve('[]', concat('[', group_concat(json_array(`v0`) separator ','), ']')), json_array()) from (select `category`.`name` as `v0` from `film_category` join `category` on `category`.`category_id` = `film_category`.`category_id` where `film_category`.`film_id` = `sakila`.`film`.`film_id`) as `t`) as `categories` from `sakila`.`film` where `sakila`.`film`.`title` like 'A%' order by `sakila`.`film`.`title` limit 5; set @@group_concat_max_len = @t;
+23:03:30.444 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener - Affected row(s)          : 0
+23:03:30.460 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener - Fetched result           : +----+------------------+-------------+----------+------+---------------------------------+---------+-------+--------------------------------+----+--------+------------------------+
+23:03:30.460 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : |  id|select_type       |table        |partitions|type  |possible_keys                    |key      |key_len|ref                             |rows|filtered|Extra                   |
+23:03:30.460 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : +----+------------------+-------------+----------+------+---------------------------------+---------+-------+--------------------------------+----+--------+------------------------+
+23:03:30.460 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : |   1|PRIMARY           |film         |{null}    |range |idx_title                        |idx_title|767    |{null}                          |  46|   100.0|Using where; Using index|
+23:03:30.460 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : |   2|DEPENDENT SUBQUERY|film_category|{null}    |ref   |PRIMARY,fk_film_category_category|PRIMARY  |4      |sakila.film.film_id             |   1|   100.0|Using index             |
+23:03:30.460 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : |   2|DEPENDENT SUBQUERY|category     |{null}    |eq_ref|PRIMARY                          |PRIMARY  |4      |sakila.film_category.category_id|   1|   100.0|{null}                  |
+23:03:30.460 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : +----+------------------+-------------+----------+------+---------------------------------+---------+-------+--------------------------------+----+--------+------------------------+
+23:03:30.460 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener - Fetched row(s)           : 3
+23:03:30.460 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener - Executing query          : set @t = @@group_concat_max_len; set @@group_concat_max_len = 4294967295; select `sakila`.`film`.`title`, (select coalesce(json_merge_preserve('[]', concat('[', group_concat(json_array(`v0`) separator ','), ']')), json_array()) from (select `category`.`name` as `v0` from `film_category` join `category` on `category`.`category_id` = `film_category`.`category_id` where `film_category`.`film_id` = `sakila`.`film`.`film_id`) as `t`) as `categories` from `sakila`.`film` where `sakila`.`film`.`title` like ? order by `sakila`.`film`.`title` limit ?; set @@group_concat_max_len = @t;
+23:03:30.460 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener - -&gt; with bind values      : set @t = @@group_concat_max_len; set @@group_concat_max_len = 4294967295; select `sakila`.`film`.`title`, (select coalesce(json_merge_preserve('[]', concat('[', group_concat(json_array(`v0`) separator ','), ']')), json_array()) from (select `category`.`name` as `v0` from `film_category` join `category` on `category`.`category_id` = `film_category`.`category_id` where `film_category`.`film_id` = `sakila`.`film`.`film_id`) as `t`) as `categories` from `sakila`.`film` where `sakila`.`film`.`title` like 'A%' order by `sakila`.`film`.`title` limit 5; set @@group_concat_max_len = @t;
+23:03:30.475 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener - Affected row(s)          : 0
+23:03:30.491 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener - Fetched result           : +----------------+---------------+
+23:03:30.491 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : |title           |categories     |
+23:03:30.491 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : +----------------+---------------+
+23:03:30.491 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : |ACADEMY DINOSAUR|[(Documentary)]|
+23:03:30.491 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : |ACE GOLDFINGER  |[(Horror)]     |
+23:03:30.491 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : |ADAPTATION HOLES|[(Documentary)]|
+23:03:30.491 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : |AFFAIR PREJUDICE|[(Horror)]     |
+23:03:30.491 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : |AFRICAN EGG     |[(Family)]     |
+23:03:30.491 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : +----------------+---------------+
+23:03:30.491 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener - Fetched row(s)           : 5
+23:03:30.491 [Test worker] INFO com.example.database.TestDatabase.com.example.database.TestDatabase - Creating filetest_multiset/multiset_as_categories_test
+23:03:30.491 [Test worker] INFO com.example.database.sakila_database.verifyData.VerifyDatabase.com.example.database.sakila_database.verifyData.VerifyDatabase - Creating filetest_multiset/multiset_as_categories_test.txt
+23:03:30.491 [Test worker] INFO com.example.database.TestDatabase.com.example.database.TestDatabase - writing output to file   
+23:03:30.491 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener - Executing query          : 
+set @t = @@group_concat_max_len;
+set @@group_concat_max_len = 4294967295;
+select
+  `sakila`.`film`.`title`,
+  (
+    select coalesce(
+      json_merge_preserve(
+        '[]',
+        concat(
+          '[',
+          group_concat(json_array(`v0`) separator ','),
+          ']'
+        )
+      ),
+      json_array()
+    )
+    from (
+      select `category`.`name` as `v0`
+      from `film_category`
+        join `category`
+          on `category`.`category_id` = `film_category`.`category_id`
+      where `film_category`.`film_id` = `sakila`.`film`.`film_id`
+    ) as `t`
+  ) as `categories`
+from `sakila`.`film`
+where `sakila`.`film`.`title` like ?
+order by `sakila`.`film`.`title`
+limit ?;
+set @@group_concat_max_len = @t;
+23:03:30.491 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener - -&gt; with bind values      : 
+set @t = @@group_concat_max_len;
+set @@group_concat_max_len = 4294967295;
+select
+  `sakila`.`film`.`title`,
+  (
+    select coalesce(
+      json_merge_preserve(
+        '[]',
+        concat(
+          '[',
+          group_concat(json_array(`v0`) separator ','),
+          ']'
+        )
+      ),
+      json_array()
+    )
+    from (
+      select `category`.`name` as `v0`
+      from `film_category`
+        join `category`
+          on `category`.`category_id` = `film_category`.`category_id`
+      where `film_category`.`film_id` = `sakila`.`film`.`film_id`
+    ) as `t`
+  ) as `categories`
+from `sakila`.`film`
+where `sakila`.`film`.`title` like 'A%'
+order by `sakila`.`film`.`title`
+limit 5;
+set @@group_concat_max_len = @t;
+23:03:30.507 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener - Affected row(s)          : 0
+23:03:30.507 [Test worker] DEBUG org.jooq.impl.DefaultExecuteListener.org.jooq.impl.DefaultExecuteListener - Affected row(s)          : 0
+23:03:30.507 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener - Fetched result           : +----------------+---------------+
+23:03:30.507 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : |title           |categories     |
+23:03:30.507 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : +----------------+---------------+
+23:03:30.507 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : |ACADEMY DINOSAUR|[(Documentary)]|
+23:03:30.507 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : |ACE GOLDFINGER  |[(Horror)]     |
+23:03:30.507 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : |ADAPTATION HOLES|[(Documentary)]|
+23:03:30.507 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : |AFFAIR PREJUDICE|[(Horror)]     |
+23:03:30.507 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : |AFRICAN EGG     |[(Family)]     |
+23:03:30.507 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener -                          : +----------------+---------------+
+23:03:30.507 [Test worker] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener - Fetched row(s)           : 5
+23:03:30.507 [Test worker] INFO com.example.database.TestDatabase.com.example.database.TestDatabase - tear down                
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 7.3.3</a> at Jul 11, 2022, 11:03:30 PM</p>
+</div>
+</div>
+</body>
+</html>

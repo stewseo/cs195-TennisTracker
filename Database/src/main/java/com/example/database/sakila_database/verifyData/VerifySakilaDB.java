@@ -1,27 +1,32 @@
 package com.example.database.sakila_database.verifyData;
 
-import com.example.database.sakila_database.SakilaModel.Record.ActorRecord;
-import com.example.database.sakila_database.SakilaModel.Table.Actor;
-import com.example.database.sakila_database.SakilaModel.Table.City;
-import com.example.database.sakila_database.SakilaModel.Table.FilmActor;
+import com.example.database.sakila_database.model.Table.Record.ActorRecord;
+import com.example.database.sakila_database.model.Table.*;
 import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
 
-import static com.example.database.sakila_database.SakilaModel.Table.Actor.ACTOR;
-import static com.example.database.sakila_database.SakilaModel.Table.Address.ADDRESS;
-import static com.example.database.sakila_database.SakilaModel.Table.City.CITY;
-import static com.example.database.sakila_database.SakilaModel.Table.Country.COUNTRY;
-import static com.example.database.sakila_database.SakilaModel.Table.Customer.CUSTOMER;
-import static com.example.database.sakila_database.SakilaModel.Table.Film.FILM;
-import static com.example.database.sakila_database.SakilaModel.Table.FilmActor.FILM_ACTOR;
+import static com.example.database.sakila_database.model.Table.Actor.ACTOR;
+import static com.example.database.sakila_database.model.Table.Address.ADDRESS;
+import static com.example.database.sakila_database.model.Table.Category.CATEGORY;
+import static com.example.database.sakila_database.model.Table.City.CITY;
+import static com.example.database.sakila_database.model.Table.Country.COUNTRY;
+import static com.example.database.sakila_database.model.Table.Customer.CUSTOMER;
+import static com.example.database.sakila_database.model.Table.Film.FILM;
+import static com.example.database.sakila_database.model.Table.FilmActor.FILM_ACTOR;
+import static com.example.database.sakila_database.model.Table.FilmCategory.FILM_CATEGORY;
+import static com.example.database.sakila_database.model.Table.Inventory.INVENTORY;
+import static com.example.database.sakila_database.model.Table.Payments.Payment.PAYMENT;
+import static com.example.database.sakila_database.model.Table.Rental.RENTAL;
 import static java.lang.System.out;
 import static org.jooq.Records.mapping;
 import static org.jooq.impl.DSL.*;
@@ -305,6 +310,7 @@ public class VerifySakilaDB extends VerifyDatabase {
         title("Verify MySql Table alias syntax using Jooq Methods and actual sql String");
 
         Actor a = (Actor) ACTOR.as("a");
+
         FilmActor fa = (FilmActor) FILM_ACTOR.as("fa");
 
         Query query =
@@ -331,21 +337,6 @@ public class VerifySakilaDB extends VerifyDatabase {
 
     public void verifyImplicitJoins(String schema) throws IOException {
         title("Customer -> address -> city -> country -> COUNTRY_");
-
-
-        List<? extends ForeignKey<?, ?>> customerReferences = CUSTOMER.getCustomerReferences();
-
-        List<? extends ForeignKey<?, ?>> addressReferences = customerReferences
-                .stream()
-                .filter(fk ->
-                        fk.getName()
-                                .equals("fk_customer_address"))
-                .toList();
-
-        println("references " + CUSTOMER.getCustomerReferences());
-        println("identity " + CUSTOMER.getIdentity());
-        println("index " + CUSTOMER.getCustomerIndex());
-        println("pk " + CUSTOMER.getCustomerPrimaryKey());
 
         String sql = """
                 SELECT cu.first_name, cu.last_name, 
@@ -534,7 +525,7 @@ public class VerifySakilaDB extends VerifyDatabase {
 
     }
 
-    public void testDynamicSql(String schema) throws IOException, SQLException {
+    void testDynamicSql(String schema) throws IOException, SQLException {
 
         ResultQuery<Record2<String, String>> res =
                 ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
@@ -602,7 +593,7 @@ public class VerifySakilaDB extends VerifyDatabase {
         querySyntaxToTxt("dynamic_sql/dynamic_sql_to_sql_string3", query);
     }
 
-    public void writeNestedRowsWithAdHocConverters(String schemaName) throws SQLException, FileNotFoundException {
+    void writeNestedRowsWithAdHocConverters(String schemaName) throws SQLException, FileNotFoundException {
         record Country(String name) {
         }
         record Customer(String firstName, String lastName, Country country) {
@@ -697,21 +688,746 @@ public class VerifySakilaDB extends VerifyDatabase {
         );
 
     }
-    
-    private Condition reduceCondition(List<Integer> ids) {
-        title("List: " + ids);
-        return ids
-                .stream()
-                .map(Long::valueOf)
-                .map(ACTOR.ACTOR_ID::eq)
-                .reduce(noCondition(), Condition::or);
+
+    void nestingToManyRelationShips(String currentSchemaName) throws SQLException, FileNotFoundException {
+
+        ResultQuery<Record4<String, String, String, String>> resultQuery = ctx.select(
+                        FILM.TITLE,
+                        ACTOR.FIRST_NAME,
+                        ACTOR.LAST_NAME,
+                        CATEGORY.NAME
+                )
+                .from(ACTOR)
+                .join(FILM_ACTOR)
+                .on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
+                .join(FILM)
+                .on(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                .join(FILM_CATEGORY)
+                .on(FILM.FILM_ID.eq(FILM_CATEGORY.FILM_ID))
+                .join(CATEGORY)
+                .on(FILM_CATEGORY.CATEGORY_ID.eq(CATEGORY.CATEGORY_ID))
+                .orderBy(1, 2, 3, 4);
+
+        description = "Actors not grouped, cartesian product as result";
+
+        queryInfoToTxt(resultQuery,
+                description,
+                "nested_records/nesting_to_many_relationships/film_title_actor_name_category_name",
+                List.of("actor", "film_actor", "film","film_category", "category"),
+                "sakila"
+        );
+
+        ResultQuery<Record3<String, Result<Record2<String, String>>, Result<Record1<String>>>> rq =
+                ctx.
+                        select(
+                                FILM.TITLE,
+                                multiset(
+                                        select(
+                                                ACTOR.FIRST_NAME,
+                                                ACTOR.LAST_NAME)
+                                                .from(ACTOR)
+                                                .join(FILM_ACTOR)
+                                                .on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
+                                                .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                                ).as("actors"),       multiset(
+                                        select(CATEGORY.NAME)
+                                                .from(CATEGORY)
+                                                .innerJoin(FILM_CATEGORY)
+                                                .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
+                                                .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
+                                ).as("categories")
+                        )
+                        .from(FILM);
+
+        description = """
+                MultiSet, Actor's grouped as Result
+                 film_actor.actor_id = actor.actor_id,
+                 film_actor.film_id = film.film_id,
+                 film_category.film_id = film.film_id
+                """;
+
+        queryInfoToTxt(rq,
+                description,
+                "nested_records/nesting_to_many_relationships/multiset_actor_name__category_name",
+                List.of("actor", "film_actor", "film","film_category", "category"),
+                "sakila"
+        );
+
+
+        String q = """
+                select(
+                      FILM.TITLE,
+                      multiset(
+                        select(
+                         ACTOR.FIRST_NAME,
+                          ACTOR.actor().LAST_NAME)
+                        .from(FILM_ACTOR)
+                        .join actor as a
+                          on film_actor.actor_id = a.actor_id
+                        .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                      ).as("actors")
+                """;
+
+        Query multi = query("""
+                select
+                  film.title,
+                  (
+                    select coalesce(
+                      json_merge_preserve(
+                        '[]',
+                        concat(
+                          '[',
+                          group_concat(json_object(
+                            'first_name', t.first_name,
+                            'last_name', t.last_name
+                          ) separator ','),
+                          ']'
+                        )
+                      ),
+                      json_array()
+                    )
+                    from (
+                      select a.first_name, a.last_name
+                      from film_actor
+                        join actor as a
+                          on film_actor.actor_id = a.actor_id
+                      where film_actor.film_id = film.film_id
+                    ) as t
+                  ) as actors,
+                  (
+                    select coalesce(
+                      json_merge_preserve(
+                        '[]',
+                        concat(
+                          '[',
+                          group_concat(json_object('name', t.name) separator ','),
+                          ']'
+                        )
+                      ),
+                      json_array()
+                    )
+                    from (
+                      select c.name
+                      from film_category
+                        join category as c
+                          on film_category.category_id = c.category_id
+                      where film_category.film_id = film.film_id
+                    ) as t
+                  ) as categories
+                from film
+                order by film.title
+                """);
+
+        description = "MySQL syntax for multiset when off";
+
+        queryInfoToTxt(multi, //Query
+                description,
+                "nested_records/nesting_to_many_relationships/my_sql_syntax",  //file_name
+                List.of("film_actor", "actor", "film","film_category", "category"),
+                "sakila" //schema in use
+        );
+
+
+        Result<Record3<String, Result<Record2<String, String>>, Result<Record1<String>>>> r =
+                ctx.select(
+                                FILM.TITLE,
+                                multiset(
+                                        select(
+                                                FILM_ACTOR.actor().FIRST_NAME,
+                                                FILM_ACTOR.actor().LAST_NAME)
+                                                .from(FILM_ACTOR)
+                                                .innerJoin(ACTOR)
+                                                .on(FILM_ACTOR.ACTOR_ID.eq(ACTOR.ACTOR_ID))
+                                                .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                                ),
+                                multiset(
+                                        select(CATEGORY.NAME)
+                                                .from(FILM_CATEGORY)
+                                                .join(CATEGORY)
+                                                .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
+                                                .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
+                                )
+                        )
+                        .from(FILM)
+                        .orderBy(FILM.TITLE)
+                        .limit(5)
+                        .fetch();
+
+
+        title("Formatted as JSON");
+        println(r.formatJSON(JSONFormat.DEFAULT_FOR_RESULTS.format(true).header(false)));
+
+        title("Formatted as XML");
+        println(r.formatXML(XMLFormat.DEFAULT_FOR_RESULTS.format(true).header(false)));
+
+
     }
 
-    public void testQueryParts() {
-        println(reduceCondition(List.of()));
-        println(reduceCondition(List.of(1)));
-        println(reduceCondition(List.of(1, 2, 3)));
+    void nestingToManyRelationshipsAdHocConverter(String currentSchemaName) throws SQLException, FileNotFoundException {
+        record Name(String firstName, String lastName) {
+        }
+        record Actor(Name name) {
+        }
+        record Category(String name) {
+        }
+        record Film(String title, List<Actor> actors, List<Category> categories) {
+        }
+
+        List<Film> listFilm =
+                ctx.select(
+                                FILM.TITLE,
+                                multiset(
+                                        select(
+                                                row(
+                                                        ACTOR.FIRST_NAME,
+                                                        ACTOR.LAST_NAME
+                                                ).mapping(Name::new))
+                                                .from(ACTOR)
+                                                .join(FILM_ACTOR)
+                                                .on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
+                                                .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                                ).convertFrom(r -> r.map(mapping(Actor::new))),
+                                multiset(
+                                        select(CATEGORY.NAME)
+                                                .from(CATEGORY)
+                                                .innerJoin(FILM_CATEGORY)
+                                                .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
+                                                .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
+                                ).convertFrom(r -> r.map(mapping(Category::new)))
+                        )
+                        .from(FILM)
+                        .orderBy(FILM.TITLE)
+                        .limit(5)
+                        .fetch(mapping(Film::new));
+
+
+        ResultQuery<Record3<String, List<Actor>, List<Category>>> query =
+                ctx.select(
+                                FILM.TITLE,
+                                multiset(
+                                        select(
+                                                row(
+                                                        ACTOR.FIRST_NAME,
+                                                        ACTOR.LAST_NAME
+                                                ).mapping(Name::new))
+                                                .from(ACTOR)
+                                                .join(FILM_ACTOR)
+                                                .on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
+                                                .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                                ).convertFrom(r -> r.map(mapping(Actor::new))),
+                                multiset(
+                                        select(CATEGORY.NAME)
+                                                .from(CATEGORY)
+                                                .innerJoin(FILM_CATEGORY)
+                                                .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
+                                                .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
+                                ).convertFrom(r -> r.map(mapping(Category::new)))
+                        )
+                        .from(FILM)
+                        .orderBy(FILM.TITLE);
+
+        SelectQuery<Record3<String, List<Actor>, List<Category>>> selectQuery = ctx.select(
+                        FILM.TITLE,
+                        multiset(
+                                select(
+                                        row(
+                                                ACTOR.FIRST_NAME,
+                                                ACTOR.LAST_NAME
+                                        ).mapping(Name::new))
+                                        .from(ACTOR)
+                                        .join(FILM_ACTOR)
+                                        .on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
+                                        .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                        ).convertFrom(r -> r.map(mapping(Actor::new))),
+                        multiset(
+                                select(CATEGORY.NAME)
+                                        .from(CATEGORY)
+                                        .innerJoin(FILM_CATEGORY)
+                                        .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
+                                        .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
+                        ).convertFrom(r -> r.map(mapping(Category::new)))
+                )
+                .from(FILM)
+                .orderBy(FILM.TITLE).getQuery();
+
+
+
+        for (Film film : listFilm) {
+            println("Film %s with categories %s and actors %s ".formatted(film.title, film.categories, film.actors));
+        }
+
+        description = "MULTISET combined with ad-hoc converters and nested rows";
+        Result<Record> res = ctx.fetch(selectQuery.getSQL());
+        resultQueryToTxt(selectQuery, //Query
+                res,
+                description,
+                "nested_records/nesting_to_many_relationships/multiset_map_to_ad_hoc_converters",  //file_name
+                List.of("film_actor", "actor", "film","film_category", "category"),
+                "sakila" //schema in use
+        );
+
     }
+
+    void multisetMappingIntoJavaRecords() throws SQLException, FileNotFoundException {
+        record Actor(String firstname, String lastname){}
+        record Category(String name){}
+
+        record Film(
+                List<Film> films,
+                String title,
+                List<Actor> actors
+        ) {}
+        record Title(String title) {}
+
+        Field<Title> title = FILM.TITLE.convertFrom(Title::new);
+
+            Result<Record3<String, List<Actor>, List<Category>>> res =
+                    ctx
+                    .select(
+                            FILM.TITLE,
+                            multiset(
+                                    select(
+                                            ACTOR.FIRST_NAME,
+                                            ACTOR.LAST_NAME
+                                    )
+                                            .from(ACTOR).join(FILM_ACTOR)
+                                            .on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
+                                            .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                            ).convertFrom(r -> r.map(mapping(Actor::new))),
+                            multiset(
+                                    select(CATEGORY.NAME)
+                                            .from(CATEGORY)
+                                            .innerJoin(FILM_CATEGORY)
+                                            .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
+                                            .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
+                            ).convertFrom(r -> r.map(mapping(Category::new)))
+                    )
+                    .from(FILM)
+                    .where(FILM.TITLE.like("A%"))
+                    .orderBy(FILM.TITLE)
+                    .limit('5')
+                    .fetch();
+
+            println(res);
+
+
+        Result<Record4<
+                String,                   // FILM.TITLE
+                Result<Record2<
+                        String,               // ACTOR.FIRST_NAME
+                        String                // ACTOR.LAST_NAME
+                        >>,                       // "actors"
+                Result<Record1<String>>,  // CATEGORY.NAME
+                Result<Record4<
+                        String,               // CUSTOMER.FIRST_NAME
+                        String,               // CUSTOMER.LAST_NAME
+                        Result<Record2<
+                                LocalDateTime,    // PAYMENT.PAYMENT_DATE
+                                BigDecimal        // PAYMENT.AMOUNT
+                                >>,
+                        BigDecimal            // "total"
+                        >>                        // "customers"
+                >> result =
+                ctx.select(
+
+                                // Get the films
+                                FILM.TITLE,
+
+                                // and all actors that played in the film
+                                multiset(
+                                        select(
+                                                ACTOR.FIRST_NAME,
+                                                ACTOR.LAST_NAME
+                                        )
+                                                .from(FILM_ACTOR)
+                                                .innerJoin(ACTOR).on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
+                                                .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                                ).as("actors"),
+
+                                // ... and all categories that categorise the film
+                                multiset(
+                                        select(CATEGORY.NAME)
+                                                .from(FILM_CATEGORY)
+                                                .join(CATEGORY)
+                                                .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
+                                                .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
+                                ).as("categories"),
+
+                                // ... and all customers who rented the film, as well
+                                // as their payments
+                                multiset(
+                                        select(
+                                                CUSTOMER.FIRST_NAME,
+                                                CUSTOMER.LAST_NAME,
+                                                multisetAgg(
+                                                        PAYMENT.PAYMENT_DATE,
+                                                        PAYMENT.AMOUNT
+                                                ).as("payments"),
+                                                sum(PAYMENT.AMOUNT).as("total"))
+                                                .from(PAYMENT)
+                                                .join(CUSTOMER).on(PAYMENT.CUSTOMER_ID.eq(CUSTOMER.CUSTOMER_ID))
+                                                .join(RENTAL).on(PAYMENT.RENTAL_ID.eq(RENTAL.RENTAL_ID))
+                                                .join(INVENTORY).on(RENTAL.INVENTORY_ID.eq(INVENTORY.INVENTORY_ID))
+                                                .where(INVENTORY.FILM_ID.eq(FILM.FILM_ID))
+                                                .groupBy(
+                                                        CUSTOMER.CUSTOMER_ID,
+                                                        CUSTOMER.FIRST_NAME,
+                                                        CUSTOMER.LAST_NAME)
+                                ).as("customers")
+                        )
+                        .from(FILM)
+                        .where(FILM.TITLE.like("A%"))
+                        .orderBy(FILM.TITLE)
+                        .limit('5')
+                        .fetch();
+
+        query =
+        ctx.select(
+
+                        // Get the films
+                        FILM.TITLE,
+
+                        // and all actors that played in the film
+                        multiset(
+                                select(
+                                        ACTOR.FIRST_NAME,
+                                        ACTOR.LAST_NAME
+                                )
+                                        .from(FILM_ACTOR)
+                                        .innerJoin(ACTOR).on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
+                                        .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                        ).as("actors"),
+
+                        // ... and all categories that categorise the film
+                        multiset(
+                                select(CATEGORY.NAME)
+                                        .from(FILM_CATEGORY)
+                                        .join(CATEGORY)
+                                        .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
+                                        .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
+                        ).as("categories"),
+
+                        // ... and all customers who rented the film, as well
+                        // as their payments
+                        multiset(
+                                select(
+                                        CUSTOMER.FIRST_NAME,
+                                        CUSTOMER.LAST_NAME,
+                                        multisetAgg(
+                                                PAYMENT.PAYMENT_DATE,
+                                                PAYMENT.AMOUNT
+                                        ).as("payments"),
+                                        sum(PAYMENT.AMOUNT).as("total"))
+                                        .from(PAYMENT)
+                                        .join(CUSTOMER).on(PAYMENT.CUSTOMER_ID.eq(CUSTOMER.CUSTOMER_ID))
+                                        .join(RENTAL).on(PAYMENT.RENTAL_ID.eq(RENTAL.RENTAL_ID))
+                                        .join(INVENTORY).on(RENTAL.INVENTORY_ID.eq(INVENTORY.INVENTORY_ID))
+//                                                .join(FILM).on(INVENTORY.FILM_ID.eq(FILM.FILM_ID))
+                                        .where(INVENTORY.FILM_ID.eq(FILM.FILM_ID))
+                                        .groupBy(
+                                                CUSTOMER.CUSTOMER_ID,
+                                                CUSTOMER.FIRST_NAME,
+                                                CUSTOMER.LAST_NAME)
+                        ).as("customers")
+                )
+                .from(FILM)
+                .where(FILM.TITLE.like("A%"))
+                .orderBy(FILM.TITLE)
+                .limit('5');
+
+        println(query(ctx.select(multiset(
+                select(ACTOR.FIRST_NAME,
+                        ACTOR.LAST_NAME
+                )
+                        .from(FILM_ACTOR)
+                        .innerJoin(ACTOR).on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
+                        .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+        ).as("actors")).getSQL()
+        ).getSQL());
+
+        resultQueryToTxt(
+                query,
+                result,
+                description,
+        "nested_records/mySql_multiset/multiset_agg_aggregate_function",  //file_name
+                List.of("film_actor", "actor", "film","film_category", "category"),
+                "sakila");
+
+        }
+
+    void nestingToManyRelationshipsBenchmark(String currentSchemaName) {
+        record DNCategory (String name) {}
+        record DNFilm (long id, String title, List<DNCategory> categories) {}
+        record DNName (String firstName, String lastName) {}
+        record DNActor (long id, DNName name, List<DNFilm> films) {}
+
+        ResultQuery<Record> res = resultQuery("""
+                select
+                  film.title,
+                  (
+                    select coalesce(
+                      json_merge_preserve(
+                        '[]',
+                        concat(
+                          '[',
+                          group_concat(json_object(
+                            'first_name', t.first_name,
+                            'last_name', t.last_name
+                          ) separator ','),
+                          ']'
+                        )
+                      ),
+                      json_array()
+                    )
+                    from (
+                      select alias_78509018.first_name, alias_78509018.last_name
+                      from film_actor
+                        join actor as alias_78509018
+                          on film_actor.actor_id = alias_78509018.actor_id
+                      where film_actor.film_id = film.film_id
+                    ) as t
+                  ) as actors,
+                  (
+                    select coalesce(
+                      json_merge_preserve(
+                        '[]',
+                        concat(
+                          '[',
+                          group_concat(json_object('name', t.name) separator ','),
+                          ']'
+                        )
+                      ),
+                      json_array()
+                    )
+                    from (
+                      select alias_130639425.name
+                      from film_category
+                        join category as alias_130639425
+                          on film_category.category_id = alias_130639425.category_id
+                      where film_category.film_id = film.film_id
+                    ) as t
+                  ) as categories,
+                  (
+                    select coalesce(
+                      json_merge_preserve(
+                        '[]',
+                        concat(
+                          '[',
+                          group_concat(json_object(
+                            'first_name', t.first_name,
+                            'last_name', t.last_name,
+                            'payments', t.payments,
+                            'total', t.total
+                          ) separator ','),
+                          ']'
+                        )
+                      ),
+                      json_array()
+                    )
+                    from (
+                      select
+                        alias_63965917.first_name,
+                        alias_63965917.last_name,
+                        json_merge_preserve(
+                          '[]',
+                          concat(
+                            '[',
+                            group_concat(json_object(
+                              'payment_date', payment.payment_date,
+                              'amount', payment.amount
+                            ) separator ','),
+                            ']'
+                          )
+                        ) as payments,
+                        sum(payment.amount) as total
+                      from payment
+                        join (
+                          rental as alias_102068213
+                            join customer as alias_63965917
+                              on alias_102068213.customer_id = alias_63965917.customer_id
+                            join inventory as alias_116526225
+                              on alias_102068213.inventory_id = alias_116526225.inventory_id
+                        )
+                          on payment.rental_id = alias_102068213.rental_id
+                      where alias_116526225.film_id = film.film_id
+                      group by alias_63965917.customer_id, alias_63965917.first_name, alias_63965917.last_name
+                    ) as t
+                  ) as customers
+                from film
+                where film.title like 'A%'
+                order by film.title
+                limit 5
+                """);
+
+        ctx.fetch(res.getSQL()).forEach(out::println);
+
+        Query query = query("""
+                SELECT
+                  film.title,
+                  (
+                    SELECT coalesce(
+                      json_merge_preserve(
+                        '[]',
+                        concat(
+                          '[',
+                          group_concat(json_object(
+                            'first_name', t.first_name,
+                            'last_name', t.last_name
+                          ) separator ','),
+                          ']'
+                        )
+                      ),
+                      json_array()
+                    )
+                    FROM (
+                      SELECT a.first_name, a.last_name
+                      FROM film_actor
+                        JOIN actor a
+                          ON film_actor.actor_id = a.actor_id
+                      WHERE film_actor.film_id = film.film_id
+                    ) AS t
+                  ) AS actors,
+                  (
+                    SELECT coalesce(
+                      json_merge_preserve(
+                        '[]',
+                        concat(
+                          '[',
+                          group_concat(json_object('name', t.name) separator ','),
+                          ']'
+                        )
+                      ),
+                      json_array()
+                    )
+                    FROM (
+                      SELECT c.name
+                      from film_category
+                        join category c
+                          on film_category.category_id = c.category_id
+                      where film_category.film_id = film.film_id
+                    ) AS t
+                  ) AS categories,
+                  (
+                    SELECT coalesce(
+                      json_merge_preserve(
+                        '[]',
+                        concat(
+                          '[',
+                          group_concat(json_object(
+                            'first_name', t.first_name,
+                            'last_name', t.last_name,
+                            'payments', t.payments,
+                            'total', t.total
+                          ) separator ','),
+                          ']'
+                        )
+                      ),
+                      json_array()
+                    )
+                    from (
+                      select
+                        c.first_name,
+                        c.last_name,
+                        json_merge_preserve(
+                          '[]',
+                          concat(
+                            '[',
+                            group_concat(json_object(
+                              'payment_date', payment.payment_date,
+                              'amount', payment.amount
+                            ) separator ','),
+                            ']'
+                          )
+                        ) as payments,
+                        sum(payment.amount) as total
+                      from payment
+                        join (
+                          rental as r
+                            join customer as c
+                              on r.customer_id = c.customer_id
+                            join inventory as i
+                              on r.inventory_id = i.inventory_id
+                        )
+                          on payment.rental_id = r.rental_id
+                      where i.film_id = film.film_id
+                      group by c.customer_id, c.first_name, c.last_name
+                    ) as t
+                  ) as customers
+                FROM FILM
+                """);
+
+
+        List<DNActor> list = ctx.select(
+                        ACTOR.ACTOR_ID,
+                        row(
+                                ACTOR.FIRST_NAME,
+                                ACTOR.LAST_NAME
+                        ).mapping(DNName::new),
+                        multiset(
+                                select(
+                                        FILM.FILM_ID,
+                                        FILM.TITLE,
+                                        multiset(
+                                                select(CATEGORY.NAME)
+                                                        .from(CATEGORY)
+                                                        .join(FILM_CATEGORY)
+                                                        .on(CATEGORY.CATEGORY_ID.eq(CATEGORY.CATEGORY_ID))
+                                                        .where(FILM_CATEGORY.FILM_ID.eq(FILM_ACTOR.FILM_ID))
+                                        ).convertFrom(r -> r.map(mapping(DNCategory::new)))
+                                )
+                                        .from(FILM)
+                                        .join(FILM_ACTOR).on(FILM.FILM_ID.eq(FILM_ACTOR.FILM_ID))
+                                        .where(FILM_ACTOR.ACTOR_ID.eq(ACTOR.ACTOR_ID))
+                        ).convertFrom(r -> r.map(mapping(DNFilm::new))))
+                .from(ACTOR)
+                .where(ACTOR.ACTOR_ID.eq(1L))
+                .fetch(mapping(DNActor::new));
+
+        ResultQuery<Record4<Long, String, String, Result<Record3<Long, String, Result<Record1<String>>>>>> resultQuery = ctx.select(
+                        ACTOR.ACTOR_ID,
+                                ACTOR.FIRST_NAME,
+                                ACTOR.LAST_NAME,
+                        multiset(
+                                select(
+                                        FILM.FILM_ID,
+                                        FILM.TITLE,
+                                        multiset(
+                                                select(CATEGORY.NAME)
+                                                        .from(CATEGORY)
+                                                        .join(FILM_CATEGORY)
+                                                        .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
+                                                        .where(FILM_CATEGORY.FILM_ID.eq(FILM_ACTOR.FILM_ID))
+                                        )
+                                )
+                                        .from(FILM)
+                                        .join(FILM_ACTOR)
+                                        .on(FILM.FILM_ID.eq(FILM_ACTOR.FILM_ID))
+                                        .where(FILM_ACTOR.ACTOR_ID.eq(ACTOR.ACTOR_ID))
+                        ))
+                .from(ACTOR);
+
+        println(resultQuery.getSQL());
+        ctx.fetch(resultQuery.getSQL()).forEach(out::println);
+
+
+        //       where film.title LIKE 'A%'
+        //                order by film.title
+        //                limit 5
+
+        ctx.fetch(resultQuery.getSQL()).forEach(out::println);
+        description = "Benchmark";
+
+        resultQueryToTxt(resultQuery, //Query
+                resultQuery.fetch(),
+                description,
+                "nested_records/nesting_to_many_relationships/benchmark",  //file_name
+                List.of("film_actor", "actor", "film","film_category", "category"),
+                "sakila" //schema in use
+        );
+
+
+    }
+
 }
 
 

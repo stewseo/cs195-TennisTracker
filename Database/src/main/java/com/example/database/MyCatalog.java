@@ -1,12 +1,7 @@
 package com.example.database;
 
-import com.example.database.db_connection.Connect;
-import com.example.database.db_connection.Database;
 import org.jooq.*;
 import org.jooq.impl.CatalogImpl;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Objects;
 
 import static org.jooq.impl.DSL.using;
 
