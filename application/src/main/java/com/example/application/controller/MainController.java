@@ -34,7 +34,6 @@ public class MainController implements Initializable {
     private double yOffset;
     private final ToggleGroup toggleGroup; // control with a Boolean indicating whether it is selected
                                             //icons passed through toggle
-
     @FXML
     private HBox windowHeader;
 

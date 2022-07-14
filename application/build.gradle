@@ -1,15 +1,18 @@
-plugins{
+plugins {
     id 'idea'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.12'
     id 'org.beryx.jlink' version '2.24.4'
+    id 'org.springframework.boot' version '2.7.1'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
+
 repositories{
     mavenCentral()
 }
 javafx {
     version = "18"
-    modules = ['javafx.controls', 'javafx.fxml', 'javafx.web']
+    modules = ['javafx.controls', 'javafx.fxml' ]
 }
 
 group 'com.example'
@@ -20,9 +23,13 @@ application {
 }
 
 dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0-M1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0-M1'
-
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
     implementation 'io.github.palexdev:scenicview:17.0.2'
     implementation('fr.brouillard.oss:cssfx:11.5.1') { exclude group: 'org.openjfx' }
     implementation 'io.github.palexdev:materialfx:11.14.0-EA3'

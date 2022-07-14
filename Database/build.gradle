@@ -14,8 +14,8 @@ application {
 }
 
 dependencies {
-    implementation 'org.apache.logging.log4j:log4j-core:2.17.2'
-    implementation 'org.apache.logging.log4j:log4j-api'
+//    implementation 'org.apache.logging.log4j:log4j-core:2.17.2'
+//    implementation 'org.apache.logging.log4j:log4j-api'
 
     implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
     implementation 'mysql:mysql-connector-java:8.0.29'
@@ -26,13 +26,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jooq:2.7.1'
     implementation group: 'com.opencsv', name: 'opencsv', version: '5.6'
 
-    testImplementation 'org.mockito:mockito-junit-jupiter:4.6.1'
-    testImplementation 'org.mockito:mockito-core:4.6.1'
+//    testImplementation 'org.mockito:mockito-junit-jupiter:4.6.1'
+//    testImplementation 'org.mockito:mockito-core:4.6.1'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0-M1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0-M1'
-    testImplementation 'org.testcontainers:mysql:1.17.3'
-    testImplementation 'org.testcontainers:testcontainers:1.17.3'
+//
+//    testImplementation 'org.testcontainers:mysql:1.17.3'
+//    testImplementation 'org.testcontainers:testcontainers:1.17.3'
 }
 
 test {

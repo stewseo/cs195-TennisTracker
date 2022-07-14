@@ -1,0 +1,33 @@
+Database/output_txt/module8/module8_q7
+Problem:
+Write an UPDATE statement that modifies the Customers table. Change the password column to secret for the customer with an email address of rick@raven.com.
+update customers
+set
+  password = 'secret'
+where email_address = 'rick@raven.com'
+data source(s):
+
+
+Table Name: customers
+unqualified name: "customers"
+qualified name: "my_guitar_shop"."customers"
+Identity: "my_guitar_shop"."customers"."customer_id"
+Primary Key: constraint "PRIMARY"
+  primary key ("customer_id")
+Unique Keys: [constraint "email_address"
+  unique ("email_address")]
+Number of records: 8
+Number of fields: 7
+ Records in customers
++-----------+---------------------------+----------------------------------------+----------+---------+-------------------+------------------+
+|customer_id|email_address              |password                                |first_name|last_name|shipping_address_id|billing_address_id|
++-----------+---------------------------+----------------------------------------+----------+---------+-------------------+------------------+
+|          1|allan.sherwood@yahoo.com   |650215acec746f0e32bdfff387439eefc1358737|Allan     |Sherwood |                  1|                 2|
+|          2|barryz@gmail.com           |3f563468d42a448cb1e56924529f6e7bbe529cc7|Barry     |Zimmer   |                  3|                 3|
+|          3|christineb@solarone.com    |ed19f5c0833094026a2f1e9e6f08a35d26037066|Christine |Brown    |                  4|                 4|
+|          4|david.goldstein@hotmail.com|b444ac06613fc8d63795be9ad0beaf55011936ac|David     |Goldstein|                  5|                 6|
+|          5|erinv@gmail.com            |109f4b3c50d7b0df729d299bc6f8e9ef9066971f|Erin      |Valentino|                  7|                 7|
+|          6|frankwilson@sbcglobal.net  |3ebfa301dc59196f18593c45e519287a23297589|Frank Lee |Wilson   |                  8|                 8|
+|          7|gary_hernandez@yahoo.com   |1ff2b3704aede04eecb51e50ca698efd50a1379b|Gary      |Hernandez|                  9|                10|
+|          8|heatheresway@mac.com       |911ddc3b8f9a13b5499b6bc4638a2b4f3f68bf23|Heather   |Esway    |                 11|                12|
++-----------+---------------------------+----------------------------------------+----------+---------+-------------------+------------------+
