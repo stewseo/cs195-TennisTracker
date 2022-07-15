@@ -1,7 +1,7 @@
 package com.example.database.sakila_database.model.Table;
 
-import com.example.database.sakila_database.schema.Public;
 import com.example.database.sakila_database.model.Table.Record.CustomerListRecord;
+import com.example.database.sakila_database.schema.Public;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;

@@ -1,17 +1,8 @@
 package com.example.dao;
 
 import com.example.dao.pojos.Actor;
-import com.example.database.connection.Database;
-import com.example.database.sakila_database.DefaultCatalog;
+
 import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
-import org.jooq.Table;
-import org.jooq.impl.DSL;
-import org.jooq.impl.DefaultConfiguration;
-import org.jooq.impl.DSL.*;
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.util.stream.Stream;
 
 public class Dao  {
     public static DSLContext ctx;
@@ -20,8 +11,10 @@ public class Dao  {
     public void connectToAndQueryDatabase(
             String username, String password) {
 
-        Connection connection = Database.connect("sakila");
-        ctx = DSL.using(connection,SQLDialect.MYSQL);
+        DSLContext ctx = null;
+
+//        Connection connection = DatabaseDao.get.connect("sakila");
+//        ctx = DSL.using(connection,SQLDialect.MYSQL);
 
 //        try (Stream<Record> stream : ctx.fetchStream("SELECT a, b, c FROM Table1")) {
 //

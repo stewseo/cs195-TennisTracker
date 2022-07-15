@@ -1,5 +1,6 @@
 package com.example.database.sakila_database.schema;
 
+
 import com.example.database.sakila_database.model.Table.*;
 import com.example.database.sakila_database.model.Table.Payments.Payment;
 import com.example.database.sakila_database.model.Table.Record.*;

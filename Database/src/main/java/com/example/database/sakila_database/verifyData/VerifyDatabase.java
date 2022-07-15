@@ -1,6 +1,6 @@
 package com.example.database.sakila_database.verifyData;
 
-import com.example.database.connection.Database;
+import com.example.database.sakila_database.connection.Database;
 import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.exception.DataAccessException;
@@ -622,7 +622,7 @@ public abstract class VerifyDatabase {
 
     protected File createTxtFile(String fileName) {
         log.info("Creating file" + fileName);
-        return new File("Database/output_txt/".concat(fileName));
+        return new File("output_txt/".concat(fileName));
 
     }
 

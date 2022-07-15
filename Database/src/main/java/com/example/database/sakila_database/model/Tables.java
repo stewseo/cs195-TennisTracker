@@ -1,7 +1,9 @@
 package com.example.database.sakila_database.model;
 
+
 import com.example.database.sakila_database.model.Table.*;
 import com.example.database.sakila_database.model.Table.Payments.Payment;
+import com.example.database.sakila_database.model.Table.*;
 
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {
@@ -32,4 +34,6 @@ public class Tables {
     public static final Rental RENTAL = Rental.RENTAL;
 
     public static final Store STORE = Store.STORE;
+
+
 }

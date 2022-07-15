@@ -1,6 +1,7 @@
 package com.example.database.sakila_database.model.Table.Record;
 
-import com.example.database.sakila_database.model.Table.Actor;
+
+import com.example.database.sakila_database.model.Table.pojos.Actor;
 import org.jooq.Field;
 import org.jooq.Record1;
 import org.jooq.Record4;
@@ -76,22 +77,22 @@ public class ActorRecord extends UpdatableRecordImpl<ActorRecord> implements Rec
 
         @Override
         public Field<Long> field1() {
-            return Actor.ACTOR.ACTOR_ID;
+            return com.example.database.sakila_database.model.Table.Actor.ACTOR.ACTOR_ID;
         }
 
         @Override
         public Field<String> field2() {
-            return Actor.ACTOR.FIRST_NAME;
+            return com.example.database.sakila_database.model.Table.Actor.ACTOR.FIRST_NAME;
         }
 
         @Override
         public Field<String> field3() {
-            return Actor.ACTOR.LAST_NAME;
+            return com.example.database.sakila_database.model.Table.Actor.ACTOR.LAST_NAME;
         }
 
         @Override
         public Field<LocalDateTime> field4() {
-            return Actor.ACTOR.LAST_UPDATE;
+            return com.example.database.sakila_database.model.Table.Actor.ACTOR.LAST_UPDATE;
         }
 
         @Override
@@ -172,11 +173,11 @@ public class ActorRecord extends UpdatableRecordImpl<ActorRecord> implements Rec
         // -------------------------------------------------------------------------
 
         public ActorRecord() {
-            super(Actor.ACTOR);
+            super(com.example.database.sakila_database.model.Table.Actor.ACTOR);
         }
 
         public ActorRecord(Long actorId, String firstName, String lastName, LocalDateTime lastUpdate) {
-            super(Actor.ACTOR);
+            super(com.example.database.sakila_database.model.Table.Actor.ACTOR);
 
             setActorId(actorId);
             setFirstName(firstName);
@@ -185,22 +186,22 @@ public class ActorRecord extends UpdatableRecordImpl<ActorRecord> implements Rec
         }
 
         public ActorRecord(Long actorId, String firstName, String lastName) {
-            super(Actor.ACTOR);
+            super(com.example.database.sakila_database.model.Table.Actor.ACTOR);
 
             setActorId(actorId);
             setFirstName(firstName);
             setLastName(lastName);
         }
 
-        public ActorRecord(com.example.database.sakila_database.model.Table.pojos.Actor value) {
-                super(Actor.ACTOR);
+    public ActorRecord(Actor value) {
+        super(com.example.database.sakila_database.model.Table.Actor.ACTOR);
 
-            if (value != null) {
-                setActorId(value.actorId());
-                setFirstName(value.firstName());
-                setLastName(value.lastName());
-                setLastUpdate(value.lastUpdate());
-            }
+        if (value != null) {
+            setActorId(value.actorId());
+            setFirstName(value.firstName());
+            setLastName(value.lastName());
+            setLastUpdate(value.lastUpdate());
         }
     }
+}
 

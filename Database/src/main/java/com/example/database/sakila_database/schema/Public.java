@@ -3,6 +3,8 @@ package com.example.database.sakila_database.schema;
 import com.example.database.sakila_database.DefaultCatalog;
 import com.example.database.sakila_database.model.Table.*;
 import com.example.database.sakila_database.model.Table.Payments.Payment;
+
+import com.example.database.sakila_database.model.Table.*;
 import org.jooq.Catalog;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;

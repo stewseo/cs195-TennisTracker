@@ -2,7 +2,7 @@ package com.example.database.sakila_database.TestDml;
 
 import com.example.database.TestDatabase;
 import com.example.database.sakila_database.model.Table.Record.ActorRecord;
-import org.junit.After;
+
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
@@ -75,7 +75,7 @@ public class DmlTests extends TestDatabase {
                 .execute();
     }
 
-    @After
+    @Test
     public void teardown() throws SQLException {
         cleanup(ACTOR, ACTOR.ACTOR_ID);
         super.teardown();

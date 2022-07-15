@@ -6,13 +6,13 @@
 > Task :Database:jar
 
 > Task :Database:module8_subquery.main()
-10:50:31.190 [main] INFO com.example.database.connection.Database.com.example.database.connection.Database - default connection
-10:50:32.205 [main] INFO com.example.database.connection.Database.com.example.database.connection.Database - Connected
-10:50:32.210 [main] INFO com.example.database.sakila_database.verifyData.VerifyDatabase.com.example.database.sakila_database.verifyData.VerifyDatabase - Connecting
-10:50:32.247 [main] INFO com.example.database.sakila_database.verifyData.VerifyDatabase.com.example.database.sakila_database.verifyData.VerifyDatabase - Connected
-10:50:32.248 [main] INFO com.example.database.sakila_database.verifyData.VerifyDatabase.com.example.database.sakila_database.verifyData.VerifyDatabase - Connecting with: my_guitar_shop
-10:50:32.281 [main] INFO com.example.database.sakila_database.verifyData.VerifyDatabase.com.example.database.sakila_database.verifyData.VerifyDatabase - Connected
-10:50:32.333 [main] INFO com.example.database.util.ScriptRunner.com.example.database.util.ScriptRunner - running script tojava.io.BufferedReader@18a136ac
+10:50:31.190 [main] INFO Database.Database - default connection
+10:50:32.205 [main] INFO Database.Database - Connected
+10:50:32.210 [main] INFO VerifyDatabase.VerifyDatabase - Connecting
+10:50:32.247 [main] INFO VerifyDatabase.VerifyDatabase - Connected
+10:50:32.248 [main] INFO VerifyDatabase.VerifyDatabase - Connecting with: my_guitar_shop
+10:50:32.281 [main] INFO VerifyDatabase.VerifyDatabase - Connected
+10:50:32.333 [main] INFO ScriptRunner.ScriptRunner - running script tojava.io.BufferedReader@18a136ac
 /******************************************************** * This script creates the database named my_guitar_shop  *********************************************************/ DROP DATABASE IF EXISTS my_guitar_shop
 CREATE DATABASE my_guitar_shop
 USE my_guitar_shop
@@ -34,7 +34,7 @@ INSERT INTO order_items (item_id, order_id, product_id, item_price, discount_amo
 INSERT INTO administrators (admin_id, email_address, password, first_name, last_name) VALUES (1, 'admin@myguitarshop.com', '6a718fbd768c2378b511f8249b54897f940e9022', 'Admin', 'User'), (2, 'joel@murach.com', '971e95957d3b74d70d79c20c94e9cd91b85f7aae', 'Joel', 'Murach'), (3, 'mike@murach.com', '3f2975c819cefc686282456aeae3a137bf896ee8', 'Mike', 'Murach')
 -- Create a user named mgs_user
 GRANT SELECT, INSERT, UPDATE, DELETE ON * TO mgs_user@localhost IDENTIFIED BY 'pa55word'
-10:50:33.358 [main] DEBUG com.example.database.util.ScriptRunner.com.example.database.util.ScriptRunner - complete
+10:50:33.358 [main] DEBUG ScriptRunner.ScriptRunner - complete
 
 BUILD SUCCESSFUL in 4s
 4 actionable tasks: 3 executed, 1 up-to-date

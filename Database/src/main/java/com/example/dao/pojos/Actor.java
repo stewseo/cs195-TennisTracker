@@ -3,9 +3,6 @@ package com.example.dao.pojos;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
-
-import static com.example.database.sakila_database.model.Tables.ACTOR;
 
 public record Actor(
         Long actorId,
@@ -19,10 +16,10 @@ public record Actor(
 //
 //    public void pojos() {
 //
-//        List<com.example.database.sakila_database.model.Table.Actor> actors =
+//        List<Actor> actors =
 //                ctx.selectFrom(ACTOR)
 //                        .where(ACTOR.ACTOR_ID.lt(4L))
-//                        .fetchInto(com.example.database.sakila_database.model.Table.Actor.class);
+//                        .fetchInto(Actor.class);
 //
 //        actors.forEach(System.out::println);
 //    }

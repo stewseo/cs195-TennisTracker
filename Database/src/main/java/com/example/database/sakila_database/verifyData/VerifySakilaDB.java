@@ -1,7 +1,7 @@
 package com.example.database.sakila_database.verifyData;
-
-import com.example.database.sakila_database.model.Table.Record.ActorRecord;
 import com.example.database.sakila_database.model.Table.*;
+import com.example.database.sakila_database.model.Table.Payments.Payment;
+import com.example.database.sakila_database.model.Table.Record.ActorRecord;
 import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
@@ -15,18 +15,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 
-import static com.example.database.sakila_database.model.Table.Actor.ACTOR;
-import static com.example.database.sakila_database.model.Table.Address.ADDRESS;
-import static com.example.database.sakila_database.model.Table.Category.CATEGORY;
-import static com.example.database.sakila_database.model.Table.City.CITY;
-import static com.example.database.sakila_database.model.Table.Country.COUNTRY;
-import static com.example.database.sakila_database.model.Table.Customer.CUSTOMER;
-import static com.example.database.sakila_database.model.Table.Film.FILM;
-import static com.example.database.sakila_database.model.Table.FilmActor.FILM_ACTOR;
-import static com.example.database.sakila_database.model.Table.FilmCategory.FILM_CATEGORY;
-import static com.example.database.sakila_database.model.Table.Inventory.INVENTORY;
-import static com.example.database.sakila_database.model.Table.Payments.Payment.PAYMENT;
-import static com.example.database.sakila_database.model.Table.Rental.RENTAL;
 import static java.lang.System.out;
 import static org.jooq.Records.mapping;
 import static org.jooq.impl.DSL.*;
@@ -71,11 +59,11 @@ public class VerifySakilaDB extends VerifyDatabase {
         Field<?> COUNT1 = field("count(*) x");
 
         Query query = ctx
-                .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME, COUNT1)
-                .from(ACTOR)
+                .select(Actor.ACTOR.FIRST_NAME, Actor.ACTOR.LAST_NAME, COUNT1)
+                .from(Actor.ACTOR)
                 .where("Actor.LAST_NAME like 'A%' ")
-                .groupBy(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-                .orderBy(ACTOR.FIRST_NAME.asc());
+                .groupBy(Actor.ACTOR.FIRST_NAME, Actor.ACTOR.LAST_NAME)
+                .orderBy(Actor.ACTOR.FIRST_NAME.asc());
 
         String sqlString = """
                 SELECT Actor.first_name, Actor.last_name, count(*)
@@ -95,15 +83,15 @@ public class VerifySakilaDB extends VerifyDatabase {
 
 
         for (var r : ctx
-                .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-                .from(ACTOR)
-                .where(ACTOR.ACTOR_ID.lessThan(5L))
+                .select(Actor.ACTOR.FIRST_NAME, Actor.ACTOR.LAST_NAME)
+                .from(Actor.ACTOR)
+                .where(Actor.ACTOR.ACTOR_ID.lessThan(5L))
         ) {
             println("Actor: %s %s".formatted(r.value1(), r.value2()));
         }
 
-        ctx.select(FILM.FILM_ID, FILM.TITLE)
-                .from(FILM)
+        ctx.select(Film.FILM.FILM_ID, Film.FILM.TITLE)
+                .from(Film.FILM)
                 .limit(5)
                 .forEach(r -> println("Film %s: %s".formatted(r.value1(), r.value2()))
                 );
@@ -111,8 +99,8 @@ public class VerifySakilaDB extends VerifyDatabase {
         description = "Result<Record> extends Iterable";
 
         query = ctx
-                .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-                .from(ACTOR)
+                .select(Actor.ACTOR.FIRST_NAME, Actor.ACTOR.LAST_NAME)
+                .from(Actor.ACTOR)
                 .where("ACTOR.ACTOR_ID < '5L'");
 
         queryInfoToTxt(query, //Query
@@ -124,12 +112,12 @@ public class VerifySakilaDB extends VerifyDatabase {
     }
 
 
-    protected void verifyConsumingLargeRecordsWithCursor(String schemaName) throws IOException, SQLException {
+    public void verifyConsumingLargeRecordsWithCursor(String schemaName) throws IOException, SQLException {
 
         try (Cursor<Record2<String, String>> c = ctx
-                .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-                .from(ACTOR)
-                .where(ACTOR.ACTOR_ID.lt(5L))
+                .select(Actor.ACTOR.FIRST_NAME, Actor.ACTOR.LAST_NAME)
+                .from(Actor.ACTOR)
+                .where(Actor.ACTOR.ACTOR_ID.lt(5L))
                 .fetchLazy()
         ) {
             for (Record2<String, String> r : c)
@@ -137,9 +125,9 @@ public class VerifySakilaDB extends VerifyDatabase {
         }
         Query query =
                 ctx
-                        .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-                        .from(ACTOR)
-                        .where(ACTOR.ACTOR_ID.lt(5L));
+                        .select(Actor.ACTOR.FIRST_NAME, Actor.ACTOR.LAST_NAME)
+                        .from(Actor.ACTOR)
+                        .where(Actor.ACTOR.ACTOR_ID.lt(5L));
 
         Cursor<Record> cursor = ctx.fetchLazy(query.getSQL());
 
@@ -159,9 +147,9 @@ public class VerifySakilaDB extends VerifyDatabase {
         );
 
         try (Stream<Record2<String, String>> s = ctx
-                .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-                .from(ACTOR)
-                .where(ACTOR.ACTOR_ID.lt(5L))
+                .select(Actor.ACTOR.FIRST_NAME, Actor.ACTOR.LAST_NAME)
+                .from(Actor.ACTOR)
+                .where(Actor.ACTOR.ACTOR_ID.lt(5L))
                 .fetchStream()
         ) {
             s.forEach(r -> println("Actor: %s %s".formatted(r.value1(), r.value2())));
@@ -169,9 +157,9 @@ public class VerifySakilaDB extends VerifyDatabase {
 
         query =
                 ctx
-                        .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-                        .from(ACTOR)
-                        .where(ACTOR.ACTOR_ID.lt(5L));
+                        .select(Actor.ACTOR.FIRST_NAME, Actor.ACTOR.LAST_NAME)
+                        .from(Actor.ACTOR)
+                        .where(Actor.ACTOR.ACTOR_ID.lt(5L));
 
         description = "Functional consumption of large results using Stream, keeping an open ResultSet behind the scenes";
 
@@ -188,12 +176,12 @@ public class VerifySakilaDB extends VerifyDatabase {
         title("Verify selecting each field from table actor");
 
         Query query = ctx
-                .selectFrom(ACTOR)
-                .where(ACTOR.ACTOR_ID.eq(1L));
+                .selectFrom(Actor.ACTOR)
+                .where(Actor.ACTOR.ACTOR_ID.eq(1L));
 
         ActorRecord actor = ctx
-                .selectFrom(ACTOR)
-                .where(ACTOR.ACTOR_ID.eq(1L))
+                .selectFrom(Actor.ACTOR)
+                .where(Actor.ACTOR.ACTOR_ID.eq(1L))
                 .fetchSingle();
 
 
@@ -205,7 +193,7 @@ public class VerifySakilaDB extends VerifyDatabase {
 
         verifyQuerySyntax(query, sqlString);
 
-        println("Resulting actor: %s %s".formatted(actor.get(ACTOR.FIRST_NAME), actor.get(ACTOR.LAST_NAME)));
+        println("Resulting actor: %s %s".formatted(actor.get(Actor.ACTOR.FIRST_NAME), actor.get(Actor.ACTOR.LAST_NAME)));
 
     }
 
@@ -213,11 +201,11 @@ public class VerifySakilaDB extends VerifyDatabase {
         title("Verify UNION / INTERSECT / EXCEPT ");
 
         Query query =
-                ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-                        .from(ACTOR)
+                ctx.select(Actor.ACTOR.FIRST_NAME, Actor.ACTOR.LAST_NAME)
+                        .from(Actor.ACTOR)
                         .where("Actor.first_name like 'A%' ")
-                        .union(select(CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME)
-                                .from(CUSTOMER)
+                        .union(select(Customer.CUSTOMER.FIRST_NAME, Customer.CUSTOMER.LAST_NAME)
+                                .from(Customer.CUSTOMER)
                                 .where("Customer.first_name LIKE 'A%'"));
 
         String sqlString = """
@@ -243,10 +231,10 @@ public class VerifySakilaDB extends VerifyDatabase {
         title("In Predicates\n" +
                 "Verification for Models: ActorTable, FilmActorTable. Verify Record Data Type safety: ActorRecord, FilmActorRecord");
         Query query1 =
-                ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-                        .from(ACTOR)
-                        .where(ACTOR.FIRST_NAME.like("A%"))
-                        .and(ACTOR.ACTOR_ID.in(select(FILM_ACTOR.ACTOR_ID).from(FILM_ACTOR)));
+                ctx.select(Actor.ACTOR.FIRST_NAME, Actor.ACTOR.LAST_NAME)
+                        .from(Actor.ACTOR)
+                        .where(Actor.ACTOR.FIRST_NAME.like("A%"))
+                        .and(Actor.ACTOR.ACTOR_ID.in(select(FilmActor.FILM_ACTOR.ACTOR_ID).from(FilmActor.FILM_ACTOR)));
         var v1 = query1;
         String sqlString = query1.getSQL();
         verifyQuerySyntax(query1, sqlString);
@@ -254,12 +242,12 @@ public class VerifySakilaDB extends VerifyDatabase {
         title("Row Value expressions\n" +
                 "Verify Models: ActorTable, FilmActorTable. Verify Record Data Type safety: ActorRecord, FilmActorRecord");
         Query query2 =
-                ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-                        .from(ACTOR)
-                        .where(ACTOR.FIRST_NAME.like("A%"))
-                        .and(row(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-                                .in(select(CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME)
-                                        .from(CUSTOMER)));
+                ctx.select(Actor.ACTOR.FIRST_NAME, Actor.ACTOR.LAST_NAME)
+                        .from(Actor.ACTOR)
+                        .where(Actor.ACTOR.FIRST_NAME.like("A%"))
+                        .and(row(Actor.ACTOR.FIRST_NAME, Actor.ACTOR.LAST_NAME)
+                                .in(select(Customer.CUSTOMER.FIRST_NAME, Customer.CUSTOMER.LAST_NAME)
+                                        .from(Customer.CUSTOMER)));
         var v2 = query2;
 
         sqlString = query1.getSQL();
@@ -269,10 +257,10 @@ public class VerifySakilaDB extends VerifyDatabase {
     public void verifyStandardisationLimit(String schemaName) {
         title("Verify LIMIT, OFFSET select Fields Actor.first_name and Actor.last_name");
         Query query =
-                ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-                        .from(ACTOR)
-                        .where(ACTOR.FIRST_NAME.like("A%"))
-                        .orderBy(ACTOR.ACTOR_ID)
+                ctx.select(Actor.ACTOR.FIRST_NAME, Actor.ACTOR.LAST_NAME)
+                        .from(Actor.ACTOR)
+                        .where(Actor.ACTOR.FIRST_NAME.like("A%"))
+                        .orderBy(Actor.ACTOR.ACTOR_ID)
                         .limit(10)
                         .offset(10);
 
@@ -285,10 +273,10 @@ public class VerifySakilaDB extends VerifyDatabase {
         title("Verify MySQL JOIN syntax using JOOQ methods and actual sql String");
 
         Query query =
-                ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-                        .from(ACTOR)
-                        .join(FILM_ACTOR)
-                        .on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
+                ctx.select(Actor.ACTOR.FIRST_NAME, Actor.ACTOR.LAST_NAME)
+                        .from(Actor.ACTOR)
+                        .join(FilmActor.FILM_ACTOR)
+                        .on(Actor.ACTOR.ACTOR_ID.eq(FilmActor.FILM_ACTOR.ACTOR_ID))
                         .where("Actor.first_name LIKE 'a%'");
 
         String sql = """
@@ -309,9 +297,9 @@ public class VerifySakilaDB extends VerifyDatabase {
     public void verifyAliasing(String schemaName) throws IOException {
         title("Verify MySql Table alias syntax using Jooq Methods and actual sql String");
 
-        Actor a = (Actor) ACTOR.as("a");
+        Actor a = (Actor) Actor.ACTOR.as("a");
 
-        FilmActor fa = (FilmActor) FILM_ACTOR.as("fa");
+        FilmActor fa = (FilmActor) FilmActor.FILM_ACTOR.as("fa");
 
         Query query =
                 ctx.select(a.FIRST_NAME, a.LAST_NAME)
@@ -525,13 +513,13 @@ public class VerifySakilaDB extends VerifyDatabase {
 
     }
 
-    void testDynamicSql(String schema) throws IOException, SQLException {
+    public void testDynamicSql(String schema) throws IOException, SQLException {
 
         ResultQuery<Record2<String, String>> res =
-                ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-                        .from(ACTOR)
-                        .where(ACTOR.ACTOR_ID.in(1L, 2L, 3L))
-                        .orderBy(ACTOR.FIRST_NAME)
+                ctx.select(Actor.ACTOR.FIRST_NAME, Actor.ACTOR.LAST_NAME)
+                        .from(Actor.ACTOR)
+                        .where(Actor.ACTOR.ACTOR_ID.in(1L, 2L, 3L))
+                        .orderBy(Actor.ACTOR.FIRST_NAME)
                         .limit(5);
 
         sql = """
@@ -553,10 +541,10 @@ public class VerifySakilaDB extends VerifyDatabase {
                 List.of("actor"),
                 schema); //schema
 
-        List<SelectField<?>> select = List.of(ACTOR.FIRST_NAME, ACTOR.LAST_NAME);
-        Table<?> from = ACTOR;
-        Condition where = ACTOR.ACTOR_ID.in(1L, 2L, 3L);
-        List<OrderField<?>> orderBy = List.of(ACTOR.FIRST_NAME);
+        List<SelectField<?>> select = List.of(Actor.ACTOR.FIRST_NAME, Actor.ACTOR.LAST_NAME);
+        Table<?> from = Actor.ACTOR;
+        Condition where = Actor.ACTOR.ACTOR_ID.in(1L, 2L, 3L);
+        List<OrderField<?>> orderBy = List.of(Actor.ACTOR.FIRST_NAME);
         Field<Integer> limit = val(5);
 
         query =
@@ -582,18 +570,18 @@ public class VerifySakilaDB extends VerifyDatabase {
         List<Integer> ids = List.of(1, 2, 3);
 
         query =
-        ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-                .from(ACTOR)
+        ctx.select(Actor.ACTOR.FIRST_NAME, Actor.ACTOR.LAST_NAME)
+                .from(Actor.ACTOR)
                 .where(ids.isEmpty()
                         ? noCondition()
-                        : ACTOR.ACTOR_ID.in(ids.stream().map(Long::valueOf).map(DSL::val).toList()))
-                .orderBy(ACTOR.FIRST_NAME)
+                        : Actor.ACTOR.ACTOR_ID.in(ids.stream().map(Long::valueOf).map(DSL::val).toList()))
+                .orderBy(Actor.ACTOR.FIRST_NAME)
                 .limit(5)
         ;
         querySyntaxToTxt("dynamic_sql/dynamic_sql_to_sql_string3", query);
     }
 
-    void writeNestedRowsWithAdHocConverters(String schemaName) throws SQLException, FileNotFoundException {
+    public void writeNestedRowsWithAdHocConverters(String schemaName) throws SQLException, FileNotFoundException {
         record Country(String name) {
         }
         record Customer(String firstName, String lastName, Country country) {
@@ -604,13 +592,13 @@ public class VerifySakilaDB extends VerifyDatabase {
 
         List<Customer> r =
                 ctx.select(
-                                CUSTOMER.FIRST_NAME,
-                                CUSTOMER.LAST_NAME,
-                                COUNTRY.COUNTRY_.convertFrom(Country::new))
-                        .from(CUSTOMER)
-                        .join(ADDRESS).on(CUSTOMER.ADDRESS_ID.eq(ADDRESS.ADDRESS_ID))
-                        .join(CITY).on(ADDRESS.CITY_ID.eq(CITY.CITY_ID))
-                        .join(COUNTRY).on(CITY.COUNTRY_ID.eq(COUNTRY.COUNTRY_ID))
+                                com.example.database.sakila_database.model.Table.Customer.CUSTOMER.FIRST_NAME,
+                                com.example.database.sakila_database.model.Table.Customer.CUSTOMER.LAST_NAME,
+                                com.example.database.sakila_database.model.Table.Country.COUNTRY.COUNTRY_.convertFrom(Country::new))
+                        .from(com.example.database.sakila_database.model.Table.Customer.CUSTOMER)
+                        .join(Address.ADDRESS).on(com.example.database.sakila_database.model.Table.Customer.CUSTOMER.ADDRESS_ID.eq(Address.ADDRESS.ADDRESS_ID))
+                        .join(City.CITY).on(Address.ADDRESS.CITY_ID.eq(City.CITY.CITY_ID))
+                        .join(com.example.database.sakila_database.model.Table.Country.COUNTRY).on(City.CITY.COUNTRY_ID.eq(com.example.database.sakila_database.model.Table.Country.COUNTRY.COUNTRY_ID))
                         .orderBy(1, 2)
                         .limit(5)
                         .fetch(mapping(Customer::new));
@@ -646,15 +634,15 @@ public class VerifySakilaDB extends VerifyDatabase {
 
         r =
                 ctx.select(DSL.row(
-                                CUSTOMER.FIRST_NAME,
-                                CUSTOMER.LAST_NAME,
-                                row(COUNTRY.COUNTRY_).mapping(Country::new)
+                                com.example.database.sakila_database.model.Table.Customer.CUSTOMER.FIRST_NAME,
+                                com.example.database.sakila_database.model.Table.Customer.CUSTOMER.LAST_NAME,
+                                row(com.example.database.sakila_database.model.Table.Country.COUNTRY.COUNTRY_).mapping(Country::new)
                         ).mapping(Customer::new))
-                        .from(CUSTOMER)
-                        .join(ADDRESS).on(CUSTOMER.ADDRESS_ID.eq(ADDRESS.ADDRESS_ID))
-                        .join(CITY).on(ADDRESS.CITY_ID.eq(CITY.CITY_ID))
-                        .join(COUNTRY).on(CITY.COUNTRY_ID.eq(COUNTRY.COUNTRY_ID))
-                        .orderBy(CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME)
+                        .from(com.example.database.sakila_database.model.Table.Customer.CUSTOMER)
+                        .join(Address.ADDRESS).on(com.example.database.sakila_database.model.Table.Customer.CUSTOMER.ADDRESS_ID.eq(Address.ADDRESS.ADDRESS_ID))
+                        .join(City.CITY).on(Address.ADDRESS.CITY_ID.eq(City.CITY.CITY_ID))
+                        .join(com.example.database.sakila_database.model.Table.Country.COUNTRY).on(City.CITY.COUNTRY_ID.eq(com.example.database.sakila_database.model.Table.Country.COUNTRY.COUNTRY_ID))
+                        .orderBy(com.example.database.sakila_database.model.Table.Customer.CUSTOMER.FIRST_NAME, com.example.database.sakila_database.model.Table.Customer.CUSTOMER.LAST_NAME)
                         .limit(5)
                         .fetch(Record1::value1);
 
@@ -689,23 +677,23 @@ public class VerifySakilaDB extends VerifyDatabase {
 
     }
 
-    void nestingToManyRelationShips(String currentSchemaName) throws SQLException, FileNotFoundException {
+    public void nestingToManyRelationShips(String currentSchemaName) throws SQLException, FileNotFoundException {
 
         ResultQuery<Record4<String, String, String, String>> resultQuery = ctx.select(
-                        FILM.TITLE,
-                        ACTOR.FIRST_NAME,
-                        ACTOR.LAST_NAME,
-                        CATEGORY.NAME
+                        Film.FILM.TITLE,
+                        Actor.ACTOR.FIRST_NAME,
+                        Actor.ACTOR.LAST_NAME,
+                        Category.CATEGORY.NAME
                 )
-                .from(ACTOR)
-                .join(FILM_ACTOR)
-                .on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
-                .join(FILM)
-                .on(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
-                .join(FILM_CATEGORY)
-                .on(FILM.FILM_ID.eq(FILM_CATEGORY.FILM_ID))
-                .join(CATEGORY)
-                .on(FILM_CATEGORY.CATEGORY_ID.eq(CATEGORY.CATEGORY_ID))
+                .from(Actor.ACTOR)
+                .join(FilmActor.FILM_ACTOR)
+                .on(Actor.ACTOR.ACTOR_ID.eq(FilmActor.FILM_ACTOR.ACTOR_ID))
+                .join(Film.FILM)
+                .on(FilmActor.FILM_ACTOR.FILM_ID.eq(Film.FILM.FILM_ID))
+                .join(FilmCategory.FILM_CATEGORY)
+                .on(Film.FILM.FILM_ID.eq(FilmCategory.FILM_CATEGORY.FILM_ID))
+                .join(Category.CATEGORY)
+                .on(FilmCategory.FILM_CATEGORY.CATEGORY_ID.eq(Category.CATEGORY.CATEGORY_ID))
                 .orderBy(1, 2, 3, 4);
 
         description = "Actors not grouped, cartesian product as result";
@@ -720,24 +708,24 @@ public class VerifySakilaDB extends VerifyDatabase {
         ResultQuery<Record3<String, Result<Record2<String, String>>, Result<Record1<String>>>> rq =
                 ctx.
                         select(
-                                FILM.TITLE,
+                                Film.FILM.TITLE,
                                 multiset(
                                         select(
-                                                ACTOR.FIRST_NAME,
-                                                ACTOR.LAST_NAME)
-                                                .from(ACTOR)
-                                                .join(FILM_ACTOR)
-                                                .on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
-                                                .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                                                Actor.ACTOR.FIRST_NAME,
+                                                Actor.ACTOR.LAST_NAME)
+                                                .from(Actor.ACTOR)
+                                                .join(FilmActor.FILM_ACTOR)
+                                                .on(Actor.ACTOR.ACTOR_ID.eq(FilmActor.FILM_ACTOR.ACTOR_ID))
+                                                .where(FilmActor.FILM_ACTOR.FILM_ID.eq(Film.FILM.FILM_ID))
                                 ).as("actors"),       multiset(
-                                        select(CATEGORY.NAME)
-                                                .from(CATEGORY)
-                                                .innerJoin(FILM_CATEGORY)
-                                                .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
-                                                .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
+                                        select(Category.CATEGORY.NAME)
+                                                .from(Category.CATEGORY)
+                                                .innerJoin(FilmCategory.FILM_CATEGORY)
+                                                .on(Category.CATEGORY.CATEGORY_ID.eq(FilmCategory.FILM_CATEGORY.CATEGORY_ID))
+                                                .where(FilmCategory.FILM_CATEGORY.FILM_ID.eq(Film.FILM.FILM_ID))
                                 ).as("categories")
                         )
-                        .from(FILM);
+                        .from(Film.FILM);
 
         description = """
                 MultiSet, Actor's grouped as Result
@@ -830,26 +818,26 @@ public class VerifySakilaDB extends VerifyDatabase {
 
         Result<Record3<String, Result<Record2<String, String>>, Result<Record1<String>>>> r =
                 ctx.select(
-                                FILM.TITLE,
+                                Film.FILM.TITLE,
                                 multiset(
                                         select(
-                                                FILM_ACTOR.actor().FIRST_NAME,
-                                                FILM_ACTOR.actor().LAST_NAME)
-                                                .from(FILM_ACTOR)
-                                                .innerJoin(ACTOR)
-                                                .on(FILM_ACTOR.ACTOR_ID.eq(ACTOR.ACTOR_ID))
-                                                .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                                                FilmActor.FILM_ACTOR.actor().FIRST_NAME,
+                                                FilmActor.FILM_ACTOR.actor().LAST_NAME)
+                                                .from(FilmActor.FILM_ACTOR)
+                                                .innerJoin(Actor.ACTOR)
+                                                .on(FilmActor.FILM_ACTOR.ACTOR_ID.eq(Actor.ACTOR.ACTOR_ID))
+                                                .where(FilmActor.FILM_ACTOR.FILM_ID.eq(Film.FILM.FILM_ID))
                                 ),
                                 multiset(
-                                        select(CATEGORY.NAME)
-                                                .from(FILM_CATEGORY)
-                                                .join(CATEGORY)
-                                                .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
-                                                .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
+                                        select(Category.CATEGORY.NAME)
+                                                .from(FilmCategory.FILM_CATEGORY)
+                                                .join(Category.CATEGORY)
+                                                .on(Category.CATEGORY.CATEGORY_ID.eq(FilmCategory.FILM_CATEGORY.CATEGORY_ID))
+                                                .where(FilmCategory.FILM_CATEGORY.FILM_ID.eq(Film.FILM.FILM_ID))
                                 )
                         )
-                        .from(FILM)
-                        .orderBy(FILM.TITLE)
+                        .from(Film.FILM)
+                        .orderBy(Film.FILM.TITLE)
                         .limit(5)
                         .fetch();
 
@@ -863,7 +851,7 @@ public class VerifySakilaDB extends VerifyDatabase {
 
     }
 
-    void nestingToManyRelationshipsAdHocConverter(String currentSchemaName) throws SQLException, FileNotFoundException {
+    public void nestingToManyRelationshipsAdHocConverter(String currentSchemaName) throws SQLException, FileNotFoundException {
         record Name(String firstName, String lastName) {
         }
         record Actor(Name name) {
@@ -875,80 +863,80 @@ public class VerifySakilaDB extends VerifyDatabase {
 
         List<Film> listFilm =
                 ctx.select(
-                                FILM.TITLE,
+                                com.example.database.sakila_database.model.Table.Film.FILM.TITLE,
                                 multiset(
-                                        select(
+                                        DSL.select(
                                                 row(
-                                                        ACTOR.FIRST_NAME,
-                                                        ACTOR.LAST_NAME
+                                                        com.example.database.sakila_database.model.Table.Actor.ACTOR.FIRST_NAME,
+                                                        com.example.database.sakila_database.model.Table.Actor.ACTOR.LAST_NAME
                                                 ).mapping(Name::new))
-                                                .from(ACTOR)
-                                                .join(FILM_ACTOR)
-                                                .on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
-                                                .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                                                .from(com.example.database.sakila_database.model.Table.Actor.ACTOR)
+                                                .join(FilmActor.FILM_ACTOR)
+                                                .on(com.example.database.sakila_database.model.Table.Actor.ACTOR.ACTOR_ID.eq(FilmActor.FILM_ACTOR.ACTOR_ID))
+                                                .where(FilmActor.FILM_ACTOR.FILM_ID.eq(com.example.database.sakila_database.model.Table.Film.FILM.FILM_ID))
                                 ).convertFrom(r -> r.map(mapping(Actor::new))),
                                 multiset(
-                                        select(CATEGORY.NAME)
-                                                .from(CATEGORY)
-                                                .innerJoin(FILM_CATEGORY)
-                                                .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
-                                                .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
+                                        select(com.example.database.sakila_database.model.Table.Category.CATEGORY.NAME)
+                                                .from(com.example.database.sakila_database.model.Table.Category.CATEGORY)
+                                                .innerJoin(FilmCategory.FILM_CATEGORY)
+                                                .on(com.example.database.sakila_database.model.Table.Category.CATEGORY.CATEGORY_ID.eq(FilmCategory.FILM_CATEGORY.CATEGORY_ID))
+                                                .where(FilmCategory.FILM_CATEGORY.FILM_ID.eq(com.example.database.sakila_database.model.Table.Film.FILM.FILM_ID))
                                 ).convertFrom(r -> r.map(mapping(Category::new)))
                         )
-                        .from(FILM)
-                        .orderBy(FILM.TITLE)
+                        .from(com.example.database.sakila_database.model.Table.Film.FILM)
+                        .orderBy(com.example.database.sakila_database.model.Table.Film.FILM.TITLE)
                         .limit(5)
                         .fetch(mapping(Film::new));
 
 
         ResultQuery<Record3<String, List<Actor>, List<Category>>> query =
                 ctx.select(
-                                FILM.TITLE,
+                                com.example.database.sakila_database.model.Table.Film.FILM.TITLE,
                                 multiset(
-                                        select(
+                                        DSL.select(
                                                 row(
-                                                        ACTOR.FIRST_NAME,
-                                                        ACTOR.LAST_NAME
+                                                        com.example.database.sakila_database.model.Table.Actor.ACTOR.FIRST_NAME,
+                                                        com.example.database.sakila_database.model.Table.Actor.ACTOR.LAST_NAME
                                                 ).mapping(Name::new))
-                                                .from(ACTOR)
-                                                .join(FILM_ACTOR)
-                                                .on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
-                                                .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                                                .from(com.example.database.sakila_database.model.Table.Actor.ACTOR)
+                                                .join(FilmActor.FILM_ACTOR)
+                                                .on(com.example.database.sakila_database.model.Table.Actor.ACTOR.ACTOR_ID.eq(FilmActor.FILM_ACTOR.ACTOR_ID))
+                                                .where(FilmActor.FILM_ACTOR.FILM_ID.eq(com.example.database.sakila_database.model.Table.Film.FILM.FILM_ID))
                                 ).convertFrom(r -> r.map(mapping(Actor::new))),
                                 multiset(
-                                        select(CATEGORY.NAME)
-                                                .from(CATEGORY)
-                                                .innerJoin(FILM_CATEGORY)
-                                                .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
-                                                .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
+                                        select(com.example.database.sakila_database.model.Table.Category.CATEGORY.NAME)
+                                                .from(com.example.database.sakila_database.model.Table.Category.CATEGORY)
+                                                .innerJoin(FilmCategory.FILM_CATEGORY)
+                                                .on(com.example.database.sakila_database.model.Table.Category.CATEGORY.CATEGORY_ID.eq(FilmCategory.FILM_CATEGORY.CATEGORY_ID))
+                                                .where(FilmCategory.FILM_CATEGORY.FILM_ID.eq(com.example.database.sakila_database.model.Table.Film.FILM.FILM_ID))
                                 ).convertFrom(r -> r.map(mapping(Category::new)))
                         )
-                        .from(FILM)
-                        .orderBy(FILM.TITLE);
+                        .from(com.example.database.sakila_database.model.Table.Film.FILM)
+                        .orderBy(com.example.database.sakila_database.model.Table.Film.FILM.TITLE);
 
         SelectQuery<Record3<String, List<Actor>, List<Category>>> selectQuery = ctx.select(
-                        FILM.TITLE,
+                        com.example.database.sakila_database.model.Table.Film.FILM.TITLE,
                         multiset(
-                                select(
+                                DSL.select(
                                         row(
-                                                ACTOR.FIRST_NAME,
-                                                ACTOR.LAST_NAME
+                                                com.example.database.sakila_database.model.Table.Actor.ACTOR.FIRST_NAME,
+                                                com.example.database.sakila_database.model.Table.Actor.ACTOR.LAST_NAME
                                         ).mapping(Name::new))
-                                        .from(ACTOR)
-                                        .join(FILM_ACTOR)
-                                        .on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
-                                        .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                                        .from(com.example.database.sakila_database.model.Table.Actor.ACTOR)
+                                        .join(FilmActor.FILM_ACTOR)
+                                        .on(com.example.database.sakila_database.model.Table.Actor.ACTOR.ACTOR_ID.eq(FilmActor.FILM_ACTOR.ACTOR_ID))
+                                        .where(FilmActor.FILM_ACTOR.FILM_ID.eq(com.example.database.sakila_database.model.Table.Film.FILM.FILM_ID))
                         ).convertFrom(r -> r.map(mapping(Actor::new))),
                         multiset(
-                                select(CATEGORY.NAME)
-                                        .from(CATEGORY)
-                                        .innerJoin(FILM_CATEGORY)
-                                        .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
-                                        .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
+                                select(com.example.database.sakila_database.model.Table.Category.CATEGORY.NAME)
+                                        .from(com.example.database.sakila_database.model.Table.Category.CATEGORY)
+                                        .innerJoin(FilmCategory.FILM_CATEGORY)
+                                        .on(com.example.database.sakila_database.model.Table.Category.CATEGORY.CATEGORY_ID.eq(FilmCategory.FILM_CATEGORY.CATEGORY_ID))
+                                        .where(FilmCategory.FILM_CATEGORY.FILM_ID.eq(com.example.database.sakila_database.model.Table.Film.FILM.FILM_ID))
                         ).convertFrom(r -> r.map(mapping(Category::new)))
                 )
-                .from(FILM)
-                .orderBy(FILM.TITLE).getQuery();
+                .from(com.example.database.sakila_database.model.Table.Film.FILM)
+                .orderBy(com.example.database.sakila_database.model.Table.Film.FILM.TITLE).getQuery();
 
 
 
@@ -968,7 +956,7 @@ public class VerifySakilaDB extends VerifyDatabase {
 
     }
 
-    void multisetMappingIntoJavaRecords() throws SQLException, FileNotFoundException {
+    public void multisetMappingIntoJavaRecords() throws SQLException, FileNotFoundException {
         record Actor(String firstname, String lastname){}
         record Category(String name){}
 
@@ -979,32 +967,32 @@ public class VerifySakilaDB extends VerifyDatabase {
         ) {}
         record Title(String title) {}
 
-        Field<Title> title = FILM.TITLE.convertFrom(Title::new);
+        Field<Title> title = com.example.database.sakila_database.model.Table.Film.FILM.TITLE.convertFrom(Title::new);
 
             Result<Record3<String, List<Actor>, List<Category>>> res =
                     ctx
                     .select(
-                            FILM.TITLE,
+                            com.example.database.sakila_database.model.Table.Film.FILM.TITLE,
                             multiset(
                                     select(
-                                            ACTOR.FIRST_NAME,
-                                            ACTOR.LAST_NAME
+                                            com.example.database.sakila_database.model.Table.Actor.ACTOR.FIRST_NAME,
+                                            com.example.database.sakila_database.model.Table.Actor.ACTOR.LAST_NAME
                                     )
-                                            .from(ACTOR).join(FILM_ACTOR)
-                                            .on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
-                                            .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                                            .from(com.example.database.sakila_database.model.Table.Actor.ACTOR).join(FilmActor.FILM_ACTOR)
+                                            .on(com.example.database.sakila_database.model.Table.Actor.ACTOR.ACTOR_ID.eq(FilmActor.FILM_ACTOR.ACTOR_ID))
+                                            .where(FilmActor.FILM_ACTOR.FILM_ID.eq(com.example.database.sakila_database.model.Table.Film.FILM.FILM_ID))
                             ).convertFrom(r -> r.map(mapping(Actor::new))),
                             multiset(
-                                    select(CATEGORY.NAME)
-                                            .from(CATEGORY)
-                                            .innerJoin(FILM_CATEGORY)
-                                            .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
-                                            .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
+                                    select(com.example.database.sakila_database.model.Table.Category.CATEGORY.NAME)
+                                            .from(com.example.database.sakila_database.model.Table.Category.CATEGORY)
+                                            .innerJoin(FilmCategory.FILM_CATEGORY)
+                                            .on(com.example.database.sakila_database.model.Table.Category.CATEGORY.CATEGORY_ID.eq(FilmCategory.FILM_CATEGORY.CATEGORY_ID))
+                                            .where(FilmCategory.FILM_CATEGORY.FILM_ID.eq(com.example.database.sakila_database.model.Table.Film.FILM.FILM_ID))
                             ).convertFrom(r -> r.map(mapping(Category::new)))
                     )
-                    .from(FILM)
-                    .where(FILM.TITLE.like("A%"))
-                    .orderBy(FILM.TITLE)
+                    .from(com.example.database.sakila_database.model.Table.Film.FILM)
+                    .where(com.example.database.sakila_database.model.Table.Film.FILM.TITLE.like("A%"))
+                    .orderBy(com.example.database.sakila_database.model.Table.Film.FILM.TITLE)
                     .limit('5')
                     .fetch();
 
@@ -1031,53 +1019,53 @@ public class VerifySakilaDB extends VerifyDatabase {
                 ctx.select(
 
                                 // Get the films
-                                FILM.TITLE,
+                                com.example.database.sakila_database.model.Table.Film.FILM.TITLE,
 
                                 // and all actors that played in the film
                                 multiset(
                                         select(
-                                                ACTOR.FIRST_NAME,
-                                                ACTOR.LAST_NAME
+                                                com.example.database.sakila_database.model.Table.Actor.ACTOR.FIRST_NAME,
+                                                com.example.database.sakila_database.model.Table.Actor.ACTOR.LAST_NAME
                                         )
-                                                .from(FILM_ACTOR)
-                                                .innerJoin(ACTOR).on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
-                                                .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                                                .from(FilmActor.FILM_ACTOR)
+                                                .innerJoin(com.example.database.sakila_database.model.Table.Actor.ACTOR).on(com.example.database.sakila_database.model.Table.Actor.ACTOR.ACTOR_ID.eq(FilmActor.FILM_ACTOR.ACTOR_ID))
+                                                .where(FilmActor.FILM_ACTOR.FILM_ID.eq(com.example.database.sakila_database.model.Table.Film.FILM.FILM_ID))
                                 ).as("actors"),
 
                                 // ... and all categories that categorise the film
                                 multiset(
-                                        select(CATEGORY.NAME)
-                                                .from(FILM_CATEGORY)
-                                                .join(CATEGORY)
-                                                .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
-                                                .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
+                                        select(com.example.database.sakila_database.model.Table.Category.CATEGORY.NAME)
+                                                .from(FilmCategory.FILM_CATEGORY)
+                                                .join(com.example.database.sakila_database.model.Table.Category.CATEGORY)
+                                                .on(com.example.database.sakila_database.model.Table.Category.CATEGORY.CATEGORY_ID.eq(FilmCategory.FILM_CATEGORY.CATEGORY_ID))
+                                                .where(FilmCategory.FILM_CATEGORY.FILM_ID.eq(com.example.database.sakila_database.model.Table.Film.FILM.FILM_ID))
                                 ).as("categories"),
 
                                 // ... and all customers who rented the film, as well
                                 // as their payments
                                 multiset(
                                         select(
-                                                CUSTOMER.FIRST_NAME,
-                                                CUSTOMER.LAST_NAME,
+                                                Customer.CUSTOMER.FIRST_NAME,
+                                                Customer.CUSTOMER.LAST_NAME,
                                                 multisetAgg(
-                                                        PAYMENT.PAYMENT_DATE,
-                                                        PAYMENT.AMOUNT
+                                                        Payment.PAYMENT.PAYMENT_DATE,
+                                                        Payment.PAYMENT.AMOUNT
                                                 ).as("payments"),
-                                                sum(PAYMENT.AMOUNT).as("total"))
-                                                .from(PAYMENT)
-                                                .join(CUSTOMER).on(PAYMENT.CUSTOMER_ID.eq(CUSTOMER.CUSTOMER_ID))
-                                                .join(RENTAL).on(PAYMENT.RENTAL_ID.eq(RENTAL.RENTAL_ID))
-                                                .join(INVENTORY).on(RENTAL.INVENTORY_ID.eq(INVENTORY.INVENTORY_ID))
-                                                .where(INVENTORY.FILM_ID.eq(FILM.FILM_ID))
+                                                sum(Payment.PAYMENT.AMOUNT).as("total"))
+                                                .from(Payment.PAYMENT)
+                                                .join(Customer.CUSTOMER).on(Payment.PAYMENT.CUSTOMER_ID.eq(Customer.CUSTOMER.CUSTOMER_ID))
+                                                .join(Rental.RENTAL).on(Payment.PAYMENT.RENTAL_ID.eq(Rental.RENTAL.RENTAL_ID))
+                                                .join(Inventory.INVENTORY).on(Rental.RENTAL.INVENTORY_ID.eq(Inventory.INVENTORY.INVENTORY_ID))
+                                                .where(Inventory.INVENTORY.FILM_ID.eq(com.example.database.sakila_database.model.Table.Film.FILM.FILM_ID))
                                                 .groupBy(
-                                                        CUSTOMER.CUSTOMER_ID,
-                                                        CUSTOMER.FIRST_NAME,
-                                                        CUSTOMER.LAST_NAME)
+                                                        Customer.CUSTOMER.CUSTOMER_ID,
+                                                        Customer.CUSTOMER.FIRST_NAME,
+                                                        Customer.CUSTOMER.LAST_NAME)
                                 ).as("customers")
                         )
-                        .from(FILM)
-                        .where(FILM.TITLE.like("A%"))
-                        .orderBy(FILM.TITLE)
+                        .from(com.example.database.sakila_database.model.Table.Film.FILM)
+                        .where(com.example.database.sakila_database.model.Table.Film.FILM.TITLE.like("A%"))
+                        .orderBy(com.example.database.sakila_database.model.Table.Film.FILM.TITLE)
                         .limit('5')
                         .fetch();
 
@@ -1085,63 +1073,63 @@ public class VerifySakilaDB extends VerifyDatabase {
         ctx.select(
 
                         // Get the films
-                        FILM.TITLE,
+                        com.example.database.sakila_database.model.Table.Film.FILM.TITLE,
 
                         // and all actors that played in the film
                         multiset(
                                 select(
-                                        ACTOR.FIRST_NAME,
-                                        ACTOR.LAST_NAME
+                                        com.example.database.sakila_database.model.Table.Actor.ACTOR.FIRST_NAME,
+                                        com.example.database.sakila_database.model.Table.Actor.ACTOR.LAST_NAME
                                 )
-                                        .from(FILM_ACTOR)
-                                        .innerJoin(ACTOR).on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
-                                        .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                                        .from(FilmActor.FILM_ACTOR)
+                                        .innerJoin(com.example.database.sakila_database.model.Table.Actor.ACTOR).on(com.example.database.sakila_database.model.Table.Actor.ACTOR.ACTOR_ID.eq(FilmActor.FILM_ACTOR.ACTOR_ID))
+                                        .where(FilmActor.FILM_ACTOR.FILM_ID.eq(com.example.database.sakila_database.model.Table.Film.FILM.FILM_ID))
                         ).as("actors"),
 
                         // ... and all categories that categorise the film
                         multiset(
-                                select(CATEGORY.NAME)
-                                        .from(FILM_CATEGORY)
-                                        .join(CATEGORY)
-                                        .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
-                                        .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
+                                select(com.example.database.sakila_database.model.Table.Category.CATEGORY.NAME)
+                                        .from(FilmCategory.FILM_CATEGORY)
+                                        .join(com.example.database.sakila_database.model.Table.Category.CATEGORY)
+                                        .on(com.example.database.sakila_database.model.Table.Category.CATEGORY.CATEGORY_ID.eq(FilmCategory.FILM_CATEGORY.CATEGORY_ID))
+                                        .where(FilmCategory.FILM_CATEGORY.FILM_ID.eq(com.example.database.sakila_database.model.Table.Film.FILM.FILM_ID))
                         ).as("categories"),
 
                         // ... and all customers who rented the film, as well
                         // as their payments
                         multiset(
                                 select(
-                                        CUSTOMER.FIRST_NAME,
-                                        CUSTOMER.LAST_NAME,
+                                        Customer.CUSTOMER.FIRST_NAME,
+                                        Customer.CUSTOMER.LAST_NAME,
                                         multisetAgg(
-                                                PAYMENT.PAYMENT_DATE,
-                                                PAYMENT.AMOUNT
+                                                Payment.PAYMENT.PAYMENT_DATE,
+                                                Payment.PAYMENT.AMOUNT
                                         ).as("payments"),
-                                        sum(PAYMENT.AMOUNT).as("total"))
-                                        .from(PAYMENT)
-                                        .join(CUSTOMER).on(PAYMENT.CUSTOMER_ID.eq(CUSTOMER.CUSTOMER_ID))
-                                        .join(RENTAL).on(PAYMENT.RENTAL_ID.eq(RENTAL.RENTAL_ID))
-                                        .join(INVENTORY).on(RENTAL.INVENTORY_ID.eq(INVENTORY.INVENTORY_ID))
+                                        sum(Payment.PAYMENT.AMOUNT).as("total"))
+                                        .from(Payment.PAYMENT)
+                                        .join(Customer.CUSTOMER).on(Payment.PAYMENT.CUSTOMER_ID.eq(Customer.CUSTOMER.CUSTOMER_ID))
+                                        .join(Rental.RENTAL).on(Payment.PAYMENT.RENTAL_ID.eq(Rental.RENTAL.RENTAL_ID))
+                                        .join(Inventory.INVENTORY).on(Rental.RENTAL.INVENTORY_ID.eq(Inventory.INVENTORY.INVENTORY_ID))
 //                                                .join(FILM).on(INVENTORY.FILM_ID.eq(FILM.FILM_ID))
-                                        .where(INVENTORY.FILM_ID.eq(FILM.FILM_ID))
+                                        .where(Inventory.INVENTORY.FILM_ID.eq(com.example.database.sakila_database.model.Table.Film.FILM.FILM_ID))
                                         .groupBy(
-                                                CUSTOMER.CUSTOMER_ID,
-                                                CUSTOMER.FIRST_NAME,
-                                                CUSTOMER.LAST_NAME)
+                                                Customer.CUSTOMER.CUSTOMER_ID,
+                                                Customer.CUSTOMER.FIRST_NAME,
+                                                Customer.CUSTOMER.LAST_NAME)
                         ).as("customers")
                 )
-                .from(FILM)
-                .where(FILM.TITLE.like("A%"))
-                .orderBy(FILM.TITLE)
+                .from(com.example.database.sakila_database.model.Table.Film.FILM)
+                .where(com.example.database.sakila_database.model.Table.Film.FILM.TITLE.like("A%"))
+                .orderBy(com.example.database.sakila_database.model.Table.Film.FILM.TITLE)
                 .limit('5');
 
         println(query(ctx.select(multiset(
-                select(ACTOR.FIRST_NAME,
-                        ACTOR.LAST_NAME
+                select(com.example.database.sakila_database.model.Table.Actor.ACTOR.FIRST_NAME,
+                        com.example.database.sakila_database.model.Table.Actor.ACTOR.LAST_NAME
                 )
-                        .from(FILM_ACTOR)
-                        .innerJoin(ACTOR).on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
-                        .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+                        .from(FilmActor.FILM_ACTOR)
+                        .innerJoin(com.example.database.sakila_database.model.Table.Actor.ACTOR).on(com.example.database.sakila_database.model.Table.Actor.ACTOR.ACTOR_ID.eq(FilmActor.FILM_ACTOR.ACTOR_ID))
+                        .where(FilmActor.FILM_ACTOR.FILM_ID.eq(com.example.database.sakila_database.model.Table.Film.FILM.FILM_ID))
         ).as("actors")).getSQL()
         ).getSQL());
 
@@ -1155,7 +1143,7 @@ public class VerifySakilaDB extends VerifyDatabase {
 
         }
 
-    void nestingToManyRelationshipsBenchmark(String currentSchemaName) {
+    public void nestingToManyRelationshipsBenchmark(String currentSchemaName) {
         record DNCategory (String name) {}
         record DNFilm (long id, String title, List<DNCategory> categories) {}
         record DNName (String firstName, String lastName) {}
@@ -1358,53 +1346,53 @@ public class VerifySakilaDB extends VerifyDatabase {
 
 
         List<DNActor> list = ctx.select(
-                        ACTOR.ACTOR_ID,
+                        Actor.ACTOR.ACTOR_ID,
                         row(
-                                ACTOR.FIRST_NAME,
-                                ACTOR.LAST_NAME
+                                Actor.ACTOR.FIRST_NAME,
+                                Actor.ACTOR.LAST_NAME
                         ).mapping(DNName::new),
                         multiset(
                                 select(
-                                        FILM.FILM_ID,
-                                        FILM.TITLE,
+                                        Film.FILM.FILM_ID,
+                                        Film.FILM.TITLE,
                                         multiset(
-                                                select(CATEGORY.NAME)
-                                                        .from(CATEGORY)
-                                                        .join(FILM_CATEGORY)
-                                                        .on(CATEGORY.CATEGORY_ID.eq(CATEGORY.CATEGORY_ID))
-                                                        .where(FILM_CATEGORY.FILM_ID.eq(FILM_ACTOR.FILM_ID))
+                                                select(Category.CATEGORY.NAME)
+                                                        .from(Category.CATEGORY)
+                                                        .join(FilmCategory.FILM_CATEGORY)
+                                                        .on(Category.CATEGORY.CATEGORY_ID.eq(Category.CATEGORY.CATEGORY_ID))
+                                                        .where(FilmCategory.FILM_CATEGORY.FILM_ID.eq(FilmActor.FILM_ACTOR.FILM_ID))
                                         ).convertFrom(r -> r.map(mapping(DNCategory::new)))
                                 )
-                                        .from(FILM)
-                                        .join(FILM_ACTOR).on(FILM.FILM_ID.eq(FILM_ACTOR.FILM_ID))
-                                        .where(FILM_ACTOR.ACTOR_ID.eq(ACTOR.ACTOR_ID))
+                                        .from(Film.FILM)
+                                        .join(FilmActor.FILM_ACTOR).on(Film.FILM.FILM_ID.eq(FilmActor.FILM_ACTOR.FILM_ID))
+                                        .where(FilmActor.FILM_ACTOR.ACTOR_ID.eq(Actor.ACTOR.ACTOR_ID))
                         ).convertFrom(r -> r.map(mapping(DNFilm::new))))
-                .from(ACTOR)
-                .where(ACTOR.ACTOR_ID.eq(1L))
+                .from(Actor.ACTOR)
+                .where(Actor.ACTOR.ACTOR_ID.eq(1L))
                 .fetch(mapping(DNActor::new));
 
         ResultQuery<Record4<Long, String, String, Result<Record3<Long, String, Result<Record1<String>>>>>> resultQuery = ctx.select(
-                        ACTOR.ACTOR_ID,
-                                ACTOR.FIRST_NAME,
-                                ACTOR.LAST_NAME,
+                        Actor.ACTOR.ACTOR_ID,
+                                Actor.ACTOR.FIRST_NAME,
+                                Actor.ACTOR.LAST_NAME,
                         multiset(
-                                select(
-                                        FILM.FILM_ID,
-                                        FILM.TITLE,
+                                DSL.select(
+                                        Film.FILM.FILM_ID,
+                                        Film.FILM.TITLE,
                                         multiset(
-                                                select(CATEGORY.NAME)
-                                                        .from(CATEGORY)
-                                                        .join(FILM_CATEGORY)
-                                                        .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
-                                                        .where(FILM_CATEGORY.FILM_ID.eq(FILM_ACTOR.FILM_ID))
+                                                select(Category.CATEGORY.NAME)
+                                                        .from(Category.CATEGORY)
+                                                        .join(FilmCategory.FILM_CATEGORY)
+                                                        .on(Category.CATEGORY.CATEGORY_ID.eq(FilmCategory.FILM_CATEGORY.CATEGORY_ID))
+                                                        .where(FilmCategory.FILM_CATEGORY.FILM_ID.eq(FilmActor.FILM_ACTOR.FILM_ID))
                                         )
                                 )
-                                        .from(FILM)
-                                        .join(FILM_ACTOR)
-                                        .on(FILM.FILM_ID.eq(FILM_ACTOR.FILM_ID))
-                                        .where(FILM_ACTOR.ACTOR_ID.eq(ACTOR.ACTOR_ID))
+                                        .from(Film.FILM)
+                                        .join(FilmActor.FILM_ACTOR)
+                                        .on(Film.FILM.FILM_ID.eq(FilmActor.FILM_ACTOR.FILM_ID))
+                                        .where(FilmActor.FILM_ACTOR.ACTOR_ID.eq(Actor.ACTOR.ACTOR_ID))
                         ))
-                .from(ACTOR);
+                .from(Actor.ACTOR);
 
         println(resultQuery.getSQL());
         ctx.fetch(resultQuery.getSQL()).forEach(out::println);

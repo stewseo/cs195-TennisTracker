@@ -1,9 +1,9 @@
 package com.example.database.sakila_database.model.Table;
 
+import com.example.database.sakila_database.model.Table.Record.CustomerRecord;
 import com.example.database.sakila_database.schema.Indexes;
 import com.example.database.sakila_database.schema.Keys;
 import com.example.database.sakila_database.schema.Public;
-import com.example.database.sakila_database.model.Table.Record.CustomerRecord;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;

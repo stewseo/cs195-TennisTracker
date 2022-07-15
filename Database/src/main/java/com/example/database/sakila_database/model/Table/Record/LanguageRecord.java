@@ -1,5 +1,6 @@
 package com.example.database.sakila_database.model.Table.Record;
 
+
 import com.example.database.sakila_database.model.Table.Language;
 import org.jooq.Field;
 import org.jooq.Record1;
@@ -165,16 +166,14 @@ public class LanguageRecord extends UpdatableRecordImpl<LanguageRecord> implemen
         setName(name);
     }
 
-    /**
-     * Create a detached, initialised LanguageRecord
-     */
-    public LanguageRecord(com.example.database.sakila_database.model.Table.pojos.Language value) {
-        super(Language.LANGUAGE);
 
-        if (value != null) {
-            setLanguageId(value.languageId());
-            setName(value.name());
-            setLastUpdate(value.lastUpdate());
-        }
-    }
+//    public LanguageRecord(Language  Language value) {
+//        super(Language.L);
+//
+//        if (value != null) {
+//            setLanguageId(value.languageId());
+//            setName(value.name());
+//            setLastUpdate(value.lastUpdate());
+//        }
+//    }
 }

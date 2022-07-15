@@ -1,19 +1,16 @@
 package com.example.database;
 
 import com.example.database.sakila_database.Listeners.CustomExecuteListener;
-import com.example.database.sakila_database.Listeners.CustomVisitListener;
-import com.example.database.connection.Database;
+import com.example.database.sakila_database.connection.Database;
 import com.example.database.sakila_database.verifyData.VerifyDatabase;
 import org.jooq.*;
 import org.jooq.conf.Settings;
 import org.jooq.impl.DefaultConfiguration;
 import org.jooq.impl.DefaultExecuteListenerProvider;
-import org.jooq.impl.DefaultVisitListenerProvider;
 import org.jooq.tools.JooqLogger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.testcontainers.containers.MySQLContainer;
 
 import javax.sql.DataSource;
 import java.io.*;
@@ -31,6 +28,7 @@ public abstract class TestDatabase extends VerifyDatabase {
     protected static DataSource jdbc;
     public static DSLContext ctx;
     protected static final JooqLogger log = JooqLogger.getLogger(TestDatabase.class);
+    public static TestDatabase LOG_TO_TXT = new TestDatabase(){};
 
     protected static Configuration configuration;
 
@@ -44,7 +42,7 @@ public abstract class TestDatabase extends VerifyDatabase {
                 .set(new Settings()
                         .withRenderFormatted(true)
                 )
-                .set(new DefaultVisitListenerProvider(new CustomVisitListener()))
+//                .set(new DefaultVisitListenerProvider(new CustomVisitListener()))
                 .set(new DefaultExecuteListenerProvider(new CustomExecuteListener()))
         );
         log.trace(ctx.selectOne().toString());

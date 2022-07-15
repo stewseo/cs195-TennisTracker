@@ -1,42 +1,59 @@
 plugins{
+    id 'org.springframework.boot' version '2.7.0'
     id 'idea'
-    id 'application'
+    id 'AtpWta.java-conventions'
+    id 'java-library'
+    id'application'
+    id 'com.gradle.plugin-publish' version '0.12.0'
+    id "io.spring.dependency-management" version "1.0.8.RELEASE"
 }
-repositories{
-    mavenCentral()
-}
+
+
+sourceCompatibility = '17'
+targetCompatibility = '17'
 
 group 'com.example'
 version '1.0-SNAPSHOT'
 
+
+repositories {
+    mavenCentral()
+}
 application {
     mainModule = 'com.example.Database'
+    mainClass = 'com.example.database.Application'
 }
 
 dependencies {
-//    implementation 'org.apache.logging.log4j:log4j-core:2.17.2'
-//    implementation 'org.apache.logging.log4j:log4j-api'
-
-    implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
-    implementation 'mysql:mysql-connector-java:8.0.29'
-
-    implementation 'org.jooq:joor:0.9.14'
-    implementation 'org.jooq:jooq-meta:3.16.6'
-    implementation 'org.jooq:jooq:3.16.6'
-    implementation 'org.springframework.boot:spring-boot-starter-jooq:2.7.1'
-    implementation group: 'com.opencsv', name: 'opencsv', version: '5.6'
-
-//    testImplementation 'org.mockito:mockito-junit-jupiter:4.6.1'
-//    testImplementation 'org.mockito:mockito-core:4.6.1'
-
+    implementation 'org.testcontainers:jdbc:1.17.3'
+    implementation 'org.apache.logging.log4j:log4j-core:2.17.2'
+    implementation 'org.apache.logging.log4j:log4j-api'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0-M1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0-M1'
-//
-//    testImplementation 'org.testcontainers:mysql:1.17.3'
-//    testImplementation 'org.testcontainers:testcontainers:1.17.3'
+
+    implementation group: 'com.opencsv', name: 'opencsv', version: '5.6'
+    implementation 'org.jooq:jooq-meta:3.16.6'
+    implementation 'org.jooq:jooq:3.16.6'
+    implementation 'mysql:mysql-connector-java:8.0.29'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'junit'
+    }
 }
 
-test {
-    useJUnitPlatform()
-}
+
+//
+//configurations {
+//    all {
+//        exclude group: "commons-logging", module: "commons-logging"
+//    }
+//}
+//dependencyManagement {
+//    imports {
+//        mavenBom 'org.springframework.boot:spring-boot-dependencies:2.1.9.RELEASE'
+//    }
+
+
+
 

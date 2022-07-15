@@ -1,8 +1,8 @@
 package com.example.database.sakila_database.model.Table;
 
+import com.example.database.sakila_database.model.Table.Record.ActorRecord;
 import com.example.database.sakila_database.schema.Indexes;
 import com.example.database.sakila_database.schema.Keys;
-import com.example.database.sakila_database.model.Table.Record.ActorRecord;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;

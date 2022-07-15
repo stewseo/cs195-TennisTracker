@@ -1,6 +1,6 @@
 package com.example.module8;
 
-import com.example.database.connection.Database;
+import com.example.database.sakila_database.connection.Database;
 import com.example.database.sakila_database.verifyData.VerifySakilaDB;
 import org.jooq.Query;
 import org.jooq.impl.DSL;

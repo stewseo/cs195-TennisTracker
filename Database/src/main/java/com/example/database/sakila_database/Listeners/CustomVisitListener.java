@@ -12,6 +12,8 @@ import static org.jooq.tools.StringUtils.abbreviate;
 
 public class CustomVisitListener extends DefaultVisitListener{
 
+
+
     private QueryPart queryPart;
     protected static final JooqLogger log = JooqLogger.getLogger(CustomVisitListener.class);
     private boolean anyAbbreviations = false;
@@ -32,7 +34,7 @@ public class CustomVisitListener extends DefaultVisitListener{
 
     @Override
     public void visitStart(VisitContext context) {
-        
+
         if (context.renderContext() != null) {
             QueryPart part = context.queryPart();
             QueryPart[] partsArray  = context.queryParts();

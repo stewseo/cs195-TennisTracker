@@ -4,7 +4,7 @@ module8 q9:
 
 customers table:
 22:45:02.794 [main] DEBUG org.jooq.tools.LoggerListener.org.jooq.tools.LoggerListener - Fetched row(s)           : 8
-22:45:02.794 [main] DEBUG com.example.database.connection.Database.com.example.database.connection.Database - +-----------+---------------------------+----------------------------------------+----------+---------+-------------------+------------------+
+22:45:02.794 [main] DEBUG Database.Database - +-----------+---------------------------+----------------------------------------+----------+---------+-------------------+------------------+
 |customer_id|email_address              |password                                |first_name|last_name|shipping_address_id|billing_address_id|
 +-----------+---------------------------+----------------------------------------+----------+---------+-------------------+------------------+
 |          1|allan.sherwood@yahoo.com   |650215acec746f0e32bdfff387439eefc1358737|Allan     |Sherwood |                  1|                 2|
@@ -21,12 +21,12 @@ customers table:
 
 
 > Task :Database:module8_subquery.main()
-11:53:59.804 [main] INFO com.example.database.connection.Database.com.example.database.connection.Database - default connection
-11:54:01.311 [main] INFO com.example.database.connection.Database.com.example.database.connection.Database - Connected
-11:54:01.332 [main] INFO com.example.database.sakila_database.verifyData.VerifyDatabase.com.example.database.sakila_database.verifyData.VerifyDatabase - Connected
-11:54:01.332 [main] INFO com.example.database.sakila_database.verifyData.VerifyDatabase.com.example.database.sakila_database.verifyData.VerifyDatabase - Connecting with: my_guitar_shop
-11:54:01.351 [main] INFO com.example.database.sakila_database.verifyData.VerifyDatabase.com.example.database.sakila_database.verifyData.VerifyDatabase - Connected
-11:54:01.381 [main] INFO com.example.database.util.ScriptRunner.com.example.database.util.ScriptRunner - running script tojava.io.BufferedReader@4748a0f9
+11:53:59.804 [main] INFO Database.Database - default connection
+11:54:01.311 [main] INFO Database.Database - Connected
+11:54:01.332 [main] INFO VerifyDatabase.VerifyDatabase - Connected
+11:54:01.332 [main] INFO VerifyDatabase.VerifyDatabase - Connecting with: my_guitar_shop
+11:54:01.351 [main] INFO VerifyDatabase.VerifyDatabase - Connected
+11:54:01.381 [main] INFO ScriptRunner.ScriptRunner - running script tojava.io.BufferedReader@4748a0f9
                                         Log Level Debug
 /******************************************************** * This script creates the database named my_guitar_shop  *********************************************************/ DROP DATABASE IF EXISTS my_guitar_shop
 
@@ -93,4 +93,4 @@ INSERT INTO administrators (admin_id, email_address, password, first_name, last_
     (2, 'joel@murach.com', '971e95957d3b74d70d79c20c94e9cd91b85f7aae', 'Joel', 'Murach'),
     (3, 'mike@murach.com', '3f2975c819cefc686282456aeae3a137bf896ee8', 'Mike', 'Murach')
 
-11:54:01.825 [main] DEBUG com.example.database.util.ScriptRunner.com.example.database.util.ScriptRunner - complete
+11:54:01.825 [main] DEBUG ScriptRunner.ScriptRunner - complete

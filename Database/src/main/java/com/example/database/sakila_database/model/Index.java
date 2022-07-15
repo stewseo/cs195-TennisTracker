@@ -1,5 +1,6 @@
 package com.example.database.sakila_database.model;
 
+
 import com.example.database.sakila_database.model.Table.*;
 import org.jooq.OrderField;
 import org.jooq.impl.DSL;

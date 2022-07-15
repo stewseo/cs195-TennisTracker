@@ -1,7 +1,9 @@
 package com.example.database.sakila_database.schema;
 
+
 import com.example.database.sakila_database.model.Table.*;
 import com.example.database.sakila_database.model.Table.Payments.Payment;
+
 import org.jooq.Index;
 import org.jooq.OrderField;
 import org.jooq.impl.DSL;
