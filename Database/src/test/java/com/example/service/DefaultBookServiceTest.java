@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.example.database.TestDatabase.ctx;
+import static com.example.database.sakila_database.model.Tables.ACTOR;
 import static com.example.service.DefaultBookService.BOOK;
 import static java.util.Arrays.asList;
 import static org.jooq.impl.DSL.*;
@@ -21,13 +22,9 @@ import java.awt.print.Book;
 import java.sql.SQLException;
 import java.util.List;
 
-
+@SpringBootTest(classes = Application.class)
 class DefaultBookServiceTest {
-
-    @SpringBootTest(classes = Application.class)
-    public class QueryTest {
-
-        @Autowired DSLContext create;
+    @Autowired DSLContext create;
 
 //
 //        @Test
@@ -89,10 +86,9 @@ class DefaultBookServiceTest {
 
         @Test
         public void testActiveRecords() throws Exception {
-            Result<?> result = create.selectFrom(BOOK).orderBy(field("book.book_id")).fetch();
+            Result<?> result = create.selectFrom(ACTOR).orderBy(ACTOR.ACTOR_ID).fetch();
 
             assertEquals(4, result.size());
             assertEquals(asList(1, 2, 3, 4), result.getValues(0));
         }
     }
-}

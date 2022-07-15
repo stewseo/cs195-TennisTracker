@@ -3,24 +3,41 @@ package com.example.database.sakila_database.connection;
 import com.example.database.TestDatabase;
 import com.example.database.sakila_database.model.Table.Payments.Payment;
 import org.jooq.*;
+import org.jooq.Record;
 import org.jooq.tools.JooqLogger;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
+
 import org.junit.BeforeClass;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.jooq.tools.JooqLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactoryUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.jdbc.ContainerDatabaseDriver;
 
 import com.example.database.TestDatabase;
+
+import javax.sql.DataSource;
+
 import static com.example.database.sakila_database.model.Table.Actor.ACTOR;
 import static com.example.database.sakila_database.model.Table.Category.CATEGORY;
 import static com.example.database.sakila_database.model.Table.Customer.CUSTOMER;
@@ -30,6 +47,8 @@ import static com.example.database.sakila_database.model.Table.FilmCategory.FILM
 import static com.example.database.sakila_database.model.Table.Inventory.INVENTORY;
 import static com.example.database.sakila_database.model.Table.Rental.RENTAL;
 import static com.example.database.sakila_database.model.Tables.PAYMENT;
+import static java.lang.System.out;
+import static java.util.Arrays.asList;
 import static org.apache.commons.collections4.ListUtils.select;
 import static org.jooq.JSONFormat.RecordFormat.OBJECT;
 import static org.jooq.Records.mapping;
@@ -37,36 +56,120 @@ import static org.jooq.XMLFormat.RecordFormat.COLUMN_NAME_ELEMENTS;
 import static org.jooq.impl.DSL.*;
 import static org.jooq.impl.DSL.table;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.testcontainers.shaded.org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest(
+        classes = DatabaseContainersTest.class
+        , properties = "spring.profiles.active=enabled"
+)
+@SuppressWarnings("ALL")
 class DatabaseContainersTest {
-    static JooqLogger log = JooqLogger.getLogger(DatabaseContainersTest.class);
+//    static JooqLogger log = JooqLogger.getLogger(DatabaseContainersTest.class);
     static Connection connection;
     static DSLContext ctx;
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseContainersTest.class);
 
-    @BeforeClass
+    @Autowired
+    ConfigurableListableBeanFactory beanFactory;
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
+    @Test
+    public void shouldConnectToMySQL() throws Exception {
+        assertThat(jdbcTemplate.queryForObject("select version()", String.class)).startsWith("8.0.");
+    }
+
+    @Test
+    public void shouldSetupDependsOnForAllDataSources() throws Exception {
+        String[] beanNamesForType = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(beanFactory, DataSource.class);
+        assertThat(beanNamesForType)
+                .as("Auto-configured datasource should be present")
+                .hasSize(1)
+                .contains("dataSource");
+        asList(beanNamesForType).forEach(this::hasDependsOn);
+    }
+
+    private void hasDependsOn(String beanName) {
+        assertThat(beanFactory.getBeanDefinition(beanName).getDependsOn())
+                .isNotNull()
+                .isNotEmpty()
+                .contains("BEAN_NAME_EMBEDDED_MYSQL");
+    }
+
+    @Test
+    public void TestConn() {
+        Properties properties = new Properties();
+        properties.setProperty("username", "root");
+        properties.setProperty("password", "sesame");
+        logger.info("Connecting");
+        ctx = null;
+
+
+        try (
+                MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.29")
+                        .withConfigurationOverride("")
+                        .withLogConsumer(new Slf4jLogConsumer(logger))
+        ) {
+            mysql.start();
+            logger.info("Connecting");
+            System.setProperty("TEST_DB_URL", mysql.getJdbcUrl());
+            System.setProperty("TEST_DB_USERNAME", mysql.getUsername());
+            System.setProperty("TEST_DB_PASSWORD", mysql.getPassword());
+            logger.debug("");
+
+            logger.info("started MySql container TEST_DB_URL [{}] TEST_DB_USERNAME [{}] TEST_DB_PASSWORD [{}]");
+
+            connection = new ContainerDatabaseDriver().connect(
+                    "jdbc:mysql://localhost:3306///sakila?TC_TMPFS=/testtmpfs:rw",
+                    properties
+            );
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void init() throws SQLException {
         Properties properties = new Properties();
         properties.setProperty("username", "root");
         properties.setProperty("password", "sesame");
-        log.info("Connecting");
-
-        connection = new ContainerDatabaseDriver().connect(
-                "jdbc:mysql://localhost:3306/sakila?allowMultiQueries=true",
-                properties
-        );
-
-        ctx = DSL.using(connection, SQLDialect.MYSQL);ls
-                
+        logger.info("Connecting");
+        ctx = null;
 
 
-        try (Statement s = connection.createStatement()) {
-            log.info("Setting up database");
-            s.execute(Source.of(DatabaseContainersTest.class.getResourceAsStream("/sakila/mysql-sakila-schema.sql")).readString());
+        try (
+                MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0")
+                        .withConfigurationOverride("")
+                        .withLogConsumer(new Slf4jLogConsumer(logger))
+        ) {
+            mysql.start();
+            logger.info("Connecting");
+            System.setProperty("TEST_DB_URL", mysql.getJdbcUrl());
+            System.setProperty("TEST_DB_USERNAME", mysql.getUsername());
+            System.setProperty("TEST_DB_PASSWORD", mysql.getPassword());
 
-            log.info("Inserting data to database");
-            s.execute(Source.of(DatabaseContainersTest.class.getResourceAsStream("/sakila/mysql-sakila-insert-data.sql")).readString());
+            logger.info("started MySql container TEST_DB_URL [{}] TEST_DB_USERNAME [{}] TEST_DB_PASSWORD [{}]");
 
-            log.info("Finished setup");
+
+            connection = new ContainerDatabaseDriver().connect(
+                    "jdbc:mysql://localhost:3306///sakila?TC_TMPFS=/testtmpfs:rw",
+                    properties
+            );
+
+            ctx = DSL.using(connection, SQLDialect.MYSQL);
+
+           ctx.meta().getSchemas().stream().collect(Collectors.toList()).forEach(out::print);
+            try (Statement s = connection.createStatement()) {
+//                log.info("Setting up database");
+                s.execute(Source.of(DatabaseContainersTest.class.getResourceAsStream("/sakila/mysql-sakila-schema.sql")).readString());
+//
+//                log.info("Inserting data to database");
+                s.execute(Source.of(DatabaseContainersTest.class.getResourceAsStream("/sakila/mysql-sakila-insert-data.sql")).readString());
+
+                logger.info("Finished setup");
+            }
         }
     }
 
@@ -76,6 +179,7 @@ class DatabaseContainersTest {
 
     @Test
     public void testMultisetMappingIntoJavaRecords() {
+        logger.info("Finished setup");
 
         Result<?> res = println(ctx
                 .select(
@@ -181,16 +285,16 @@ class DatabaseContainersTest {
                 )
                         .fetch();
 
-        System.out.println(result.format(new TXTFormat()));
-        System.out.println(result.formatXML(new XMLFormat().xmlns(false).format(true).header(false).recordFormat(COLUMN_NAME_ELEMENTS)));
-        System.out.println(result.formatJSON(new JSONFormat().format(true).header(false).recordFormat(OBJECT)));
+        out.println(result.format(new TXTFormat()));
+        out.println(result.formatXML(new XMLFormat().xmlns(false).format(true).header(false).recordFormat(COLUMN_NAME_ELEMENTS)));
+        out.println(result.formatJSON(new JSONFormat().format(true).header(false).recordFormat(OBJECT)));
     }
 
     public static final <T> T println(T t) {
         if (t instanceof Object[])
-            System.out.println(List.of(t));
+            out.println(List.of(t));
         else
-            System.out.println(t);
+            out.println(t);
 
         return t;
     }

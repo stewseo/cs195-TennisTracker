@@ -9,7 +9,6 @@ module com.example.Database {
     requires spring.context;
     requires spring.tx;
     requires spring.beans;
-
     exports com.example.database.sakila_database.connection;
     exports com.example.database.sakila_database.model.Table;
     exports com.example.database.sakila_database.model;
