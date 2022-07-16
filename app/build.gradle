@@ -1,36 +1,43 @@
 plugins {
-    id 'AtpWta.java-conventions'
+    id 'cs195-TennisTracker.java-conventions'
     id 'org.openjfx.javafxplugin' version '0.0.13'
     id 'idea'
     id 'application'
     id 'com.gradle.plugin-publish' version '0.12.0'
+    id 'jvm-test-suite'
 }
 
 repositories {
     mavenCentral()
 }
 
+group 'com.example'
+version '1.0-SNAPSHOT'
+
 javafx {
     version = "18"
     modules = ['javafx.controls', 'javafx.fxml', 'javafx.web']
 }
 
-sourceCompatibility = '17'
-targetCompatibility = '17'
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 
-group 'com.example'
-version '1.0-SNAPSHOT'
+//    modularity.inferModulePath.set(false)
+}
+
+// Workaround for https://github.com/openjfx/javafx-gradle-plugin/issues/89
+// See also https://github.com/java9-modularity/gradle-modules-plugin/issues/165
+modularity.disableEffectiveArgumentsAdjustment()
+
 
 dependencies {
-    implementation 'org.testcontainers:jdbc:1.17.3'
     implementation project(':utilities')
-    implementation 'org.apache.logging.log4j:log4j-core:2.17.2'
-    implementation 'org.apache.logging.log4j:log4j-api'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0-M1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0-M1'
-    implementation 'io.github.palexdev:scenicview:17.0.2'
+
     implementation('fr.brouillard.oss:cssfx:11.5.1') { exclude group: 'org.openjfx' }
-    implementation 'io.github.palexdev:materialfx:11.14.0-EA3'
+
+    implementation ('io.github.palexdev:materialfx:11.14.0-EA3')
+
     implementation 'org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0'
     implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'
     implementation 'org.kordamp.ikonli:ikonli-materialdesign2-pack:12.3.1'
@@ -40,5 +47,7 @@ application {
     mainModule = 'com.example.app'
     mainClass = 'com.example.app.Main'
 }
+
+
 
 

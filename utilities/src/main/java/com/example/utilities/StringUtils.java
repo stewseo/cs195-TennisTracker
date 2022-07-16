@@ -1,7 +1,7 @@
 package com.example.utilities;
 
 
-import java.util.LinkedList;
+import com.example.list.LinkedList;
 
 public class StringUtils {
     public static String join(LinkedList source) {

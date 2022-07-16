@@ -1,4 +1,5 @@
 module com.example.app {
+    requires com.example.utilities;
     requires javafx.controls;
     requires javafx.fxml;
     requires MaterialFX;
@@ -10,7 +11,6 @@ module com.example.app {
     requires javafx.web;
     requires java.logging;
     requires org.kordamp.bootstrapfx.core;
-    opens com.example.app.controller to javafx.fxml;
-    opens com.example.app to javafx.fxml;
+    requires com.example.list;
     exports com.example.app;
 }

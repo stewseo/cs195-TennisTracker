@@ -1,8 +1,7 @@
 package com.example.utilities;
 
 
-import java.util.LinkedList;
-
+import com.example.list.LinkedList;
 class SplitUtils {
     public static LinkedList split(String source) {
         int lastFind = 0;
