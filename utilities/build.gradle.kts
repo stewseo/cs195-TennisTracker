@@ -1,0 +1,9 @@
+plugins {
+    id ("cs195-TennisTracker.java-conventions")
+    id ("java-library")
+}
+
+dependencies {
+    api(project(":list"))
+}
+

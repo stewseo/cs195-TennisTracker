@@ -33,7 +33,7 @@ set APP_HOME=%DIRNAME%..
 for %%i in ("%APP_HOME%") do set APP_HOME=%%~fi
 
 @rem Add default JVM options here. You can also use JAVA_OPTS and DATABASE_OPTS to pass JVM options to this script.
-set DEFAULT_JVM_OPTS="--module-path" "%APP_HOME%\lib" "--module" "com.example.Database/com.example.database.Application"
+set DEFAULT_JVM_OPTS=
 
 @rem Find java.exe
 if defined JAVA_HOME goto findJavaFromJavaHome
@@ -67,11 +67,11 @@ goto fail
 :execute
 @rem Setup the command line
 
-set CLASSPATH=
-set MODULE_PATH=
+set CLASSPATH=%APP_HOME%\lib\mysql-connector-java-8.0.29.jar
+set MODULE_PATH=%APP_HOME%\lib\Database-1.0-SNAPSHOT-plain.jar;%APP_HOME%\lib\HikariCP-5.0.1.jar;%APP_HOME%\lib\utilities-1.0-SNAPSHOT.jar;%APP_HOME%\lib\jooq-meta-3.16.6.jar;%APP_HOME%\lib\jooq-3.16.6.jar;%APP_HOME%\lib\slf4j-api-1.7.30.jar;%APP_HOME%\lib\list-1.0-SNAPSHOT.jar;%APP_HOME%\lib\r2dbc-spi-0.9.0.RELEASE.jar;%APP_HOME%\lib\jakarta.xml.bind-api-3.0.0.jar;%APP_HOME%\lib\protobuf-java-3.19.4.jar;%APP_HOME%\lib\reactive-streams-1.0.3.jar;%APP_HOME%\lib\jakarta.activation-2.0.0.jar
 
 @rem Execute Database
-"%JAVA_EXE%" %JAVA_OPTS% %DATABASE_OPTS% %DEFAULT_JVM_OPTS% %*
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %DATABASE_OPTS%  -classpath "%CLASSPATH%" --module-path "%MODULE_PATH%" --module com.example.Database/com.example.database.Application %*
 
 :end
 @rem End local scope for the variables with windows NT shell

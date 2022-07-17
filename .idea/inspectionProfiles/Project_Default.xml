@@ -355,6 +355,7 @@
     <inspection_tool class="DeprecatedClassUsageInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="DeprecatedIsStillUsed" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="DeprecatedKindProjectorSyntax" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="DeprecatedLombok" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="DeprecatedPackageObject" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="DeprecatedViewBound" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="Deprecation" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -1019,6 +1020,7 @@
       <option name="loggerFactoryMethodName" value="getLogger,getLogger,getLog,getLogger" />
     </inspection_tool>
     <inspection_tool class="LoggingConditionDisagreesWithLogStatement" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="Lombok" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="LongLine" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="LongLiteralsEndingWithLowercaseL" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="LoopConditionNotUpdatedInsideLoop" enabled="true" level="WARNING" enabled_by_default="true">
@@ -1438,9 +1440,13 @@
     <inspection_tool class="RedundantLabeledSwitchRuleCodeBlock" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RedundantLambdaParameterType" enabled="true" level="INFORMATION" enabled_by_default="true" />
     <inspection_tool class="RedundantMethodOverride" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="RedundantModifiersUtilityClassLombok" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="RedundantModifiersValLombok" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="RedundantModifiersValueLombok" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="RedundantNewCaseClass" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RedundantOperationOnEmptyContainer" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RedundantRecordConstructor" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="RedundantSlf4jDefinition" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="RedundantStreamOptionalCall" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RedundantStringFormatCall" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RedundantSuppression" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -1604,6 +1610,7 @@
       <option name="processLiterals" value="true" />
       <option name="processComments" value="true" />
     </inspection_tool>
+    <inspection_tool class="SpringQualifierCopyableLombok" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="StandardVariableNames" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="StatefulEp" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="StaticCallOnSubclass" enabled="false" level="WARNING" enabled_by_default="false" />
@@ -1988,6 +1995,27 @@
     <inspection_tool class="ZeroIndexToHead" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ZeroLengthArrayInitialization" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ZipWithIndex" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="com.haulmont.jpb.AssociationFieldHasColumnAnnotation" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.AssociationNotMarkedInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.CompositeIdClassSerializable" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.ConverterNotAnnotatedInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.ConverterSpecifiedIncorrectlyInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.DuplicateVersionAnnotationInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.EmbeddedNotMarkedInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.EntityIdMissingInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.EqualsDoesntCheckParameterClass" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.IncompatibleTableAnnotationInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.LombokAllArgsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.LombokBuilderInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.LombokDataInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.LombokEqualsAndHashCodeInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.LombokToStringIncludeInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.LombokToStringInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.MoreThanOneIdInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.NoArgsConstructorInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.SpringDataModifyingAnnotationMissing" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.SpringDataPageableParameterMissing" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="com.haulmont.jpb.UnsupportedTypeWithoutConverterInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="dependsOnMethodTestNG" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="groupsTestNG" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="groups">

@@ -1,3 +1,4 @@
+//noinspection GroovyAssignabilityCheck
 plugins {
     id 'groovy-gradle-plugin'
 }

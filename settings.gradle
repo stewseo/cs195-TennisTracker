@@ -10,6 +10,12 @@ include("model")
 include("app")
 include ('list')
 include 'utilities'
+include 'custom-generator-strategy'
 
-
+gradleEnterprise {
+    buildScan {
+        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+        termsOfServiceAgree = "yes"
+    }
+}
 

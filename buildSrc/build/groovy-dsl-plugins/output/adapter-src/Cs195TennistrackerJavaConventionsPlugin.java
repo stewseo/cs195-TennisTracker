@@ -18,7 +18,6 @@ public class Cs195TennistrackerJavaConventionsPlugin implements org.gradle.api.P
             pluginsBlockScript.init(target, target.getServices());
             pluginsBlockScript.run();
             target.getPluginManager().apply("java");
-            target.getPluginManager().apply("jacoco");
 
 
             Class<? extends BasicScript> precompiledScriptClass = Class.forName("precompiled_Cs195TennistrackerJavaConventions").asSubclass(BasicScript.class);
