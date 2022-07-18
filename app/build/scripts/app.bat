@@ -33,7 +33,7 @@ set APP_HOME=%DIRNAME%..
 for %%i in ("%APP_HOME%") do set APP_HOME=%%~fi
 
 @rem Add default JVM options here. You can also use JAVA_OPTS and APP_OPTS to pass JVM options to this script.
-set DEFAULT_JVM_OPTS="--module-path" "%APP_HOME%\lib" "--module" "com.example.app/com.example.app.Main"
+set DEFAULT_JVM_OPTS=
 
 @rem Find java.exe
 if defined JAVA_HOME goto findJavaFromJavaHome
@@ -67,11 +67,11 @@ goto fail
 :execute
 @rem Setup the command line
 
-set CLASSPATH=
-set MODULE_PATH=
+set CLASSPATH=%APP_HOME%\lib\logback-classic-1.2.11.jar;%APP_HOME%\lib\jul-to-slf4j-1.7.36.jar;%APP_HOME%\lib\logback-core-1.2.11.jar
+set MODULE_PATH=%APP_HOME%\lib\app-plain.jar;%APP_HOME%\lib\utilities-1.0-SNAPSHOT.jar;%APP_HOME%\lib\spring-boot-starter-web-2.7.1.jar;%APP_HOME%\lib\list-1.0-SNAPSHOT.jar;%APP_HOME%\lib\spring-boot-starter-json-2.7.1.jar;%APP_HOME%\lib\spring-boot-starter-2.7.1.jar;%APP_HOME%\lib\spring-boot-starter-tomcat-2.7.1.jar;%APP_HOME%\lib\spring-webmvc-5.3.21.jar;%APP_HOME%\lib\spring-web-5.3.21.jar;%APP_HOME%\lib\spring-boot-autoconfigure-2.7.1.jar;%APP_HOME%\lib\spring-boot-2.7.1.jar;%APP_HOME%\lib\spring-boot-starter-logging-2.7.1.jar;%APP_HOME%\lib\jakarta.annotation-api-1.3.5.jar;%APP_HOME%\lib\spring-context-5.3.21.jar;%APP_HOME%\lib\spring-expression-5.3.21.jar;%APP_HOME%\lib\spring-aop-5.3.21.jar;%APP_HOME%\lib\spring-beans-5.3.21.jar;%APP_HOME%\lib\spring-core-5.3.21.jar;%APP_HOME%\lib\snakeyaml-1.30.jar;%APP_HOME%\lib\jackson-datatype-jsr310-2.13.3.jar;%APP_HOME%\lib\jackson-module-parameter-names-2.13.3.jar;%APP_HOME%\lib\jackson-annotations-2.13.3.jar;%APP_HOME%\lib\jackson-core-2.13.3.jar;%APP_HOME%\lib\jackson-datatype-jdk8-2.13.3.jar;%APP_HOME%\lib\jackson-databind-2.13.3.jar;%APP_HOME%\lib\tomcat-embed-websocket-9.0.64.jar;%APP_HOME%\lib\tomcat-embed-core-9.0.64.jar;%APP_HOME%\lib\tomcat-embed-el-9.0.64.jar;%APP_HOME%\lib\log4j-to-slf4j-2.17.2.jar;%APP_HOME%\lib\spring-jcl-5.3.21.jar;%APP_HOME%\lib\slf4j-api-1.7.36.jar;%APP_HOME%\lib\log4j-api-2.17.2.jar
 
 @rem Execute app
-"%JAVA_EXE%" %JAVA_OPTS% %APP_OPTS% %DEFAULT_JVM_OPTS% %*
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %APP_OPTS%  -classpath "%CLASSPATH%" --module-path "%MODULE_PATH%" --module com.example.app/com.example.app.App %*
 
 :end
 @rem End local scope for the variables with windows NT shell

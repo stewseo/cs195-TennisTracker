@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.integtest.app.MainIntegrationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-07-16T21:44:02" hostname="STEWS" time="0.009">
-  <properties/>
-  <testcase name="testMain()" classname="com.example.integtest.app.MainIntegrationTest" time="0.009"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

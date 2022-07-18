@@ -1,53 +1,55 @@
 plugins {
-    id 'cs195-TennisTracker.java-conventions'
-    id 'org.openjfx.javafxplugin' version '0.0.13'
-    id 'idea'
+    id ("cs195-TennisTracker.java-conventions")
+    id ("java-library")
     id 'application'
-    id 'com.gradle.plugin-publish' version '0.12.0'
-    id 'jvm-test-suite'
+    id 'java'
+    id "org.springframework.boot" version "2.7.1"
+    id 'com.bmuschko.docker-spring-boot-application' version "7.4.0"
+    id 'io.spring.dependency-management' version "1.0.12.RELEASE"
 }
+
+import com.bmuschko.gradle.docker.tasks.image.*
+import com.bmuschko.gradle.docker.tasks.container.*
+
 
 repositories {
     mavenCentral()
 }
 
-group 'com.example'
-version '1.0-SNAPSHOT'
-
-javafx {
-    version = "18"
-    modules = ['javafx.controls', 'javafx.fxml', 'javafx.web']
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-
-//    modularity.inferModulePath.set(false)
-}
-
-// Workaround for https://github.com/openjfx/javafx-gradle-plugin/issues/89
-// See also https://github.com/java9-modularity/gradle-modules-plugin/issues/165
-modularity.disableEffectiveArgumentsAdjustment()
-
-
 dependencies {
     implementation project(':utilities')
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.1'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
 
-    implementation('fr.brouillard.oss:cssfx:11.5.1') { exclude group: 'org.openjfx' }
+task createDockerFile(type: Dockerfile) {
+    from 'openjdk:17-oracle'
+    copyFile jar.archiveFileName.get(), '/app/test_service.jar'
+    entryPoint 'java'
+    defaultCommand '-jar', '/app/test_service.jar'
+    exposePort 8080
+}
 
-    implementation ('io.github.palexdev:materialfx:11.14.0-EA3')
+task syncJar(type: Copy) {
+    dependsOn assemble
+    from jar.destinationDirectory
+    into "$buildDir/docker"
+}
 
-    implementation 'org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0'
-    implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'
-    implementation 'org.kordamp.ikonli:ikonli-materialdesign2-pack:12.3.1'
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+task buildImage(type: DockerBuildImage) {
+    dependsOn createDockerFile, syncJar
+    inputDir = createDockerFile.getDestDir()
+    images.add("stewseo/com.example.app:1.0")
 }
 
 application {
     mainModule = 'com.example.app'
-    mainClass = 'com.example.app.Main'
+    mainClassName = 'com.example.app.App'
 }
-
-
 
 
