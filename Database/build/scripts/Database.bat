@@ -14,7 +14,7 @@
 @rem limitations under the License.
 @rem
 
-@if "%DEBUG%" == "" @echo off
+@if "%DEBUG%"=="" @echo off
 @rem ##########################################################################
 @rem
 @rem  Database startup script for Windows
@@ -25,7 +25,7 @@
 if "%OS%"=="Windows_NT" setlocal
 
 set DIRNAME=%~dp0
-if "%DIRNAME%" == "" set DIRNAME=.
+if "%DIRNAME%"=="" set DIRNAME=.
 set APP_BASE_NAME=%~n0
 set APP_HOME=%DIRNAME%..
 
@@ -40,7 +40,7 @@ if defined JAVA_HOME goto findJavaFromJavaHome
 
 set JAVA_EXE=java.exe
 %JAVA_EXE% -version >NUL 2>&1
-if "%ERRORLEVEL%" == "0" goto execute
+if %ERRORLEVEL% equ 0 goto execute
 
 echo.
 echo ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
@@ -67,21 +67,23 @@ goto fail
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\mysql-connector-java-8.0.29.jar
-set MODULE_PATH=%APP_HOME%\lib\Database-1.0-SNAPSHOT-plain.jar;%APP_HOME%\lib\HikariCP-5.0.1.jar;%APP_HOME%\lib\utilities-1.0-SNAPSHOT.jar;%APP_HOME%\lib\jooq-meta-3.16.6.jar;%APP_HOME%\lib\jooq-3.16.6.jar;%APP_HOME%\lib\slf4j-api-1.7.30.jar;%APP_HOME%\lib\list-1.0-SNAPSHOT.jar;%APP_HOME%\lib\r2dbc-spi-0.9.0.RELEASE.jar;%APP_HOME%\lib\jakarta.xml.bind-api-3.0.0.jar;%APP_HOME%\lib\protobuf-java-3.19.4.jar;%APP_HOME%\lib\reactive-streams-1.0.3.jar;%APP_HOME%\lib\jakarta.activation-2.0.0.jar
+set CLASSPATH=
+set MODULE_PATH=%APP_HOME%\lib\Database-1.0-SNAPSHOT.jar;%APP_HOME%\lib\utilities-1.0-SNAPSHOT.jar;%APP_HOME%\lib\list-1.0-SNAPSHOT.jar
 
 @rem Execute Database
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %DATABASE_OPTS%  -classpath "%CLASSPATH%" --module-path "%MODULE_PATH%" --module com.example.Database/com.example.database.Application %*
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %DATABASE_OPTS%  -classpath "%CLASSPATH%" --module-path "%MODULE_PATH%" --module com.example.Database %*
 
 :end
 @rem End local scope for the variables with windows NT shell
-if "%ERRORLEVEL%"=="0" goto mainEnd
+if %ERRORLEVEL% equ 0 goto mainEnd
 
 :fail
 rem Set variable DATABASE_EXIT_CONSOLE if you need the _script_ return code instead of
 rem the _cmd.exe /c_ return code!
-if  not "" == "%DATABASE_EXIT_CONSOLE%" exit 1
-exit /b 1
+set EXIT_CODE=%ERRORLEVEL%
+if %EXIT_CODE% equ 0 set EXIT_CODE=1
+if not ""=="%DATABASE_EXIT_CONSOLE%" exit %EXIT_CODE%
+exit /b %EXIT_CODE%
 
 :mainEnd
 if "%OS%"=="Windows_NT" endlocal
