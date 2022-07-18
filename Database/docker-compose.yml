@@ -1,0 +1,20 @@
+#--name=mysql-docker – To Specify Container name.
+#-p 3306:3306 – Port Binding -p <host_port>:<container_port> , if would like to access form different port (ex: 3309) then command would be -p 3309:3306
+#-e MYSQL_ROOT_HOST='%' – to specify host to access MySQL DB for root user. '%' is to allow to access from any other containers. You can change this to specific host.
+#-e MYSQL_ROOT_PASSWORD=password – To set root user password.
+#-e MYSQL_DATABASE=docker_db – Name of the Database to be created.
+#-d mysql/mysql-server:8.0 – To Specify image name (which is created in previous step), -d means containers starts in detached mode.
+# docker run --name=mysql-docker -p 3309:3306 -e MYSQL_ROOT_HOST='%' -e MYSQL_ROOT_PASSWORD=sesame -e MYSQL_DATABASE=docker_db -d mysql/mysql-server:latest
+version: '3.1'
+services:
+  mysql:
+    image: mysql-docker
+    command: --default-authentication-plugin=caching_sha2_password
+    restart: always
+    environment:
+      MYSQL_ROOT_HOST='%'
+      MYSQL_DATABASE: docker_db
+      MYSQL_ROOT_PASSWORD: 'sesame'
+
+    ports:
+      - "3309:3306"

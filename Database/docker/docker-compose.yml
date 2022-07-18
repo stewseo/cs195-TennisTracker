@@ -1,0 +1,10 @@
+version: '3'
+services:
+  mysql-docker:
+    image: mysql/mysql-server:latest
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: sesame
+      MYSQL_DATABASE: docker_db
+    ports:
+      - "3309:3306"
