@@ -1,0 +1,42 @@
+m6_dml_statements_4
+Write an INSERT statement that adds this row to the Products table:
+
+product_id:                  The next automatically generated ID
+category_id:                 4
+product_code:              dgx_640
+product_name:             Yamaha DGX 640 88-Key Digital Piano
+description:                  Long description to come.
+list_price:                     799.99
+discount_percent:         0
+date_added:                  Todayâ€™s date/time.
+
+
+Query Parts:
+            INSERT INTO products
+                (product_id, category_id, product_code, product_name, description, 
+            list_price, discount_percent, date_added)
+                values
+            (default, 4, 'dgx_640', 'Yamaha DGX 640 88-Key Digital Piano', 'Long description to come', 
+            '799.99', '0', NOW());
+
+Sql String            INSERT INTO products
+                (product_id, category_id, product_code, product_name, description, 
+            list_price, discount_percent, date_added)
+                values
+            (default, 4, 'dgx_640', 'Yamaha DGX 640 88-Key Digital Piano', 'Long description to come', 
+            '799.99', '0', NOW());
++----------+-----------+------------+------------------------------------+--------------------------------------------------+----------+----------------+---------------------+
+|product_id|category_id|product_code|product_name                        |description                                       |list_price|discount_percent|date_added           |
++----------+-----------+------------+------------------------------------+--------------------------------------------------+----------+----------------+---------------------+
+|         1|          1|strat       |Fender Stratocaster                 |The Fender Stratocaster is the electric guitar ...|    699.00|           30.00|2014-10-30 09:32:40.0|
+|         2|          1|les_paul    |Gibson Les Paul                     |This Les Paul guitar offers a carved top and hu...|   1199.00|           30.00|2014-12-05 16:33:13.0|
+|         3|          1|sg          |Gibson SG                           |This Gibson SG electric guitar takes the best o...|   2517.00|           52.00|2015-02-04 11:04:31.0|
+|         4|          1|fg700s      |Yamaha FG700S                       |The Yamaha FG700S solid top acoustic guitar has...|    489.99|           38.00|2015-06-01 11:12:59.0|
+|         5|          1|washburn    |Washburn D10S                       |The Washburn D10S acoustic guitar is superbly c...|    299.00|            0.00|2015-07-30 13:58:35.0|
+|         6|          1|rodriguez   |Rodriguez Caballero 11              |Featuring a carefully chosen, solid Canadian ce...|    415.00|           39.00|2015-07-30 14:12:41.0|
+|         7|          2|precision   |Fender Precision                    |The Fender Precision bass guitar delivers the s...|    799.99|           30.00|2015-06-01 11:29:35.0|
+|         8|          2|hofner      |Hofner Icon                         |With authentic details inspired by the original...|    499.99|           25.00|2015-07-30 14:18:33.0|
+|         9|          3|ludwig      |Ludwig 5-piece Drum Set with Cymbals|This product includes a Ludwig 5-piece drum set...|    699.99|           30.00|2015-07-30 12:46:40.0|
+|        10|          3|tama        |Tama 5-Piece Drum Set with Cymbals  |The Tama 5-piece Drum Set is the most affordabl...|    799.99|           15.00|2015-07-30 13:14:15.0|
+|        11|          4|dgx_640     |Yamaha DGX 640 88-Key Digital Piano |Long description to come                          |    799.99|           35.00|2022-07-19 08:22:38.0|
++----------+-----------+------------+------------------------------------+--------------------------------------------------+----------+----------------+---------------------+

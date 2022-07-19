@@ -1,10 +1,17 @@
-version: '3'
+version: '3.5'
 services:
   mysql-docker:
     image: mysql/mysql-server:latest
-    environment:
-      MYSQL_ROOT_HOST: "%"
-      MYSQL_ROOT_PASSWORD: sesame
-      MYSQL_DATABASE: docker_db
     ports:
       - "3309:3306"
+    environment:
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: sesame
+      MYSQL_DATABASE: docker_db
+    volumes:
+      - .docker/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+      - db_data:/var/lib/mysql-docker
+volumes:
+    db_data:
+
+

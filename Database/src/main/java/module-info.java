@@ -3,6 +3,5 @@ module com.example.Database {
     requires org.jooq;
     requires org.jooq.meta;
     requires com.example.utilities;
-    requires junit;
-    requires org.junit.jupiter.api;
+    requires org.apache.logging.log4j;
 }

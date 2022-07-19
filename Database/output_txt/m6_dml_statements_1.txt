@@ -1,0 +1,26 @@
+m6_dml_statements_1
+Write an INSERT statement that adds this row to the Categories table:
+category_name: Brass
+
+Code the INSERT statement so MySQL automatically generates the category_id column.
+
+
+Query Parts:
+insert into categories 
+(category_id, category_name)
+values 
+(default, 'Brass');
+
+Sql Stringinsert into categories 
+(category_id, category_name)
+values 
+(default, 'Brass');
++-----------+-------------+
+|category_id|category_name|
++-----------+-------------+
+|          2|Basses       |
+|          5|Brass        |
+|          3|Drums        |
+|          1|Guitars      |
+|          4|Keyboards    |
++-----------+-------------+

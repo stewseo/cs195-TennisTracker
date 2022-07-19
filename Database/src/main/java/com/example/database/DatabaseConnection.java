@@ -14,7 +14,7 @@ public class DatabaseConnection {
     private static final String password = "sesame";
 
     public static Connection connect(String dbName) {
-        mySQLUrl = new StringBuilder("jdbc:mysql://localhost:3306/").append(dbName);
+        mySQLUrl = new StringBuilder("jdbc:mysql://localhost:3309/").append(dbName);
 
         connection = null;
 

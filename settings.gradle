@@ -5,12 +5,9 @@ plugins {
 rootProject.name = "AtpWta"
 
 include ("Database")
-include("service")
-include("model")
 include("app")
 include ('list')
 include 'utilities'
-include 'custom-generator-strategy'
 
 gradleEnterprise {
     buildScan {
