@@ -1,0 +1,26 @@
+m6_dml_statements_1
+INSERT into categories (category_id, category_name)
+values (
+  default,
+  'Brass'
+)
+
+
+Query Parts:
+insert into categories
+(category_id, category_name)
+values
+(default, 'Brass');
+
+Sql Stringinsert into categories
+(category_id, category_name)
+values
+(default, 'Brass');
+1+-----------+-------------+
+|category_id|category_name|
++-----------+-------------+
+|          2|Basses       |
+|          8|Brass        |
+|          3|Drums        |
+|          1|Guitars      |
++-----------+-------------+

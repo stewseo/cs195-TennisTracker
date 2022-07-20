@@ -1,0 +1,21 @@
+m6_dml_statements_3
+Write a DELETE statement that deletes the row you added to the Categories table in exercise 1.
+This statement should use the category_id column to identify the row.
+
+
+
+Query Parts:
+delete from categories
+order by categories.category_id desc limit 1
+
+
+Sql Stringdelete from categories
+order by categories.category_id desc limit 1
+
+1+-----------+-------------+
+|category_id|category_name|
++-----------+-------------+
+|          2|Basses       |
+|          3|Drums        |
+|          1|Guitars      |
++-----------+-------------+

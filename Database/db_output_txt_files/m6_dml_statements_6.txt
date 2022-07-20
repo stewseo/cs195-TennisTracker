@@ -1,0 +1,27 @@
+m6_dml_statements_6
+Write a DELETE statement that deletes the row that you added to the Categories table in exercise 1.
+When you execute this statement, it will produce an error since the category has related rows in the Products table.
+To fix that, precede the DELETE statement with another DELETE statement that deletes all products in this category.
+(Remember that to code two or more statements in a script, you must end each statement with a semicolon.)
+
+
+Query Parts:
+DELETE t1, t2
+FROM categories t1
+    INNER JOIN products t2
+    ON t2.category_id = t1.category_id
+WHERE t1.category_id = 6
+
+Sql StringDELETE t1, t2
+FROM categories t1
+    INNER JOIN products t2
+    ON t2.category_id = t1.category_id
+WHERE t1.category_id = 6
+0+-----------+-------------+
+|category_id|category_name|
++-----------+-------------+
+|          2|Basses       |
+|          8|Brass        |
+|          3|Drums        |
+|          1|Guitars      |
++-----------+-------------+
