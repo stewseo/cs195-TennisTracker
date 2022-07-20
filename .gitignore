@@ -11,8 +11,6 @@
 .idea/**/dataSources.local.xml
 .idea/**/sqlDataSources.xml
 .idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
-.idea/**/dbnavigator.xml
 
 # Gradle
 .idea/**/gradle.xml
@@ -27,8 +25,8 @@
 .idea/modules
 *.iml
 *.ipr
+*.iws
 
-*.iml
 
 hs_err_pid*
 
